@@ -1,0 +1,131 @@
+.logo {
+    width: 200px;
+    height: 100px;
+}
+
+.main {
+    height: 100vh;
+}
+
+a:link,
+a:visited {
+    text-decoration: none;
+}
+
+.pabtn {
+    background-color: #e9eaef;
+    border: 2px solid;
+    border-color: #cdd1dd;
+    color: #566aad;
+}
+
+.pabtn:hover {
+    border-color: #566aad;
+}
+
+.fabtn {
+    background-color: #e5f3f9;
+    border: 2px solid;
+    border-color: #c5dfe5;
+    color: #599dbc;
+}
+
+.fabtn:hover {
+    border-color: #599dbc;
+}
+
+.cobtn {
+    background-color: #e9f1e8;
+    border: 2px solid;
+    border-color: #cbe2ce;
+    color: #54854d;
+}
+
+.cobtn:hover {
+    border-color: #54854d;
+}
+
+.bpbtn {
+    background-color: #f8e6ee;
+    border: 2px solid;
+    border-color: #dfcad6;
+    color: #b22570;
+}
+
+.bpbtn:hover {
+    border-color: #b22570;
+}
+
+.backdiv {
+    position: fixed;
+    /* top: 100px; */
+    left: 60%;
+}
+
+.imain {
+    position: relative;
+    z-index: 1;
+    width: 400px;
+}
+
+.selectbtns {
+    justify-content: start;
+    padding-right: 3em;
+}
+
+.subinfodiv {
+    justify-content: space-between;
+}
+
+@media only screen and (max-width:430px) {
+    .logo {
+        display: none;
+    }
+    .cmain {
+        margin-top: auto;
+    }
+    .main {
+        justify-content: space-between;
+    }
+    a:link,
+    a:visited {
+        text-decoration: none;
+        font-size: 0.7em;
+    }
+    .imain {
+        width: 290px;
+    }
+    .selectbtns {
+        justify-content: center;
+        padding: inherit;
+    }
+    .subinfotext {
+        display: none;
+    }
+    .subinfodiv {
+        justify-content: end;
+    }
+}
+
+.cmain {
+    position: relative;
+    margin-top: auto;
+}
+
+.bgimage {
+    position: absolute;
+    z-index: 0;
+    bottom: 0;
+    filter: blur(5px);
+    top: 0;
+    opacity: 0.8;
+}
+
+.content {
+    z-index: 1;
+}
+
+#bgimage {
+    height: 100%;
+    width: 100%;
+}

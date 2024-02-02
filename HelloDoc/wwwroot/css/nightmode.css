@@ -1,0 +1,33 @@
+#imgmode {
+    width: 38px;
+    height: 38px;
+    padding-top: 18px;
+}
+
+.modebtn {
+    position: fixed;
+    z-index: 1;
+    top: 2%;
+    right: 2%;
+}
+
+#btn {
+    display: flex;
+    border-color: black;
+}
+
+#logo {
+    height: 60px;
+}
+
+@media only screen and (max-width:430px) {
+    #imgmode {
+        width: 28.5px;
+        height: 28.5px;
+        padding-top: 13.5px;
+        font-size: 1.5rem;
+    }
+    #logo {
+        height: 45px;
+    }
+}

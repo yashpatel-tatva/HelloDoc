@@ -1,0 +1,88 @@
+.uploadbtn {
+    background-color: #00b8e6;
+    color: white;
+    border-top-right-radius: 0.375rem;
+    border-bottom-right-radius: 0.375rem;
+}
+
+.uploadbtndiv {
+    background-color: #ebebeb;
+}
+
+.bglight {
+    background-color: white;
+}
+
+.bgdark {
+    background-color: black;
+}
+
+@media only screen and (max-width:430px) {
+    body {}
+    .h5 {
+        font-size: 0.8rem;
+        font-weight: bolder;
+    }
+    .form-group textarea {
+        width: 100%;
+        outline: none;
+        border: 0;
+        background-color: transparent;
+        margin-top: 11.25px;
+        padding: 0px 11.25px 7.5px 11.25px;
+        font-size: 1em;
+    }
+    .form-group input {
+        width: 100%;
+        outline: none;
+        border: 0;
+        background-color: transparent;
+        padding: 11.25px 11.25px 7.5px 11.25px;
+        font-size: 0.75em;
+    }
+    .telephone input {
+        width: 100%;
+        outline: none;
+        border: 0;
+        background-color: transparent;
+        padding: 9.375px 11.25px 9.375px 11.25px;
+        font-size: 0.75em;
+    }
+    .form-group span {
+        position: absolute;
+        left: 11.25px;
+        top: 9.75px;
+        pointer-events: none;
+        font-size: 0.75em;
+        transition: 0.5s;
+    }
+    input:focus+span,
+    input:not(:placeholder-shown)+span,
+    textarea:focus+span,
+    textarea:not(:placeholder-shown)+span {
+        color: #00b8e6;
+        transform: translateX(-3px) translateY(-10.5px);
+        font-size: 0.57em;
+        padding: 0px 5px;
+        background-color: transparent;
+    }
+    input:not(:placeholder-shown):not(:focus)+span,
+    textarea:not(:placeholder-shown):not(:focus)+span {
+        color: inherit;
+        transform: translateX(-3px) translateY(-10.5px);
+        font-size: 0.57em;
+        padding: 0px 5px;
+        background-color: transparent;
+    }
+    .uploadbtndiv {
+        font-size: medium;
+    }
+    .uploadbtn,
+    .babtn,
+    .choosenfile {
+        font-size: small;
+    }
+    label div {
+        display: none;
+    }
+}

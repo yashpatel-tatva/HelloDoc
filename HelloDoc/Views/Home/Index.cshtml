@@ -1,0 +1,31 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+@{
+    Layout = "_Styles";
+}
+@*@Html.Partial("_Styles")*@
+
+    <div class="main d-flex py-5 flex-column">
+        <div class="d-flex justify-content-around">
+            <div class="logo">
+                <img src="~/Logo.png" class="logo">
+            </div>
+            <div class="modebtn">
+                <button style="background-color: transparent;" class="border-1 rounded" id="btn1">
+                    <i class="fa-solid fa-moon fa-2xl fa-rotate-by" style="color: black; --fa-rotate-angle: 330deg;"  id="imgmode"></i>
+                </button>
+            </div>
+        </div>
+        <div class="mt-5">
+            <div class="d-grid gap-2 my-5">
+                <a asp-action="PatientRequestScreen"><button class="btn w-100" style="background-color: #00b8e6; color: white;" type="button">Submit A Request</button></a>
+                <a asp-action="PatientLogin"><button class="btn w-100" style="background-color: #00004d; color: white;" type="button">Registered Patients</button></a>
+            </div>
+        </div>
+        <div class="bggray d-flex justify-content-center py-1 mt" id="bg">
+            <span class="fw-medium px-2  "><a href="#" class="text-secondary">Terms and Condition</a></span>
+            <span class="fw-medium px-2  "><a href="#" class="text-secondary"> | </a></span>
+            <span class="fw-medium px-2  "><a href="#" class="text-secondary">Privacy Policy</a></span>
+        </div>
+    </div>
