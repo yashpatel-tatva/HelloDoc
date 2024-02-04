@@ -30,6 +30,22 @@ namespace HelloDoc.Controllers
         {
             return View();
         }
+        public IActionResult PatientRequest()
+        {
+            return View("~/Views/Home/RequestForms/PatientRequest.cshtml");
+        }
+        public IActionResult FamilyRequest()
+        {
+            return View();
+        }
+        public IActionResult ConciergeRequest()
+        {
+            return View();
+        }
+        public IActionResult BuisnessPartnerRequest()
+        {
+            return View();
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

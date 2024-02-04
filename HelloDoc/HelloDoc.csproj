@@ -6,4 +6,12 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'https' " />
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'http' " />
+  <ItemGroup>
+    <None Remove="Views\Home\RequestForms\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Views\Home\RequestForms\" />
+  </ItemGroup>
 </Project>
