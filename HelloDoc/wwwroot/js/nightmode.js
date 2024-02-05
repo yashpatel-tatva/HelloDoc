@@ -3,28 +3,19 @@ const imgmode = document.getElementById('imgmode');
 const bg = document.getElementsByClassName('bggray');
 btn.addEventListener('click', changetheme);
 var flag = 1;
-
-window.onload = function() {
-    console.log(sessionStorage.getItem('flag'));
+console.log(sessionStorage.getItem('flag'));
     if (sessionStorage.getItem('flag')) {
         flag = parseInt(sessionStorage.getItem('flag'));
         console.log(flag);
     }
     changetheme();
-    try {
-        const myModal = new bootstrap.Modal(document.getElementById('exampleModal'));
-        myModal.show();
-        const closeBtn = document.getElementById("closeBtn");
-        closeBtn.addEventListener('click', function() {
-            myModal.hide();
-        });
-    } catch {}
-}
+
 
 function changetheme() {
     if (flag === 0) {
         document.querySelector('body').setAttribute('data-bs-theme', 'dark');
-        imgmode.style.color = "#00b8e6";
+        imgmode.classList.replace("fa-sun", "fa-moon")
+        imgmode.style.color = "rgb(0, 184, 230)"
         btn.style.borderColor = "#00b8e6";
         if (document.querySelector('body').style.backgroundColor === "rgb(235, 235, 235)") {
             document.querySelector('body').style.backgroundColor = "black";
@@ -46,7 +37,8 @@ function changetheme() {
         flag = 1;
     } else {
         document.querySelector('body').setAttribute('data-bs-theme', 'light');
-        imgmode.style.color = "black";
+        imgmode.classList.replace("fa-moon", "fa-sun")
+        imgmode.style.color = "black"
         btn.style.borderColor = "black";
         sessionStorage.setItem('flag', flag);
         flag = 0;

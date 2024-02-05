@@ -1,10 +1,10 @@
 ﻿<div class="d-flex justify-content-center pt-5">
     <div class="d-flex flex-column gap-4">
         <div class="h1">I am a..........</div>
-        <div><a asp-action="PatientRequest"><button class="rounded w-100 d-flex selectbtns pabtn"><span class="h5 p-2">PATIENT</span></button></a></div>
-        <div><a asp-action="FamilyRequest"><button class="rounded w-100 d-flex selectbtns fabtn"><span class="h5 p-2">FAMILY / FRIEND</span></button></a></div>
-        <div><a asp-action="CociergeRequest"><button class="rounded w-100 d-flex selectbtns cobtn"><span class="h5 p-2">CONCIERGE</span></button></a></div>
-        <div><a asp-action="BusinessPartnerRequest"><button class="rounded w-100 d-flex selectbtns bpbtn"><span class="h5 p-2">BUSINESS PARTNERS</span></button></a></div>
+        <div><a asp-controller="RequestForms" asp-action="PatientRequest"><button class="rounded w-100 d-flex selectbtns pabtn"><span class="h5 p-2">PATIENT</span></button></a></div>
+        <div><a asp-controller="RequestForms" asp-action="FamilyRequest"><button class="rounded w-100 d-flex selectbtns fabtn"><span class="h5 p-2">FAMILY / FRIEND</span></button></a></div>
+        <div><a asp-controller="RequestForms" asp-action="ConciergeRequest"><button class="rounded w-100 d-flex selectbtns cobtn"><span class="h5 p-2">CONCIERGE</span></button></a></div>
+        <div><a asp-controller="RequestForms" asp-action="BuisnessPartnerRequest"><button class="rounded w-100 d-flex selectbtns bpbtn"><span class="h5 p-2">BUSINESS PARTNERS</span></button></a></div>
     </div>
     <div class="ps-5 backdiv">
         <a asp-action="Index">
