@@ -26,20 +26,22 @@
             <div class="py-2">
                 <span class="h2 ps-2">Login To Your Account</span>
             </div>
-            <div class="py-2">
-                <div class="my-2 form-group d-flex align-items-center rounded">
-                    <input type="email" class="form-control" placeholder="" required="required"><span>Email</span>
-                    <label class="px-2"><i class="fa-regular fa-circle-user"></i></label>
+            <form asp-route="Login" method="post">
+                <div class="py-2">
+                    <div class="my-2 form-group d-flex align-items-center rounded">
+                        <input type="email" class="form-control" placeholder="" required="required"><span>Email</span>
+                        <label class="px-2"><i class="fa-regular fa-circle-user"></i></label>
+                    </div>
+                    <div class="my-2 form-group d-flex align-items-center rounded">
+                        <input type="password" id="showpass" class="form-control" placeholder="" required="required"><span>Password</span>
+                        <label id="eyeiconlabel" class="px-2"><i class="fa-regular fa-eye-slash" id="eyeicon"></i></label>
+                    </div>
+                    <div class="py-2 form-group border-0">
+                        <button class="form-control subbtn">Log In</button>
+                    </div>
                 </div>
-                <div class="my-2 form-group d-flex align-items-center rounded">
-                    <input type="password" id="showpass" class="form-control" placeholder="" required="required"><span>Password</span>
-                    <label id="eyeiconlabel" class="px-2"><i class="fa-regular fa-eye-slash" id="eyeicon"></i></label>
-                </div>
-                <div class="py-2 form-group border-0">
-                    <button class="form-control subbtn">Log In</button>
-                </div>
-            </div>
-            <div class="d-flex justify-content-center"><a asp-action="PatientForgetPassword">Forget Password?</a></div>
+                    <div class="d-flex justify-content-center"><a asp-action="PatientForgetPassword">Forget Password?</a></div>
+            </form>
         </div>
     </div>
 
