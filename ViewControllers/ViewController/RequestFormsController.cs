@@ -1,6 +1,4 @@
-﻿using HelloDoc.DataContext;
-using HelloDoc.Models;
-using HelloDoc.DataModels;
+﻿using HelloDoc.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -8,11 +6,6 @@ namespace HelloDoc.Controllers
 {
     public class RequestFormsController : Controller
     {
-        private readonly HelloDocDbContext _context;
-        public RequestFormsController(HelloDocDbContext context)
-        {
-            _context = context;
-        }
         public IActionResult PatientRequest()
         {
             return View();
@@ -32,12 +25,6 @@ namespace HelloDoc.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Self(User user) 
-        {
-            _context.Add(user);
-            _context.SaveChanges(); 
-            return View();
-        }
 
 
 

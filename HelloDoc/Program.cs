@@ -1,8 +1,12 @@
+using HelloDoc.DataContext;
+using Microsoft.EntityFrameworkCore;
+using System;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
+builder.Services.AddDbContext<HelloDocDbContext>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

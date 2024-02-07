@@ -3,10 +3,11 @@
 }
 
 #imgmode{
+    padding : 15px 5px;
     transition : 0.5s ;
 }
 #imgmode:hover{
-    transform : translateX(10px)
+    
 }
 
 body{

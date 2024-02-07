@@ -1,9 +1,12 @@
 ﻿@{
     ViewData["Title"] = "Login Page";
 }
+
+@model HelloDoc.DataModels.User;
 @{
     Layout = "_Styles";
 }
+
 <div class="main d-flex py-2 flex-column imain">
     <div class="bgimage">
         <img src="~/7768657_3763028.png" alt="" id="bgimage">
@@ -26,16 +29,18 @@
             <div class="py-2">
                 <span class="h2 ps-2">Login To Your Account</span>
             </div>
-            <form asp-route="Login" method="post">
+            <form asp-controller="Credential" asp-action="Login" method="post">
                 <div class="py-2">
-                    <div class="my-2 form-group d-flex align-items-center rounded">
-                        <input type="email" class="form-control" placeholder="" required="required"><span>Email</span>
+                    <div class="my-2 form-group d-flex align-items-center rounded @TempData["Style"]">
+                        <input type="email" asp-for="Email" class="form-control" placeholder="" required="required"><span>Email</span>
                         <label class="px-2"><i class="fa-regular fa-circle-user"></i></label>
                     </div>
-                    <div class="my-2 form-group d-flex align-items-center rounded">
-                        <input type="password" id="showpass" class="form-control" placeholder="" required="required"><span>Password</span>
+                        <p style="color : red">@TempData["WrongEmail"]</p>
+                    <div class="my-2 form-group d-flex align-items-center rounded @TempData["Style"]">
+                        <input type="password" asp-for="Aspnetuser.Passwordhash" id="showpass" class="form-control" placeholder="" required="required"><span>Password</span>
                         <label id="eyeiconlabel" class="px-2"><i class="fa-regular fa-eye-slash" id="eyeicon"></i></label>
                     </div>
+                        <p style="color : red">@TempData["Wrongpass"]</p>
                     <div class="py-2 form-group border-0">
                         <button class="form-control subbtn">Log In</button>
                     </div>

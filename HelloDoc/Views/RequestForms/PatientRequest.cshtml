@@ -1,5 +1,7 @@
 ﻿@{
 }
+@model HelloDoc.DataModels.Request;
+
 <div class="container pb-5 mb-5">
     <div class="d-flex subinfodiv align-items-center py-3">
         <div class="h3 subinfotext fw-bold">Submit Information</div>
@@ -12,30 +14,31 @@
             </a>
         </div>
     </div>
-    <form>
+    <form asp-controller="RequestForms" asp-action="Self" method="post">
         <div class="bglight rounded p-3 shadow" id="content">
-
+            <input type="number" asp-for="Requesttypeid" placeholder="1" hidden/>
+            <input type="number" asp-for="Status" placeholder="1" hidden/>
             <div>
                 <div class="h5 fw-bold">Patient Information</div>
                 <div class="row d-flex">
                     <div class="py-2 col-12 ">
                         <div class="form-group rounded d-flex align-items-center">
-                            <textarea class="form-control" placeholder=" " rows="3"></textarea><span>Enter Brief Details Of Symptomps (Optional)</span>
+                            <textarea  class="form-control" placeholder=" " rows="3"></textarea><span>Enter Brief Details Of Symptomps (Optional)</span>
                         </div>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="textbox" class="form-control" placeholder="" required="required"><span>First Name</span>
+                            <input type="text" class="form-control" placeholder="" required="required" asp-for="Firstname"><span>First Name</span>
                         </div>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="textbox" class="form-control" placeholder="" required="required"><span>Last Name</span>
+                            <input type="text" class="form-control" placeholder="" required="required" asp-for="Lastname"><span>Last Name</span>
                         </div>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="date" class="form-control" placeholder="" required="required"><span>Date of Birth</span>
+                            <input type="date" class="form-control" placeholder="" required="required" ><span>Date of Birth</span>
                         </div>
                     </div>
                 </div>
@@ -45,13 +48,13 @@
                 <div class="row d-flex">
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="email" class="form-control" placeholder="" required="required"><span>Email</span>
+                            <input type="email" class="form-control" placeholder="" required="required" asp-for="Email"><span>Email</span>
                         </div>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                         <div class="telephone rounded">
                             <div class="input-group d-flex align-items-center rounded ">
-                                <input type="tel" id="tel" class="form-control">
+                                <input type="tel" id="tel" class="form-control" >
                             </div>
                         </div>
                     </div>
@@ -62,27 +65,27 @@
                 <div class="row d-flex">
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="textbox" class="form-control" placeholder="" required="required"><span>Street</span>
+                            <input type="text" class="form-control" placeholder="" required="required" asp-for="User.Street"><span>Street</span>
                         </div>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="textbox" class="form-control" placeholder="" required="required"><span>City</span>
+                            <input type="text" class="form-control" placeholder="" required="required" asp-for="User.City"><span>City</span>
                         </div>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="textbox" class="form-control" placeholder="" required="required"><span>State</span>
+                            <input type="text" class="form-control" placeholder="" required="required" asp-for="User.State"><span>State</span>
                         </div>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="textbox" class="form-control" placeholder="" required="required"><span>Zip Code</span>
+                            <input type="text" class="form-control" placeholder="" required="required" asp-for="User.Zip"><span>Zip Code</span>
                         </div>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="textbox" class="form-control" placeholder="" required="required"><span>Room # / Suite (Optional)</span>
+                            <input type="text" class="form-control" placeholder="" required="required" ><span>Room # / Suite (Optional)</span>
                         </div>
                     </div>
                 </div>
