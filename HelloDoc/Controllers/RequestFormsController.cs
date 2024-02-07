@@ -3,6 +3,7 @@ using HelloDoc.Models;
 using HelloDoc.DataModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using Microsoft.EntityFrameworkCore;
 
 namespace HelloDoc.Controllers
 {
@@ -32,11 +33,13 @@ namespace HelloDoc.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Self(User user) 
+        public async Task<IActionResult> Self(Request request) 
         {
-            _context.Add(user);
+            var correct = await _context.Users
+                .FirstOrDefaultAsync(m => m.Email == request.Email);
+            _context.Add(request);
             _context.SaveChanges(); 
-            return View();
+            return View() ;
         }
 
 
