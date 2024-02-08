@@ -37,6 +37,7 @@ namespace HelloDoc.Controllers
         {
             var correct = await _context.Users
                 .FirstOrDefaultAsync(m => m.Email == request.User.Email);
+            _context.Users.Update(request.User);
             _context.Add(request);
             _context.SaveChanges(); 
             return View() ;

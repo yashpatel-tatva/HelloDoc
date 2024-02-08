@@ -1,3 +1,5 @@
+using DataAccess.Repository;
+using DataAccess.Repository.IRepository;
 using HelloDoc.DataContext;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -7,6 +9,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<HelloDocDbContext>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IAspNetUserRepository, AspNetUserRepository>();
+builder.Services.AddScoped<IRequestRepository , RequestRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

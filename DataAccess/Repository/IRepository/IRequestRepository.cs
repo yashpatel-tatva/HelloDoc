@@ -7,10 +7,9 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Repository.IRepository
 {
-    public interface IUserRepository : IRepository<User>
+    public interface IRequestRepository : IRepository<Request>
     {
-
-        void Update(User user);
+        void Update(Request request);
         void Save();
     }
 }

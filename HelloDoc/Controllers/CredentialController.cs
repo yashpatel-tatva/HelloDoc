@@ -1,4 +1,5 @@
-﻿ using HelloDoc.DataContext;
+﻿using DataAccess.Repository.IRepository;
+using HelloDoc.DataContext;
 using HelloDoc.DataModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -7,18 +8,17 @@ namespace HelloDoc.Controllers
 {
     public class CredentialController : Controller
     {
-        private readonly HelloDocDbContext _context;
-        public CredentialController(HelloDocDbContext context) { 
+        private readonly IAspNetUserRepository _context;
+        public CredentialController(IAspNetUserRepository context) { 
             _context = context;
         }
         [HttpPost]
-        public async Task<IActionResult> Login(User user)
+        public IActionResult Login(Aspnetuser user)
         {
             try
             {   
-                var correct = await _context.Aspnetusers
-                .FirstOrDefaultAsync(m => m.Email == user.Email);
-                if (correct.Passwordhash == user.Aspnetuser.Passwordhash)
+                var correct = _context.GetFirstOrDefault(m => m.Email == user.Email);
+                if (correct.Passwordhash == user.Passwordhash)
                 {
                     return RedirectToAction("Index", "Home");
                 }

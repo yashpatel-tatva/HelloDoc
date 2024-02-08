@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Repository.IRepository
 {
-    public interface IUserRepository : IRepository<User>
+    public interface IAspNetUserRepository : IRepository<Aspnetuser>
     {
 
-        void Update(User user);
+
+        void Update(Aspnetuser user);   
         void Save();
     }
 }
