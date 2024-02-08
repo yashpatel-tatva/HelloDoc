@@ -1,9 +1,11 @@
 .iti {
     width : 100%;
 }
+body::-webkit-scrollbar{
+    display : none;
+}
 
 #imgmode{
-    padding : 15px 5px;
     transition : 0.5s ;
 }
 #imgmode:hover{

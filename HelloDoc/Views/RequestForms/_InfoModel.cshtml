@@ -3,7 +3,7 @@
 *@
 @{
 }
-<div id="exampleModal" class="modal" tabindex="-1">
+@*<div id="exampleModal" class="modal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-body text-center">
@@ -14,4 +14,40 @@
             </div>
         </div>
     </div>
-</div>
+</div>*@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    Swal.fire({
+        title: "<strong>Information</strong>",
+        timer: 10000,
+        timerProgressBar: true,
+        icon: "info",
+        html: `
+            When Submitting the request, you must provide the correct contact information for the patient or the responsibly party. Failure to provide the correct email and phone number will delay the service or be declined.
+      `,
+        showCloseButton: false,
+        focusConfirm: false,
+        confirmButtonText: `
+        <i class="fa fa-thumbs-up"></i> Ok!
+      `,
+        willOpen: () => {
+           console.log("Hello")
+            var ss = document.createElement('link');
+            ss.rel = "stylesheet";
+            if (sessionStorage.getItem('flag')) {
+                flag = parseInt(sessionStorage.getItem('flag'));
+                console.log(flag);
+            }
+            @{
+                var sweetalert = "@sweetalert2";
+            }
+            if (flag == 0) {
+                ss.href = "//cdn.jsdelivr.net/npm/@sweetalert/theme-dark@4/dark.css";
+            } else {
+                ss.href = "//cdn.jsdelivr.net/npm/@sweetalert/theme-minimal/minimal.css";
+            }
+            document.head.appendChild(ss);
+        }
+    });
+</script>

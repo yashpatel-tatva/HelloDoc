@@ -1,5 +1,6 @@
 const btn = document.getElementById("btn1");
 const imgmode = document.getElementById('imgmode');
+imgmode.classList.remove("fa-spin");
 const bg = document.getElementsByClassName('bggray');
 btn.addEventListener('click', changetheme);
 var flag = 1;

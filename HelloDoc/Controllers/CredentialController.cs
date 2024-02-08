@@ -1,4 +1,4 @@
-﻿using HelloDoc.DataContext;
+﻿ using HelloDoc.DataContext;
 using HelloDoc.DataModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
