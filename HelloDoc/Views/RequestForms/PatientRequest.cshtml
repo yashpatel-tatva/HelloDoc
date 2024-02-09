@@ -3,11 +3,11 @@
 }
 @{
 }
-@model HelloDoc.DataModels.Request;
+@model HelloDoc.ViewModels.PatientRequestViewModel;
 
 <div class="container pb-5 mb-5">
     <div class="d-flex subinfodiv align-items-center py-3">
-        <div class="h3 subinfotext fw-bold">Submit Information</div>
+        <div class="h3 subinfotext fw-bold">Submit Information </div>
         <div>
             <a asp-controller="Home" asp-action="PatientRequestScreen">
                 <button class="d-flex babtn rounded align-item-center p-1 px-2">
@@ -17,32 +17,29 @@
             </a>
         </div>
     </div>
-    <form asp-controller="RequestForms" asp-action="Self" method="post">
+    <form asp-action="Self" asp-controller="RequestForms" method="post">
         <div class="bglight rounded p-3 shadow" id="content">
-            <input type="number" asp-for="Requesttypeid" value="1" hidden/>
-            <input type="number" asp-for="Status" value="1" hidden/>
-            <input type="number" asp-for="Isurgentemailsent" value="1" hidden />
             <div>
                 <div class="h5 fw-bold">Patient Information</div>
                 <div class="row d-flex">
                     <div class="py-2 col-12 ">
                         <div class="form-group rounded d-flex align-items-center">
-                            <textarea  class="form-control" placeholder=" " rows="3"></textarea><span>Enter Brief Details Of Symptomps (Optional)</span>
+                            <textarea class="form-control" placeholder="" rows="3" asp-for="Symptomps"></textarea><span>Enter Brief Details Of Symptomps (Optional)</span>
                         </div>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="text" class="form-control" placeholder="" required="required" asp-for="Firstname"><span>First Name</span>
+                            <input type="text" class="form-control" placeholder="" required="required" asp-for="FirstName"><span>First Name</span>
                         </div>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="text" class="form-control" placeholder="" required="required" asp-for="Lastname"><span>Last Name</span>
+                            <input type="text" class="form-control" placeholder="" required="required" asp-for="LastName"><span>Last Name</span>
                         </div>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="date" class="form-control" placeholder="" required="required" ><span>Date of Birth</span>
+                            <input type="date" class="form-control" placeholder="" required="required" asp-for="BirthDate"><span>Date of Birth</span>
                         </div>
                     </div>
                 </div>
@@ -52,39 +49,42 @@
                 <div class="row d-flex">
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="email" class="form-control" placeholder="" required="required" asp-for="User.Email"><span>Email</span>
+
+                            <input type="email" class="form-control" placeholder="" required="required" asp-for="Email"> <span>Email</span>
+                            @*onchange="this.form.submit()"*@
                         </div>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                         <div class="telephone rounded">
                             <div class="input-group d-flex align-items-center rounded ">
-                                <input type="tel" id="tel" class="form-control" >
+                                <input type="tel" id="tel" class="form-control" asp-for="PhoneNumber">
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> 
+                @Html.Raw(TempData["Password Fields"])
             </div>
             <div class="mt-4">
                 <div class="h5 fw-bold">Patient Location</div>
                 <div class="row d-flex">
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="text" class="form-control" placeholder="" required="required" asp-for="User.Street"><span>Street</span>
+                            <input type="text" class="form-control" placeholder="" required="required" asp-for="Street"><span>Street</span>
                         </div>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="text" class="form-control" placeholder="" required="required" asp-for="User.City"><span>City</span>
+                            <input type="text" class="form-control" placeholder="" required="required" asp-for="City"><span>City</span>
                         </div>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="text" class="form-control" placeholder="" required="required" asp-for="User.State"><span>State</span>
+                            <input type="text" class="form-control" placeholder="" required="required" asp-for="State"><span>State</span>
                         </div>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="text" class="form-control" placeholder="" required="required" asp-for="User.Zip"><span>Zip Code</span>
+                            <input type="text" class="form-control" placeholder="" required="required" asp-for="ZipCode"><span>Zip Code</span>
                         </div>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
@@ -132,3 +132,36 @@
         </div>
     </form>
 </div>
+
+<script>
+    const eyeiconlabel = document.getElementById('eyeiconlabel');
+    const eyeicon = document.getElementById('eyeicon');
+    const showpass = document.getElementById('showpass');
+    eyeiconlabel.addEventListener("click", () => {
+        if (showpass.type === "text") {
+            showpass.type = "password";
+            eyeicon.classList.remove("fa-eye");
+            eyeicon.classList.add("fa-eye-slash");
+
+        } else {
+            showpass.type = "text";
+            eyeicon.classList.remove("fa-eye-slash");
+            eyeicon.classList.add("fa-eye");
+        }
+    })
+    const eyeiconlabel1 = document.getElementById('eyeiconlabel1');
+    const eyeicon1 = document.getElementById('eyeicon1');
+    const showpass1 = document.getElementById('showpass1');
+    eyeiconlabel1.addEventListener("click", () => {
+        if (showpass1.type === "text") {
+            showpass1.type = "password";
+            eyeicon1.classList.remove("fa-eye");
+            eyeicon1.classList.add("fa-eye-slash");
+
+        } else {
+            showpass1.type = "text";
+            eyeicon1.classList.remove("fa-eye-slash");
+            eyeicon1.classList.add("fa-eye");
+        }
+    })
+</script>
