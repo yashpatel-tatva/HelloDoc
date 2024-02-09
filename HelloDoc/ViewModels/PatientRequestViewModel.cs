@@ -18,5 +18,6 @@
         public string Room { get; set; }
         public int Requesttypeid { get; set; } = 1;
         public short Status { get; set; } = 1;
+        public string Password { get;  set; }
     }
 }

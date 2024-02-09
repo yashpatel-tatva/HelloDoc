@@ -1,0 +1,191 @@
+﻿@model IEnumerable<HelloDoc.DataModels.Request>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Firstname)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Lastname)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Phonenumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Confirmationnumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Createddate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Isdeleted)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Modifieddate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Declinedby)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Isurgentemailsent)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Lastwellnessdate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ismobile)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Calltype)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Completedbyphysician)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Lastreservationdate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Accepteddate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Relationname)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Casenumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ip)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Casetag)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Casetagphysician)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Patientaccountid)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Createduserid)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Physician)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Requesttype)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.User)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Firstname)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Lastname)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Phonenumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Confirmationnumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Createddate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Isdeleted)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Modifieddate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Declinedby)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Isurgentemailsent)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Lastwellnessdate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ismobile)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Calltype)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Completedbyphysician)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Lastreservationdate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Accepteddate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Relationname)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Casenumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ip)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Casetag)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Casetagphysician)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Patientaccountid)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Createduserid)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Physician.Businessname)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Requesttype.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.User.Aspnetuserid)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Requestid">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Requestid">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Requestid">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

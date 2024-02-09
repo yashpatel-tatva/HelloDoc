@@ -48,5 +48,11 @@ namespace DataAccess.Repository
         {
             dbSet.RemoveRange(entity);
         }
+
+        bool IRepository<T>.Any(Expression<Func<T, bool>> filter)
+        {
+            IQueryable<T> query = dbSet;
+            return query.Any(filter);
+        }
     }
 }

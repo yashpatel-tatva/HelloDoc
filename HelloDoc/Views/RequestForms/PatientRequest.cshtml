@@ -17,7 +17,7 @@
             </a>
         </div>
     </div>
-    <form asp-action="Self" asp-controller="RequestForms" method="post">
+    <form asp-action="Self" asp-controller="PatientRequestForm" method="post">
         <div class="bglight rounded p-3 shadow" id="content">
             <div>
                 <div class="h5 fw-bold">Patient Information</div>
@@ -50,7 +50,7 @@
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
 
-                            <input type="email" class="form-control" placeholder="" required="required" asp-for="Email"> <span>Email</span>
+                            <input type="email" class="form-control" placeholder="" required="required" onblur="checkEmailExists()" asp-for="Email" id="patientEmail"> <span>Email</span>
                             @*onchange="this.form.submit()"*@
                         </div>
                     </div>
@@ -62,7 +62,22 @@
                         </div>
                     </div>
                 </div> 
-                @Html.Raw(TempData["Password Fields"])
+                <div id="passwordf" style="display : none;">
+                <div class="row d-flex" >
+                    <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
+                            <div class="form-group d-flex align-items-center rounded" >
+                                <input type="password" class="form-control" placeholder="" id="showpass" asp-for="Password" onblur="print()"><span>Password</span>
+                                <label id="eyeiconlabel" class="px-2"><i class="fa-regular fa-eye-slash" id="eyeicon"></i></label> 
+                        </div> 
+                    </div> 
+                    <div class="py-2 col-xl-6 col-md-6 col-sm-12">
+                            <div class="form-group d-flex align-items-center rounded" id="showpass1">
+                                <input type="password" class="form-control"  placeholder="" ><span>Confirm Password</span> 
+                              <label id="eyeiconlabel1" class="px-2"><i class="fa-regular fa-eye-slash" id="eyeicon1"></i></label> 
+                         </div> 
+                    </div>
+                    </div>
+                </div>
             </div>
             <div class="mt-4">
                 <div class="h5 fw-bold">Patient Location</div>
@@ -164,4 +179,34 @@
             eyeicon1.classList.add("fa-eye");
         }
     })
+</script>
+<script>
+    function checkEmailExists() {
+        var email = document.getElementById("patientEmail").value;
+        console.log("check")
+        fetch('/Credential/checkemail/' + email)
+            .then(response => response.json())
+            .then(data => {
+                var div = document.getElementById("passwordf")
+                var patientPassword = document.getElementById('showpass');
+                var patientConfirmPassword = document.getElementById('showpass1');
+                if (data.exists) {
+                    patientPassword.style.display = 'none';
+                    patientConfirmPassword.style.display = 'none';
+                    div.style.display = 'none';
+                    console.log("exist ")
+                }
+                else {
+                    patientPassword.style.display = 'block';
+                    patientConfirmPassword.style.display = 'block';
+                    div.style.display = 'block';
+                    console.log(" not exist ")
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+    function print(){
+        var pass = document.getElementById("showpass").value
+        console.log(pass)
+    }
 </script>

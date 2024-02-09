@@ -12,9 +12,20 @@ namespace HelloDoc.Controllers
         public CredentialController(IAspNetUserRepository context) { 
             _context = context;
         }
+
+        [Route("/Credent/checkemail/{email}")]
+        [HttpGet]
+        public IActionResult CheckEmail(string email)
+        {
+            var emailExists = _context.Any(u => u.Email == email);
+            return Json(new { exists = emailExists });
+        }
+
         [HttpPost]
         public IActionResult Login(Aspnetuser user)
         {
+            var result = CheckEmail(user.Email).ToString();
+            result.ToString();
             try
             {   
                 var correct = _context.GetFirstOrDefault(m => m.Email == user.Email);

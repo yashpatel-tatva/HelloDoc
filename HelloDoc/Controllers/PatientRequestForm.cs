@@ -1,55 +1,28 @@
 ﻿using HelloDoc.DataContext;
-using HelloDoc.Models;
 using HelloDoc.DataModels;
-using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
-using Microsoft.EntityFrameworkCore;
 using HelloDoc.ViewModels;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 
 namespace HelloDoc.Controllers
 {
-    public class RequestFormsController : Controller
+    public class PatientRequestForm : Controller
     {
-        private readonly HelloDocDbContext _context;
-        public RequestFormsController(HelloDocDbContext context)
-        {
+        public readonly HelloDocDbContext _context;
+        public PatientRequestForm(HelloDocDbContext context) {
             _context = context;
-        }
-        public IActionResult PatientRequest()
-        {
-            //@TempData["Display"] = "d-none";
-            return View();
-        }
-        public IActionResult FamilyRequest()
-        {
-            return View();
-        }
-        public IActionResult ConciergeRequest()
-        {
-            return View();
-        }
-        public IActionResult BuisnessPartnerRequest()
-        {
-            return View();
-        }
-
-        [Route("/Patient/RequestForms/checkemail/{email}")]
-        [HttpGet]
-        public IActionResult CheckEmail(string email)
-        {
-            var emailExists = _context.Aspnetusers.Any(u => u.Email == email);
-            return Json(new { exists = emailExists });
         }
 
         [HttpPost]
         public async Task<IActionResult> Self(PatientRequestViewModel model)
         {
-            
-            
-            if(model.Password  != null)
-            {   
-                Aspnetuser newaspnetuser = new Aspnetuser { 
+
+
+            if (model.Password != null)
+            {
+                Aspnetuser newaspnetuser = new Aspnetuser
+                {
                     Id = Guid.NewGuid().ToString(),
                     Username = model.FirstName + model.LastName,
                     Passwordhash = model.Password,
@@ -73,7 +46,7 @@ namespace HelloDoc.Controllers
                     Intyear = model.BirthDate.Year,
                     Createdby = model.Email,
                     Createddate = DateTime.Now,
-                    Regionid = 3 ,
+                    Regionid = 3,
                 };
                 _context.Users.Add(newuser);
                 _context.SaveChanges();
@@ -132,14 +105,6 @@ namespace HelloDoc.Controllers
                 //@TempData["Display"] = "d-flex";
                 return RedirectToAction("PatientRequest", model);
             }
-        }
-
-
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }
