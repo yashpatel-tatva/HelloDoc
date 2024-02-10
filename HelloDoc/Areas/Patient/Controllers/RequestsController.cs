@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using HelloDoc.DataContext;
 using HelloDoc.DataModels;
 
-namespace HelloDoc.Controllers
+namespace HelloDoc.Areas.Patient.Controllers
 {
     public class RequestsController : Controller
     {
@@ -167,14 +167,14 @@ namespace HelloDoc.Controllers
             {
                 _context.Requests.Remove(request);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool RequestExists(int id)
         {
-          return (_context.Requests?.Any(e => e.Requestid == id)).GetValueOrDefault();
+            return (_context.Requests?.Any(e => e.Requestid == id)).GetValueOrDefault();
         }
     }
 }

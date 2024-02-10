@@ -4,16 +4,17 @@ using HelloDoc.DataModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace HelloDoc.Controllers
+namespace HelloDoc.Areas.Patient.DataController
 {
     public class CredentialController : Controller
     {
         private readonly IAspNetUserRepository _context;
-        public CredentialController(IAspNetUserRepository context) { 
+        public CredentialController(IAspNetUserRepository context)
+        {
             _context = context;
         }
 
-        [Route("/Credent/checkemail/{email}")]
+        [Route("/Credential/checkemail/{email}")]
         [HttpGet]
         public IActionResult CheckEmail(string email)
         {
@@ -27,7 +28,7 @@ namespace HelloDoc.Controllers
             var result = CheckEmail(user.Email).ToString();
             result.ToString();
             try
-            {   
+            {
                 var correct = _context.GetFirstOrDefault(m => m.Email == user.Email);
                 if (correct.Passwordhash == user.Passwordhash)
                 {

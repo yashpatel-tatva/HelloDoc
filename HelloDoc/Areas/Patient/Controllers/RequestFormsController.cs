@@ -4,10 +4,10 @@ using HelloDoc.DataModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
-using HelloDoc.ViewModels;
 using System.Globalization;
+using HelloDoc.Areas.Patient.ViewModels;
 
-namespace HelloDoc.Controllers
+namespace HelloDoc.Areas.Patient.Controllers
 {
     public class RequestFormsController : Controller
     {
@@ -45,11 +45,12 @@ namespace HelloDoc.Controllers
         [HttpPost]
         public async Task<IActionResult> Self(PatientRequestViewModel model)
         {
-            
-            
-            if(model.Password  != null)
-            {   
-                Aspnetuser newaspnetuser = new Aspnetuser { 
+
+
+            if (model.Password != null)
+            {
+                Aspnetuser newaspnetuser = new Aspnetuser
+                {
                     Id = Guid.NewGuid().ToString(),
                     Username = model.FirstName + model.LastName,
                     Passwordhash = model.Password,
@@ -73,7 +74,7 @@ namespace HelloDoc.Controllers
                     Intyear = model.BirthDate.Year,
                     Createdby = model.Email,
                     Createddate = DateTime.Now,
-                    Regionid = 3 ,
+                    Regionid = 3,
                 };
                 _context.Users.Add(newuser);
                 _context.SaveChanges();
@@ -91,7 +92,7 @@ namespace HelloDoc.Controllers
                     Email = model.Email,
                     Phonenumber = model.PhoneNumber,
                     Status = model.Status,
-                    Createddate = System.DateTime.Now,
+                    Createddate = DateTime.Now,
                     User = user,
                 };
                 _context.Add(request);

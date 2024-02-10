@@ -1,8 +1,8 @@
-﻿ using HelloDoc.Models;
+﻿using HelloDoc.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
-namespace HelloDoc.Controllers
+namespace HelloDoc.Areas.Patient.Controllers
 {
     public class HomeController : Controller
     {

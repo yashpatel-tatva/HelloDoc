@@ -1,13 +1,12 @@
-﻿@{
-    ViewData["Title"] = "\"Submit Request As - Patient\"";
-}
+﻿@using HelloDoc.Areas.Patient.ViewModels
 @{
+    ViewData["Title"] = "\"Submit Request As - Friend/Family\"";
 }
-@model HelloDoc.ViewModels.PatientRequestViewModel;
-
+@Html.Partial("_InfoModel")
+@model FamilyRequestViewModel;
 <div class="container pb-5 mb-5">
     <div class="d-flex subinfodiv align-items-center py-3">
-        <div class="h3 subinfotext fw-bold">Submit Information </div>
+        <div class="h3 subinfotext fw-bold">Submit Information</div>
         <div>
             <a asp-controller="Home" asp-action="PatientRequestScreen">
                 <button class="d-flex babtn rounded align-item-center p-1 px-2">
@@ -17,24 +16,57 @@
             </a>
         </div>
     </div>
-    <form asp-action="Self" asp-controller="PatientRequestForm" method="post">
+    <form asp-controller="FamilyRequestForm" asp-action="FamilyRequest" method="post">
         <div class="bglight rounded p-3 shadow" id="content">
+
             <div>
+                <div class="h5 fw-bold">Family/Friend Information</div>
+                <div class="row d-flex">
+                    <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
+                        <div class="form-group d-flex align-items-center rounded">
+                            <input type="textbox" class="form-control" placeholder="" required="required" asp-for="F_FirstName"><span>Your First Name</span>
+                        </div>
+                    </div>
+                    <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
+                        <div class="form-group d-flex align-items-center rounded">
+                            <input type="textbox" class="form-control" placeholder="" required="required" asp-for="F_LastName"><span>Your Last Name</span>
+                        </div>
+                    </div>
+                    <div class="py-2 col-xl-6 col-md-6 col-sm-12">
+                        <div class="telephone rounded">
+                            <div class="input-group d-flex align-items-center rounded ">
+                                <input type="tel" id="tel" class="form-control" asp-for="F_Phone">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
+                        <div class="form-group d-flex align-items-center rounded">
+                            <input type="email" class="form-control" placeholder="" required="required" asp-for="F_Email"><span>Your Email</span>
+                        </div>
+                    </div>
+                    <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
+                        <div class="form-group d-flex align-items-center rounded">
+                            <input type="textbox" class="form-control" placeholder="" required="required" asp-for="Relation"><span>Relation With Patient</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-4">
                 <div class="h5 fw-bold">Patient Information</div>
                 <div class="row d-flex">
                     <div class="py-2 col-12 ">
                         <div class="form-group rounded d-flex align-items-center">
-                            <textarea class="form-control" placeholder="" rows="3" asp-for="Symptomps"></textarea><span>Enter Brief Details Of Symptomps (Optional)</span>
+                            <textarea class="form-control" asp-for="Symptopmps" placeholder=" " rows="3"></textarea><span>Enter Brief Details Of Symptomps (Optional)</span>
                         </div>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="text" class="form-control" placeholder="" required="required" asp-for="FirstName"><span>First Name</span>
+                            <input type="textbox" class="form-control" placeholder="" required="required" asp-for="FirstName"><span>First Name</span>
                         </div>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="text" class="form-control" placeholder="" required="required" asp-for="LastName"><span>Last Name</span>
+                            <input type="textbox" class="form-control" placeholder="" required="required" asp-for="LastName"><span>Last Name</span>
                         </div>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12">
@@ -49,33 +81,15 @@
                 <div class="row d-flex">
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-
-                            <input type="email" class="form-control" placeholder="" required="required" onblur="checkEmailExists()" asp-for="Email" id="patientEmail"> <span>Email</span>
-                            @*onchange="this.form.submit()"*@
+                            <input type="email" class="form-control" placeholder="" required="required" asp-for="Email"><span>Email</span>
                         </div>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                         <div class="telephone rounded">
                             <div class="input-group d-flex align-items-center rounded ">
-                                <input type="tel" id="tel" class="form-control" asp-for="PhoneNumber">
+                                <input type="tel" id="tel1" class="form-control" asp-for="Phone">
                             </div>
                         </div>
-                    </div>
-                </div> 
-                <div id="passwordf" style="display : none;">
-                <div class="row d-flex" >
-                    <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
-                            <div class="form-group d-flex align-items-center rounded" >
-                                <input type="password" class="form-control" placeholder="" id="showpass" asp-for="Password" onblur="print()"><span>Password</span>
-                                <label id="eyeiconlabel" class="px-2"><i class="fa-regular fa-eye-slash" id="eyeicon"></i></label> 
-                        </div> 
-                    </div> 
-                    <div class="py-2 col-xl-6 col-md-6 col-sm-12">
-                            <div class="form-group d-flex align-items-center rounded" id="showpass1">
-                                <input type="password" class="form-control"  placeholder="" ><span>Confirm Password</span> 
-                              <label id="eyeiconlabel1" class="px-2"><i class="fa-regular fa-eye-slash" id="eyeicon1"></i></label> 
-                         </div> 
-                    </div>
                     </div>
                 </div>
             </div>
@@ -84,27 +98,27 @@
                 <div class="row d-flex">
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="text" class="form-control" placeholder="" required="required" asp-for="Street"><span>Street</span>
+                            <input type="textbox" class="form-control" asp-for="Street" placeholder="" required="required"><span>Street</span>
                         </div>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="text" class="form-control" placeholder="" required="required" asp-for="City"><span>City</span>
+                            <input type="textbox" class="form-control" placeholder="" asp-for="City" required="required"><span>City</span>
                         </div>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="text" class="form-control" placeholder="" required="required" asp-for="State"><span>State</span>
+                            <input type="textbox" class="form-control" placeholder="" asp-for="State" required="required"><span>State</span>
                         </div>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="text" class="form-control" placeholder="" required="required" asp-for="ZipCode"><span>Zip Code</span>
+                            <input type="textbox" class="form-control" placeholder="" asp-for="ZipCode" required="required"><span>Zip Code</span>
                         </div>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="text" class="form-control" placeholder="" required="required" ><span>Room # / Suite (Optional)</span>
+                            <input type="textbox" class="form-control" placeholder="" asp-for="Room" required="required"><span>Room # / Suite (Optional)</span>
                         </div>
                     </div>
                 </div>
@@ -147,66 +161,3 @@
         </div>
     </form>
 </div>
-
-<script>
-    const eyeiconlabel = document.getElementById('eyeiconlabel');
-    const eyeicon = document.getElementById('eyeicon');
-    const showpass = document.getElementById('showpass');
-    eyeiconlabel.addEventListener("click", () => {
-        if (showpass.type === "text") {
-            showpass.type = "password";
-            eyeicon.classList.remove("fa-eye");
-            eyeicon.classList.add("fa-eye-slash");
-
-        } else {
-            showpass.type = "text";
-            eyeicon.classList.remove("fa-eye-slash");
-            eyeicon.classList.add("fa-eye");
-        }
-    })
-    const eyeiconlabel1 = document.getElementById('eyeiconlabel1');
-    const eyeicon1 = document.getElementById('eyeicon1');
-    const showpass1 = document.getElementById('showpass1');
-    eyeiconlabel1.addEventListener("click", () => {
-        if (showpass1.type === "text") {
-            showpass1.type = "password";
-            eyeicon1.classList.remove("fa-eye");
-            eyeicon1.classList.add("fa-eye-slash");
-
-        } else {
-            showpass1.type = "text";
-            eyeicon1.classList.remove("fa-eye-slash");
-            eyeicon1.classList.add("fa-eye");
-        }
-    })
-</script>
-<script>
-    function checkEmailExists() {
-        var email = document.getElementById("patientEmail").value;
-        console.log("check")
-        fetch('/Credential/checkemail/' + email)
-            .then(response => response.json())
-            .then(data => {
-                var div = document.getElementById("passwordf")
-                var patientPassword = document.getElementById('showpass');
-                var patientConfirmPassword = document.getElementById('showpass1');
-                if (data.exists) {
-                    patientPassword.style.display = 'none';
-                    patientConfirmPassword.style.display = 'none';
-                    div.style.display = 'none';
-                    console.log("exist ")
-                }
-                else {
-                    patientPassword.style.display = 'block';
-                    patientConfirmPassword.style.display = 'block';
-                    div.style.display = 'block';
-                    console.log(" not exist ")
-                }
-            })
-            .catch(error => console.error('Error:', error));
-    }
-    function print(){
-        var pass = document.getElementById("showpass").value
-        console.log(pass)
-    }
-</script>

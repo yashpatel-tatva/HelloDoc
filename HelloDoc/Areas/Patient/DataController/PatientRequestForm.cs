@@ -1,16 +1,17 @@
-﻿using HelloDoc.DataContext;
+﻿using HelloDoc.Areas.Patient.ViewModels;
+using HelloDoc.DataContext;
 using HelloDoc.DataModels;
-using HelloDoc.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 
-namespace HelloDoc.Controllers
+namespace HelloDoc.Areas.Patient.DataController
 {
     public class PatientRequestForm : Controller
     {
         public readonly HelloDocDbContext _context;
-        public PatientRequestForm(HelloDocDbContext context) {
+        public PatientRequestForm(HelloDocDbContext context)
+        {
             _context = context;
         }
 
@@ -64,7 +65,7 @@ namespace HelloDoc.Controllers
                     Email = model.Email,
                     Phonenumber = model.PhoneNumber,
                     Status = model.Status,
-                    Createddate = System.DateTime.Now,
+                    Createddate = DateTime.Now,
                     User = user,
                 };
                 _context.Add(request);
@@ -83,6 +84,7 @@ namespace HelloDoc.Controllers
                     Zipcode = model.ZipCode,
                     Intdate = model.BirthDate.Day,
                     Intyear = model.BirthDate.Year,
+                    Address = model.Room + " , " + model.Street + " , " + model.City + " , " + model.State,
                     Strmonth = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(model.BirthDate.Month),
                     Regionid = (int)user.Regionid,
                 };
