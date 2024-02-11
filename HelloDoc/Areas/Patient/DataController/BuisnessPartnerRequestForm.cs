@@ -4,25 +4,25 @@ using HelloDoc.DataModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
-using System.Net;
 
 namespace HelloDoc.Areas.Patient.DataController
 {
-    public class ConciergeRequestForm : Controller
+    public class BuisnessPartnerRequestForm : Controller
     {
         public readonly HelloDocDbContext _context;
-
-        public ConciergeRequestForm(HelloDocDbContext context) {
+        public BuisnessPartnerRequestForm(HelloDocDbContext context)
+        {
             _context = context;
         }
 
         [HttpPost]
-        public async Task<IActionResult> Conciergerequest(ConciergeRequestViewModel model)
+        public async Task<IActionResult> BuisneesPartnerRequest(BuisnessPartnerRequestViewModel model)
         {
             var aspnetuser = await _context.Aspnetusers.FirstOrDefaultAsync(m => m.Email == model.Email);
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == model.Email);
             if (aspnetuser != null)
             {
+                
                 Request request = new Request
                 {
                     Requesttypeid = model.Requesttypeid,
@@ -33,6 +33,7 @@ namespace HelloDoc.Areas.Patient.DataController
                     Phonenumber = model.Phone,
                     Status = model.Status,
                     Createddate = DateTime.Now,
+                    Casenumber = model.CaseNumber,
                     User = user,
                 };
                 _context.Add(request);
@@ -41,15 +42,15 @@ namespace HelloDoc.Areas.Patient.DataController
                 {
                     Notes = model.Symptopmps,
                     Requestid = request.Requestid,
-                    Firstname = model.C_FirstName,
-                    Lastname = model.C_LastName,
-                    Email = model.C_Email,
-                    Phonenumber = model.C_Phone,
-                    State = model.C_State,
-                    Street = model.C_Street,
-                    City = model.C_City,
-                    Zipcode = model.C_ZipCode,
-                    Address = model.Room + " , " + model.C_Street + " , " + model.C_City + " , " + model.C_State,
+                    Firstname = model.B_FirstName,
+                    Lastname = model.B_LastName,
+                    Email = model.B_Email,
+                    Phonenumber = model.B_Phone,
+                    State = model.State,
+                    Street = model.Street,
+                    City = model.City,
+                    Zipcode = model.ZipCode,
+                    Address = model.Room + " , " + model.Street + " , " + model.City + " , " + model.State,
                     Intdate = model.BirthDate.Day,
                     Intyear = model.BirthDate.Year,
                     Strmonth = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(model.BirthDate.Month),
@@ -57,33 +58,33 @@ namespace HelloDoc.Areas.Patient.DataController
                 };
                 _context.Add(requestclient);
                 _context.SaveChanges();
-                Concierge concierge = new Concierge {
-                    Conciergename = model.C_FirstName + model.C_LastName,
-                    Address = model.Room + " , " + model.C_Street + " , " + model.C_City + " , " + model.C_State,
-                    State = model.C_State,
-                    Street = model.C_Street,
-                    City = model.C_City,
-                    Zipcode = model.C_ZipCode,
+                Business buisness = new Business
+                {
+                    Name = model.B_FirstName + model.B_LastName,
+                    Address1 = model.Room + " , " + model.Street + " , " + model.City + " , " + model.State,
+                    City = model.City,
+                    Zipcode = model.ZipCode,
                     Createddate = DateTime.Now,
+                    Phonenumber = model.B_Phone,
                     Regionid = 3,
+                    Createdby = aspnetuser.Id,
                 };
-                _context.Add(concierge);
+                _context.Add(buisness);
                 _context.SaveChanges();
                 var requestdata = await _context.Requests.FirstOrDefaultAsync(m => m.Email == model.Email);
-                var conciergedata = await _context.Concierges.FirstOrDefaultAsync(m => m.Conciergename == model.C_FirstName + model.C_LastName);
-                Requestconcierge requestconcierge = new Requestconcierge
+                var buisnessdata = await _context.Businesses.FirstOrDefaultAsync(m => m.Name == model.B_FirstName + model.B_LastName);
+                Requestbusiness requestbusiness = new Requestbusiness
                 {
                     Requestid = requestdata.Requestid,
-                    Conciergeid = conciergedata.Conciergeid,
-                    
+                    Businessid = buisness.Businessid,
+
                 };
-                _context.Add(requestconcierge);
+                _context.Add(requestbusiness);
                 _context.SaveChanges();
                 return RedirectToAction("Index", "Home");
             }
             else
             {
-                //email logic 
                 return RedirectToAction("PatientRequestScreen", "Home");
             }
         }

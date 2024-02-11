@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@model HelloDoc.DataModels.User ;
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -26,7 +27,14 @@
                 <img src="~/Logo.png" width="sauto" id="logo" alt="">
             </a>
             <div>
-                <button style="background-color: transparent;" class="border-1 rounded" id="btn1">
+                @if (Model != null)
+                {
+                    <span>Welcome , @Html.DisplayFor(model => model.Firstname)</span>
+                    <button style="background-color: transparent;" class="border-1 rounded text-info border-info p-2">
+                        Log Out
+                    </button>
+                }
+                <button style="background-color: transparent;" class="border-1 rounded p-2 border-info " id="btn1">
                     <i class="fa-solid fa-sun fa-xl" id="imgmode"></i>
                 </button>
             </div>

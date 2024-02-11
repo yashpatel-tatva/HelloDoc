@@ -1,8 +1,9 @@
-﻿@{
+﻿@using HelloDoc.Areas.Patient.ViewModels
+@{
     ViewData["Title"] = "\"Submit Request As - Buisnesspartner\"";
 }
 @Html.Partial("_InfoModel")
-
+@model BuisnessPartnerRequestViewModel
 <div class="container pb-5 mb-5">
     <div class="d-flex subinfodiv align-items-center py-3">
         <div class="h3 subinfotext fw-bold">Submit Information</div>
@@ -15,41 +16,41 @@
             </a>
         </div>
     </div>
-    <form>
+    <form asp-controller="BuisnessPartnerRequestForm" asp-action="BuisneesPartnerRequest" method="post">
         <div class="bglight rounded p-3 shadow" id="content">
             <div>
                 <div class="h5 fw-bold">Business Information</div>
                 <div class="row d-flex">
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="textbox" class="form-control" placeholder="" required="required"><span>Your First Name</span>
+                            <input type="textbox" class="form-control" placeholder="" asp-for="B_FirstName" required="required"><span>Your First Name</span>
                         </div>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="textbox" class="form-control" placeholder="" required="required"><span>Your Last Name</span>
+                            <input type="textbox" class="form-control" placeholder="" asp-for="B_LastName" required="required"><span>Your Last Name</span>
                         </div>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                         <div class="telephone rounded">
                             <div class="input-group d-flex align-items-center rounded ">
-                                <input type="tel" id="tel" class="form-control">
+                                <input type="tel" id="tel" class="form-control" asp-for="B_Phone">
                             </div>
                         </div>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="email" class="form-control" placeholder="" required="required"><span>Your Email</span>
+                            <input type="email" class="form-control" placeholder="" asp-for="B_Email" required="required"><span>Your Email</span>
                         </div>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="textbox" class="form-control" placeholder="" required="required"><span>Business/Property Name</span>
+                            <input type="textbox" class="form-control" placeholder="" asp-for="PropertyName" required="required"><span>Business/Property Name</span>
                         </div>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="textbox" class="form-control" placeholder="" required="required"><span>Case Number</span>
+                            <input type="textbox" class="form-control" placeholder="" asp-for="CaseNumber" required="required"><span>Case Number</span>
                         </div>
                     </div>
                 </div>
@@ -59,22 +60,22 @@
                 <div class="row d-flex">
                     <div class="py-2 col-12 ">
                         <div class="form-group rounded d-flex align-items-center">
-                            <textarea class="form-control" placeholder=" " rows="3"></textarea><span>Enter Brief Details Of Symptomps (Optional)</span>
+                            <textarea class="form-control" placeholder=" " asp-for="Symptopmps" rows="3"></textarea><span>Enter Brief Details Of Symptomps (Optional)</span>
                         </div>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="textbox" class="form-control" placeholder="" required="required"><span>First Name</span>
+                            <input type="textbox" class="form-control" placeholder="" asp-for="FirstName" required="required"><span>First Name</span>
                         </div>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="textbox" class="form-control" placeholder="" required="required"><span>Last Name</span>
+                            <input type="textbox" class="form-control" placeholder="" asp-for="LastName" required="required"><span>Last Name</span>
                         </div>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="date" class="form-control" placeholder="" required="required"><span>Date of Birth</span>
+                            <input type="date" class="form-control" placeholder="" asp-for="BirthDate" required="required"><span>Date of Birth</span>
                         </div>
                     </div>
                 </div>
@@ -84,13 +85,13 @@
                 <div class="row d-flex">
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="email" class="form-control" placeholder="" required="required"><span>Email</span>
+                            <input type="email" class="form-control" placeholder="" asp-for="Email" required="required"><span>Email</span>
                         </div>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                         <div class="telephone rounded">
                             <div class="input-group d-flex align-items-center rounded ">
-                                <input type="tel" id="tel1" class="form-control">
+                                <input type="tel" id="tel1" class="form-control" asp-for="Phone">
                             </div>
                         </div>
                     </div>
@@ -101,27 +102,27 @@
                 <div class="row d-flex">
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="textbox" class="form-control" placeholder="" maxlength="50" required="required"><span>Street</span>
+                            <input type="textbox" class="form-control" placeholder="" asp-for="Street" maxlength="50" required="required"><span>Street</span>
                         </div>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="textbox" class="form-control" placeholder="" required="required"><span>City</span>
+                            <input type="textbox" class="form-control" placeholder="" asp-for="City" required="required"><span>City</span>
                         </div>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="textbox" class="form-control" placeholder="" required="required"><span>State</span>
+                            <input type="textbox" class="form-control" placeholder="" asp-for="State" required="required"><span>State</span>
                         </div>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="textbox" class="form-control" placeholder="" required="required"><span>Zip Code</span>
+                            <input type="textbox" class="form-control" placeholder="" asp-for="ZipCode" required="required"><span>Zip Code</span>
                         </div>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="textbox" class="form-control" placeholder="" required="required"><span>Room # / Suite (Optional)</span>
+                            <input type="textbox" class="form-control" placeholder="" asp-for="Room" required="required"><span>Room # / Suite (Optional)</span>
                         </div>
                     </div>
                 </div>

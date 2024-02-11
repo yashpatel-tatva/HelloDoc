@@ -8,31 +8,31 @@ namespace HelloDoc.Areas.Patient.DataController
 {
     public class CredentialController : Controller
     {
-        private readonly IAspNetUserRepository _context;
-        public CredentialController(IAspNetUserRepository context)
+        private readonly HelloDocDbContext _context;
+        public CredentialController(HelloDocDbContext context)
         {
             _context = context;
         }
 
         [Route("/Credential/checkemail/{email}")]
         [HttpGet]
-        public IActionResult CheckEmail(string email)
+        public async Task<IActionResult> CheckEmail(string email)
         {
-            var emailExists = _context.Any(u => u.Email == email);
+            var emailExists = await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
             return Json(new { exists = emailExists });
         }
 
         [HttpPost]
-        public IActionResult Login(Aspnetuser user)
+        public async Task<IActionResult> Login(Aspnetuser user)
         {
-            var result = CheckEmail(user.Email).ToString();
-            result.ToString();
             try
             {
-                var correct = _context.GetFirstOrDefault(m => m.Email == user.Email);
+                var correct = await _context.Aspnetusers.FirstOrDefaultAsync(m => m.Email == user.Email);
+                var userdata = await _context.Users.FirstOrDefaultAsync(u => u.Email == user.Email);
                 if (correct.Passwordhash == user.Passwordhash)
                 {
-                    return RedirectToAction("Index", "Home");
+                    int id = userdata.Userid;
+                    return RedirectToAction("Dashboard", "Dashboard",new { id = userdata.Userid});
                 }
                 TempData["WrongPass"] = "Enter Correct Password";
                 TempData["Style"] = " border-danger";
