@@ -32,8 +32,8 @@ body{
 }
 
 #btn1{
-    height : 40px;
-    width : 40px;
+    height : 42px;
+    width : 42px;
 }
 
 
@@ -55,6 +55,22 @@ body{
     .nav-tabs .nav-link.active {
         border: 0;
         color: #0dcaf0;
+        font-weight : 700;
+        padding-top : 4px;
         border-bottom: 2px solid #0dcaf0;
         background-color: transparent;
+}
+@media only screen and (max-width:430px) {
+    #btn1 {
+        width: 36px;
+        height: 36px;
+    }
+
+    .navdiv {
+        font-size: 0.75rem;
+    }
+
+    #logo {
+        height: 45px;
+    }
 }

@@ -22,11 +22,12 @@
 }
 
 @media only screen and (max-width:430px) {
-    #imgmode {
-        width: 28.5px;
-        height: 28.5px;
-        padding-top: 13.5px;
-        font-size: 1.5rem;
+    #btn1{
+        width : 36px;
+        height : 36px;
+    }
+    .navdiv{
+        font-size : 0.75rem ;
     }
     #logo {
         height: 45px;

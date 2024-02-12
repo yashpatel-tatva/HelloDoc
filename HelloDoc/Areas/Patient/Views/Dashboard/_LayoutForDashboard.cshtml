@@ -1,5 +1,4 @@
-﻿@model HelloDoc.DataModels.User ;
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -22,46 +21,8 @@
     <link rel="stylesheet" href="~/HelloDoc.styles.css" />
 </head>
 <body data-bs-theme="dark" style="background-color: rgb(235, 235, 235)">
-    <header>
-        <nav class="navbar navbar-light bg-light shadow rounded px-4">
-            <a class="navbar-brand px" asp-controller="Home" asp-action="Index">
-                <img src="~/Logo.png" width="sauto" id="logo" alt="">
-            </a>
-            <div class="navdiv">
-                    <span>Welcome , @Html.DisplayFor(model => model.Firstname)</span>
-                    <button style="background-color: transparent;" class="border-1 rounded text-info border-info p-2">
-                        <div class="logoutimg"><i class=" fa-solid fa-arrow-right-from-bracket "></i></div>
-                        <div class="logouttext"><span class="">Log Out</span></div>
-                    </button>
-                <button style="background-color: transparent;" class="border-1 rounded p-2 border-info " id="btn1">
-                    <i class="fa-solid fa-sun fa-xl" id="imgmode"></i>
-                </button>
-            </div>
-        </nav>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between px-4">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Dashboard" asp-action="MedicalHistory" asp-route-id="@Model.Userid">Dashboard</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Dashboard" asp-action="UserProfile" asp-route-id="@Model.Userid">Profile</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container-fluid pb-5 mb-5">
-        <div class="px-4">
-            @RenderBody()
-        </div>
-    </div>
+   
+    @RenderBody()
     <footer class="text-muted">
         <div class="bg-dark d-flex justify-content-end py-2 mt-auto position-fixed bottom-0  w-100" id="bg">
             <span class="fw-medium px-2  "><a href="#" class="text-secondary">Terms and Condition</a></span>

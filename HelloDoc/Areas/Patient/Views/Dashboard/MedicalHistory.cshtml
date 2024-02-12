@@ -1,0 +1,86 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "_LayoutForDashboard";
+}
+
+@model IEnumerable<HelloDoc.DataModels.Request>;
+<header>
+    <nav class="navbar navbar-light bg-light shadow rounded px-4">
+        <a class="navbar-brand px" asp-controller="Home" asp-action="Index">
+            <img src="~/Logo.png" width="sauto" id="logo" alt="">
+        </a>
+        <div class="navdiv">
+            @if (Model != null)
+            {
+                <span>Welcome , @TempData["user"]</span>
+                <a asp-action="PatientLogin" asp-controller="Home">
+                <button style="background-color: transparent;" class="border-1 rounded text-info border-info p-2">
+                    <div class="logoutimg"><i class=" fa-solid fa-arrow-right-from-bracket "></i></div>
+                    <div class="logouttext"><span class="">Log Out</span></div>
+                </button></a>
+            }
+            <button style="background-color: transparent;" class="border-1 rounded p-2 border-info " id="btn1">
+                <i class="fa-solid fa-sun fa-xl" id="imgmode"></i>
+            </button>
+        </div>
+    </nav>
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between px-4">
+                <ul class="navbar-nav flex-grow-1">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Dashboard" asp-action="MedicalHistory" asp-route-id='@TempData["id"]'>Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Dashboard" asp-action="UserProfile" asp-route-id='@TempData["id"]'>Profile</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+<div class="container-fluid pb-5 mb-5">
+    <div class="px-4">
+
+        <div class="d-flex subinfodiv align-items-center py-3">
+            <div class="h3 subinfotext fw-bold">Medical History </div>
+        </div>
+        <div class="bglight rounded p-3 shadow" id="content">
+            <div class="d-flex justify-content-end">
+                <a asp-controller="Dashboard" asp-action="Dashboard">
+                    <button class="d-flex babtn rounded align-item-center p-1 px-2">
+                        <div class="plusimg"><i class="bi bi-plus-lg"></i></div>
+                        <div class="cnr"><span>Create New request</span></div>
+                    </button>
+                </a>
+            </div>
+            <div>
+                <table class="table">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">Created Date</th>
+                            <th scope="col">Current Status</th>
+                            <th scope="col">Document</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var m in Model)
+                        {
+                            <tr>
+                                <th>@m.Createddate</th>
+                                <th>@m.Createduserid</th>
+                                <th>@m.Requestid</th>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

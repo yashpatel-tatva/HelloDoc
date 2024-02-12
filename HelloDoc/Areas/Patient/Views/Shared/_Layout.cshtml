@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="~/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/patientpage.css" />
     <link rel="stylesheet" href="~/css/nightmode.css" />
+    <link rel="stylesheet" href="~/css/dashboard.css" />
     <link rel="stylesheet" href="~/css/requestform.css" />
     <link rel="stylesheet" href="~/css/style.css" />
     <link rel="stylesheet" href="~/css/index.css" />
@@ -22,16 +23,17 @@
 </head>
 <body data-bs-theme="dark" style="background-color: rgb(235, 235, 235)">
     <header>
-        <nav class="navbar navbar-light bg-light shadow rounded px-3">
+        <nav class="navbar navbar-light bg-light shadow rounded px-4">
             <a class="navbar-brand px" asp-controller="Home" asp-action="Index">
                 <img src="~/Logo.png" width="sauto" id="logo" alt="">
             </a>
-            <div>
+            <div class="navdiv">
                 @if (Model != null)
                 {
                     <span>Welcome , @Html.DisplayFor(model => model.Firstname)</span>
                     <button style="background-color: transparent;" class="border-1 rounded text-info border-info p-2">
-                        Log Out
+                        <div class="logoutimg"><i class=" fa-solid fa-arrow-right-from-bracket "></i></div>
+                        <div class="logouttext"><span class="">Log Out</span></div>
                     </button>
                 }
                 <button style="background-color: transparent;" class="border-1 rounded p-2 border-info " id="btn1">
