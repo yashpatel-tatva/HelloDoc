@@ -1,4 +1,5 @@
-﻿using HelloDoc.DataContext;
+﻿using HelloDoc.Areas.Patient.ViewModels;
+using HelloDoc.DataContext;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,20 +12,17 @@ namespace HelloDoc.Areas.Patient.DataController
         {
             _context = context;
         }
-        public async Task<IActionResult> UserProfile(int id)
-        {          
-            var user = await _context.Users.FirstOrDefaultAsync(m => m.Userid == id);
-            return View(user);
-        }
-        public async Task<IActionResult> MedicalHistory(int id)
+        
+        public async Task<IActionResult> Dashboard(int id)
         {
+            PatientDashboard patientDashboard = new PatientDashboard();
             var user = await _context.Users.FirstOrDefaultAsync(m => m.Userid == id);
-            TempData["user"] = user.Firstname;
-            TempData["id"] = user.Userid;
             var request = from m in _context.Requests
                           where m.Userid == id
                           select m;
-            return View(request.ToList());
+            patientDashboard.User = user;
+            patientDashboard.Requests = request.ToList();
+            return View(patientDashboard);
         }
     }
 }

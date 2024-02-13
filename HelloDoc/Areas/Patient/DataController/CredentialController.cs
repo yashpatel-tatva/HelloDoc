@@ -32,7 +32,7 @@ namespace HelloDoc.Areas.Patient.DataController
                 if (correct.Passwordhash == user.Passwordhash)
                 {
                     int id = userdata.Userid;
-                    return RedirectToAction("MedicalHistory", "Dashboard", new { id = userdata.Userid});
+                    return RedirectToAction("Dashboard", "Dashboard", new { id = userdata.Userid});
                 }
                 TempData["WrongPass"] = "Enter Correct Password";
                 TempData["Style"] = " border-danger";
