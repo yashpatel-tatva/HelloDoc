@@ -25,6 +25,8 @@
 
         public int Requesttypeid { get; set; } = 2;
         public short Status { get; set; } = 1;
+        public List<IFormFile> Upload { get; set; }
+
     }
 
 }

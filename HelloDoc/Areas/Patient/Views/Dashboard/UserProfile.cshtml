@@ -1,4 +1,4 @@
-﻿@model HelloDoc.Areas.Patient.ViewModels.PatientDashboard;
+﻿@model HelloDoc.Areas.Patient.ViewModels.PatientDashboardViewModel;
 <div class="container-fluid pb-5 mb-5">
     <div class="px-4">
             <div class="d-flex subinfodiv align-items-center py-3">
@@ -13,23 +13,23 @@
                 </div>
             </div>
     <div class="bglight rounded p-3 shadow" id="content">
-        <form>    
+        <form asp-action="Edit" asp-controller="Dashboard" asp-route-id="@Model.User.Userid">    
             <div>
                 <div class="h5 fw-bold">Patient Information</div>
                 <div class="row d-flex">
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                                <input type="text" class="form-control" placeholder="" value="@Html.DisplayFor(model => model.User.Firstname)" required="required"><span>First Name</span>
+                                <input type="text" class="form-control" placeholder="" asp-for="User.Firstname" required="required"><span>First Name</span>
                         </div>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                                <input type="text" class="form-control" placeholder="" value="@Html.DisplayFor(model => model.User.Lastname)" required="required"><span>Last Name</span>
+                                <input type="text" class="form-control" placeholder="" asp-for="User.Lastname" required="required"><span>Last Name</span>
                         </div>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                         <div class="form-group d-flex align-items-center rounded">
-                                <input type="date" class="form-control" placeholder="" value="" required="required"><span>Date of Birth</span>
+                                <input type="date" class="form-control" placeholder="" asp-for="birthdate" required="required"><span>Date of Birth</span>
                         </div>
                     </div>
                 </div>
@@ -40,13 +40,13 @@
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                         <div class="telephone rounded">
                             <div class="input-group d-flex align-items-center rounded ">
-                                    <input type="tel" id="tel" class="form-control" value="@Html.DisplayFor(model => model.User.Mobile)">
+                                    <input type="tel" id="tel" class="form-control" asp-for="User.Mobile">
                             </div>
                         </div>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                                <input type="email" class="form-control" placeholder="" value="@Html.DisplayFor(model => model.User.Email)" required="required" id="patientEmail"> <span>Email</span>
+                                <input type="email" class="form-control" placeholder="" asp-for="User.Email" required="required" id="patientEmail"> <span>Email</span>
                         </div>
                     </div>
                 </div>
@@ -56,22 +56,22 @@
                 <div class="row d-flex">
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                                <input type="text" class="form-control" placeholder="" value="@Html.DisplayFor(model => model.User.Street)" required="required"><span>Street</span>
+                                <input type="text" class="form-control" placeholder="" asp-for="User.Street" required="required"><span>Street</span>
                         </div>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                                <input type="text" class="form-control" placeholder="" value="@Html.DisplayFor(model => model.User.City)" required="required"><span>City</span>
+                                <input type="text" class="form-control" placeholder="" asp-for="User.City" required="required"><span>City</span>
                         </div>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                         <div class="form-group d-flex align-items-center rounded">
-                                <input type="text" class="form-control" placeholder="" value="@Html.DisplayFor(model => model.User.State)" required="required"><span>State</span>
+                                <input type="text" class="form-control" placeholder="" asp-for="User.State" required="required"><span>State</span>
                         </div>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                                <input type="text" class="form-control" placeholder="" value="@Html.DisplayFor(model => model.User.Zip)" required="required"><span>Zip Code</span>
+                                <input type="text" class="form-control" placeholder="" asp-for="User.Zip" required="required"><span>Zip Code</span>
                         </div>
                     </div>
                 </div>
@@ -80,7 +80,7 @@
                 <div class="row d-flex justify-content-end">
                     <div class="py-2 col-xl-1 col-md-2 col-4 align-items-center">
                         <div class="form-group d-flex   border-0">
-                            <button class="p-2 babtn rounded w-100">
+                            <button class="p-2 babtn rounded w-100" type="submit">
                                 Edit
                             </button>
                         </div>

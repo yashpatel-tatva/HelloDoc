@@ -2,6 +2,7 @@
 {
     public class PatientRequestViewModel
     {
+
         public string Symptomps { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -19,5 +20,7 @@
         public int Requesttypeid { get; set; } = 1;
         public short Status { get; set; } = 1;
         public string Password { get; set; }
+
+        public List<IFormFile> Upload { get; set; }
     }
 }

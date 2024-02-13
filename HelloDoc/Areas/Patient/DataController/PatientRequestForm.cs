@@ -14,6 +14,31 @@ namespace HelloDoc.Areas.Patient.DataController
         {
             _context = context;
         }
+        public void AddPatientRequestWiseFile(List<IFormFile> formFile, int requestid)
+        {
+            foreach (var file in formFile)
+            {
+                        string filename = requestid.ToString() + " _ "+ file.FileName;
+                        string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Documents",  filename);
+
+                        using (var fileStream = new FileStream(path, FileMode.Create))
+                        {
+                            file.CopyTo(fileStream);
+                        }
+
+                        var data3 = new Requestwisefile()
+                        {
+                            Requestid = requestid,
+                            Filename = path,
+                            Createddate = DateTime.Now,
+                        };
+
+                        _context.Requestwisefiles.Add(data3);
+                        
+            }
+            _context.SaveChanges();  
+        }
+
 
         [HttpPost]
         public async Task<IActionResult> Self(PatientRequestViewModel model)
@@ -90,6 +115,11 @@ namespace HelloDoc.Areas.Patient.DataController
                 };
                 _context.Requestclients.Add(requestclient);
                 _context.SaveChanges();
+                if (model.Upload != null)
+                {
+                    AddPatientRequestWiseFile(model.Upload, request.Requestid);
+                }
+
                 return RedirectToAction("Index", "Home");
             }
             else

@@ -103,4 +103,9 @@ public partial class User
 
     [InverseProperty("User")]
     public virtual ICollection<Request> Requests { get; set; } = new List<Request>();
+
+    public static implicit operator User(Task<User?> v)
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -16,7 +16,7 @@
             </a>
         </div>
     </div>
-    <form asp-controller="FamilyRequestForm" asp-action="FamilyRequest" method="post">
+    <form asp-controller="FamilyRequestForm" asp-action="FamilyRequest" method="post" enctype="multipart/form-data">
         <div class="bglight rounded p-3 shadow" id="content">
 
             <div>
@@ -132,7 +132,7 @@
                                 <lable class="choosenfile text-dark text-nowrap" id="file-chosen">No item selected</lable>
                             </div>
                             <div role="button" class="uploadbtn px-2 py-1 d-flex ms-1">
-                                <input type="file" id="actual-btn" hidden />
+                                <input type="file" id="actual-btn" asp-for="Upload" hidden />
                                 <label role="button" for="actual-btn" class="d-flex align-items-center"><i class="bi bi-cloud-arrow-up p-2"></i><div>Upload</div></label>
                             </div>
                         </div>

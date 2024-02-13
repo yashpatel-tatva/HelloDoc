@@ -4,7 +4,9 @@ try {
     const fileChosen = document.getElementById('file-chosen');
 
     actualBtn.addEventListener('change', function () {
-        fileChosen.textContent = this.files[0].name;
+        for (int i = 0; i < files.length ; i++){
+            fileChosen.textContent = this.files[i].name;
+        }
         fileChosen.style.color = "black";
         fileChosen.style.fontSize = "large"
     })
