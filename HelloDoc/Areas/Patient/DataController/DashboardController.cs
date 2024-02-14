@@ -1,4 +1,5 @@
-﻿using HelloDoc.Areas.Patient.ViewModels;
+﻿using Azure.Core;
+using HelloDoc.Areas.Patient.ViewModels;
 using HelloDoc.DataContext;
 using HelloDoc.DataModels;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +18,30 @@ namespace HelloDoc.Areas.Patient.DataController
         {
             _context = context;
         }
-        
+        public void AddPatientRequestWiseFile(List<IFormFile> formFile, int requestid)
+        {
+            foreach (var file in formFile)
+            {
+                string filename = requestid.ToString() + " _ " + file.FileName;
+                string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Documents", filename);
+
+                using (var fileStream = new FileStream(path, FileMode.Create))
+                {
+                    file.CopyTo(fileStream);
+                }
+
+                var data3 = new Requestwisefile()
+                {
+                    Requestid = requestid,
+                    Filename = path,
+                    Createddate = DateTime.Now,
+                };
+
+                _context.Requestwisefiles.Add(data3);
+
+            }
+            _context.SaveChanges();
+        }
         public async Task<IActionResult> Dashboard(PatientDashboardViewModel patientDashboardviewmodel)
         {
             if (HttpContext.Session.GetInt32("UserId") != null)
@@ -98,11 +122,17 @@ namespace HelloDoc.Areas.Patient.DataController
             return RedirectToAction("Dashboard", patientDashboard);
         }
         [HttpPost]
-        public async Task<IActionResult> AddDocument(PatientDashboardViewModel patientDashboardView)
+        public async Task<IActionResult> AddDocument(PatientDashboardViewModel model)
         {
+            PatientDashboardViewModel patientDashboard = new PatientDashboardViewModel();
+            patientDashboard.RequestsId = model.RequestsId;
+            patientDashboard.showdocument = model.showdocument;
 
-
-            return RedirectToAction("Dashboard", patientDashboard);
+            if (model.Upload != null)
+            {
+                AddPatientRequestWiseFile(model.Upload, model.RequestsId);
+            }
+            return RedirectToAction("Dashboard" , patientDashboard);
         }
     }
 }

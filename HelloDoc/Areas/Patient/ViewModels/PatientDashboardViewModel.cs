@@ -32,6 +32,7 @@ namespace HelloDoc.Areas.Patient.ViewModels
         public int RequestsId {  get; set; }
         public bool showdocument { get;  set; }
         
+        public List<IFormFile> Upload { get; set; }
 
     }
 }
