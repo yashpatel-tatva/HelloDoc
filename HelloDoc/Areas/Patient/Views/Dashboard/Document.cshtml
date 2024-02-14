@@ -19,7 +19,7 @@
             </div>
         </div>
         <div class="bglight rounded p-3 shadow" id="content">
-            <form asp-action="" asp-controller="">
+            <form asp-action="AddDocument" asp-controller="Dashboard" method="post">
                 <div><span class="small">Patient Name</span></div>
                 <div class=""><span class="text-info h4">@Model.User.Firstname @Model.User.Lastname   </span><span class="h6">(@Model.Requests.FirstOrDefault(x => x.Requestid == Model.RequestsId).Confirmationnumber)</span></div>
                 @*<div class=""><span class="text-info h4">@Model.User.Firstname @Model.User.Lastname   </span><span class="h6">(@Model.Requests.FirstOrDefault(x => x.Requestid == (Model.Requests.FirstOrDefault(m =>m.Userid == Model.User.Userid).Requestid)).Confirmationnumber)</span></div>*@
@@ -28,12 +28,12 @@
                     <div class="py-2 col-12 ">
                         <div class="form-group rounded d-flex align-items-center justify-content-between uploadbtndiv">
                             <div class="px-3 table-responsive">
-                                <lable class="choosenfile text-dark text-nowrap" id="file-chosen">No item selected</lable>
-                            </div>
-                            <div role="button" class="uploadbtn px-2 py-1 d-flex ms-1">
                                 <input type="file" id="actual-btn" asp-for="requestwisefiles" multiple hidden />
-                                <label role="button" for="actual-btn" class="d-flex align-items-center"><i class="bi bi-cloud-arrow-up p-2"></i><div>Upload</div></label>
+                                <label role="button" for="actual-btn" id="file-chosen" class="choosenfile text-dark text-nowrap">No item selected</label>
                             </div>
+                            <button type="submit" class="uploadbtn px-2 py-1 d-flex ms-1 border-0">
+                                <label role="button" class="d-flex align-items-center"><i class="bi bi-cloud-arrow-up p-2"></i><div>Upload</div></label>
+                            </button>
                         </div>
                     </div>
                 </div>

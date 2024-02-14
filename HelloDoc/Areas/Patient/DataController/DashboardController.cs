@@ -97,5 +97,12 @@ namespace HelloDoc.Areas.Patient.DataController
             patientDashboard.showdocument = model.showdocument;
             return RedirectToAction("Dashboard", patientDashboard);
         }
+        [HttpPost]
+        public async Task<IActionResult> AddDocument(PatientDashboardViewModel patientDashboardView)
+        {
+
+
+            return RedirectToAction("Dashboard", patientDashboard);
+        }
     }
 }
