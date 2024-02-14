@@ -25,25 +25,31 @@ namespace HelloDoc.Areas.Patient.DataController
         [HttpPost]
         public async Task<IActionResult> Login(Aspnetuser user)
         {
-            try
-            {
                 var correct = await _context.Aspnetusers.FirstOrDefaultAsync(m => m.Email == user.Email);
                 var userdata = await _context.Users.FirstOrDefaultAsync(u => u.Email == user.Email);
+            if(correct != null)
+            {
                 if (correct.Passwordhash == user.Passwordhash)
                 {
                     int id = userdata.Userid;
-                    return RedirectToAction("Dashboard", "Dashboard", new { id = userdata.Userid});
+                    HttpContext.Session.SetInt32("UserId", id) ;
+                    return RedirectToAction("Dashboard", "Dashboard");
                 }
                 TempData["WrongPass"] = "Enter Correct Password";
                 TempData["Style"] = " border-danger";
                 return RedirectToAction("PatientLogin", "Home");
             }
-            catch
+            else
             {
                 TempData["Style"] = " border-danger";
                 TempData["WrongEmail"] = "Enter Correct Email";
                 return RedirectToAction("PatientLogin", "Home");
             }
+        }
+        public async Task<IActionResult> LogOut()
+        {
+            HttpContext.Session.Remove("UserId");
+            return RedirectToAction("PatientLogin", "Home");
         }
     }
 }

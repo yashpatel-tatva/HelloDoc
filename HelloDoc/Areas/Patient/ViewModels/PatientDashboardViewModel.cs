@@ -29,5 +29,9 @@ namespace HelloDoc.Areas.Patient.ViewModels
         public List<Requestwisefile> requestwisefiles { get; set; }
          
         public DateTime birthdate { get; set; }
+        public int RequestsId {  get; set; }
+        public bool showdocument { get;  set; }
+        
+
     }
 }

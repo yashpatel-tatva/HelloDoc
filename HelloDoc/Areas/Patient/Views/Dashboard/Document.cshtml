@@ -1,0 +1,44 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model HelloDoc.Areas.Patient.ViewModels.PatientDashboardViewModel;
+
+<div class="container pb-5 mb-5">
+    <div class="px-4">
+        <div class="d-flex subinfodiv align-items-center py-3">
+            <div class="h3 subinfotext fw-bold">Documents</div>
+            <div>
+                <a asp-controller="Dashboard" asp-action="Dashboard">
+                    <button class="d-flex babtn rounded align-item-center p-1 px-2">
+                        <div><img src="~/back.png" width="15px" height="10px"></div>
+                        <div><span>Back</span></div>
+                    </button>
+                </a>
+            </div>
+        </div>
+        <div class="bglight rounded p-3 shadow" id="content">
+            <form asp-action="" asp-controller="">
+                <div><span class="small">Patient Name</span></div>
+                @*<div class=""><span class="text-info h4">@Model.User.Firstname @Model.User.Lastname   </span><span class="h6">(@Model.Requests.FirstOrDefault(x => x.Requestid == Model.RequestsId).Confirmationnumber)</span></div>*@
+                <div class=""><span class="text-info h4">@Model.User.Firstname @Model.User.Lastname   </span><span class="h6">(@Model.Requests.FirstOrDefault(x => x.Requestid == (Model.Requests.FirstOrDefault(m =>m.Userid == Model.User.Userid).Requestid)).Confirmationnumber)</span></div>
+                <div class="py-3"><span class="small">Check here for any files that you or the doctores of your subsequents reqestors have attached for you to review</span></div>
+                <div class="row d-flex">
+                    <div class="py-2 col-12 ">
+                        <div class="form-group rounded d-flex align-items-center justify-content-between uploadbtndiv">
+                            <div class="px-3 table-responsive">
+                                <lable class="choosenfile text-dark text-nowrap" id="file-chosen">No item selected</lable>
+                            </div>
+                            <div role="button" class="uploadbtn px-2 py-1 d-flex ms-1">
+                                <input type="file" id="actual-btn" asp-for="requestwisefiles" multiple hidden />
+                                <label role="button" for="actual-btn" class="d-flex align-items-center"><i class="bi bi-cloud-arrow-up p-2"></i><div>Upload</div></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>

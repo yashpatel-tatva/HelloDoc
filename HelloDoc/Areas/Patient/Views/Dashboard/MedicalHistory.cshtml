@@ -7,15 +7,38 @@
         </div>
         <div class="bg-white rounded p-3 shadow" id="content">
             <div class="d-flex justify-content-end">
-                <a asp-controller="Dashboard" asp-action="Dashboard">
-                    <button class="d-flex babtn rounded align-item-center p-1 px-2">
-                        <div class="plusimg"><i class="bi bi-plus-lg"></i></div>
-                        <div class="cnr"><span>Create New request</span></div>
-                    </button>
-                </a>
+                <button class="d-flex babtn rounded align-item-center p-1 px-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                    <div class="plusimg"><i class="bi bi-plus-lg"></i></div>
+                    <div class="cnr"><span>Create New request</span></div>
+                </button>
             </div>
-            <div>
-                <table class="table table-hover" id="dtBasicExample">
+            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header bg-info">
+                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Create New Request</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body d-flex justify-content-center">
+                            <div class="px-2">
+                                <input type="radio" id="me" name="selectrequesttype" hidden>
+                                <label for="me"><button type="button" class="btn border border-1 border-info text-info">Me</button></label>
+                            </div>
+                            <div class="px-2">
+                                <input type="radio" id="someone" name="selectrequesttype" hidden>
+                                <label for="someone"><button type="button" class="btn border border-1 border-info text-info">Some One Else</button></label>
+                            </div>
+                            
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-info">Continue</button>
+                            <button type="button" class="btn border border-1 border-info text-info" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover small" id="dtBasicExample">
                     <thead class="thead-dark">
                         <tr>
                             <th>
@@ -38,19 +61,27 @@
                                 <td>
                                     @*@foreach (var n in m.Requestwisefiles)
                                     {
-                                        <span>@n.Filename ,</span>
+                                        <table>
+                                            <tr>
+                                                <td>@n.Filename</td>
+                                            </tr>
+                                        </table>
                                     }*@
                                     @if (m.Requestwisefiles.Count() != 0)
                                     {
-                                        <a asp-controller="Dashboard" asp-action="Document">
+                                        <form asp-controller="Dashboard" asp-action="Dashboard" method="post">
+                                            @{
+                                                Model.RequestsId = m.Requestid;
+                                            }
+                                            <input type="number" asp-for="@Model.RequestsId" hidden>
+                                            <input type="hidden" asp-for="@Model.showdocument" value="true">
                                             <button class="d-flex babtn rounded align-item-center p-1 px-2">
                                                 <div class="plusimg">(@m.Requestwisefiles.Count()) </div>
                                                 <div class="cnr"><span>(@m.Requestwisefiles.Count()) Documnets</span></div>
                                             </button>
-                                        </a>
+                                        </form>
                                     }
                                 </td>
-                                @*<td><a asp-action="Index" asp-controller="Requests" asp-route-itemid="@m.Requestid">Edit</a></td>*@
                             </tr>
                         }
                     </tbody>
@@ -73,3 +104,10 @@
 
 
 </script>
+
+@*<div class="d-flex justify-content-end">
+    <button class="d-flex babtn rounded align-item-center p-1 px-2">
+        <div class="plusimg"><i class="bi bi-plus-lg"></i></div>
+        <div class="cnr"><span>Create New request</span></div>
+    </button>
+</div>*@

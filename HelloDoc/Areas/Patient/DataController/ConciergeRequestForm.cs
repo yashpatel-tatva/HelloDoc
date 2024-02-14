@@ -3,6 +3,7 @@ using HelloDoc.DataContext;
 using HelloDoc.DataModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Drawing;
 using System.Globalization;
 using System.Net;
 
@@ -21,6 +22,8 @@ namespace HelloDoc.Areas.Patient.DataController
         {
             var aspnetuser = await _context.Aspnetusers.FirstOrDefaultAsync(m => m.Email == model.Email);
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == model.Email);
+            var region = await _context.Regions.FirstOrDefaultAsync(x => x.Regionid == user.Regionid);
+            var requestcount = (from m in _context.Requests where m.Createddate.Date == DateTime.Now.Date select m).ToList();
             if (aspnetuser != null)
             {
                 Request request = new Request
@@ -33,6 +36,7 @@ namespace HelloDoc.Areas.Patient.DataController
                     Phonenumber = model.Phone,
                     Status = model.Status,
                     Createddate = DateTime.Now,
+                    Confirmationnumber = (region.Abbreviation.Substring(0, 2) + DateTime.Now.Day.ToString() + DateTime.Now.Month.ToString().PadLeft(2, '0') + model.LastName.Substring(0, 2) + model.FirstName.Substring(0, 2) + requestcount.Count().ToString().PadLeft(4, '0')).ToUpper(),
                     User = user,
                 };
                 _context.Add(request);

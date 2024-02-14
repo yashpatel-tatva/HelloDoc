@@ -15,7 +15,12 @@
 </nav>
 <div class="tab-content" id="nav-tabContent">
     <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-        @Html.Partial("MedicalHistory")
+        @if (@Model.showdocument){
+            @Html.Partial("Document")
+        }
+        else{
+            @Html.Partial("MedicalHistory")
+        }
     </div>
     <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
         @Html.Partial("UserProfile")
