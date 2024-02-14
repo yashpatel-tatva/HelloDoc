@@ -17,7 +17,7 @@ namespace HelloDoc.Areas.Patient.DataController
         {
             _context = context;
         }
-
+        
         public async Task<IActionResult> Dashboard(PatientDashboardViewModel patientDashboardviewmodel)
         {
             if (HttpContext.Session.GetInt32("UserId") != null)
