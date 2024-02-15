@@ -20,16 +20,16 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <form asp-action="RequestByPatient" asp-controller="Dashboard" method="post">
+                            <input type="hidden" asp-for="User.Userid" value="User.UserId" />
                             <div class="modal-body d-flex justify-content-center">
                                 <div class="px-2">
-                                    <input type="radio" id="me"  name="selectrequesttype" value="me" >
-                                    <label for="me"><button type="button" class="btn border border-1 border-info text-info">Me</button></label>
+                                    <input type="radio" class="btn-check" name="selectrequesttype" id="success-outlined" autocomplete="off" value="me" checked>
+                                    <label class="btn btn-outline-info" for="success-outlined">Me</label>
                                 </div>
                                 <div class="px-2">
-                                    <input type="radio" id="someone" name="selectrequesttype" value="someoneelse" >
-                                    <label for="someone"><button type="button" class="btn border border-1 border-info text-info">Some One Else</button></label>
+                                    <input type="radio" class="btn-check" name="selectrequesttype" id="danger-outlined" autocomplete="off" value="someone">
+                                    <label class="btn btn-outline-info" for="danger-outlined">Some One Else</label>
                                 </div>
-
                             </div>
                             <div class="modal-footer">
                                 <button type="submit" class="btn btn-info">Continue</button>
