@@ -20,7 +20,7 @@
         </div>
         <div class="bglight rounded p-3 shadow" id="content">
             <form asp-action="AddDocument" asp-controller="Dashboard" method="post" enctype="multipart/form-data">
-                <div><span class="small">Patient Name @Model.RequestsId</span></div>
+                <div><span class="small">Patient Name </span></div>
                 <div class=""><span class="text-info h4">@Model.User.Firstname @Model.User.Lastname   </span><span class="h6">(@Model.Requests.FirstOrDefault(x => x.Requestid == Model.RequestsId).Confirmationnumber)</span></div>
                 @*<div class=""><span class="text-info h4">@Model.User.Firstname @Model.User.Lastname   </span><span class="h6">(@Model.Requests.FirstOrDefault(x => x.Requestid == (Model.Requests.FirstOrDefault(m =>m.Userid == Model.User.Userid).Requestid)).Confirmationnumber)</span></div>*@
                 <div class="py-3"><span class="small">Check here for any files that you or the doctores of your subsequents reqestors have attached for you to review</span></div>
@@ -29,7 +29,7 @@
                         <div class="form-group rounded d-flex align-items-center justify-content-between uploadbtndiv">
                             <div class="px-3 table-responsive">
                                 <input type="hidden" asp-for="@Model.showdocument" value="true">
-                                <input type="hidden" asp-for="RequestsId" value="@Model.RequestsId"/>
+                                <input type="hidden" asp-for="RequestsId" value="@Model.RequestsId" />
                                 <input type="file" id="actual-btn" asp-for="Upload" multiple hidden />
                                 <label role="button" for="actual-btn" id="file-chosen" class="choosenfile text-dark text-nowrap">No item selected</label>
                             </div>
@@ -39,18 +39,21 @@
                         </div>
                     </div>
                 </div>
-                <div class="d-flex justify-content-between align-items-center py-3">
-                    <div class="h4 mb-0 fw-bold">Documents</div>
-                    <button class="d-flex babtn rounded align-item-center p-1 px-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                        <div class="plusimg"><i class="bi bi-cloud-arrow-down"></i></div>
-                        <div class="cnr"><span>Download All</span></div>
-                    </button>
-                </div>
+            </form>
+            <form asp-action="Download" asp-controller="Dashboard" method="post" enctype="multipart/form-data">
+                <input type="hidden" asp-for="RequestsId" value="@Model.RequestsId"/>
+            <div class="d-flex justify-content-between align-items-center py-3">
+                <div class="h4 mb-0 fw-bold">Documents</div>
+                <button class="d-flex babtn rounded align-item-center p-1 px-2" type="submit">
+                    <div class="plusimg"><i class="bi bi-cloud-arrow-down"></i></div>
+                    <div class="cnr"><span>Download All</span></div>
+                </button>
+            </div>
                 <div class="table-responsive">
                     <table class="table table-hover small rounded" id="dtBasicExample">
                         <thead class="thead-dark bg-body-secondary">
                             <tr style="--bs-table-bg: #ebebeb;">
-                                <th><input type="checkbox" id="download_@Model.RequestsId" name="downloadselect" /></th>
+                                <th><input type="checkbox" id="download_@Model.RequestsId" name="downloadmainselect" /></th>
                                 <th></th>
                                 <th>
                                     Uploader
@@ -67,14 +70,20 @@
                             @foreach (var m in Model.requestwisefiles)
                             {
                                 <tr>
-                                    <td><input type="checkbox" id="download_@m.Requestwisefileid" name="downloadselect"/></td>
+                                    <td><input type="checkbox" class="childCheckbox" id="download_@m.Requestwisefileid" name="downloadselect" value="@m.Requestwisefileid" /></td>
                                     <td>@m.Filename.Split("\\Documents\\")[1]</td>
                                     <td>@Model.Requests.FirstOrDefault(u => u.Requestid==m.Requestid).Firstname </td>
                                     <td>@m.Createddate.ToString("MMM dd , yyyy")</td>
                                     <td>
-                                        <button class="d-flex babtn rounded align-item-center p-1 px-2">
-                                            <div><i class="bi bi-cloud-arrow-down"></i></div>
-                                        </button>
+
+                                        <a asp-action="Download" asp-controller="Dashboard" asp-route-id="@m.Requestwisefileid" class="justify-content-start d-flex">
+
+                                            <input type="hidden" asp-for="reqfileid" value="@m.Requestwisefileid" multiple>
+                                            <div class="babtn rounded align-item-center p-1 px-2"  style="width : 40px">
+                                                <div><i class="bi bi-cloud-arrow-down"></i></div>
+                                            </div>
+                                        </a>
+
                                     </td>
                                 </tr>
                             }
@@ -94,6 +103,20 @@
             paging: false,
             searching: false,
 
+        });
+    });
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    // jQuery script to handle leader checkbox click event
+    $(document).ready(function () {
+        $('#download_@Model.RequestsId').click(function () {
+            $('.childCheckbox').prop('checked', $(this).prop('checked'));
+        });
+
+        // Handle individual checkbox clicks to update the leader checkbox state
+        $('.childCheckbox').click(function () {
+            $('#download_@Model.RequestsId').prop('checked', $('.childCheckbox:checked').length === $('.childCheckbox').length);
         });
     });
 </script>

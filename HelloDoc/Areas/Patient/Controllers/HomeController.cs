@@ -1,4 +1,6 @@
-﻿using HelloDoc.Models;
+﻿using HelloDoc.DataContext;
+using HelloDoc.DataModels;
+using HelloDoc.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -6,11 +8,11 @@ namespace HelloDoc.Areas.Patient.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly HelloDocDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(HelloDocDbContext context)
         {
-            _logger = logger;
+            _context = context;
         }
 
         public IActionResult Index()
@@ -26,11 +28,23 @@ namespace HelloDoc.Areas.Patient.Controllers
         {
             return View();
         }
-        public IActionResult PatientForgetPassword()
+        public IActionResult PatientForgetPassword(Aspnetuser user)
         {
-            return View();
+            return View(user);
         }
-
+        public IActionResult PatientResetPassword(Aspnetuser user)
+        {
+            return View(user);
+        }
+        [HttpPost]
+        public IActionResult ResetPassword(Aspnetuser aspnetuser)
+        {
+            var aspuser = _context.Aspnetusers.FirstOrDefault(x => x.Email == aspnetuser.Email);
+            aspuser.Passwordhash = aspnetuser.Passwordhash;
+            _context.Aspnetusers.Update(aspuser);
+            _context.SaveChanges();
+            return RedirectToAction("PatientLogin");
+        }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

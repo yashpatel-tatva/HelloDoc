@@ -3,10 +3,12 @@ using HelloDoc.Areas.Patient.ViewModels;
 using HelloDoc.DataContext;
 using HelloDoc.DataModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using Mono.TextTemplating;
 using System.Globalization;
 using System.IO;
+using System.IO.Compression;
 
 namespace HelloDoc.Areas.Patient.DataController
 {
@@ -133,6 +135,54 @@ namespace HelloDoc.Areas.Patient.DataController
                 AddPatientRequestWiseFile(model.Upload, model.RequestsId);
             }
             return RedirectToAction("Dashboard" , patientDashboard);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Download(PatientDashboardViewModel dashedit)
+        {
+            var checkbox = Request.Form["downloadselect"].ToList();
+            var zipname = dashedit.RequestsId.ToString() + "_"+ DateTime.Now + ".zip";
+            using (var memoryStream = new MemoryStream())
+            {
+                using (var zipArchive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true))
+                {
+                    foreach (var item in checkbox)
+                    {
+                        var s = Int32.Parse(item);
+                        var file = await _context.Requestwisefiles.FirstOrDefaultAsync(x => x.Requestwisefileid == s);
+                        var path = file.Filename;
+                        var bytes = await System.IO.File.ReadAllBytesAsync(path);
+                        var zipEntry = zipArchive.CreateEntry(file.Filename.Split("\\Documents\\")[1], CompressionLevel.Fastest);
+                        using (var zipStream = zipEntry.Open())
+                        {
+                            await zipStream.WriteAsync(bytes, 0, bytes.Length);
+                        }
+                    }
+                }
+                memoryStream.Position = 0; // Reset the position
+                return File(memoryStream.ToArray(), "application/zip", zipname, enableRangeProcessing:true);
+            }
+        }
+
+
+        public async Task<IActionResult> Download(int id)
+        {
+            var path = (await _context.Requestwisefiles.FirstOrDefaultAsync(x => x.Requestwisefileid == id)).Filename;
+            //var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "document", filename);
+            var provider = new FileExtensionContentTypeProvider();
+            if (!provider.TryGetContentType(path, out var contentType))
+            {
+                contentType = "application/octet-stream";
+            }
+            var bytes = await System.IO.File.ReadAllBytesAsync(path);
+            return File(bytes, contentType, Path.GetFileName(path));
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> RequestByPatient(PatientDashboardViewModel patientDashboardView)
+        {
+            var radio = Request.Form["selectrequesttype"];
+            return View();
         }
     }
 }

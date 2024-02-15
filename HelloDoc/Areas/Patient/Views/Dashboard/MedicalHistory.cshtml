@@ -19,21 +19,23 @@
                             <h1 class="modal-title fs-5" id="staticBackdropLabel">Create New Request</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="modal-body d-flex justify-content-center">
-                            <div class="px-2">
-                                <input type="radio" id="me" name="selectrequesttype" hidden>
-                                <label for="me"><button type="button" class="btn border border-1 border-info text-info">Me</button></label>
+                        <form asp-action="RequestByPatient" asp-controller="Dashboard" method="post">
+                            <div class="modal-body d-flex justify-content-center">
+                                <div class="px-2">
+                                    <input type="radio" id="me"  name="selectrequesttype" value="me" >
+                                    <label for="me"><button type="button" class="btn border border-1 border-info text-info">Me</button></label>
+                                </div>
+                                <div class="px-2">
+                                    <input type="radio" id="someone" name="selectrequesttype" value="someoneelse" >
+                                    <label for="someone"><button type="button" class="btn border border-1 border-info text-info">Some One Else</button></label>
+                                </div>
+
                             </div>
-                            <div class="px-2">
-                                <input type="radio" id="someone" name="selectrequesttype" hidden>
-                                <label for="someone"><button type="button" class="btn border border-1 border-info text-info">Some One Else</button></label>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-info">Continue</button>
+                                <button type="button" class="btn border border-1 border-info text-info" data-bs-dismiss="modal">Close</button>
                             </div>
-                            
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-info">Continue</button>
-                            <button type="button" class="btn border border-1 border-info text-info" data-bs-dismiss="modal">Close</button>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -60,13 +62,13 @@
                                 <td>@Model.Statusname(m.Status)</td>
                                 <td>
                                     @*@foreach (var n in m.Requestwisefiles)
-                                    {
-                                        <table>
-                                            <tr>
-                                                <td>@n.Filename</td>
-                                            </tr>
-                                        </table>
-                                    }*@
+                                {
+                                <table>
+                                <tr>
+                                <td>@n.Filename</td>
+                                </tr>
+                                </table>
+                                }*@
                                     @if (m.Requestwisefiles.Count() != 0)
                                     {
                                         <form asp-controller="Dashboard" asp-action="Dashboard" method="post">
@@ -97,8 +99,8 @@
             info: false,
             ordering: true,
             paging: false,
-            searching : false,
-            
+            searching: false,
+
         });
     });
 

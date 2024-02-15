@@ -3,9 +3,15 @@ using HelloDoc.DataModels;
 
 namespace HelloDoc.Areas.Patient.ViewModels
 {
+    public class checkbox
+    {
+        public string Name { get; set; }
+        public string Value { get; set; }
+    }
+
     public class PatientDashboardViewModel
     {
-        
+
         public enum Statuses
         {
             January,
@@ -27,12 +33,13 @@ namespace HelloDoc.Areas.Patient.ViewModels
             return status;
         }
         public List<Requestwisefile> requestwisefiles { get; set; }
-         
-        public DateTime birthdate { get; set; }
-        public int RequestsId {  get; set; }
-        public bool showdocument { get;  set; }
-        
-        public List<IFormFile> Upload { get; set; }
 
+        public DateTime birthdate { get; set; }
+        public int RequestsId { get; set; }
+        public bool showdocument { get; set; }
+
+        public int reqfileid { get; set; }
+        public List<IFormFile> Upload { get; set; }
+        public string requestbypatient { get; set; }
     }
 }
