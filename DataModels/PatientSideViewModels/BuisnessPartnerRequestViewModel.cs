@@ -8,7 +8,7 @@
         public string B_Phone { get; set; }
         public string PropertyName { get; set; }
         public string CaseNumber {  get; set; }
-        public string Symptopmps { get; set; }
+        public string Symptoms { get; set; }
         public string FirstName { get; set; }
 
         public string LastName { get; set; }

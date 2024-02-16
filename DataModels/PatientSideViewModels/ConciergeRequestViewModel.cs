@@ -8,7 +8,7 @@
         public string C_Phone { get; set; }
         public string HostelName{ get; set; }
 
-        public string Symptopmps { get; set; }
+        public string Symptoms { get; set; }
         public string FirstName { get; set; }
 
         public string LastName { get; set; }

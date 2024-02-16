@@ -99,7 +99,7 @@ namespace HelloDoc.Areas.Patient.Controllers
                 _context.SaveChanges();
                 Requestclient requestclient = new Requestclient
                 {
-                    Notes = model.Symptomps,
+                    Notes = model.Symptoms,
                     Requestid = request.Requestid,
                     Firstname = model.FirstName,
                     Lastname = model.LastName,
@@ -120,7 +120,7 @@ namespace HelloDoc.Areas.Patient.Controllers
             }
             else
             {
-                //TempData["Symptomps"] = model.Symptomps;
+                //TempData["Symptoms"] = model.Symptoms;
                 //ViewBag.FirstName = model.FirstName;
                 //ViewBag.LastName = model.LastName;
                 //ViewBag.Email = model.Email;

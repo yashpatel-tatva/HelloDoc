@@ -43,7 +43,7 @@ namespace HelloDoc.Areas.Patient.DataController
                 _context.SaveChanges();
                 Requestclient requestclient = new Requestclient
                 {
-                    Notes = model.Symptopmps,
+                    Notes = model.Symptoms,
                     Requestid = request.Requestid,
                     Firstname = model.C_FirstName,
                     Lastname = model.C_LastName,

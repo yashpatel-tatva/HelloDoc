@@ -67,7 +67,7 @@ namespace HelloDoc.Areas.Patient.DataController
                 _context.SaveChanges();
                 Requestclient requestclient = new Requestclient
                 {
-                    Notes = model.Symptopmps,
+                    Notes = model.Symptoms,
                     Requestid = request.Requestid,
                     Firstname = model.F_FirstName,
                     Lastname = model.F_LastName,
@@ -88,6 +88,10 @@ namespace HelloDoc.Areas.Patient.DataController
                 if (model.Upload != null)
                 {
                     AddPatientRequestWiseFile(model.Upload, request.Requestid);
+                }
+                if(HttpContext.Session.IsAvailable)
+                {
+                    return RedirectToAction("Dashboard" , "Dashboard");
                 }
                 return RedirectToAction("Index", "Home");
             }

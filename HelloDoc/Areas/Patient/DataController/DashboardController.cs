@@ -62,11 +62,11 @@ namespace HelloDoc.Areas.Patient.DataController
                 List<Requestwisefile> files;
                 if (patientDashboardviewmodel.RequestsId == 0)
                 {
-                     files = (from m in _context.Requestwisefiles select m).ToList();
+                    files = (from m in _context.Requestwisefiles select m).ToList();
                 }
                 else
                 {
-                     files = (from m in _context.Requestwisefiles where m.Requestid==patientDashboardviewmodel.RequestsId select m).ToList();
+                    files = (from m in _context.Requestwisefiles where m.Requestid == patientDashboardviewmodel.RequestsId select m).ToList();
                     patientDashboard.RequestsId = patientDashboardviewmodel.RequestsId;
                 }
                 patientDashboard.requestwisefiles = files;
@@ -134,13 +134,13 @@ namespace HelloDoc.Areas.Patient.DataController
             {
                 AddPatientRequestWiseFile(model.Upload, model.RequestsId);
             }
-            return RedirectToAction("Dashboard" , patientDashboard);
+            return RedirectToAction("Dashboard", patientDashboard);
         }
         [HttpPost]
         public async Task<IActionResult> Download(PatientDashboardViewModel dashedit)
         {
             var checkbox = Request.Form["downloadselect"].ToList();
-            var zipname = dashedit.RequestsId.ToString() + "_"+ DateTime.Now + ".zip";
+            var zipname = dashedit.RequestsId.ToString() + "_" + DateTime.Now + ".zip";
             using (var memoryStream = new MemoryStream())
             {
                 using (var zipArchive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true))
@@ -159,7 +159,7 @@ namespace HelloDoc.Areas.Patient.DataController
                     }
                 }
                 memoryStream.Position = 0; // Reset the position
-                return File(memoryStream.ToArray(), "application/zip", zipname, enableRangeProcessing:true);
+                return File(memoryStream.ToArray(), "application/zip", zipname, enableRangeProcessing: true);
             }
         }
 
@@ -182,7 +182,38 @@ namespace HelloDoc.Areas.Patient.DataController
         public async Task<IActionResult> RequestByPatient(PatientDashboardViewModel patientDashboardView)
         {
             var radio = Request.Form["selectrequesttype"];
-            return View();
+            if (radio == "me")
+            {
+                return RedirectToAction("PatientRequestForMe");
+            }
+            else
+            {
+                return RedirectToAction("PatientRequestForSomeoneelse");
+            }
+        }
+
+        public async Task<IActionResult> PatientRequestForMe()
+        {
+            int id = (int)HttpContext.Session.GetInt32("UserId");
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Userid == id);
+            PatientRequestViewModel model = new PatientRequestViewModel();
+            model.FirstName = user.Firstname;
+            model.LastName = user.Lastname;
+            model.BirthDate = new DateTime(Convert.ToInt32(user.Intyear), DateTime.ParseExact(user.Strmonth, "MMMM", CultureInfo.InvariantCulture).Month, Convert.ToInt32(user.Intdate));
+            model.Email = user.Email;
+            model.PhoneNumber = user.Mobile ;
+            return View(model);
+        }
+        public async Task<IActionResult> PatientRequestForSomeoneelse()
+        {
+            int id = (int)HttpContext.Session.GetInt32("UserId");
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Userid == id);
+            FamilyRequestViewModel model = new FamilyRequestViewModel();
+            model.F_FirstName = user.Firstname;
+            model.F_LastName = user.Lastname;
+            model.F_Email = user.Email;
+            model.F_Phone = user.Mobile;
+            return View(model);
         }
     }
 }

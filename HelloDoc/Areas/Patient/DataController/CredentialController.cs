@@ -33,6 +33,7 @@ namespace HelloDoc.Areas.Patient.DataController
                 {
                     int id = userdata.Userid;
                     HttpContext.Session.SetInt32("UserId", id) ;
+                    HttpContext.Session.SetString("UserName", userdata.Firstname + " " + userdata.Lastname) ;
                     return RedirectToAction("Dashboard", "Dashboard");
                 }
                 TempData["WrongPass"] = "Enter Correct Password";

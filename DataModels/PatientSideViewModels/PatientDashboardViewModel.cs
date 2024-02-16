@@ -1,5 +1,5 @@
-﻿using HelloDoc.DataContext;
-using HelloDoc.DataModels;
+﻿using HelloDoc.DataModels;
+using Microsoft.AspNetCore.Http;
 
 namespace HelloDoc.Areas.Patient.ViewModels
 {

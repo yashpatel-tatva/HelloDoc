@@ -63,6 +63,7 @@ namespace HelloDoc.Areas.Patient.DataController
                     Firstname = model.FirstName,
                     Lastname = model.LastName,
                     Email = model.Email,
+                    Mobile = model.PhoneNumber,
                     Street = model.Street,
                     City = model.City,
                     State = model.State,
@@ -100,7 +101,7 @@ namespace HelloDoc.Areas.Patient.DataController
                 _context.SaveChanges();
                 Requestclient requestclient = new Requestclient
                 {
-                    Notes = model.Symptomps,
+                    Notes = model.Symptoms,
                     Requestid = request.Requestid,
                     Firstname = model.FirstName,
                     Lastname = model.LastName,
@@ -122,12 +123,14 @@ namespace HelloDoc.Areas.Patient.DataController
                 {
                     AddPatientRequestWiseFile(model.Upload, request.Requestid);
                 }
-
-                return RedirectToAction("Index", "Home");
+                int id = user.Userid;
+                HttpContext.Session.SetInt32("UserId", id);
+                HttpContext.Session.SetString("UserName", user.Firstname + " " + user.Lastname);
+                return RedirectToAction("Dashboard", "Dashboard");
             }
             else
             {
-                //TempData["Symptomps"] = model.Symptomps;
+                //TempData["Symptoms"] = model.Symptoms;
                 //ViewBag.FirstName = model.FirstName;
                 //ViewBag.LastName = model.LastName;
                 //ViewBag.Email = model.Email;

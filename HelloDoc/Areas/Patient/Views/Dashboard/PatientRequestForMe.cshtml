@@ -18,14 +18,14 @@
             </a>
         </div>
     </div>
-    <form asp-action="PatientRequestFormForMe" asp-controller="Dashboard" method="post" enctype="multipart/form-data">
+    <form asp-action="Self" asp-controller="PatientRequestForm" method="post" enctype="multipart/form-data">
         <div class="bglight rounded p-3 shadow" id="content">
             <div>
                 <div class="h5 fw-bold">Patient Information</div>
                 <div class="row d-flex">
                     <div class="py-2 col-12 ">
                         <div class="form-group rounded d-flex align-items-center">
-                            <textarea class="form-control" placeholder="" rows="3" asp-for="Symptomps"></textarea><span>Enter Brief Details Of Symptomps (Optional)</span>
+                            <textarea class="form-control" placeholder="" rows="3" asp-for="Symptoms"></textarea><span>Enter Brief Details Of Symptoms (Optional)</span>
                         </div>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
@@ -50,7 +50,7 @@
                 <div class="row d-flex">
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="email" class="form-control" placeholder="" required="required"  asp-for="Email" id="patientEmail"> <span>Email</span>
+                            <input type="email" class="form-control" placeholder="" required="required" asp-for="Email" id="patientEmail"> <span>Email</span>
                         </div>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12">
@@ -60,7 +60,7 @@
                             </div>
                         </div>
                     </div>
-                </div
+                </div>
             </div>
             <div class="mt-4">
                 <div class="h5 fw-bold">Patient Location</div>

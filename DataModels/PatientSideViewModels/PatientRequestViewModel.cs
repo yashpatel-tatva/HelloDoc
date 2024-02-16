@@ -1,12 +1,14 @@
-﻿namespace HelloDoc.Areas.Patient.ViewModels
+﻿using Microsoft.AspNetCore.Http;
+
+namespace HelloDoc.Areas.Patient.ViewModels
 {
     public class PatientRequestViewModel
     {
 
-        public string Symptomps { get; set; }
+        public string Symptoms { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public DateOnly BirthDate { get; set; }
+        public DateTime BirthDate { get; set; }
 
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
