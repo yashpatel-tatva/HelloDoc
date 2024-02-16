@@ -27,6 +27,8 @@ function changetheme() {
         try {
             document.getElementById('content').classList.remove('bg-light');
             document.getElementById('content').classList.add('bg-dark');
+            document.getElementById('content1').classList.remove('bg-light');
+            document.getElementById('content1').classList.add('bg-dark');
         } catch {}
         try {
             document.querySelector('nav').classList.replace('bg-light', 'bg-dark');
@@ -52,6 +54,8 @@ function changetheme() {
         try {
             document.getElementById('content').classList.remove('bg-dark');
             document.getElementById('content').classList.add('bg-light');
+            document.getElementById('content1').classList.remove('bg-dark');
+            document.getElementById('content1').classList.add('bg-light');
         } catch {}
         try {
             document.querySelector('nav').classList.replace('bg-dark', 'bg-light');

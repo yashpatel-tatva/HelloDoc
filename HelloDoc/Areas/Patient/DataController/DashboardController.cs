@@ -97,6 +97,7 @@ namespace HelloDoc.Areas.Patient.DataController
             user.Intyear = model.birthdate.Year;
             user.Modifiedby = model.User.Email;
             user.Modifieddate = DateTime.Now;
+            HttpContext.Session.SetString("UserName", user.Firstname + " " + user.Lastname);
 
             _context.Users.Update(user);
             _context.SaveChanges();

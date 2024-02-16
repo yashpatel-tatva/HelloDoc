@@ -5,7 +5,7 @@
         <div class="d-flex  align-items-center py-3">
             <div class="h3 mb-0 fw-bold">Medical History </div>
         </div>
-        <div class="bg-white rounded p-3 shadow" id="content">
+        <div class="bg-light rounded p-3 shadow" id="content">
             <div class="d-flex justify-content-end">
                 <button class="d-flex babtn rounded align-item-center p-1 px-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                     <div class="plusimg"><i class="bi bi-plus-lg"></i></div>
@@ -19,6 +19,7 @@
                             <h1 class="modal-title fs-5" id="staticBackdropLabel">Create New Request</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
+                        <div class="modal-title px-5 py-3">Here , I want to create new request for..</div>
                         <form asp-action="RequestByPatient" asp-controller="Dashboard" method="post">
                             <input type="hidden" asp-for="User.Userid" value="User.UserId" />
                             <div class="modal-body d-flex justify-content-center">
@@ -61,14 +62,6 @@
                                 <td>@m.Createddate.ToString("MMM dd , yyyy")</td>
                                 <td>@Model.Statusname(m.Status)</td>
                                 <td>
-                                    @*@foreach (var n in m.Requestwisefiles)
-                                {
-                                <table>
-                                <tr>
-                                <td>@n.Filename</td>
-                                </tr>
-                                </table>
-                                }*@
                                     @if (m.Requestwisefiles.Count() != 0)
                                     {
                                         <form asp-controller="Dashboard" asp-action="Dashboard" method="post">
