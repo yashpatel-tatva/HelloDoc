@@ -15,7 +15,7 @@
     <PackageReference Include="FluentAssertions" Version="6.12.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="7.0.15" />
     <PackageReference Include="Microsoft.AspNetCore.Session" Version="2.2.0" />
-    <PackageReference Include="Microsoft.DotNet.Scaffolding.Shared" Version="8.0.0" />
+    <PackageReference Include="Microsoft.DotNet.Scaffolding.Shared" Version="7.0.12" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.15" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.15">
       <PrivateAssets>all</PrivateAssets>
@@ -39,6 +39,9 @@
     <ProjectReference Include="..\DataModels\DataModels.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Areas\Admin\Controllers\" />
+    <Folder Include="Areas\Admin\DataController\" />
+    <Folder Include="Areas\Admin\Views\" />
     <Folder Include="Views\" />
     <Folder Include="wwwroot\Documents\" />
   </ItemGroup>
