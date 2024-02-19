@@ -16,24 +16,29 @@ namespace HelloDoc.Areas.Patient.Controllers
         {
             _context = context;
         }
+        [Area("Patient")]
         public IActionResult PatientRequest()
         {
             //@TempData["Display"] = "d-none";
             return View();
         }
+        [Area("Patient")]
         public IActionResult FamilyRequest()
         {
             return View();
         }
+        [Area("Patient")]
         public IActionResult ConciergeRequest()
         {
             return View();
         }
+        [Area("Patient")]
         public IActionResult BuisnessPartnerRequest()
         {
             return View();
         }
 
+        [Area("Patient")]
         [Route("/Patient/RequestForms/checkemail/{email}")]
         [HttpGet]
         public IActionResult CheckEmail(string email)
@@ -42,6 +47,7 @@ namespace HelloDoc.Areas.Patient.Controllers
             return Json(new { exists = emailExists });
         }
 
+        [Area("Patient")]
         [HttpPost]
         public async Task<IActionResult> Self(PatientRequestViewModel model)
         {
@@ -137,6 +143,7 @@ namespace HelloDoc.Areas.Patient.Controllers
 
 
 
+        [Area("Patient")]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

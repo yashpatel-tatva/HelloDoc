@@ -15,6 +15,7 @@ namespace HelloDoc.Areas.Patient.DataController
         {
             _context = context;
         }
+        [Area("Patient")]
 
         [HttpPost]
         public async Task<IActionResult> BuisneesPartnerRequest(BuisnessPartnerRequestViewModel model)
@@ -30,10 +31,10 @@ namespace HelloDoc.Areas.Patient.DataController
                 {
                     Requesttypeid = model.Requesttypeid,
                     Userid = user.Userid,
-                    Firstname = model.FirstName,
-                    Lastname = model.LastName,
-                    Email = model.Email,
-                    Phonenumber = model.Phone,
+                    Firstname = model.B_FirstName,
+                    Lastname = model.B_LastName,
+                    Email = model.B_Email,
+                    Phonenumber = model.B_Phone,
                     Status = model.Status,
                     Createddate = DateTime.Now,
                     Casenumber = model.CaseNumber,
@@ -46,10 +47,10 @@ namespace HelloDoc.Areas.Patient.DataController
                 {
                     Notes = model.Symptoms,
                     Requestid = request.Requestid,
-                    Firstname = model.B_FirstName,
-                    Lastname = model.B_LastName,
-                    Email = model.B_Email,
-                    Phonenumber = model.B_Phone,
+                    Firstname = model.FirstName,
+                    Lastname = model.LastName,
+                    Email = model.Email,
+                    Phonenumber = model.Phone,
                     State = model.State,
                     Street = model.Street,
                     City = model.City,

@@ -15,6 +15,7 @@ namespace HelloDoc.Areas.Patient.DataController
         {
             _context = context;
         }
+        [Area("Patient")]
         public void AddPatientRequestWiseFile(List<IFormFile> formFile, int requestid)
         {
             foreach (var file in formFile)
@@ -39,6 +40,7 @@ namespace HelloDoc.Areas.Patient.DataController
             }
             _context.SaveChanges();
         }
+        [Area("Patient")]
 
         [HttpPost]
         public async Task<IActionResult> FamilyRequest(FamilyRequestViewModel model)
@@ -53,10 +55,10 @@ namespace HelloDoc.Areas.Patient.DataController
                 {
                     Requesttypeid = model.Requesttypeid,
                     Userid = user.Userid,
-                    Firstname = model.FirstName,
-                    Lastname = model.LastName,
-                    Email = model.Email,
-                    Phonenumber = model.Phone,
+                    Firstname = model.F_FirstName,
+                    Lastname = model.F_LastName,
+                    Email = model.F_Email,
+                    Phonenumber = model.F_Phone,
                     Status = model.Status,
                     Createddate = DateTime.Now,
                     Relationname = model.Relation,
@@ -69,10 +71,10 @@ namespace HelloDoc.Areas.Patient.DataController
                 {
                     Notes = model.Symptoms,
                     Requestid = request.Requestid,
-                    Firstname = model.F_FirstName,
-                    Lastname = model.F_LastName,
-                    Email = model.F_Email,
-                    Phonenumber = model.F_Phone,
+                    Firstname = model.FirstName,
+                    Lastname = model.LastName,
+                    Email = model.Email,
+                    Phonenumber = model.Phone,
                     State = model.State,
                     Street = model.Street,
                     City = model.City,

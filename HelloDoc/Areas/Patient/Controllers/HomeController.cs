@@ -14,28 +14,33 @@ namespace HelloDoc.Areas.Patient.Controllers
         {
             _context = context;
         }
-
+        [Area("Patient")]
         public IActionResult Index()
         {
             return View();
         }
+        [Area("Patient")]
 
         public IActionResult PatientRequestScreen()
         {
             return View();
         }
+        [Area("Patient")]
         public IActionResult PatientLogin()
         {
             return View();
         }
+        [Area("Patient")]
         public IActionResult PatientForgetPassword(Aspnetuser user)
         {
             return View(user);
         }
+        [Area("Patient")]
         public IActionResult PatientResetPassword(Aspnetuser user)
         {
             return View(user);
         }
+        [Area("Patient")]
         [HttpPost]
         public IActionResult ResetPassword(Aspnetuser aspnetuser)
         {
@@ -45,6 +50,7 @@ namespace HelloDoc.Areas.Patient.Controllers
             _context.SaveChanges();
             return RedirectToAction("PatientLogin");
         }
+        [Area("Patient")]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

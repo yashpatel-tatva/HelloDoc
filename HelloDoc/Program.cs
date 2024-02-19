@@ -1,7 +1,4 @@
-using DataAccess.Repository;
-using DataAccess.Repository.IRepository;
 using HelloDoc.DataContext;
-using Microsoft.EntityFrameworkCore;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,9 +12,6 @@ builder.Services.AddSession(options =>
 builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddDbContext<HelloDocDbContext>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IAspNetUserRepository, AspNetUserRepository>();
-builder.Services.AddScoped<IRequestRepository , RequestRepository>();
 
 var app = builder.Build();
 
@@ -36,12 +30,13 @@ app.UseRouting();
 app.UseSession();
 app.UseAuthorization();
 
+
+//app.MapControllerRoute(
+//    name: "Admin",
+//    pattern: "{area=Admin}/{controller=Home}/{action=AdminLogin}/{id?}");
+
 app.MapControllerRoute(
     name: "Patient",
     pattern: "{area=Patient}/{controller=Home}/{action=Index}/{id?}");
-
-app.MapControllerRoute(
-    name: "Admin",
-    pattern: "{area=Admin}/{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

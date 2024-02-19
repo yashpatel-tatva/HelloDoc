@@ -19,6 +19,7 @@ namespace HelloDoc.Areas.Patient.DataController
         {
             _context = context;
         }
+        [Area("Patient")]
         public void AddPatientRequestWiseFile(List<IFormFile> formFile, int requestid)
         {
             foreach (var file in formFile)
@@ -43,6 +44,7 @@ namespace HelloDoc.Areas.Patient.DataController
             }
             _context.SaveChanges();
         }
+        [Area("Patient")]
         public async Task<IActionResult> Dashboard(PatientDashboardViewModel patientDashboardviewmodel)
         {
             if (HttpContext.Session.GetInt32("UserId") != null)
@@ -78,6 +80,7 @@ namespace HelloDoc.Areas.Patient.DataController
             }
 
         }
+        [Area("Patient")]
 
         public async Task<IActionResult> Edit(PatientDashboardViewModel model)
         {
@@ -102,6 +105,7 @@ namespace HelloDoc.Areas.Patient.DataController
             _context.SaveChanges();
             return RedirectToAction("Dashboard", "Dashboard");
         }
+        [Area("Patient")]
 
         [HttpPost]
         public async Task<IActionResult> Document(PatientDashboardViewModel model)
@@ -123,6 +127,7 @@ namespace HelloDoc.Areas.Patient.DataController
             patientDashboard.showdocument = model.showdocument;
             return RedirectToAction("Dashboard", patientDashboard);
         }
+        [Area("Patient")]
         [HttpPost]
         public async Task<IActionResult> AddDocument(PatientDashboardViewModel model)
         {
@@ -136,6 +141,7 @@ namespace HelloDoc.Areas.Patient.DataController
             }
             return RedirectToAction("Dashboard", patientDashboard);
         }
+        [Area("Patient")]
         [HttpPost]
         public async Task<IActionResult> Download(PatientDashboardViewModel dashedit)
         {
@@ -163,6 +169,7 @@ namespace HelloDoc.Areas.Patient.DataController
             }
         }
 
+        [Area("Patient")]
 
         public async Task<IActionResult> Download(int id)
         {
@@ -177,6 +184,7 @@ namespace HelloDoc.Areas.Patient.DataController
             return File(bytes, contentType, Path.GetFileName(path));
         }
 
+        [Area("Patient")]
 
         [HttpPost]
         public async Task<IActionResult> RequestByPatient(PatientDashboardViewModel patientDashboardView)
@@ -191,6 +199,7 @@ namespace HelloDoc.Areas.Patient.DataController
                 return RedirectToAction("PatientRequestForSomeoneelse");
             }
         }
+        [Area("Patient")]
 
         public async Task<IActionResult> PatientRequestForMe()
         {
@@ -204,6 +213,7 @@ namespace HelloDoc.Areas.Patient.DataController
             model.PhoneNumber = user.Mobile ;
             return View(model);
         }
+        [Area("Patient")]
         public async Task<IActionResult> PatientRequestForSomeoneelse()
         {
             int id = (int)HttpContext.Session.GetInt32("UserId");

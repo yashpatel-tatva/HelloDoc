@@ -16,6 +16,7 @@ namespace HelloDoc.Areas.Patient.DataController
         public ConciergeRequestForm(HelloDocDbContext context) {
             _context = context;
         }
+        [Area("Patient")]
 
         [HttpPost]
         public async Task<IActionResult> Conciergerequest(ConciergeRequestViewModel model)
@@ -30,10 +31,10 @@ namespace HelloDoc.Areas.Patient.DataController
                 {
                     Requesttypeid = model.Requesttypeid,
                     Userid = user.Userid,
-                    Firstname = model.FirstName,
-                    Lastname = model.LastName,
-                    Email = model.Email,
-                    Phonenumber = model.Phone,
+                    Firstname = model.C_FirstName,
+                    Lastname = model.C_LastName,
+                    Email = model.C_Email,
+                    Phonenumber = model.C_Phone,
                     Status = model.Status,
                     Createddate = DateTime.Now,
                     Confirmationnumber = (region.Abbreviation.Substring(0, 2) + DateTime.Now.Day.ToString() + DateTime.Now.Month.ToString().PadLeft(2, '0') + model.LastName.Substring(0, 2) + model.FirstName.Substring(0, 2) + requestcount.Count().ToString().PadLeft(4, '0')).ToUpper(),
@@ -45,10 +46,10 @@ namespace HelloDoc.Areas.Patient.DataController
                 {
                     Notes = model.Symptoms,
                     Requestid = request.Requestid,
-                    Firstname = model.C_FirstName,
-                    Lastname = model.C_LastName,
-                    Email = model.C_Email,
-                    Phonenumber = model.C_Phone,
+                    Firstname = model.FirstName,
+                    Lastname = model.LastName,
+                    Email = model.Email,
+                    Phonenumber = model.Phone,
                     State = model.C_State,
                     Street = model.C_Street,
                     City = model.C_City,

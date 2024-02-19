@@ -39,9 +39,6 @@
     <ProjectReference Include="..\DataModels\DataModels.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Areas\Admin\Controllers\" />
-    <Folder Include="Areas\Admin\DataController\" />
-    <Folder Include="Areas\Admin\Views\" />
     <Folder Include="Views\" />
     <Folder Include="wwwroot\Documents\" />
   </ItemGroup>

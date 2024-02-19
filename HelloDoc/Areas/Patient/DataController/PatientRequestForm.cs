@@ -14,6 +14,7 @@ namespace HelloDoc.Areas.Patient.DataController
         {
             _context = context;
         }
+        [Area("Patient")]
         public void AddPatientRequestWiseFile(List<IFormFile> formFile, int requestid)
         {
             foreach (var file in formFile)
@@ -39,6 +40,7 @@ namespace HelloDoc.Areas.Patient.DataController
             _context.SaveChanges();  
         }
 
+        [Area("Patient")]
 
         [HttpPost]
         public async Task<IActionResult> Self(PatientRequestViewModel model)
