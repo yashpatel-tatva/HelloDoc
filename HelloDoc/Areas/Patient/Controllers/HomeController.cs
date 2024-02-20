@@ -37,15 +37,28 @@ namespace HelloDoc.Areas.Patient.Controllers
         {
             return View(user);
         }
-        [Area("Patient")]
-        public IActionResult PatientResetPassword(Aspnetuser user)
-        {
-            sendEmail(user.Email, "hello", "hello reset password https://localhost:44325/Home/ResetPassword/id=" + user.Email + "");
 
-            return RedirectToAction("PatientLogin" , "Home");
+        [Area("Patient")]
+        public IActionResult PatientResetPasswordEmail(Aspnetuser user)
+        {
+            string Id = (_context.Aspnetusers.FirstOrDefault(x => x.Email == user.Email)).Id;
+            string resetPasswordUrl = GenerateResetPasswordUrl(Id);
+            SendEmail(user.Email, "Reset Your Password", $"Hello, reset your password using this link: {resetPasswordUrl}");
+
+            return RedirectToAction("PatientLogin", "Home");
         }
 
-        public Task sendEmail(string email, string subject, string message)
+        [Area("Patient")]
+        private string GenerateResetPasswordUrl(string userId)
+        {
+            string baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}";
+            string resetPasswordPath = Url.Action("PatientResetPassword", "Home", new { id = userId });
+            return baseUrl + resetPasswordPath;
+        }
+
+
+        [Area("Patient")]
+        private Task SendEmail(string email, string subject, string message)
         {
             var mail = "tatva.dotnet.yashpatel@outlook.com";
             var password = "Yash@7046";
@@ -58,7 +71,17 @@ namespace HelloDoc.Areas.Patient.Controllers
 
             return client.SendMailAsync(new MailMessage(from: mail, to: email, subject, message));
         }
-       
+
+        // Handle the reset password URL in the same controller or in a separate one
+        [Area("Patient")]
+        public IActionResult PatientResetPassword(string id)
+        {
+            var aspuser = _context.Aspnetusers.FirstOrDefault(x => x.Id == id);
+
+            return View(aspuser);
+        }
+
+
 
         [Area("Patient")]
         [HttpPost]
