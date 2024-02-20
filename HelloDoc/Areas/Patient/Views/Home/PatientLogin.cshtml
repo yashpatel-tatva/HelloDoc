@@ -32,21 +32,22 @@
             <form asp-controller="Credential" asp-action="Login" method="post">
                 <div class="py-2">
                     <div class="my-2 form-group d-flex align-items-center rounded @TempData["Style"]">
-                        <input type="email" asp-for="Email" class="form-control" placeholder="" required="required"><span>Email</span>
+                        <input type="email" asp-for="Email" class="form-control" placeholder="" required><span>Email</span>
                         <label class="px-2"><i class="fa-regular fa-circle-user"></i></label>
+                    <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
-                        <p style="color : red">@TempData["WrongEmail"]</p>
+                    <p style="color : red">@TempData["WrongEmail"]</p>
                     <div class="my-2 form-group d-flex align-items-center rounded @TempData["Style"]">
-                        <input type="password" asp-for="Passwordhash" id="showpass" class="form-control" placeholder="" required="required"><span>Password</span>
+                        <input type="password" asp-for="Passwordhash" id="showpass" class="form-control" placeholder="" required><span>Password</span>
                         <label id="eyeiconlabel" class="px-2"><i class="fa-regular fa-eye-slash" id="eyeicon"></i></label>
                     </div>
-                        <p style="color : red">@TempData["Wrongpass"]</p>
+                    <p style="color : red">@TempData["Wrongpass"]</p>
                     <div class="py-2 form-group border-0">
                         <button class="form-control subbtn">Log In</button>
                     </div>
                 </div>
-                    <div class="d-flex justify-content-center"><a asp-action="AdminForgetPassword">Forget Password?</a></div>
-            </form> 
+                <div class="d-flex justify-content-center"><a asp-action="PatientForgetPassword">Forget Password?</a></div>
+            </form>
         </div>
     </div>
 

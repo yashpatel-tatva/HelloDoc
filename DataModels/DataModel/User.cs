@@ -19,18 +19,22 @@ public partial class User
     public string Aspnetuserid { get; set; } = null!;
 
     [Column("firstname")]
+    [Required]
+    [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Enter Valid Name.")]
     [StringLength(100)]
     public string Firstname { get; set; } = null!;
 
     [Column("lastname")]
+    [Required]
+    [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Enter Valid Name.")]
     [StringLength(100)]
     public string? Lastname { get; set; }
 
     [Column("email")]
-    [StringLength(50)]
     public string Email { get; set; } = null!;
 
     [Column("mobile")]
+    [RegularExpression(@"^\+?(\d[\d-. ]+)?(\([\d-. ]+\))?[\d-. ]+\d$", ErrorMessage = "Please enter valid phone number")]
     [StringLength(20)]
     public string? Mobile { get; set; }
 
@@ -38,14 +42,17 @@ public partial class User
     public BitArray? Ismobile { get; set; }
 
     [Column("street")]
+    [RegularExpression(@"^(?=.*\S)[a-zA-Z\s.'-]+$", ErrorMessage = "Enter a valid")]
     [StringLength(100)]
     public string? Street { get; set; }
 
     [Column("city")]
+    [RegularExpression(@"^(?=.*\S)[a-zA-Z\s.'-]+$", ErrorMessage = "Enter a valid")]
     [StringLength(100)]
     public string? City { get; set; }
 
     [Column("state")]
+    [RegularExpression(@"^(?=.*\S)[a-zA-Z\s.'-]+$", ErrorMessage = "Enter a valid")]
     [StringLength(100)]
     public string? State { get; set; }
 
@@ -53,7 +60,8 @@ public partial class User
     public int? Regionid { get; set; }
 
     [Column("zip")]
-    [StringLength(10)]
+    [StringLength(10, ErrorMessage = "Enter valid Zip Code")]
+    [RegularExpression(@"^\d{6}$", ErrorMessage = "Enter a valid 6-digit zip code")]
     public string? Zip { get; set; }
 
     [Column("strmonth")]

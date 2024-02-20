@@ -35,20 +35,26 @@
                         <div class="form-group rounded d-flex align-items-center">
                             <textarea class="form-control" placeholder="" rows="3" asp-for="Symptoms"></textarea><span>Enter Brief Details Of Symptoms (Optional)</span>
                         </div>
+                        <span asp-validation-for="Symptoms"></span>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="text" class="form-control" placeholder="" required="required" asp-for="FirstName"><span>First Name</span>
+                            <input type="text" class="form-control" placeholder=""  asp-for="FirstName"><span>First Name</span>
                         </div>
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="text" class="form-control" placeholder="" required="required" asp-for="LastName"><span>Last Name</span>
+                            <input type="text" class="form-control" placeholder=""  asp-for="LastName"><span>Last Name</span>
                         </div>
+                        <span asp-validation-for="LastName" class="text-danger"></span>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="date" class="form-control" placeholder="" required="required" asp-for="BirthDate"><span>Date of Birth</span>
+                            @{          
+                                string today = DateTime.Today.ToString("yyyy-MM-dd");
+                            }
+                            <input type="date" class="form-control" placeholder=""   max=@today min="1940-01-01" asp-for="BirthDate"><span>Date of Birth</span>
                         </div>
                     </div>
                 </div>
@@ -58,14 +64,16 @@
                 <div class="row d-flex">
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="email" class="form-control" placeholder="" required="required" asp-for="Email" id="patientEmail"> <span>Email</span>
+                            <input type="email" class="form-control" placeholder=""  asp-for="Email" id="patientEmail"> <span>Email</span>
                         </div>
+                        <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                         <div class="telephone rounded">
                             <div class="input-group d-flex align-items-center rounded ">
-                                <input type="tel" id="tel" class="form-control" asp-for="Phone">
+                                <input type="tel" id="tel2" class="form-control" asp-for="Phone">
                             </div>
+                        <span asp-validation-for="Phone" class="text-danger"></span>
                         </div>
                     </div>
                 </div>
@@ -75,28 +83,33 @@
                 <div class="row d-flex">
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="text" class="form-control" placeholder="" required="required" asp-for="Street"><span>Street</span>
+                            <input type="text" class="form-control" placeholder=""  asp-for="Street"><span>Street</span>
                         </div>
+                        <span asp-validation-for="Street" class="text-danger"></span>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="text" class="form-control" placeholder="" required="required" asp-for="City"><span>City</span>
+                            <input type="text" class="form-control" placeholder=""  asp-for="City"><span>City</span>
                         </div>
+                        <span asp-validation-for="City" class="text-danger"></span>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="text" class="form-control" placeholder="" required="required" asp-for="State"><span>State</span>
+                            <input type="text" class="form-control" placeholder=""  asp-for="State"><span>State</span>
                         </div>
+                        <span asp-validation-for="State" class="text-danger"></span>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="text" class="form-control" placeholder="" required="required" asp-for="ZipCode"><span>Zip Code</span>
+                            <input type="text" class="form-control" placeholder=""  asp-for="ZipCode"><span>Zip Code</span>
                         </div>
+                        <span asp-validation-for="ZipCode" class="text-danger"></span>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="text" class="form-control" placeholder="" required="required"><span>Room # / Suite (Optional)</span>
+                            <input type="text" class="form-control" placeholder="" ><span>Room # / Suite (Optional)</span>
                         </div>
+                        <span asp-validation-for="Room" class="text-danger"></span>
                     </div>
                 </div>
             </div>
@@ -107,6 +120,7 @@
                         <div class="form-group d-flex align-items-center rounded">
                             <input type="text" class="form-control" placeholder="" asp-for="Relation"><span>Relation With Patient (Optional)</span>
                         </div>
+                        <span asp-validation-for="Relation" class="text-danger"></span>
                     </div>
                 </div>
             </div>
@@ -149,3 +163,12 @@
     </form>
 </div>
 
+<script>
+    var input = document.querySelector("#teL2");
+var iti = window.intlTelInput(input, {
+    separateDialCode: true,
+    preferredCountries: ["in"],
+    hiddenInput: "full",
+    utilsScript: "//cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.3/js/utils.js"
+});
+</script>

@@ -71,7 +71,7 @@
                             {
                                 <tr>
                                     <td><input type="checkbox" class="childCheckbox" id="download_@m.Requestwisefileid" name="downloadselect" value="@m.Requestwisefileid" /></td>
-                                    <td>@m.Filename.Split("\\Documents\\")[1]</td>
+                                    <td>@System.IO.Path.GetFileName(@m.Filename)</td>
                                     <td>@Model.Requests.FirstOrDefault(u => u.Requestid==m.Requestid).Firstname </td>
                                     <td>@m.Createddate.ToString("MMM dd , yyyy")</td>
                                     <td>

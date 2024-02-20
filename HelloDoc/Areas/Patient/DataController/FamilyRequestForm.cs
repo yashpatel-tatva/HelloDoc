@@ -21,7 +21,8 @@ namespace HelloDoc.Areas.Patient.DataController
             foreach (var file in formFile)
             {
                 string filename = requestid.ToString() + " _ " + file.FileName;
-                string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Documents", filename);
+                string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "HalloDoc Request Documents", filename);
+
 
                 using (var fileStream = new FileStream(path, FileMode.Create))
                 {

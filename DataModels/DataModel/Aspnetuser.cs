@@ -22,7 +22,6 @@ public partial class Aspnetuser
     public string? Passwordhash { get; set; }
 
     [Column("email")]
-    [StringLength(256)]
     public string? Email { get; set; }
 
     [Column("phonenumber", TypeName = "character varying")]

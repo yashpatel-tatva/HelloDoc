@@ -23,35 +23,41 @@
                 <div class="row d-flex">
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="textbox" class="form-control" placeholder="" asp-for="B_FirstName" required="required"><span>Your First Name</span>
+                            <input type="textbox" class="form-control" placeholder="" asp-for="B_FirstName" ><span>Your First Name</span>
                         </div>
+                        <span asp-validation-for="B_FirstName" class="text-danger"></span>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="textbox" class="form-control" placeholder="" asp-for="B_LastName" required="required"><span>Your Last Name</span>
+                            <input type="textbox" class="form-control" placeholder="" asp-for="B_LastName" ><span>Your Last Name</span>
                         </div>
+                        <span asp-validation-for="B_LastName" class="text-danger"></span>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                         <div class="telephone rounded">
                             <div class="input-group d-flex align-items-center rounded ">
                                 <input type="tel" id="tel" class="form-control" asp-for="B_Phone">
                             </div>
+                            <span asp-validation-for="B_Phone" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="email" class="form-control" placeholder="" asp-for="B_Email" required="required"><span>Your Email</span>
+                            <input type="email" class="form-control" placeholder="" asp-for="B_Email" ><span>Your Email</span>
                         </div>
+                        <span asp-validation-for="B_Email" class="text-danger"></span>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="textbox" class="form-control" placeholder="" asp-for="PropertyName" required="required"><span>Business/Property Name</span>
+                            <input type="textbox" class="form-control" placeholder="" asp-for="PropertyName" ><span>Business/Property Name</span>
                         </div>
+                        <span asp-validation-for="PropertyName" class="text-danger"></span>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="textbox" class="form-control" placeholder="" asp-for="CaseNumber" required="required"><span>Case Number</span>
+                            <input type="textbox" class="form-control" placeholder="" asp-for="CaseNumber" ><span>Case Number</span>
                         </div>
+                        <span asp-validation-for="CaseNumber" class="text-danger"></span>
                     </div>
                 </div>
             </div>
@@ -62,21 +68,28 @@
                         <div class="form-group rounded d-flex align-items-center">
                             <textarea class="form-control" placeholder=" " asp-for="Symptoms" rows="3"></textarea><span>Enter Brief Details Of Symptoms (Optional)</span>
                         </div>
+                        <span asp-validation-for="Symptoms" class="text-danger"></span>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="textbox" class="form-control" placeholder="" asp-for="FirstName" required="required"><span>First Name</span>
+                            <input type="textbox" class="form-control" placeholder="" asp-for="FirstName" ><span>First Name</span>
                         </div>
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="textbox" class="form-control" placeholder="" asp-for="LastName" required="required"><span>Last Name</span>
+                            <input type="textbox" class="form-control" placeholder="" asp-for="LastName" ><span>Last Name</span>
                         </div>
+                        <span asp-validation-for="LastName" class="text-danger"></span>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="date" class="form-control" placeholder="" asp-for="BirthDate" required="required"><span>Date of Birth</span>
+                            @{
+                                string today = DateTime.Today.ToString("yyyy-MM-dd");
+                            }
+                            <input type="date" class="form-control" placeholder="" min="1940-01-01" max=@today asp-for="BirthDate" ><span>Date of Birth</span>
                         </div>
+                        <span asp-validation-for="BirthDate" class="text-danger"></span>
                     </div>
                 </div>
             </div>
@@ -85,14 +98,16 @@
                 <div class="row d-flex">
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="email" class="form-control" placeholder="" asp-for="Email" required="required"><span>Email</span>
+                            <input type="email" class="form-control" placeholder="" asp-for="Email" ><span>Email</span>
                         </div>
+                        <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                         <div class="telephone rounded">
                             <div class="input-group d-flex align-items-center rounded ">
                                 <input type="tel" id="tel1" class="form-control" asp-for="Phone">
                             </div>
+                            <span asp-validation-for="Phone" class="text-danger"></span>
                         </div>
                     </div>
                 </div>
@@ -102,28 +117,33 @@
                 <div class="row d-flex">
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="textbox" class="form-control" placeholder="" asp-for="Street" maxlength="50" required="required"><span>Street</span>
+                            <input type="textbox" class="form-control" placeholder="" asp-for="Street" maxlength="50" ><span>Street</span>
                         </div>
+                        <span asp-validation-for="Street" class="text-danger"></span>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="textbox" class="form-control" placeholder="" asp-for="City" required="required"><span>City</span>
+                            <input type="textbox" class="form-control" placeholder="" asp-for="City" ><span>City</span>
                         </div>
+                        <span asp-validation-for="City" class="text-danger"></span>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="textbox" class="form-control" placeholder="" asp-for="State" required="required"><span>State</span>
+                            <input type="textbox" class="form-control" placeholder="" asp-for="State" ><span>State</span>
                         </div>
+                        <span asp-validation-for="State" class="text-danger"></span>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="textbox" class="form-control" placeholder="" asp-for="ZipCode" required="required"><span>Zip Code</span>
+                            <input type="textbox" class="form-control" placeholder="" asp-for="ZipCode" ><span>Zip Code</span>
                         </div>
+                        <span asp-validation-for="ZipCode" class="text-danger"></span>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="textbox" class="form-control" placeholder="" asp-for="Room" required="required"><span>Room # / Suite (Optional)</span>
+                            <input type="textbox" class="form-control" placeholder="" asp-for="Room" ><span>Room # / Suite (Optional)</span>
                         </div>
+                        <span asp-validation-for="Room" class="text-danger"></span>
                     </div>
                 </div>
             </div>

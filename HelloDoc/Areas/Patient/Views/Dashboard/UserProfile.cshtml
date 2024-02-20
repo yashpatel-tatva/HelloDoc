@@ -19,18 +19,26 @@
                     <div class="row d-flex">
                         <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                             <div class="form-group d-flex align-items-center rounded">
-                                <input type="text" class="form-control" placeholder="" asp-for="User.Firstname" required="required" disabled><span>First Name</span>
+                                <input type="text" class="form-control" placeholder="" asp-for="User.Firstname"  disabled><span>First Name</span>
                             </div>
+                            <span asp-validation-for="User.Firstname" class="text-danger"></span>
                         </div>
                         <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                             <div class="form-group d-flex align-items-center rounded">
-                                <input type="text" class="form-control" placeholder="" asp-for="User.Lastname" required="required" disabled><span>Last Name</span>
+                                <input type="text" class="form-control" placeholder="" asp-for="User.Lastname"  disabled><span>Last Name</span>
                             </div>
+                            <span asp-validation-for="User.Lastname" class="text-danger"></span>
+
                         </div>
                         <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                             <div class="form-group d-flex align-items-center rounded">
-                                <input type="date" class="form-control" placeholder="" asp-for="birthdate" required="required" disabled><span>Date of Birth</span>
+                                @{
+                                    string today = DateTime.Today.ToString("yyyy-MM-dd");
+                                }
+                                <input type="date" class="form-control" placeholder="" asp-for="birthdate" max=@today min="1940-01-01" disabled><span>Date of Birth</span>
                             </div>
+                            <span asp-validation-for="birthdate" class="text-danger"></span>
+
                         </div>
                     </div>
                 </div>
@@ -40,14 +48,17 @@
                         <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                             <div class="telephone rounded">
                                 <div class="input-group d-flex align-items-center rounded ">
-                                    <input type="tel" id="tel" class="form-control" asp-for="User.Mobile" disabled>
+                                    <input type="tel"  id="tel" class="form-control" asp-for="User.Mobile" disabled>
                                 </div>
+                                <span asp-validation-for="User.Mobile" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                             <div class="form-group d-flex align-items-center rounded">
-                                <input type="email" class="form-control" placeholder="" asp-for="User.Email" required="required" id="patientEmail" disabled> <span>Email</span>
+                                <input type="email" class="form-control" placeholder="" asp-for="User.Email"  id="patientEmail" disabled> <span>Email</span>
                             </div>
+                            <span asp-validation-for="User.Email" class="text-danger"></span>
+
                         </div>
                     </div>
                 </div>
@@ -56,23 +67,31 @@
                     <div class="row d-flex">
                         <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                             <div class="form-group d-flex align-items-center rounded">
-                                <input type="text" class="form-control" placeholder="" asp-for="User.Street" required="required" disabled><span>Street</span>
+                                <input type="text" class="form-control" placeholder="" asp-for="User.Street"  disabled><span>Street</span>
                             </div>
+                            <span asp-validation-for="User.Street" class="text-danger"></span>
+
                         </div>
                         <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                             <div class="form-group d-flex align-items-center rounded">
-                                <input type="text" class="form-control" placeholder="" asp-for="User.City" required="required" disabled><span>City</span>
+                                <input type="text" class="form-control" placeholder="" asp-for="User.City"  disabled><span>City</span>
                             </div>
+                            <span asp-validation-for="User.City" class="text-danger"></span>
+
                         </div>
                         <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                             <div class="form-group d-flex align-items-center rounded">
-                                <input type="text" class="form-control" placeholder="" asp-for="User.State" required="required" disabled><span>State</span>
+                                <input type="text" class="form-control" placeholder="" asp-for="User.State"  disabled><span>State</span>
                             </div>
+                            <span asp-validation-for="User.State" class="text-danger"></span>
+
                         </div>
                         <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                             <div class="form-group d-flex align-items-center rounded">
-                                <input type="text" class="form-control" placeholder="" asp-for="User.Zip" required="required" disabled><span>Zip Code</span>
+                                <input type="text" class="form-control" placeholder="" asp-for="User.Zip"  disabled><span>Zip Code</span>
                             </div>
+                            <span asp-validation-for="User.Zip" class="text-danger"></span>
+
                         </div>
                     </div>
                 </div>
@@ -115,4 +134,7 @@
             $('#saveButton').removeAttr('hidden', false);
         });
     });
+</script>
+<script>
+
 </script>

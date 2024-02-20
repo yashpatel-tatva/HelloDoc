@@ -24,18 +24,29 @@ namespace HelloDoc.Areas.Patient.DataController
         {
             foreach (var file in formFile)
             {
-                string filename = requestid.ToString() + " _ " + file.FileName;
-                string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Documents", filename);
+                string filename = file.FileName;
+                string filenameWithoutExtension = Path.GetFileNameWithoutExtension(filename);
+                string extension = Path.GetExtension(filename);
+                string filewith = filenameWithoutExtension +"_"+ DateTime.Now.ToString("dd`MM`yyyy`HH`mm`ss") + extension;
 
-                using (var fileStream = new FileStream(path, FileMode.Create))
+                string directoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "HalloDoc Request Documents", requestid.ToString());
+                if (!Directory.Exists(directoryPath))
+                {
+                    // Create the directory
+                    Directory.CreateDirectory(directoryPath);
+                }
+
+                string filePath = Path.Combine(directoryPath, filewith);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
                 {
                     file.CopyTo(fileStream);
                 }
 
+
                 var data3 = new Requestwisefile()
                 {
                     Requestid = requestid,
-                    Filename = path,
+                    Filename = filePath,
                     Createddate = DateTime.Now,
                 };
 
@@ -90,6 +101,7 @@ namespace HelloDoc.Areas.Patient.DataController
             user.Firstname = model.User.Firstname;
             user.Lastname = model.User.Lastname;
             user.Email = model.User.Email;
+            user.Mobile = model.User.Mobile;
             user.Street = model.User.Street;
             user.City = model.User.City;
             user.State = model.User.State;
@@ -157,7 +169,7 @@ namespace HelloDoc.Areas.Patient.DataController
                         var file = await _context.Requestwisefiles.FirstOrDefaultAsync(x => x.Requestwisefileid == s);
                         var path = file.Filename;
                         var bytes = await System.IO.File.ReadAllBytesAsync(path);
-                        var zipEntry = zipArchive.CreateEntry(file.Filename.Split("\\Documents\\")[1], CompressionLevel.Fastest);
+                        var zipEntry = zipArchive.CreateEntry(Path.GetFileName(path), CompressionLevel.Fastest);
                         using (var zipStream = zipEntry.Open())
                         {
                             await zipStream.WriteAsync(bytes, 0, bytes.Length);
