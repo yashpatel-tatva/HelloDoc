@@ -20,19 +20,29 @@ namespace HelloDoc.Areas.Patient.DataController
         {
             foreach (var file in formFile)
             {
-                string filename = requestid.ToString() + " _ " + file.FileName;
-                string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "HalloDoc Request Documents", filename);
+                string filename = file.FileName;
+                string filenameWithoutExtension = Path.GetFileNameWithoutExtension(filename);
+                string extension = Path.GetExtension(filename);
+                string filewith = filenameWithoutExtension + "_" + DateTime.Now.ToString("dd`MM`yyyy`HH`mm`ss") + extension;
 
+                string directoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "HalloDoc Request Documents", requestid.ToString());
+                if (!Directory.Exists(directoryPath))
+                {
+                    // Create the directory
+                    Directory.CreateDirectory(directoryPath);
+                }
 
-                using (var fileStream = new FileStream(path, FileMode.Create))
+                string filePath = Path.Combine(directoryPath, filewith);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
                 {
                     file.CopyTo(fileStream);
                 }
 
+
                 var data3 = new Requestwisefile()
                 {
                     Requestid = requestid,
-                    Filename = path,
+                    Filename = filePath,
                     Createddate = DateTime.Now,
                 };
 

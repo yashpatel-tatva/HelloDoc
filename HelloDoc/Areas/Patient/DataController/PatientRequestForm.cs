@@ -19,25 +19,36 @@ namespace HelloDoc.Areas.Patient.DataController
         {
             foreach (var file in formFile)
             {
-                        string filename = requestid.ToString() + " _ "+ file.FileName;
-                        string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "HalloDoc Request Documents",  filename);
+                string filename = file.FileName;
+                string filenameWithoutExtension = Path.GetFileNameWithoutExtension(filename);
+                string extension = Path.GetExtension(filename);
+                string filewith = filenameWithoutExtension + "_" + DateTime.Now.ToString("dd`MM`yyyy`HH`mm`ss") + extension;
 
-                        using (var fileStream = new FileStream(path, FileMode.Create))
-                        {
-                            file.CopyTo(fileStream);
-                        }
+                string directoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "HalloDoc Request Documents", requestid.ToString());
+                if (!Directory.Exists(directoryPath))
+                {
+                    // Create the directory
+                    Directory.CreateDirectory(directoryPath);
+                }
 
-                        var data3 = new Requestwisefile()
-                        {
-                            Requestid = requestid,
-                            Filename = path,
-                            Createddate = DateTime.Now,
-                        };
+                string filePath = Path.Combine(directoryPath, filewith);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    file.CopyTo(fileStream);
+                }
 
-                        _context.Requestwisefiles.Add(data3);
-                        
+
+                var data3 = new Requestwisefile()
+                {
+                    Requestid = requestid,
+                    Filename = filePath,
+                    Createddate = DateTime.Now,
+                };
+
+                _context.Requestwisefiles.Add(data3);
+
             }
-            _context.SaveChanges();  
+            _context.SaveChanges();
         }
 
         [Area("Patient")]

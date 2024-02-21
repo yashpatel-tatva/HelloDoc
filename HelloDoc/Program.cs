@@ -31,12 +31,12 @@ app.UseSession();
 app.UseAuthorization();
 
 
-//app.MapControllerRoute(
-//    name: "Admin",
-//    pattern: "{area=Admin}/{controller=Home}/{action=AdminLogin}/{id?}");
-
 app.MapControllerRoute(
-    name: "Patient",
-    pattern: "{area=Patient}/{controller=Home}/{action=Index}/{id?}");
+    name: "Admin",
+    pattern: "{area=Admin}/{controller=Home}/{action=AdminLogin}/{id?}");
+
+//app.MapControllerRoute(
+//    name: "Patient",
+//    pattern: "{area=Patient}/{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
