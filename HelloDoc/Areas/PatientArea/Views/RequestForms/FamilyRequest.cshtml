@@ -1,0 +1,182 @@
+﻿@using HelloDoc.Areas.PatientArea.ViewModels
+@{
+    ViewData["Title"] = "\"Submit Request As - Friend/Family\"";
+}
+@Html.Partial("_InfoModel")
+@model FamilyRequestViewModel;
+<div class="container pb-5 mb-5">
+    <div class="d-flex subinfodiv align-items-center py-3">
+        <div class="h3 subinfotext fw-bold">Submit Information</div>
+        <div>
+            <a asp-controller="Home" asp-action="PatientRequestScreen">
+                <button class="d-flex babtn rounded align-item-center p-1 px-2">
+                    <div><img src="~/res/back.png" width="15px" height="10px"></div>
+                    <div><span>Back</span></div>
+                </button>
+            </a>
+        </div>
+    </div>
+    <form asp-controller="FamilyRequestForm" asp-action="FamilyRequest" method="post" enctype="multipart/form-data">
+        <div class="bglight rounded p-3 shadow" id="content">
+
+            <div>
+                <div class="h5 fw-bold">Family/Friend Information</div>
+                <div class="row d-flex">
+                    <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
+                        <div class="form-group d-flex align-items-center rounded">
+                            <input type="textbox" class="form-control" placeholder="" asp-for="F_FirstName"><span>Your First Name</span>
+                        </div>
+                        <span asp-validation-for="F_FirstName" class="text-danger"></span>
+                    </div>
+                    <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
+                        <div class="form-group d-flex align-items-center rounded">
+                            <input type="textbox" class="form-control" placeholder="" asp-for="F_LastName"><span>Your Last Name</span>
+                        </div>
+                        <span asp-validation-for="F_LastName" class="text-danger"></span>
+                    </div>
+                    <div class="py-2 col-xl-6 col-md-6 col-sm-12">
+                        <div class="telephone rounded">
+                            <div class="input-group d-flex align-items-center rounded ">
+                                <input type="tel" id="tel" class="form-control" asp-for="F_Phone">
+                            </div>
+                        </div>
+                        <span asp-validation-for="F_Phone" class="text-danger"></span>
+                    </div>
+                    <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
+                        <div class="form-group d-flex align-items-center rounded">
+                            <input type="email" class="form-control" placeholder="" asp-for="F_Email"><span>Your Email</span>
+                        </div>
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
+                        <div class="form-group d-flex align-items-center rounded">
+                            <input type="textbox" class="form-control" placeholder="" asp-for="Relation"><span>Relation With Patient</span>
+                        </div>
+                        <span asp-validation-for="Relation" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-4">
+                <div class="h5 fw-bold">Patient Information</div>
+                <div class="row d-flex">
+                    <div class="py-2 col-12 ">
+                        <div class="form-group rounded d-flex align-items-center">
+                            <textarea class="form-control" asp-for="Symptoms" placeholder=" " rows="3"></textarea><span>Enter Brief Details Of Symptoms (Optional)</span>
+                        </div>
+                        <span asp-validation-for="Symptoms"></span>
+                    </div>
+                    <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
+                        <div class="form-group d-flex align-items-center rounded">
+                            <input type="textbox" class="form-control" placeholder="" asp-for="FirstName"><span>First Name</span>
+                        </div>
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                    </div>
+                    <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
+                        <div class="form-group d-flex align-items-center rounded">
+                            <input type="textbox" class="form-control" placeholder="" asp-for="LastName"><span>Last Name</span>
+                        </div>
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+                    </div>
+                    <div class="py-2 col-xl-6 col-md-6 col-sm-12">
+                        <div class="form-group d-flex align-items-center rounded">
+                            @{
+                                string today = DateTime.Today.ToString("yyyy-MM-dd");
+                            }
+                            <input type="date" class="form-control" placeholder="" max=@today min="1940-01-01" asp-for="BirthDate"><span>Date of Birth</span>
+                        </div>
+                        <span asp-validation-for="BirthDate" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-4">
+                <div class="h5 fw-bold">Patient Contact Information</div>
+                <div class="row d-flex">
+                    <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
+                        <div class="form-group d-flex align-items-center rounded">
+                            <input type="email" class="form-control" placeholder="" asp-for="Email"><span>Email</span>
+                        </div>
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="py-2 col-xl-6 col-md-6 col-sm-12">
+                        <div class="telephone rounded">
+                            <div class="input-group d-flex align-items-center rounded ">
+                                <input type="tel" id="tel1" class="form-control" asp-for="Phone">
+                            </div>
+                        </div>
+                        <span asp-validation-for="Phone" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-4">
+                <div class="h5 fw-bold">Patient Location</div>
+                <div class="row d-flex">
+                    <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
+                        <div class="form-group d-flex align-items-center rounded">
+                            <input type="textbox" class="form-control" asp-for="Street" placeholder=""><span>Street</span>
+                        </div>
+                        <span asp-validation-for="Street" class="text-danger"></span>
+                    </div>
+                    <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
+                        <div class="form-group d-flex align-items-center rounded">
+                            <input type="textbox" class="form-control" placeholder="" asp-for="City"><span>City</span>
+                        </div>
+                        <span asp-validation-for="City" class="text-danger"></span>
+                    </div>
+                    <div class="py-2 col-xl-6 col-md-6 col-sm-12">
+                        <div class="form-group d-flex align-items-center rounded">
+                            <input type="textbox" class="form-control" placeholder="" asp-for="State"><span>State</span>
+                        </div>
+                        <span asp-validation-for="State" class="text-danger"></span>
+                    </div>
+                    <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
+                        <div class="form-group d-flex align-items-center rounded">
+                            <input type="textbox" class="form-control" placeholder="" asp-for="ZipCode"><span>Zip Code</span>
+                        </div>
+                        <span asp-validation-for="ZipCode" class="text-danger"></span>
+                    </div>
+                    <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
+                        <div class="form-group d-flex align-items-center rounded">
+                            <input type="textbox" class="form-control" placeholder="" asp-for="Room"><span>Room # / Suite (Optional)</span>
+                        </div>
+                        <span asp-validation-for="Room" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-4">
+                <div class="h5 fw-bold">(Optional) Upload Photo or Document</div>
+                <div class="row d-flex">
+                    <div class="py-2 col-12 ">
+                        <div class="form-group rounded d-flex align-items-center justify-content-between uploadbtndiv">
+                            <div class="px-3 table-responsive">
+                                <lable class="choosenfile text-dark text-nowrap" id="file-chosen">No item selected</lable>
+                            </div>
+                            <div role="button" class="uploadbtn px-2 py-1 d-flex ms-1">
+                                <input type="file" id="actual-btn" asp-for="Upload" multiple hidden />
+                                <label role="button" for="actual-btn" class="d-flex align-items-center"><i class="bi bi-cloud-arrow-up p-2"></i><div>Upload</div></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="">
+                <div class="row d-flex justify-content-end">
+                    <div class="py-2 col-xl-1 col-md-2 col-4 align-items-center">
+                        <div class="form-group d-flex  border-0">
+                            <button type="submit" class="p-2 uploadbtn rounded w-100  border-0">
+                                Submit
+                            </button>
+                        </div>
+                    </div>
+                    <div class="py-2 col-xl-1 col-md-2 col-4 align-items-center">
+                        <div class="form-group d-flex   border-0">
+                            <button type="reset" class="p-2 babtn rounded w-100">
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

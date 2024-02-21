@@ -1,0 +1,58 @@
+﻿@{
+    Layout = null;
+}
+
+<div class="rounded-4 bg-white">
+    <div class="d-flex justify-content-between pt-2 p-4">
+        <div class="">
+            <div><input type="search" placeholder="Search" class="form-control rounded" /></div>
+        </div>
+        <div class="d-flex align-items-center">
+            <div class="d-flex rounded ">
+                <input type="radio" name="requestby" id="requestbyAll" class="btn-check" autocomplete="off"/>
+                <label class="d-flex btn" for="requestbyAll">All</label>
+            </div>
+            <div class="d-flex rounded ">
+                <input type="radio" name="requestby" id="requestbyPatient" class="btn-check" autocomplete="off"/>
+                <label class="d-flex btn" for="requestbyPatient"><div><i class="fa-solid fa-circle" style="color: #66bb63;"></i></div><span  class="ps-2">Patient</span></label>
+            </div>
+            <div class="d-flex rounded ">
+                <input type="radio" name="requestby" id="requestbyFamily"  class="btn-check" autocomplete="off"/>
+                <label class="d-flex btn" for="requestbyFamily"><div><i class="fa-solid fa-circle" style="color: #e59132;"></i></div><span class="ps-2">Family/Friend</span></label>
+            </div>
+            <div class="d-flex rounded ">
+                <input type="radio" name="requestby" id="requestbyBuisness"  class="btn-check" autocomplete="off"/>
+                <label class="d-flex btn" for="requestbyBuisness"><div><i class="fa-solid fa-circle" style="color: #d8697b;"></i></div><span class="ps-2">Buisness</span></label>
+            </div>
+            <div class="d-flex rounded ">
+                <input type="radio" name="requestby" id="requestbyConcierge"  class="btn-check" autocomplete="off"/>
+                <label class="d-flex btn" for="requestbyConcierge"><div><i class="fa-solid fa-circle" style="color: #077aba;"></i></div><span class="ps-2">Concierge</span></label>
+            </div>
+            <div class="d-flex rounded ">
+                <input type="radio" name="requestby" id="requestbyVip"  class="btn-check" autocomplete="off"/>
+                <label class="d-flex btn" for="requestbyVip"><div><i class="fa-solid fa-circle" style="color: #9042af;"></i></div><span class="ps-2">Vip</span></label>
+            </div>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table" id="newtable">
+            <thead style="--bs-table-bg: rgb(235, 235, 235)">
+                <tr>
+                    <th>Name</th>
+                    <th>Date of Birth</th>
+                    <th>Requestor</th>
+                    <th>Physician Name</th>
+                    <th>Date of Service</th>
+                    <th>Phone</th>
+                    <th>Address</th>
+                    <th>Notes</th>
+                    <th>Chat With</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+<script>
+    //new DataTable('#newtable')
+</script>

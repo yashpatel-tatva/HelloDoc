@@ -114,6 +114,20 @@
     }
 
 
+.nav-tabs{
+    border:none;
+}
+.nav-tabs .nav-link:focus, .nav-tabs .nav-link:hover {
+    border: none;
+}
+
+.btn-check:checked + .btn, .btn.active, .btn.show, .btn:first-child:active, :not(.btn-check) + .btn:active {
+    color: var(--bs-btn-active-color);
+    background-color: var(--bs-btn-active-bg);
+    border-color: #d0d0d0;
+}
+
+
 @media only screen and (max-width:900px) {
     .allstatus {
         width: 33.3%

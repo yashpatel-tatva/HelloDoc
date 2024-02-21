@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 
-namespace HelloDoc.Areas.Patient.ViewModels
+namespace HelloDoc.Areas.PatientArea.ViewModels
 {
     public class ConciergeRequestViewModel
     {

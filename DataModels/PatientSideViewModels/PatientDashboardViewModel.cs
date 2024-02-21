@@ -1,7 +1,7 @@
 ﻿using HelloDoc.DataModels;
 using Microsoft.AspNetCore.Http;
 
-namespace HelloDoc.Areas.Patient.ViewModels
+namespace HelloDoc.Areas.PatientArea.ViewModels
 {
     public class checkbox
     {

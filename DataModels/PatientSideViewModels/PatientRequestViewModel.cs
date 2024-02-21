@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
-namespace HelloDoc.Areas.Patient.ViewModels
+namespace HelloDoc.Areas.PatientArea.ViewModels
 {
     public class PatientRequestViewModel
     {

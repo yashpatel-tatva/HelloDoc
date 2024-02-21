@@ -1,3 +1,5 @@
+using DataAccess.Repository.IRepository;
+using DataAccess.Repository;
 using HelloDoc.DataContext;
 
 
@@ -12,6 +14,10 @@ builder.Services.AddSession(options =>
 builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddDbContext<HelloDocDbContext>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IAspNetUserRepository, AspNetUserRepository>();
+builder.Services.AddScoped<IRequestRepository, RequestRepository>();
+builder.Services.AddScoped<IAdminRepository, AdminRepository>();
 
 var app = builder.Build();
 
@@ -31,12 +37,12 @@ app.UseSession();
 app.UseAuthorization();
 
 
-app.MapControllerRoute(
-    name: "Admin",
-    pattern: "{area=Admin}/{controller=Home}/{action=AdminLogin}/{id?}");
-
 //app.MapControllerRoute(
-//    name: "Patient",
-//    pattern: "{area=Patient}/{controller=Home}/{action=Index}/{id?}");
+//    name: "Admin",
+//    pattern: "{area=AdminArea}/{controller=Home}/{action=AdminLogin}/{id?}");
+
+app.MapControllerRoute(
+    name: "Patient",
+    pattern: "{area=PatientArea}/{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
