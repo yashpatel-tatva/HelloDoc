@@ -33,7 +33,15 @@ namespace DataAccess.Repository
         }
         public int GetSessionAdminId()
         {
-            return (int)_httpsession.HttpContext.Session.GetInt32("AdminId");
+            try
+            {
+                var id = (int)_httpsession.HttpContext.Session.GetInt32("AdminId");
+                return id;
+            }
+            catch
+            {
+                return -1;
+            }
         }
     }
 }

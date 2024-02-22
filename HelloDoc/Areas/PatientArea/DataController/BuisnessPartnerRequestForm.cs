@@ -8,17 +8,17 @@ using System.Globalization;
 
 namespace HelloDoc.Areas.PatientArea.DataController
 {
-    public class BuisnessPartnerRequestForm : Controller
+    public class BusinessPartnerRequestForm : Controller
     {
         public readonly HelloDocDbContext _context;
-        public BuisnessPartnerRequestForm(HelloDocDbContext context)
+        public BusinessPartnerRequestForm(HelloDocDbContext context)
         {
             _context = context;
         }
         [Area("PatientArea")]
 
         [HttpPost]
-        public async Task<IActionResult> BuisneesPartnerRequest(BuisnessPartnerRequestViewModel model)
+        public async Task<IActionResult> BuisneesPartnerRequest(BusinessPartnerRequestViewModel model)
         {
             var aspnetuser = await _context.Aspnetusers.FirstOrDefaultAsync(m => m.Email == model.Email);
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == model.Email);
@@ -63,7 +63,7 @@ namespace HelloDoc.Areas.PatientArea.DataController
                 };
                 _context.Add(requestclient);
                 _context.SaveChanges();
-                Business buisness = new Business
+                Business Business = new Business
                 {
                     Name = model.B_FirstName + model.B_LastName,
                     Address1 = model.Room + " , " + model.Street + " , " + model.City + " , " + model.State,
@@ -74,14 +74,14 @@ namespace HelloDoc.Areas.PatientArea.DataController
                     Regionid = 3,
                     Createdby = aspnetuser.Id,
                 };
-                _context.Add(buisness);
+                _context.Add(Business);
                 _context.SaveChanges();
                 var requestdata = await _context.Requests.FirstOrDefaultAsync(m => m.Email == model.Email);
-                var buisnessdata = await _context.Businesses.FirstOrDefaultAsync(m => m.Name == model.B_FirstName + model.B_LastName);
+                var Businessdata = await _context.Businesses.FirstOrDefaultAsync(m => m.Name == model.B_FirstName + model.B_LastName);
                 Requestbusiness requestbusiness = new Requestbusiness
                 {
                     Requestid = requestdata.Requestid,
-                    Businessid = buisness.Businessid,
+                    Businessid = Business.Businessid,
 
                 };
                 _context.Add(requestbusiness);

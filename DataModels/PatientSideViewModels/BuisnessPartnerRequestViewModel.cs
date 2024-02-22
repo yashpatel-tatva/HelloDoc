@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace HelloDoc.Areas.PatientArea.ViewModels
 {
-    public class BuisnessPartnerRequestViewModel
+    public class BusinessPartnerRequestViewModel
     {
 
         [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Enter a valid")]

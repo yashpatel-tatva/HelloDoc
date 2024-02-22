@@ -1,9 +1,9 @@
 ﻿@using HelloDoc.Areas.PatientArea.ViewModels
 @{
-    ViewData["Title"] = "\"Submit Request As - Buisnesspartner\"";
+    ViewData["Title"] = "\"Submit Request As - Businesspartner\"";
 }
 @Html.Partial("_InfoModel")
-@model BuisnessPartnerRequestViewModel
+@model BusinessPartnerRequestViewModel
 <div class="container pb-5 mb-5">
     <div class="d-flex subinfodiv align-items-center py-3">
         <div class="h3 subinfotext fw-bold">Submit Information</div>
@@ -16,7 +16,7 @@
             </a>
         </div>
     </div>
-    <form asp-controller="BuisnessPartnerRequestForm" asp-action="BuisneesPartnerRequest" method="post">
+    <form asp-controller="BusinessPartnerRequestForm" asp-action="BuisneesPartnerRequest" method="post">
         <div class="bglight rounded p-3 shadow" id="content">
             <div>
                 <div class="h5 fw-bold">Business Information</div>

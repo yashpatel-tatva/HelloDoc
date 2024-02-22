@@ -31,9 +31,9 @@ namespace HelloDoc.Areas.AdminArea.DataController
             if (correct != null)
             {
                 var admin = _admin.GetFirstOrDefault(u => u.Aspnetuserid == correct.Id);
-                if (admin != null)
+                if (_aspnetuser.checkemail(user))
                 {
-                    if (correct.Passwordhash == user.Passwordhash)
+                    if (_aspnetuser.checkemail(user))
                     {
 
                         _admin.SetSession(admin);

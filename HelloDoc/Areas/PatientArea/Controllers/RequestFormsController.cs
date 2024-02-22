@@ -33,7 +33,7 @@ namespace HelloDoc.Areas.PatientArea.Controllers
             return View();
         }
         [Area("PatientArea")]
-        public IActionResult BuisnessPartnerRequest()
+        public IActionResult BusinessPartnerRequest()
         {
             return View();
         }

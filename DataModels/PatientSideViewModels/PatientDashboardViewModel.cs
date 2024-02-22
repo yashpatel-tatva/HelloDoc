@@ -14,15 +14,17 @@ namespace HelloDoc.Areas.PatientArea.ViewModels
 
         public enum Statuses
         {
-            January,
-            Unassigned,
-            Accepted,
-            Cancelled,
-            MDEnRoute,
-            MDOnSite,
-            Closed,
-            Clear,
-            Unpaid
+            first,
+            Unassigned,         //New 
+            Accepted,           //Pending
+            Cancelled,          //To-close
+            MDEnRoute,          //Active
+            MDOnSite,           //Active
+            Conclude,           //Conclude
+            CancelledByPatient, //To-close
+            Closed,             //To-close
+            Unpaid,             //Unpaid
+            Clear              
         }
         public User User { get; set; }
         public List<Request> Requests { get; set; }

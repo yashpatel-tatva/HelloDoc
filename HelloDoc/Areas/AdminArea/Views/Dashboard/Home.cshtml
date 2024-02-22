@@ -30,7 +30,7 @@
                     <div class="d-flex">
                         <div class="px-2 icons  float-start small"><i class="bi bi-plus-circle-dotted"></i></div><div class="small fw-bold">ACTIVE</div>
                     </div>
-                    <div class="fw-bolder fs-4 p-2 text-start">@Model.requests.Count(x => x.Status == 3)</div>
+                    <div class="fw-bolder fs-4 p-2 text-start">@Model.requests.Count(x => x.Status == 4 || x.Status==5)</div>
                 </div>
                 <div class="bottomarrow"></div>
             </button>
@@ -41,7 +41,7 @@
                     <div class="d-flex">
                         <div class="px-2  icons float-start small"><i class="bi bi-plus-circle-dotted"></i></div><div class="small fw-bold">CONCLUDE</div>
                     </div>
-                    <div class="fw-bolder fs-4 p-2 text-start">@Model.requests.Count(x => x.Status == 4)</div>
+                    <div class="fw-bolder fs-4 p-2 text-start">@Model.requests.Count(x => x.Status == 6)</div>
                 </div>
                 <div class="bottomarrow"></div>
             </button>
@@ -52,7 +52,7 @@
                     <div class="d-flex">
                         <div class="px-2 icons  float-start small"><i class="bi bi-plus-circle-dotted"></i></div><div class="small fw-bold">TO CLOSE</div>
                     </div>
-                    <div class="fw-bolder fs-4 p-2 text-start">@Model.requests.Count(x => x.Status == 5)</div>
+                    <div class="fw-bolder fs-4 p-2 text-start">@Model.requests.Count(x => x.Status == 3 || x.Status == 7 || x.Status ==8)</div>
                 </div>
                 <div class="bottomarrow"></div>
             </button>
@@ -63,7 +63,7 @@
                     <div class="d-flex">
                         <div class="px-2 icons  float-start small"><i class="bi bi-plus-circle-dotted"></i></div><div class="small fw-bold">UNPAID</div>
                     </div>
-                    <div class="fw-bolder fs-4 p-2 text-start">@Model.requests.Count(x => x.Status == 6)</div>
+                    <div class="fw-bolder fs-4 p-2 text-start">@Model.requests.Count(x => x.Status == 9)</div>
                 </div>
                 <div class="bottomarrow"></div>
             </button>
@@ -82,7 +82,42 @@
             <div class="p-2 px-3 text-white mx-2 bg-info rounded">Request DTY Support</div>
         </div>
     </div>
-    <div id="status-tabContent" class="bg-white rounded-4 mt-3"></div>
+    <div id="status-tabContent" class="bg-white rounded-4 mt-3">
+        <div class="rounded-4 bg-white">
+            <div class="d-flex justify-content-between pt-2 p-4">
+                <div class="">
+                    <div><input type="search" placeholder="Search" class="form-control rounded" /></div>
+                </div>
+                <div class="d-flex align-Models-center">
+                    <div class="d-flex rounded ">
+                        <input type="radio" name="requestby" id="requestbyAll" class="btn-check" autocomplete="off" />
+                        <label class="d-flex btn" for="requestbyAll">All</label>
+                    </div>
+                    <div class="d-flex rounded ">
+                        <input type="radio" name="requestby" id="1" class="btn-check" autocomplete="off" />
+                        <label class="d-flex btn" for="1"><div><i class="fa-solid fa-circle" style="color: #66bb63;"></i></div><span class="ps-2">Patient</span></label>
+                    </div>
+                    <div class="d-flex rounded ">
+                        <input type="radio" name="requestby" id="2" class="btn-check" autocomplete="off" />
+                        <label class="d-flex btn" for="2"><div><i class="fa-solid fa-circle" style="color: #e59132;"></i></div><span class="ps-2">Family/Friend</span></label>
+                    </div>
+                    <div class="d-flex rounded ">
+                        <input type="radio" name="requestby" id="3" class="btn-check" autocomplete="off" />
+                        <label class="d-flex btn" for="3"><div><i class="fa-solid fa-circle" style="color: #d8697b;"></i></div><span class="ps-2">Business</span></label>
+                    </div>
+                    <div class="d-flex rounded ">
+                        <input type="radio" name="requestby" id="4" class="btn-check" autocomplete="off" />
+                        <label class="d-flex btn" for="4"><div><i class="fa-solid fa-circle" style="color: #077aba;"></i></div><span class="ps-2">Concierge</span></label>
+                    </div>
+                    <div class="d-flex rounded ">
+                        <input type="radio" name="requestby" id="5" class="btn-check" autocomplete="off" />
+                        <label class="d-flex btn" for="5"><div><i class="fa-solid fa-circle" style="color: #9042af;"></i></div><span class="ps-2">Vip</span></label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive" id="dashtables"></div>
+    </div>
 </div>
 
 
@@ -90,7 +125,7 @@
 <script>
     $(document).ready(function () {
 
-        $('#status-tabContent').hide();
+        $('#dashtables').hide();
 
         var target = localStorage.getItem('target')
         $('.dashboardtab').on('click', function (e) {
@@ -134,19 +169,40 @@
                 url: url,
 
                 success: function (response) {
-                    $('#status-tabContent').html(response);
+                    $('#dashtables').html(response);
                 },
                 error: function (xhr, status, error) {
                     console.error(error);
                 }
             });
         });
-        $('.dashboardtab[data-bs-target="' + target + '"]').trigger('click'); 
+        $('.dashboardtab[data-bs-target="' + target + '"]').trigger('click');
+        if (target == null) {
+            $('.dashboardtab[data-bs-target="#s_new"]').trigger('click');
 
-        $('#status-tabContent').show();
+        }
+        $('#dashtables').show();
 
     });
 
+</script>
+<script>
+    $(document).ready(function () {
+        var table = $('#newtable').DataTable({ dom: 'lrtip' }); // Initialize your DataTable
+        $('input[type="search"]').on('keyup', function () {
+            table.search(this.value).draw();
+        });
+        $('input[name="requestby"]').on('change', function () {
+            var value = $(this).attr('id');
+            console.log(value);
+            if (value == 'requestbyAll') {
+                table.columns(9).search('').draw();
+            }
+            else {
+                table.columns(9).search(value).draw(); // Replace 0 with the index of the column you want to filter
+            }
+        });
+    });
 </script>
 
 
