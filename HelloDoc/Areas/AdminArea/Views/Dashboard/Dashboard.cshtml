@@ -1,41 +1,31 @@
-﻿@using DataModels.AdminSideViewModels;
+﻿@{
+    Layout = null;
+}
+
+@using DataModels.AdminSideViewModels;
 @model AdminDashboardViewModel;
 
-<nav style="background-color:white" class="ps-5">
-    <div class="mainnav">
-        <div class="nav nav-tabs" id="nav-tab" role="tablist">
-            <button class="nav-link active me-3" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Dashboard</button>
-            <button class="nav-link me-3" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-ProviderLocation" type="button" role="tab" aria-controls="nav-ProviderLocation" aria-selected="false">Provider Location</button>
-            <button class="nav-link me-3" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-Profile" type="button" role="tab" aria-controls="nav-Profile" aria-selected="false">My Profile</button>
-            <button class="nav-link me-3" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-Providers" type="button" role="tab" aria-controls="nav-Providers" aria-selected="false">Providers</button>
-            <button class="nav-link me-3" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-Partners" type="button" role="tab" aria-controls="nav-Partners" aria-selected="false">Partners</button>
-            <button class="nav-link me-3" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-Access" type="button" role="tab" aria-controls="nav-Access" aria-selected="false">Access</button>
-            <button class="nav-link me-3" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-Records" type="button" role="tab" aria-controls="nav-Records" aria-selected="false">Records</button>
-        </div>
-    </div>
-</nav>
-<div class="tab-content p-5" id="nav-tabContent">
-   <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-        @Html.Partial("Home")
-    </div>
-    <div class="tab-pane fade" id="nav-ProviderLocation" role="tabpanel" aria-labelledby="nav-ProviderLocation-tab">
-        ProviderLocation
-    </div>
-    <div class="tab-pane fade" id="nav-Profile" role="tabpanel" aria-labelledby="nav-Profile-tab">
-        Profile
-    </div>
-    <div class="tab-pane fade" id="nav-Providers" role="tabpanel" aria-labelledby="nav-Providers-tab">
-        Providers
-    </div>
-    <div class="tab-pane fade" id="nav-Partners" role="tabpanel" aria-labelledby="nav-Partners-tab">
-        Partners
-    </div>
-    <div class="tab-pane fade" id="nav-Access" role="tabpanel" aria-labelledby="nav-Access-tab">
-        Access
-    </div>
-    <div class="tab-pane fade" id="nav-Records" role="tabpanel" aria-labelledby="nav-Records-tab">
-        Records
-    </div>
+<div id="dashboardView">
 
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+        
+        $.ajax({
+            url: '../Dashboard/Home',
+
+            success: function (response) {
+                $('#dashboardView').html(response);
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+            }
+        });
+
+    });
+
+</script>

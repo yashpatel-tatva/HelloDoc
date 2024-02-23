@@ -1,0 +1,30 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = null;
+}
+<div class="container">
+    <div class="d-flex justify-content-between">
+        <div>View Reservation &nbsp; <span class="p-2 text-white rounded-3 bg-success"></span></div>
+        <div>
+            <a asp-action="AdminTabsLayout" asp-controller="Home">
+                <button class="d-flex babtn border-0 rounded align-items-center p-1 px-2">
+                    <div class="d-flex"><img src="~/res/back.png" width="15px" height="15px"></div>
+                    <div class="px-1"><span>Back</span></div>
+                </button>
+            </a>
+        </div>
+    </div>
+    <div class="bg-white rounded-3 p-3 mt-2 shadow">
+        <div class="h5 fw-bold">Patient Information</div>
+        <div class="mt-2">
+            <div class="small text-muted">Confirmation Number</div>
+            <div style="class-info">Confirmation Number</div>
+        </div>
+        <div class="mt-2 w-100">
+            <textarea readonly placeholder="Patient Notes"> </textarea>
+        </div>
+        <hr style="border : 1px dashed grey"/>
+    </div>
+</div>

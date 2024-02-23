@@ -1,4 +1,4 @@
-﻿@{
+@{
     Layout = null;
 }
 @using DataModels.AdminSideViewModels;
@@ -9,15 +9,14 @@
     <thead style="--bs-table-bg: rgb(235, 235, 235)">
         <tr>
             <th class="d-none"></th>
-            <th style="width : 17%">Name</th>
-            <th style="width : 8%">Date of Birth</th>
-            <th style="width : 9%">Requestor</th>
-            <th style="width : 9%">Date of Service</th>
-            <th style="width : 11%">Phone</th>
-            <th style="width : 14%">Address</th>
-            <th style="width : 17%">Notes</th>
-            <th style="width : 9%">Chat With</th>
-            <th style="width : 6%">Action</th>
+            <th>Name</th>
+            <th>Date of Birth</th>
+            <th>Physician Name</th>
+            <th>Date of Service</th>
+            <th>Phone</th>
+            <th>Address</th>
+            <th>Chat With</th>
+            <th>Action</th>
         </tr>
     </thead>
     <tbody>
@@ -47,7 +46,7 @@
                 <td class="d-none">@item.RequestType</td>
                 <td>@item.PatientName</td>
                 <td>@item.PatientDOB</td>
-                <td>@item.RequestorName</td>
+                <td>@item.PhysicainName</td>
                 <td>@item.RequestedDate</td>
                 @if (item.RequestType == 1)
                 {
@@ -83,28 +82,39 @@
                                 <div>(@item.RequestTypeName(item.RequestType))</div>
                             </div>
                         }
-                        
+
                     </td>
                 }
                 <td>@item.Address</td>
-                <td>@item.Notes</td>
-                <td>@item.ProviderEmail
-                    <div class="border border-1 border-white rounded d-flex justify-content-around align-items-center" style="width : 90%">
-                        <i class="fa-solid fa-user-doctor"></i>
-                        Provider
+                <td>
+                    <div class="d-flex w-100 justify-content-between">
+                        <a asp-route-id="@item.ProviderEmail" style="color : white ;width : 65% " class="m-1">
+                            <div class="border border-1 border-white rounded d-flex justify-content-around align-items-center p-1">
+                                <i class="fa-solid fa-user-doctor"></i>
+                                Provider
+                            </div>
+                        </a>
+                        <a asp-route-id="@item.PatientEmail" style="color : white ;width : 65% " class="m-1">
+                            <div class="border border-1 border-white rounded d-flex justify-content-around align-items-center p-1">
+                                <i class="fa-solid fa-user-doctor"></i>
+                                Patient
+                            </div>
+                        </a>
                     </div>
+
                 </td>
                 <td>
-                    <div class="dropdown">
-                        <button class="btn btn-outline-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Action
+                    <div class="dropstart ms-2">
+                        <button class="btn btn-outline-light" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Actions
                         </button>
-                        <ul class="dropdown-menu">
-                            <li>1</li>
-                            <li>2</li>
-                            <li>3</li>
-                            <li>4</li>
-                            <li>5</li>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item text-secondary" href="#"><i class="bi bi-view-list me-2"></i>View case</a></li>
+                            <li><a class="dropdown-item text-secondary" href="#"><i class="bi bi-file-earmark-arrow-up-fill me-2"></i>View Uploads</a></li>
+                            <li><a class="dropdown-item text-secondary" href="#"><i class="fa-regular fa-rectangle-list me-2"></i>View Notes</a></li>
+                            <li><a class="dropdown-item text-secondary" href="#"><i class="fa-solid fa-suitcase-medical me-2"></i>Orders</a></li>
+                            <li><a class="dropdown-item text-secondary" href="#"><i class="fa-solid fa-book-medical me-2"></i>Doctor Notes</a></li>
+                            <li><a class="dropdown-item text-secondary" href="#"><i class="fa-solid fa-bell-concierge me-2"></i>Encounter</a></li>
                         </ul>
                     </div>
                 </td>
@@ -132,7 +142,7 @@
             }
         });
     });
-    
+
 </script>
 
 

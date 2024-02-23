@@ -9,6 +9,7 @@ namespace DataModels.AdminSideViewModels
 {
     public class AllRequestDataViewModel
     {
+        public int RequestId { get; set; } 
         public string PatientName { get; set; }
         public DateOnly PatientDOB { get; set;}
         public string RequestorName { get; set; }
@@ -22,7 +23,8 @@ namespace DataModels.AdminSideViewModels
         public string PatientEmail { get; set; }
         public int RequestType { get; set; }
 
-
+        public string Region { get; set; }
+        public string PhysicainName { get; set; }
 
         public enum Requestby
         {

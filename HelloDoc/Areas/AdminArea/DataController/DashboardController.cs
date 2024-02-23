@@ -13,7 +13,6 @@ namespace HelloDoc.Areas.AdminArea.DataController
         private readonly HelloDocDbContext _db;
         public readonly IAdminRepository _admin;
         public readonly IRequestRepository _requests;
-        private readonly IAllRequestDataRepository _allrequestdata;
 
         public DashboardController(
             HelloDocDbContext db,
@@ -25,11 +24,16 @@ namespace HelloDoc.Areas.AdminArea.DataController
             _db = db;
             _admin = adminRepository;
             _requests = requestRepository;
-            _allrequestdata = allRequestDataRepository;
         }
 
         [Area("AdminArea")]
         public IActionResult Dashboard()
+        {
+            return View();
+        }
+        
+        [Area("AdminArea")]
+        public IActionResult Home()
         {
             AdminDashboardViewModel model = new AdminDashboardViewModel();
             if(_admin.GetSessionAdminId() == -1)
@@ -41,36 +45,13 @@ namespace HelloDoc.Areas.AdminArea.DataController
             return View(model);
         }
 
+
         [Area("AdminArea")]
-        public IActionResult Status_New() {
-            var model = _allrequestdata.Status(1);
-            return View(model);
+        [HttpGet]
+        public IActionResult Viewcase(int id)
+        {
+
+            return View();
         }
-       [Area("AdminArea")]
-        public IActionResult Status_Pending() {
-            var model = _allrequestdata.Status(2);
-            return View(model);
-        }
-       [Area("AdminArea")]
-        public IActionResult Status_Active() {
-            var model = _allrequestdata.Status(4).Concat(_allrequestdata.Status(5)) ;
-            return View(model);
-        }
-       [Area("AdminArea")]
-        public IActionResult Status_Conclude() {
-            var model = _allrequestdata.Status(6);
-            return View(model);
-        }
-       [Area("AdminArea")]
-        public IActionResult Status_Toclose() {
-            var model = _allrequestdata.Status(3).Concat(_allrequestdata.Status(7)).Concat(_allrequestdata.Status(8));
-            return View(model);
-        }
-       [Area("AdminArea")]
-        public IActionResult Status_Unpaid() {
-            var model = _allrequestdata.Status(9);
-            return View(model);
-        }
-       
     }
 }

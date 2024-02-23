@@ -13,7 +13,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
         private readonly IAdminRepository _admin;
 
         public CredentialAdminController(
-            HelloDocDbContext context , 
+            HelloDocDbContext context,
             IAspNetUserRepository aspnetUserRepository,
             IAdminRepository adminRepository
             )
@@ -27,21 +27,24 @@ namespace HelloDoc.Areas.AdminArea.DataController
         [HttpPost]
         public async Task<IActionResult> Login(Aspnetuser user)
         {
-            var correct =  _aspnetuser.GetFirstOrDefault(x => x.Email == user.Email);
+            var correct = _aspnetuser.GetFirstOrDefault(x => x.Email == user.Email);
             if (correct != null)
             {
                 var admin = _admin.GetFirstOrDefault(u => u.Aspnetuserid == correct.Id);
-                if (_aspnetuser.checkemail(user))
+                if (admin != null)
                 {
-                    if (_aspnetuser.checkemail(user))
+                    if (_aspnetuser.checkpass(user))
                     {
-
                         _admin.SetSession(admin);
-                        return RedirectToAction("Dashboard", "Dashboard");
+                        return RedirectToAction("AdminTabsLayout", "Home");
                     }
-                    TempData["WrongPass"] = "Enter Correct Password";
-                    TempData["Style"] = " border-danger";
-                    return RedirectToAction("AdminLogin", "Home");
+                    else
+                    {
+                        TempData["WrongPass"] = "Enter Correct Password";
+                        TempData["Style"] = " border-danger";
+                        return RedirectToAction("AdminLogin", "Home");
+                    }
+
                 }
                 else
                 {

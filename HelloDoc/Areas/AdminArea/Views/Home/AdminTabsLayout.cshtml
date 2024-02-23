@@ -1,0 +1,81 @@
+﻿<nav style="background-color:white" class="ps-5">
+    <div class="mainnav">
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <button class="nav-link maintabs active me-3" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Dashboard</button>
+            <button class="nav-link maintabs me-3" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-ProviderLocation" type="button" role="tab" aria-controls="nav-ProviderLocation" aria-selected="false">Provider Location</button>
+            <button class="nav-link maintabs me-3" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-Profile" type="button" role="tab" aria-controls="nav-Profile" aria-selected="false">My Profile</button>
+            <button class="nav-link maintabs me-3" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-Providers" type="button" role="tab" aria-controls="nav-Providers" aria-selected="false">Providers</button>
+            <button class="nav-link maintabs me-3" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-Partners" type="button" role="tab" aria-controls="nav-Partners" aria-selected="false">Partners</button>
+            <button class="nav-link maintabs me-3" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-Access" type="button" role="tab" aria-controls="nav-Access" aria-selected="false">Access</button>
+            <button class="nav-link maintabs me-3" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-Records" type="button" role="tab" aria-controls="nav-Records" aria-selected="false">Records</button>
+        </div>
+    </div>
+</nav>
+<div class="tab-content p-5" id="nav-tabContent">
+</div>
+
+
+
+<script>
+    $(document).ready(function () {
+
+        $('#nav-tabContent').hide();
+
+        var target = localStorage.getItem('target')
+        $('.maintabs').on('click', function (e) {
+            e.preventDefault();
+            $('.maintabs').removeClass('active');
+            $(this).addClass('active');
+            var target = $(this).data('bs-target');
+            console.log(target);
+            localStorage.setItem('target', target);
+            var url;
+            switch (target) {
+                case '#nav-home':
+                    url = '../Dashboard/Dashboard';
+                    break;
+                case '#nav-ProviderLocation':
+                    url = '../Dashboard/Status_Pending';
+                    break;
+                case '#nav-Profile':
+                    url = '../Dashboard/Status_Active';
+                    break;
+                case '#nav-Providers':
+                    url = '../Dashboard/Status_Conclude';
+                    break;
+                case '#nav-Partners':
+                    url = '../Dashboard/Status_Toclose';
+                    break;
+                case '#nav-Access':
+                    url = '../Dashboard/Status_Unpaid';
+                    break;
+                case '#nav-Records':
+                    url = '../Dashboard/Status_Unpaid';
+                    break;
+
+                default:
+                    url = '../Home/AdminLogin';
+            }
+
+            $.ajax({
+                url: url,
+
+                success: function (response) {
+                    $('#nav-tabContent').html(response);
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        });
+
+        $('.maintabs[data-bs-target="' + target + '"]').trigger('click');
+        if (target == null) {
+            $('.maintabs[data-bs-target="#nav-home"]').trigger('click');
+
+        }
+        $('#nav-tabContent').show();
+
+    });
+
+</script>

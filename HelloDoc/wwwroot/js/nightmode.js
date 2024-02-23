@@ -1,7 +1,7 @@
-const btn = document.getElementById("btn1");
-const imgmode = document.getElementById('imgmode');
+var btn = document.getElementById("btn1");
+var imgmode = document.getElementById('imgmode');
 imgmode.classList.remove("fa-spin");
-const bg = document.getElementsByClassName('bggray');
+var bg = document.getElementsByClassName('bggray');
 btn.addEventListener('click', changetheme);
 var flag = 1;
 console.log(sessionStorage.getItem('flag'));

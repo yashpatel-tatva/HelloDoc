@@ -1,5 +1,8 @@
 ﻿@using DataModels.AdminSideViewModels;
 @model AdminDashboardViewModel;
+@{
+    Layout = null;
+}
 <nav>
     <div class="nav nav-tabs row" id="status-tab" role="tablist">
         <div class="allstatus ">
@@ -127,38 +130,38 @@
 
         $('#dashtables').hide();
 
-        var target = localStorage.getItem('target')
+        var target1 = localStorage.getItem('target1')
         $('.dashboardtab').on('click', function (e) {
             e.preventDefault();
             $('.dashboardtab').removeClass('active');
             $(this).addClass('active');
-            var target = $(this).data('bs-target');
-            localStorage.setItem('target', target);
+            var target1 = $(this).data('bs-target');
+            localStorage.setItem('target1', target1);
             var url;
-            switch (target) {
+            switch (target1) {
                 case '#s_new':
                     $('#status_text').html("(New)")
-                    url = '../Dashboard/Status_New';
+                    url = '../StatusWiseData/Status_New';
                     break;
                 case '#s_pending':
                     $('#status_text').html("(Pending)")
-                    url = '../Dashboard/Status_Pending';
+                    url = '../StatusWiseData/Status_Pending';
                     break;
                 case '#s_active':
                     $('#status_text').html("(Active)")
-                    url = '../Dashboard/Status_Active';
+                    url = '../StatusWiseData/Status_Active';
                     break;
                 case '#s_conclude':
                     $('#status_text').html("(Conclude)")
-                    url = '../Dashboard/Status_Conclude';
+                    url = '../StatusWiseData/Status_Conclude';
                     break;
                 case '#s_toclose':
                     $('#status_text').html("(To Close)")
-                    url = '../Dashboard/Status_Toclose';
+                    url = '../StatusWiseData/Status_Toclose';
                     break;
                 case '#s_unpaid':
                     $('#status_text').html("(Unpaid)")
-                    url = '../Dashboard/Status_Unpaid';
+                    url = '../StatusWiseData/Status_Unpaid';
                     break;
 
                 default:
@@ -176,8 +179,9 @@
                 }
             });
         });
-        $('.dashboardtab[data-bs-target="' + target + '"]').trigger('click');
-        if (target == null) {
+        $('.dashboardtab[data-bs-target="' + target1 + '"]').trigger('click');
+
+        if (target1 == null) {
             $('.dashboardtab[data-bs-target="#s_new"]').trigger('click');
 
         }
@@ -186,24 +190,5 @@
     });
 
 </script>
-<script>
-    $(document).ready(function () {
-        var table = $('#newtable').DataTable({ dom: 'lrtip' }); // Initialize your DataTable
-        $('input[type="search"]').on('keyup', function () {
-            table.search(this.value).draw();
-        });
-        $('input[name="requestby"]').on('change', function () {
-            var value = $(this).attr('id');
-            console.log(value);
-            if (value == 'requestbyAll') {
-                table.columns(9).search('').draw();
-            }
-            else {
-                table.columns(9).search(value).draw(); // Replace 0 with the index of the column you want to filter
-            }
-        });
-    });
-</script>
-
 
 

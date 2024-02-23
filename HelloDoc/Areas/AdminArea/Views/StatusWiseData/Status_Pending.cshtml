@@ -1,0 +1,153 @@
+@{
+    Layout = null;
+}
+@using DataModels.AdminSideViewModels;
+@model List<AllRequestDataViewModel>
+
+
+<table class="table" id="newtable">
+    <thead style="--bs-table-bg: rgb(235, 235, 235)">
+        <tr>
+            <th class="d-none"></th>
+            <th>Name</th>
+            <th>Date of Birth</th>
+            <th>Requestor</th>
+            <th>Physician Name</th>
+            <th>Date of Service</th>
+            <th>Phone</th>
+            <th>Address</th>
+            <th>Notes</th>
+            <th>Chat With</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            var color = "";
+            @switch (item.RequestType)
+            {
+                case 1:
+                    color = "#66bb63";
+                    break;
+                case 2:
+                    color = "#e59132";
+                    break;
+                case 3:
+                    color = "#d8697b";
+                    break;
+                case 4:
+                    color = "#077aba";
+                    break;
+                default:
+                    color = "#9042af";
+                    break;
+
+            }
+            <tr style="--bs-table-bg : @color ; --bs-table-color-state : 'white'" class="text-white align-middle">
+                <td class="d-none">@item.RequestType</td>
+                <td>@item.PatientName</td>
+                <td>@item.PatientDOB</td>
+                <td>@item.RequestorName</td>
+                <td>@item.PhysicainName</td>
+                <td>@item.RequestedDate</td>
+                @if (item.RequestType == 1)
+                {
+                    @if (@item.PatientPhone != null)
+                    {
+                        <td>
+                            <div class="">
+                                <div class="border border-1 border-white rounded w-100 d-flex justify-content-around"><i class="bi bi-telephone"></i>  @item.PatientPhone</div>
+                                <div>(Patient)</div>
+                            </div>
+                        </td>
+                    }
+                    else
+                    {
+                        <td></td>
+                    }
+                }
+                else
+                {
+                    <td>
+                        @if (@item.PatientPhone != null)
+                        {
+                            <div>
+                                <div class="border border-1 border-white rounded w-100 d-flex justify-content-around"><i class="bi bi-telephone"></i>@item.PatientPhone</div>
+                                <div>(Patient)</div>
+                            </div>
+                        }
+
+                        @if (@item.RequestorPhone != null)
+                        {
+                            <div>
+                                <div class="border border-1 border-white rounded w-100 d-flex justify-content-around"><i class="bi bi-telephone"></i> @item.RequestorPhone </div>
+                                <div>(@item.RequestTypeName(item.RequestType))</div>
+                            </div>
+                        }
+
+                    </td>
+                }
+                <td>@item.Address</td>
+                <td>@item.Notes</td>
+                <td>
+                    <div class="d-flex w-100 justify-content-between">
+                        <a asp-route-id="@item.ProviderEmail" style="color : white ;width : 65% " class="m-1" >
+                            <div class="border border-1 border-white rounded d-flex justify-content-around align-items-center p-1" >
+                                <i class="fa-solid fa-user-doctor"></i>
+                                Provider
+                            </div>
+                        </a>
+                        <a asp-route-id="@item.PatientEmail" style="color : white ;width : 65% " class="m-1">
+                            <div class="border border-1 border-white rounded d-flex justify-content-around align-items-center p-1">
+                                <i class="fa-solid fa-user-doctor"></i>
+                                Patient
+                            </div>
+                        </a>
+                    </div>
+
+                </td>
+                <td>
+                    <div class="dropstart ms-2">
+                        <button class="btn btn-outline-light" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Actions
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" >
+                            <li><a class="dropdown-item text-secondary" href="#"><i class="bi bi-view-list me-2"></i>View case</a></li>
+                            <li><a class="dropdown-item text-secondary" href="#"><i class="bi bi-file-earmark-arrow-up-fill me-2"></i>View Uploads</a></li>
+                            <li><a class="dropdown-item text-secondary" href="#"><i class="fa-regular fa-rectangle-list me-2"></i>View Notes</a></li>
+                            <li><a class="dropdown-item text-secondary" href="#"><i class="fa-solid fa-shuffle me-2"></i>Transfer</a></li>
+                            <li><a class="dropdown-item text-secondary" href="#"><i class="fa-regular fa-circle-xmark me-2"></i>Clear case</a></li>
+                            <li><a class="dropdown-item text-secondary" href="#"><i class="fa-solid fa-file-contract me-2"></i>Send Agrrenment</a></li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+
+
+<script>
+    $(document).ready(function () {
+        var table = $('#newtable').DataTable({ dom: 'lrtip' }); // Initialize your DataTable
+        $('input[type="search"]').on('keyup', function () {
+            table.search(this.value).draw();
+        });
+        $('input[name="requestby"]').on('change', function () {
+            var value = $(this).attr('id');
+            console.log(value);
+            if (value == 'requestbyAll') {
+                table.columns(0).search('').draw();
+            }
+            else {
+                table.columns(0).search(value).draw(); // Replace 0 with the index of the column you want to filter
+            }
+        });
+    });
+
+</script>
+
+
+

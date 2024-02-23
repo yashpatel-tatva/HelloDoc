@@ -13,9 +13,19 @@ namespace HelloDoc.Areas.AdminArea.Controllers
         {
             return View();
         }
+
+
+        [Area("AdminArea")]
         public IActionResult AdminForgetPassword() 
         { 
             return View(); 
+        }
+
+
+        [Area("AdminArea")]
+        public IActionResult AdminTabsLayout()
+        {
+            return View();
         }
     }
 }
