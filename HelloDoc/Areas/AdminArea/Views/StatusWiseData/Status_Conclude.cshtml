@@ -125,6 +125,9 @@
 </table>
 
 
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
 <script>
     $(document).ready(function () {
         var table = $('#newtable').DataTable({ dom: 'lrtip' }); // Initialize your DataTable
@@ -138,12 +141,39 @@
                 table.columns(0).search('').draw();
             }
             else {
-                table.columns(0).search(value).draw(); // Replace 0 with the index of the column you want to filter
+                table.columns(0).search(value).draw();
             }
         });
+
+        $(document).ready(function () {
+            $('.dropdown-item').click(function (e) {
+                e.preventDefault();
+
+                var action = $(this).attr('id');
+                var id = $(this).closest('form').data('id');
+
+                $.ajax({
+                    url: '../Dashboard/' + action,
+                    type: 'GET',
+                    data: { id: id },
+                    success: function (result) {
+
+                        $('#nav-tabContent').html(result);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error: ' + error);
+                    },
+                });
+            });
+        });
+
     });
 
 </script>
+
+
+
+
 
 
 

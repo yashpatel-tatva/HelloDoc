@@ -1,0 +1,84 @@
+﻿.respadding {
+    padding: 3rem
+}
+
+.resstartpadding {
+    padding-left: 3rem
+}
+
+.displayflexorblock, .displayflexorblockwithpad {
+    display: flex;
+}
+
+.p-2px-3mx-2{
+    padding : 0.5rem 1rem ;
+    margin : 0rem 0.5rem ;
+}
+.h3size{
+    font-size : 1.6rem;
+}
+.h6size{
+
+}
+.ps-2size {
+    padding: 0rem .5rem
+}
+.px-5size{
+    padding: 0rem 3rem;
+}
+.welcomespan{
+
+}
+
+
+@media only screen and (max-width:800px) {
+    .respadding {
+        padding: 1rem
+    }
+
+    .resstartpadding {
+        padding-left: 1rem
+    }
+
+    .displayflexorblock {
+        display: block;
+        padding: 1px;
+        font-size : smaller ;
+    }
+    .displayflexorblockwithpad {
+        display: block;
+        padding: 15px
+    }
+    .p-2px-3mx-2 {
+        padding: 0.25rem 0.5rem;
+        margin: 0rem 0.125rem;
+        font-size: large;
+    }
+    .h3size {
+        font-size : 1rem;
+        font-weight : 700;
+    }
+
+    .h6size {
+    }
+    .ps-2size{
+        padding : 0rem .1rem;
+        font-size : smaller;
+    }
+    .px-5size {
+        padding: 0rem 1rem;
+    }
+
+}
+
+@media only screen and (max-width:400px){
+    .p-2px-3mx-2 {
+        padding: 0.25rem 0.5rem;
+        margin: 0rem 0.125rem;
+        font-size: smaller;
+    }
+    .welcomespan {
+        display: none;
+    }
+
+}

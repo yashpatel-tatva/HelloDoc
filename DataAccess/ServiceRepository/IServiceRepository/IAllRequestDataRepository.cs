@@ -12,5 +12,9 @@ namespace DataAccess.ServiceRepository.IServiceRepository
     public interface IAllRequestDataRepository 
     {
         List<AllRequestDataViewModel> Status(int status);
+
+        RequestDataViewModel GetRequestById(int id);
+        RequestNotesViewModel GetNotesById(int id);
+        void SaveAdminNotes(int id, RequestNotesViewModel model);
     }
 }

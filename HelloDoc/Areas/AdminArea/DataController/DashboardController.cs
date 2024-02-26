@@ -4,6 +4,7 @@ using DataModels.AdminSideViewModels;
 using HelloDoc.DataContext;
 using HelloDoc.DataModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Linq;
 
 namespace HelloDoc.Areas.AdminArea.DataController
@@ -13,6 +14,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
         private readonly HelloDocDbContext _db;
         public readonly IAdminRepository _admin;
         public readonly IRequestRepository _requests;
+        private readonly IAllRequestDataRepository _allrequest;
 
         public DashboardController(
             HelloDocDbContext db,
@@ -24,6 +26,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
             _db = db;
             _admin = adminRepository;
             _requests = requestRepository;
+            _allrequest = allRequestDataRepository;
         }
 
         [Area("AdminArea")]
@@ -48,10 +51,28 @@ namespace HelloDoc.Areas.AdminArea.DataController
 
         [Area("AdminArea")]
         [HttpGet]
-        public IActionResult Viewcase(int id)
+        public IActionResult ViewCase(int id)
         {
-
-            return View();
+            var result = _allrequest.GetRequestById(id);
+            return View(result);
+        }
+        
+        
+        [Area("AdminArea")]
+        [HttpGet]
+        public IActionResult ViewNotes(int id)
+        {
+            var result = _allrequest.GetNotesById(id);
+            return View(result);
+        }
+        
+        [Area("AdminArea")]
+        [HttpPost]
+        public IActionResult SaveAdminNotes(RequestNotesViewModel model)
+        {
+            var id = model.RequestId;
+            _allrequest.SaveAdminNotes(id, model);
+            return RedirectToAction("AdminTabsLayout", "Home");
         }
     }
 }
