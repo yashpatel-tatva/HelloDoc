@@ -15,6 +15,7 @@ namespace DataModels.AdminSideViewModels
         public string RequestorName { get; set; }
         public DateTime RequestedDate { get; set; }
         public string PatientPhone { get; set; }
+        public string TransferNotes { get; set; }
         public string RequestorPhone { get; set; }
         public string RequestorEmail { get; set; }
         public string Address { get; set; }

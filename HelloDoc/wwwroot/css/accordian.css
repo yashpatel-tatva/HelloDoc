@@ -1,0 +1,9 @@
+﻿.tdsmallicons {
+    width: 25px;
+    height: 25px;
+    border: 2px solid rgb(13,202,240);
+    border-radius : 50%;
+    padding : 0.25rem;
+    display:flex;
+    align-items:center;
+}

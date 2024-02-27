@@ -42,9 +42,10 @@
 .nav-link {
     padding: 8px;
 }
-.rounded-4res{
-    border-radius : 1rem;
-    padding : 0.5rem;
+
+.rounded-4res {
+    border-radius: 1rem;
+    padding: 0.5rem;
 }
 
 .bottomarrow {
@@ -118,12 +119,13 @@
     }
 
 
-.nav-tabs{
-    border:none;
-}
-.nav-tabs .nav-link:focus, .nav-tabs .nav-link:hover {
+.nav-tabs {
     border: none;
 }
+
+    .nav-tabs .nav-link:focus, .nav-tabs .nav-link:hover {
+        border: none;
+    }
 
 .btn-check:checked + .btn, .btn.active, .btn.show, .btn:first-child:active, :not(.btn-check) + .btn:active {
     color: var(--bs-btn-active-color);
@@ -131,17 +133,28 @@
     border-color: #d0d0d0;
 }
 
+@media only screen and (max-width:980px) {
+    .allstatus {
+        padding : 2px;
+    }
+    .nav-link{
+        padding : 4px;
+    }
+}
+
 
 @media only screen and (max-width:900px) {
     .allstatus {
         width: 33.3%
     }
-    .bottomarrow{
-        display : none
+
+    .bottomarrow {
+        display: none
     }
+
     .rounded-4res {
         border-radius: 0;
-        padding : 0
+        padding: 0
     }
 }
 
@@ -155,14 +168,17 @@
     .icons {
         display: none;
     }
+
     .allstatus {
-        padding : 2px;
+        padding: 2px;
     }
+
     .small {
         font-size: 0.75rem
     }
-    .text-start{
-        display : flex ;
-        justify-content : center;
+
+    .text-start {
+        display: flex;
+        justify-content: center;
     }
 }

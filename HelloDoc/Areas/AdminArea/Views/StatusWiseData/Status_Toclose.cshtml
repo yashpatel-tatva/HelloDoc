@@ -5,7 +5,7 @@
 @model List<AllRequestDataViewModel>
 
 
-<table class="table" id="newtable">
+<table class="table newtable restable">
     <thead style="--bs-table-bg: rgb(235, 235, 235)">
         <tr>
             <th class="d-none"></th>
@@ -92,6 +92,103 @@
     </tbody>
 </table>
 
+<table class="table newtable w-100 mt-2 acctable">
+    <thead>
+        <tr>
+            <th class="d-none"></th>
+            <th class="d-none"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <div class="accordion accordion-flush" id="accordionFlushExample">
+            @foreach (var item in Model)
+            {
+                var color = "";
+                @switch (item.RequestType)
+                {
+                    case 1:
+                        color = "#66bb63";
+                        break;
+                    case 2:
+                        color = "#e59132";
+                        break;
+                    case 3:
+                        color = "#d8697b";
+                        break;
+                    case 4:
+                        color = "#077aba";
+                        break;
+                    default:
+                        color = "#9042af";
+                        break;
+
+                }
+            <tr class="" style="--bs-table-bg:#0dcaf04f">
+                <td class="d-none">@item.RequestType</td>
+                <td>
+                    <form data-id="@item.RequestId">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="flush-heading-@item.RequestId">
+                                <button class="accordion-button collapsed d-block" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne-@item.RequestId" aria-expanded="false" aria-controls="flush-collapseOne-@item.RequestId">
+                                    <div>
+                                        <div class="d-flex p-2 justify-content-between">
+                                            <div><span>@item.PatientName</span></div>
+                                            <div><span>@item.RequestTypeName(item.RequestType) <i class="fa-solid fa-circle" style="color: @color"></i></span></div>
+                                        </div>
+                                        <div class="d-flex p-2 justify-content-between">
+                                            <div> <span>@item.Address</span></div>
+                                            <div class="rounded-3 bg-transparent border border-1 border-info text-info p-1 px-2 small">Map Location</div>
+                                        </div>
+                                    </div>
+                                </button>
+                            </h2>
+                            <div id="flush-collapseOne-@item.RequestId" class="accordion-collapse mt-3 collapse" aria-labelledby="flush-headingOne-@item.RequestId" data-bs-parent="#accordionFlushExample">
+                                <div>
+                                    <hr class="m-0 p-0 text-muted" />
+                                    <div class="d-flex justify-content-end p-2" style="transform: translateY(-50%);">
+                                        <button class="small gotoaction  rounded-pill border-primary text-primary z-3 p-1 px-2  " style="background-color:rgba(255, 255, 255, 0.719);" type="button" action="ViewCase">View Case</button>
+                                    </div>
+                                </div>
+                                <div class="accordion-body small">
+                                    <div class="d-flex align-items-center py-1">
+                                        <div class="tdsmallicons"><i class="bi bi-calendar-date "></i></div>
+                                        <div class="text-muted ps-1">Date of birth: </div>
+                                        <div class="ps-1">@item.PatientDOB</div>
+                                    </div>
+                                    <div class="d-flex align-items-center py-1">
+                                        <div class="tdsmallicons"><i class="bi bi-envelope "></i></div>
+                                        <div class="text-muted ps-1">Email: </div>
+                                        <div class="ps-1">@item.PatientEmail</div>
+                                    </div>
+                                    <div class="d-flex align-items-center py-1">
+                                        <div class="tdsmallicons"><i class="bi bi-telephone "></i></div>
+                                        <div class="text-muted ps-1">Patient: </div>
+                                        <div class="ps-1">@item.PatientPhone</div>
+                                    </div>
+                                    <div class="d-flex align-items-center py-1">
+                                        <div class="tdsmallicons"><i class="bi bi-person-circle "></i></div>
+                                        <div class="text-muted ps-1">Requestor</div>
+                                        <div class="ps-1">@item.RequestorName</div>
+                                    </div>
+                                    <div class="row  mt-4 d-flex flex-wrap">
+                                        <div class="col-6 pt-2"><button class="w-100 border-0 rounded-pill px-3 py-1 text-white gotoaction" action="" style="background-color : purple">Assign Case</button></div>
+                                        <div class="col-6 pt-2"><button class="w-100 border-0 rounded-pill px-3 py-1 text-white gotoaction" action="" style="background-color : red">Cancle Case</button></div>
+                                        <div class="col-6 pt-2"><button class="w-100 border-0 rounded-pill px-3 py-1 text-white gotoaction" action="ViewNotes" style="background-color : green">View Notes</button></div>
+                                        <div class="col-6 pt-2"><button class="w-100 border-0 rounded-pill px-3 py-1 text-white gotoaction" action="" style="background-color : red">Block Patient</button></div>
+                                        <div class="col-6 pt-2"><button class="w-100 border-0 rounded-pill px-3 py-1 text-white gotoaction" action="" style="background-color : green">Email</button></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </td>
+            </tr>
+
+            }
+        </div>
+    </tbody>
+</table>
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
@@ -113,10 +210,10 @@
         });
 
         $(document).ready(function () {
-            $('.dropdown-item').click(function (e) {
+            $('.gotoaction').click(function (e) {
                 e.preventDefault();
 
-                var action = $(this).attr('id');
+                var action = $(this).attr('action');
                 var id = $(this).closest('form').data('id');
 
                 $.ajax({

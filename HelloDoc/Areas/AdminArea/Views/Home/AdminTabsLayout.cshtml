@@ -1,18 +1,53 @@
-﻿<nav style="background-color:white" class="resstartpadding collapse navbar-collapse" id="mainnav">
+﻿@{
+    int id = (int)Context.Session.GetInt32("AdminId");
+    string username = Context.Session.GetString("UserName");
+}
+<nav style="background-color:white" class="resstartpadding">
     <div class="mainnav">
         <div class="nav nav-tabs" id="nav-tab" role="tablist">
-            <button class="nav-link maintabs active me-3" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Dashboard</button>
-            <button class="nav-link maintabs me-3" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-ProviderLocation" type="button" role="tab" aria-controls="nav-ProviderLocation" aria-selected="false">Provider Location</button>
-            <button class="nav-link maintabs me-3" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-Profile" type="button" role="tab" aria-controls="nav-Profile" aria-selected="false">My Profile</button>
-            <button class="nav-link maintabs me-3" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-Providers" type="button" role="tab" aria-controls="nav-Providers" aria-selected="false">Providers</button>
-            <button class="nav-link maintabs me-3" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-Partners" type="button" role="tab" aria-controls="nav-Partners" aria-selected="false">Partners</button>
-            <button class="nav-link maintabs me-3" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-Access" type="button" role="tab" aria-controls="nav-Access" aria-selected="false">Access</button>
-            <button class="nav-link maintabs me-3" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-Records" type="button" role="tab" aria-controls="nav-Records" aria-selected="false">Records</button>
+            <button class="nav-link maintabs active me-3" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Dashboard</button>
+            <button class="nav-link maintabs me-3" data-bs-toggle="tab" data-bs-target="#nav-ProviderLocation" type="button" role="tab" aria-controls="nav-ProviderLocation" aria-selected="false">Provider Location</button>
+            <button class="nav-link maintabs me-3" data-bs-toggle="tab" data-bs-target="#nav-Profile" type="button" role="tab" aria-controls="nav-Profile" aria-selected="false">My Profile</button>
+            <button class="nav-link maintabs me-3" data-bs-toggle="tab" data-bs-target="#nav-Providers" type="button" role="tab" aria-controls="nav-Providers" aria-selected="false">Providers</button>
+            <button class="nav-link maintabs me-3" data-bs-toggle="tab" data-bs-target="#nav-Partners" type="button" role="tab" aria-controls="nav-Partners" aria-selected="false">Partners</button>
+            <button class="nav-link maintabs me-3" data-bs-toggle="tab" data-bs-target="#nav-Access" type="button" role="tab" aria-controls="nav-Access" aria-selected="false">Access</button>
+            <button class="nav-link maintabs me-3" data-bs-toggle="tab" data-bs-target="#nav-Records" type="button" role="tab" aria-controls="nav-Records" aria-selected="false">Records</button>
         </div>
     </div>
 </nav>
-<div class="tab-content respadding" id="nav-tabContent">
+<div class="position-relative">
+    <div class="offcanvas offcanvas-start position-absolute" data-bs-scroll="false" style="width:65%" tabindex="-1" id="layoutnav" aria-labelledby="offcanvasWithBackdropLabel">
+        <span class="p-2 "> <span class="small">Welcome , </span><b>@username</b></span>
+        <div class="maintabsul">
+            <div class="maintabs" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Dashboard</div>
+            <div class="maintabs" data-bs-toggle="tab" data-bs-target="#nav-ProviderLocation" type="button" role="tab" aria-controls="nav-ProviderLocation" aria-selected="false">Provider </div>
+            <div class="maintabs" data-bs-toggle="tab" data-bs-target="#nav-Profile" type="button" role="tab" aria-controls="nav-Profile" aria-selected="false">My Profile</div>
+            <div class="accordion customaccordion p-0" id="accordionExample">
+                <div class="accordion-item border-0 shadow-none">
+                    <button class="accordion-button sidebar collapsed p-0 m-0" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        <h2 class="accordion-header sidebar" id="headingTwo">
+                            Providers
+                        </h2>
+                    </button>
+                    <div id="collapseTwo" class="accordion-collapse collapse sidebar" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                        <ul class="accordion-body sidebar m-0 py-0" style="list-style : inside">
+                            <li>Provider</li>
+                            <li>Scheduling</li>
+                            <li>Invoice</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="maintabs" data-bs-toggle="tab" data-bs-target="#nav-Partners" type="button" role="tab" aria-controls="nav-Partners" aria-selected="false">Partners</div>
+            <div class="maintabs" data-bs-toggle="tab" data-bs-target="#nav-Access" type="button" role="tab" aria-controls="nav-Access" aria-selected="false">Access</div>
+            <div class="maintabs" data-bs-toggle="tab" data-bs-target="#nav-Records" type="button" role="tab" aria-controls="nav-Records" aria-selected="false">Records</div>
+        </div>
+    </div>
+    <div class="tab-content respadding" id="nav-tabContent">
+    </div>
 </div>
+
+
 
 
 
