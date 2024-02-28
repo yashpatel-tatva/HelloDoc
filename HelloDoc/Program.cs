@@ -20,7 +20,7 @@ builder.Services.AddScoped<IAspNetUserRepository, AspNetUserRepository>();
 builder.Services.AddScoped<IRequestRepository, RequestRepository>();
 builder.Services.AddScoped<IAdminRepository, AdminRepository>();
 builder.Services.AddScoped<IAllRequestDataRepository , AllRequestDataRepository>();
-
+builder.Services.AddScoped<IBlockCaseRepository, BlockCaseRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

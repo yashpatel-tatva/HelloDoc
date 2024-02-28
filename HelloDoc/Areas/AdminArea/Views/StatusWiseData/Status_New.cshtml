@@ -87,7 +87,7 @@
                     </td>
                 }
                 <td>@item.Address</td>
-                <td>@item.Notes</td>
+                <td>@item.TransferNotes</td>
                 <td>
                     @item.ProviderEmail
                     <div class="border border-1 border-white rounded d-flex justify-content-around align-items-center p-1" style="width : 65%">
@@ -100,13 +100,13 @@
                         <button class="btn btn-outline-light" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Actions
                         </button>
-                        <form data-id="@item.RequestId">
+                        <form data-id="@item.RequestId" value="@item.PatientName">
                             <ul class="dropdown-menu">
-                                <li><button class="dropdown-item gotoaction text-secondary" action="AssignCase"><i class="fa-regular fa-rectangle-list me-2"></i>Assign case</button></li>
-                                <li><button class="dropdown-item gotoaction text-secondary" action="CancelCase"><i class="fa-regular fa-circle-xmark me-2"></i>Cancel case</button></li>
+                                <li><button type="button" class="dropdown-item gotomodel text-secondary" data-toggle="modal" data-target="#AssignCasemodal"><i class="fa-regular fa-rectangle-list me-2"></i>Assign case</button></li>
+                                <li><button type="button" class="dropdown-item gotomodel text-secondary" data-toggle="modal" data-target="#CancelCaseModal"><i class="fa-regular fa-circle-xmark me-2"></i>Cancel case</button></li>
                                 <li><button class="dropdown-item gotoaction text-secondary" action="ViewCase"><i class="bi bi-view-list me-2"></i>View case</button></li>
                                 <li><button class="dropdown-item gotoaction text-secondary" action="ViewNotes"><i class="fa-solid fa-book-journal-whills me-2"></i>View Notes</button></li>
-                                <li><button class="dropdown-item gotoaction text-secondary" action="BlockPatients"><i class="fa-solid fa-ban me-2"></i>Block Patients</button></li>
+                                <li><button type="button" class="dropdown-item gotomodel text-secondary" data-toggle="modal" data-target="#BlockPatientsmodal"><i class="fa-solid fa-ban me-2"></i>Block Patients</button></li>
                             </ul>
                         </form>
 
@@ -117,6 +117,7 @@
 
     </tbody>
 </table>
+
 
 
 <table class="table newtable w-100 mt-2 acctable">
@@ -217,7 +218,7 @@
 </table>
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+@*<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>*@
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
 <script>
     $(document).ready(function () {
@@ -236,10 +237,11 @@
             }
         });
 
+
         $(document).ready(function () {
             $('.gotoaction').click(function (e) {
                 e.preventDefault();
-
+                console.log("clicked");
                 var action = $(this).attr('action');
                 var id = $(this).closest('form').data('id');
 
@@ -256,6 +258,19 @@
                     },
                 });
             });
+
+
+        });
+        $('.gotomodel').on('click', function (e) {
+            console.log("clicked")
+            var name = $(this).closest('form').attr('value');
+            console.log(name);
+            $('.patientname').html(name);
+            var id = $(this).closest('form').data('id');
+
+            $('.inputhiddenrequestid').val(id);
+            console.log(id);
+
         });
 
     });

@@ -12,6 +12,11 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
+using Microsoft.AspNetCore.Mvc;
+using static HelloDoc.Areas.PatientArea.ViewModels.PatientDashboardViewModel;
+using DataAccess.Repository.IRepository;
 
 namespace DataAccess.ServiceRepository
 {
@@ -19,17 +24,23 @@ namespace DataAccess.ServiceRepository
     {
         private readonly HelloDocDbContext _db;
         private readonly IHttpContextAccessor _session;
+        private readonly IBlockCaseRepository _blockcase;
 
-        public AllRequestDataRepository(HelloDocDbContext dbContext, IHttpContextAccessor httpContextAccessor)
+        public AllRequestDataRepository(HelloDocDbContext dbContext, IHttpContextAccessor httpContextAccessor , IBlockCaseRepository blockCaseRepository)
         {
             _db = dbContext;
             _session = httpContextAccessor;
+            _blockcase = blockCaseRepository;
         }
 
         public List<AllRequestDataViewModel> Status(int status)
         {
             List<AllRequestDataViewModel> allRequestDataViewModels = new List<AllRequestDataViewModel>();
-            var requests = _db.Requests.Include(r => r.User).Include(r => r.Requestclients).Include(r => r.Physician).ToList().Where(r => r.Status == status);
+            var requests = _db.Requests.Include(r => r.User).Include(r => r.Requestclients).Include(r => r.Physician).Include(r => r.User.Region).Include(r => r.Requeststatuslogs).ToList().Where(r => r.Status == status);
+            //if(status == 0)
+            //{
+            //     requests = _db.Requests.Include(r => r.User).Include(r => r.Requestclients).Include(r => r.Physician).Include(r => r.User.Region).Include(r => r.Requeststatuslogs);
+            //}
             foreach (var item in requests)
             {
                 AllRequestDataViewModel model = new AllRequestDataViewModel();
@@ -44,7 +55,7 @@ namespace DataAccess.ServiceRepository
                 model.PatientEmail = item.User.Email;
                 model.RequestorEmail = item.Email;
                 model.RequestType = item.Requesttypeid;
-                model.Region = _db.Regions.FirstOrDefault(x => x.Regionid == item.User.Regionid).Name;
+                model.Region = item.User.Region.Name;
                 model.RequestId = item.Requestid;
 
                 if (status != 1)
@@ -53,16 +64,16 @@ namespace DataAccess.ServiceRepository
                     model.PhysicainName = item.Physician.Firstname + " " + item.Physician.Lastname;
                 }
                 var id = item.Requestid;
-                var reqstatuslog = _db.Requeststatuslogs.FirstOrDefault(x => x.Requestid == id);
-                if (reqstatuslog == null)
+                var reqstatuslog = item.Requeststatuslogs;
+                if (reqstatuslog.Count() == 0)
                 {
                     model.TransferNotes = "-";
                 }
                 else
                 {
-                    var date = _db.Requeststatuslogs.FirstOrDefault(x => x.Requestid == id).Createddate;
-                    var afterphysicanid = _db.Requeststatuslogs.FirstOrDefault(y => y.Requestid == id).Transtophysicianid;
-                    var afterphysician = _db.Physicians.FirstOrDefault(x => x.Physicianid == afterphysicanid).Firstname;
+                    var date = reqstatuslog.ElementAt(0).Createddate;
+                    var afterphysicanid = reqstatuslog.ElementAt(0).Transtophysicianid;
+                    var afterphysician = reqstatuslog.ElementAt(0).Transtophysician.Firstname;
                     model.TransferNotes = "Admin transferred case to " + afterphysician + " on " + date;
                 }
 
@@ -74,7 +85,7 @@ namespace DataAccess.ServiceRepository
 
         }
 
-        RequestDataViewModel IAllRequestDataRepository.GetRequestById(int id)
+        public RequestDataViewModel GetRequestById(int id)
         {
             var request = _db.Requests.Include(r => r.Requestclients).FirstOrDefault(x => x.Requestid == id);
             var user = _db.Users.FirstOrDefault(x => x.Userid == request.Userid);
@@ -91,10 +102,11 @@ namespace DataAccess.ServiceRepository
             model.RequesttypeID = request.Requesttypeid;
             model.Notes = request.Requestclients.FirstOrDefault(x => x.Requestid == id).Notes;
             model.PatientDOB = new DateTime(Convert.ToInt32(user.Intyear), DateTime.ParseExact(user.Strmonth, "MMMM", CultureInfo.InvariantCulture).Month, Convert.ToInt32(user.Intdate));
+            model.Status = request.Status;
             return model;
         }
 
-        RequestNotesViewModel IAllRequestDataRepository.GetNotesById(int id)
+        public RequestNotesViewModel GetNotesById(int id)
         {
             RequestNotesViewModel model = new RequestNotesViewModel();
             model.RequestId = id;
@@ -124,7 +136,7 @@ namespace DataAccess.ServiceRepository
             return model;
         }
 
-        void IAllRequestDataRepository.SaveAdminNotes(int id, RequestNotesViewModel model)
+        public void SaveAdminNotes(int id, RequestNotesViewModel model)
         {
             var curr = _db.Requestnotes.FirstOrDefault(x => x.Requestid == id);
             if (curr != null)
@@ -146,10 +158,121 @@ namespace DataAccess.ServiceRepository
             }
             _db.SaveChanges();
         }
+
+        public byte[] DownloadExcle(string status)
+        {
+            int[] statuses = new int[9];
+            if (status == "status-new")
+            {
+                statuses[0] = 1;
+            }
+            else if (status == "status-pending")
+            {
+                statuses[0] = 2;
+            }
+            else if (status == "status-active")
+            {
+                statuses[0] = 4;
+                statuses[1] = 5;
+                
+            }
+            else if (status == "status-conclude")
+            {
+                statuses[0] = 6;
+            }
+            else if (status == "status-toclose")
+            {
+                statuses[0] = 3;
+                statuses[1] = 7;
+                statuses[2] = 8;
+            }
+            else if(status == "status-unpaid")
+            {
+                statuses[0] = 9;
+            }
+            else if(status == "all")
+            {
+                statuses[0] = 1 ;
+                statuses[1] = 2 ;
+                statuses[2] = 3 ;
+                statuses[3] = 4 ;
+                statuses[4] = 5 ;
+                statuses[5] = 6 ;
+                statuses[6] = 7 ;
+                statuses[7] = 8 ;
+                statuses[8] = 9 ;
+            }
+
+            List<AllRequestDataViewModel> model = new List<AllRequestDataViewModel>();
+            foreach(int s in statuses)
+            {
+                List<AllRequestDataViewModel> model1 = Status(s);
+                model = model.Concat(model1).ToList();
+            }
+
+            using (var workbook = new XSSFWorkbook())
+            {
+                ISheet sheet = workbook.CreateSheet(status);
+                IRow headerRow = sheet.CreateRow(0);
+                headerRow.CreateCell(0).SetCellValue("Sr No.");
+                headerRow.CreateCell(1).SetCellValue("Request Id");
+                headerRow.CreateCell(2).SetCellValue("Patient Name");
+                headerRow.CreateCell(3).SetCellValue("Patient DOB");
+                headerRow.CreateCell(4).SetCellValue("RequestorName");
+                headerRow.CreateCell(5).SetCellValue("RequestedDate");
+                headerRow.CreateCell(6).SetCellValue("PatientPhone");
+                headerRow.CreateCell(7).SetCellValue("TransferNotes");
+                headerRow.CreateCell(8).SetCellValue("RequestorPhone");
+                headerRow.CreateCell(9).SetCellValue("RequestorEmail");
+                headerRow.CreateCell(10).SetCellValue("Address");
+                headerRow.CreateCell(11).SetCellValue("Notes");
+                headerRow.CreateCell(12).SetCellValue("ProviderEmail");
+                headerRow.CreateCell(13).SetCellValue("PatientEmail");
+                headerRow.CreateCell(14).SetCellValue("RequestType");
+                headerRow.CreateCell(15).SetCellValue("Region");
+                headerRow.CreateCell(16).SetCellValue("PhysicainName");
+
+                for (int i = 0; i < model.Count; i++)
+                {
+                    IRow row = sheet.CreateRow(i + 1);
+                    row.CreateCell(0).SetCellValue(i+1);
+                    row.CreateCell(1).SetCellValue(model[i].RequestId);
+                    row.CreateCell(2).SetCellValue(model[i].PatientName);
+                    row.CreateCell(3).SetCellValue(model[i].PatientDOB);
+                    row.CreateCell(4).SetCellValue(model[i].RequestorName);
+                    row.CreateCell(5).SetCellValue(model[i].RequestedDate);
+                    row.CreateCell(6).SetCellValue(model[i].PatientPhone);
+                    row.CreateCell(7).SetCellValue(model[i].TransferNotes);
+                    row.CreateCell(8).SetCellValue(model[i].RequestorPhone);
+                    row.CreateCell(9).SetCellValue(model[i].RequestorEmail);
+                    row.CreateCell(10).SetCellValue(model[i].Address);
+                    row.CreateCell(11).SetCellValue(model[i].Notes);
+                    row.CreateCell(12).SetCellValue(model[i].ProviderEmail);
+                    row.CreateCell(13).SetCellValue(model[i].PatientEmail);
+                    row.CreateCell(14).SetCellValue(model[i].RequestType);
+                    row.CreateCell(15).SetCellValue(model[i].Region);
+                    row.CreateCell(16).SetCellValue(model[i].PhysicainName);
+                }
+
+                using (var stream = new MemoryStream())
+                {
+                    workbook.Write(stream); 
+                    var content = stream.ToArray();
+                    return content;
+                }
+            }
+        }
+
+        public void BlockCase(DashpopupsViewModel model)
+        {
+            var adminid = _session.HttpContext.Session.GetInt32("AdminId");
+            var email  = _db.Admins.FirstOrDefault(x => x.Adminid ==  adminid).Email;
+
+            _blockcase.BlockRequest(model.RequestId , model.Blockreason);
+           
+        }
     }
 }
-
-
 
 
 

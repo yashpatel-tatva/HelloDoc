@@ -78,26 +78,26 @@
     <div class="d-flex mt-4 align-items-center justify-content-between">
         <div class="h3size mb-0">Patients<small class="h6size px-2" style="color: #203F9A" id="status_text"></small></div>
         <div class="d-flex">
-            <div class="p-2px-3mx-2 text-white bg-info rounded ">
+            <button class="p-2px-3mx-2 text-white bg-info rounded border-info d-flex align-items-center">
                 <i class="fa-regular fa-paper-plane  "></i>
-                <span class="d-none d-lg-block ">Send Link</span>
-            </div>
-            <div class="p-2px-3mx-2 text-white bg-info rounded ">
+                <span class="d-none d-lg-block ps-2">Send Link</span>
+            </button>
+            <button class="p-2px-3mx-2 text-white bg-info rounded border-info d-flex align-items-center">
                 <i class="fa-solid fa-file-pen "></i>
-                <span class="d-none d-lg-block ">Create Request</span>
-            </div>
-            <div class="p-2px-3mx-2 text-white bg-info rounded ">
+                <span class="d-none d-lg-block ps-2">Create Request</span>
+            </button>
+            <button class="p-2px-3mx-2 text-white bg-info rounded border-info d-flex align-items-center" id="export">
                 <i class="fa-solid fa-share "></i>
-                <span class="d-none d-lg-block ">Export</span>
-            </div>
-            <div class="p-2px-3mx-2 text-white bg-info rounded ">
+                <span class="d-none d-lg-block ps-2">Export</span>
+            </button>
+            <button class="p-2px-3mx-2 text-white bg-info rounded border-info d-flex align-items-center" id="exportall">
                 <i class="fa-solid fa-share-from-square"></i>
-                <span class="d-none d-lg-block ">Export All</span>
-            </div>
-            <div class="p-2px-3mx-2 text-white bg-info rounded ">
+                <span class="d-none d-lg-block ps-2">Export All</span>
+            </button>
+            <button class="p-2px-3mx-2 text-white bg-info rounded border-info d-flex align-items-center">
                 <i class="fa-solid fa-user-doctor "></i>
-                <span class="d-none d-lg-block ">Request DTY Support</span>
-            </div>
+                <span class="d-none d-lg-block ps-2">Request DTY Support</span>
+            </button>
         </div>
     </div>
     <div id="status-tabContent" class="bg-white rounded-4 mt-3">
@@ -142,6 +142,31 @@
 
 <script>
     $(document).ready(function () {
+
+
+        $(document).ready(function () {
+            $('.gotoaction').click(function (e) {
+                e.preventDefault();
+                console.log("clicked");
+                var action = $(this).attr('action');
+                var id = $(this).closest('form').data('id');
+
+                $.ajax({
+                    url: '../Dashboard/' + action,
+                    type: 'GET',
+                    data: { id: id },
+                    success: function (result) {
+
+                        $('#nav-tabContent').html(result);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error: ' + error);
+                    },
+                });
+            });
+        });
+
+
 
         $('#dashtables').hide();
 
@@ -194,6 +219,7 @@
                 }
             });
         });
+
         $('.dashboardtab[data-bs-target="' + target1 + '"]').trigger('click');
 
         if (target1 == null) {
@@ -201,7 +227,30 @@
 
         }
         $('#dashtables').show();
+    });
 
+    $('#export').on('click', function () {
+        var thisstate = $(".dashboardtab.active");
+        var statuscollection = thisstate.map(function () {
+            return this.id;
+        }).get();
+        var status = statuscollection[0];
+        var link = document.createElement('a');
+        link.href = '../Dashboard/Export?status=' + status; 
+        link.style.display = 'none'; 
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    });
+    
+
+    $('#exportall').on('click', function () {
+        var link = document.createElement('a');
+        link.href = '../Dashboard/ExportAll'; 
+        link.style.display = 'none'; 
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     });
 
 </script>

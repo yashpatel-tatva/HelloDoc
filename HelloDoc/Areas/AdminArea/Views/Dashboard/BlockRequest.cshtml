@@ -1,0 +1,27 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@using HelloDoc.DataModels;
+@model Blockrequest
+
+
+<table>
+    <tr>
+        <th>id</th>
+        <th>reid</th>
+        <th>reason</th>
+        <th>email</th>
+        <th>phone</th>
+        <th>createddate</th>
+    </tr>
+    <tr>
+        <td>@Model.Blockrequestid</td>
+        <td>@Model.Requestid</td>
+        <td>@Model.Reason</td>
+        <td>@Model.Email</td>
+        <td>@Model.Phonenumber</td>
+        <td>@Model.Createddate</td>
+    </tr>
+</table>

@@ -15,18 +15,21 @@ namespace HelloDoc.Areas.AdminArea.DataController
         public readonly IAdminRepository _admin;
         public readonly IRequestRepository _requests;
         private readonly IAllRequestDataRepository _allrequest;
+        private readonly IBlockCaseRepository _blockcase;
 
         public DashboardController(
             HelloDocDbContext db,
             IAdminRepository adminRepository,
             IRequestRepository requestRepository,
-            IAllRequestDataRepository allRequestDataRepository
+            IAllRequestDataRepository allRequestDataRepository,
+            IBlockCaseRepository blockCaseRepository
             )
         {
             _db = db;
             _admin = adminRepository;
             _requests = requestRepository;
             _allrequest = allRequestDataRepository;
+            _blockcase = blockCaseRepository;
         }
 
         [Area("AdminArea")]
@@ -47,6 +50,33 @@ namespace HelloDoc.Areas.AdminArea.DataController
             model.requests = _requests.GetAll().ToList();
             return View(model);
         }
+
+        [Area("AdminArea")]
+        [HttpGet]
+        public IActionResult Export(string status)
+        {
+            var record = _allrequest.DownloadExcle(status);
+            string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            var strDate = DateTime.Now.ToString("yyyyMMdd");
+            string filename = $"{status}_{strDate}.xlsx";
+
+            return File(record, contentType, filename);
+        }
+
+        [Area("AdminArea")]
+        [HttpGet]
+        public IActionResult ExportAll()
+        {
+            var record = _allrequest.DownloadExcle("all");
+            string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            var strDate = DateTime.Now.ToString("yyyyMMdd");
+            string filename = $"All Request_{strDate}.xlsx";
+
+            return File(record, contentType, filename);
+        }
+
+
+
 
 
         [Area("AdminArea")]
@@ -74,5 +104,15 @@ namespace HelloDoc.Areas.AdminArea.DataController
             _allrequest.SaveAdminNotes(id, model);
             return RedirectToAction("AdminTabsLayout", "Home");
         }
+
+        [Area("AdminArea")]
+        [HttpPost]
+        public IActionResult BlockRequets(DashpopupsViewModel model)
+        {
+            _allrequest.BlockCase(model);
+            var result = _blockcase.GetAll();
+            return View(result);
+        }
+
     }
 }

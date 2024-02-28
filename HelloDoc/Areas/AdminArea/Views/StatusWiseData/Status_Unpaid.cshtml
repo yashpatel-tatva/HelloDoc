@@ -106,11 +106,11 @@
                         <button class="btn btn-outline-light" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Actions
                         </button>
-                        <form>
+                        <form data-id="@item.RequestId">
                             <ul class="dropdown-menu dropdown-menu-end">
-                                <li><button type="submit" class="dropdown-item text-secondary" href="#"><i class="bi bi-view-list me-2"></i>View case</button></li>
-                                <li><button type="submit" class="dropdown-item text-secondary" href="#"><i class="bi bi-file-earmark-arrow-up-fill me-2"></i>View Uploads</button></li>
-                                <li><button type="submit" class="dropdown-item text-secondary" href="#"><i class="fa-regular fa-rectangle-list me-2"></i>View Notes</button></li>
+                                <li><button type="submit" class="dropdown-item gotoaction text-secondary" action="ViewCase"><i class="bi bi-view-list me-2"></i>View case</button></li>
+                                <li><button type="submit" class="dropdown-item gotoaction text-secondary" action="Viewuploads"><i class="bi bi-file-earmark-arrow-up-fill me-2"></i>View Uploads</button></li>
+                                <li><button type="submit" class="dropdown-item gotoaction text-secondary" action="ViewNotes"><i class="fa-regular fa-rectangle-list me-2"></i>View Notes</button></li>
                             </ul>
                         </form>
                     </div>
@@ -238,7 +238,7 @@
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
 <script>
     $(document).ready(function () {
-        var table = $('#newtable').DataTable({ dom: 'lrtip' }); // Initialize your DataTable
+        var table = $('.newtable').DataTable({ dom: 'lrtip' }); // Initialize your DataTable
         $('input[type="search"]').on('keyup', function () {
             table.search(this.value).draw();
         });

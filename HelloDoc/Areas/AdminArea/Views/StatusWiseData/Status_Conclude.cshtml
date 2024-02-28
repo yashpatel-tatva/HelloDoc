@@ -108,14 +108,16 @@
                         <button class="btn btn-outline-light" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Actions
                         </button>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item text-secondary" href="#"><i class="bi bi-view-list me-2"></i>View case</a></li>
-                            <li><a class="dropdown-item text-secondary" href="#"><i class="bi bi-file-earmark-arrow-up-fill me-2"></i>View Uploads</a></li>
-                            <li><a class="dropdown-item text-secondary" href="#"><i class="fa-regular fa-rectangle-list me-2"></i>View Notes</a></li>
-                            <li><a class="dropdown-item text-secondary" href="#"><i class="fa-solid fa-suitcase-medical me-2"></i>Orders</a></li>
-                            <li><a class="dropdown-item text-secondary" href="#"><i class="fa-solid fa-book-medical me-2"></i>Doctor Notes</a></li>
-                            <li><a class="dropdown-item text-secondary" href="#"><i class="fa-solid fa-bell-concierge me-2"></i>Encounter</a></li>
-                        </ul>
+                        <form data-id="@item.RequestId">
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><button class="dropdown-item gotoaction text-secondary" action="ViewCase"><i class="bi bi-view-list me-2"></i>View case</button></li>
+                                <li><button class="dropdown-item gotoaction text-secondary" action="ViewUploads"><i class="bi bi-file-earmark-arrow-up-fill me-2"></i>View Uploads</button></li>
+                                <li><button class="dropdown-item gotoaction text-secondary" action="ViewNotes"><i class="fa-regular fa-rectangle-list me-2"></i>View Notes</button></li>
+                                <li><button class="dropdown-item gotoaction text-secondary" action="Orders"><i class="fa-solid fa-suitcase-medical me-2"></i>Orders</button></li>
+                                <li><button class="dropdown-item gotoaction text-secondary" action="DoctorNotes"><i class="fa-solid fa-book-medical me-2"></i>Doctor Notes</button></li>
+                                <li><button class="dropdown-item gotoaction text-secondary" action="Encounter"><i class="fa-solid fa-bell-concierge me-2"></i>Encounter</button></li>
+                            </ul>
+                        </form>
                     </div>
                 </td>
             </tr>

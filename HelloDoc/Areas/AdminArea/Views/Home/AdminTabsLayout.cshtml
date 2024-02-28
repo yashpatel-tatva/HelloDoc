@@ -5,7 +5,7 @@
 <nav style="background-color:white" class="resstartpadding">
     <div class="mainnav">
         <div class="nav nav-tabs" id="nav-tab" role="tablist">
-            <button class="nav-link maintabs active me-3" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Dashboard</button>
+            <button class="nav-link maintabs me-3" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Dashboard</button>
             <button class="nav-link maintabs me-3" data-bs-toggle="tab" data-bs-target="#nav-ProviderLocation" type="button" role="tab" aria-controls="nav-ProviderLocation" aria-selected="false">Provider Location</button>
             <button class="nav-link maintabs me-3" data-bs-toggle="tab" data-bs-target="#nav-Profile" type="button" role="tab" aria-controls="nav-Profile" aria-selected="false">My Profile</button>
             <button class="nav-link maintabs me-3" data-bs-toggle="tab" data-bs-target="#nav-Providers" type="button" role="tab" aria-controls="nav-Providers" aria-selected="false">Providers</button>
@@ -59,7 +59,7 @@
         var target = localStorage.getItem('target')
         $('.maintabs').on('click', function (e) {
             e.preventDefault();
-            $('.maintabs').removeClass('active');
+            //$('.maintabs').removeClass('active');
             $(this).addClass('active');
             var target = $(this).data('bs-target');
             console.log(target);

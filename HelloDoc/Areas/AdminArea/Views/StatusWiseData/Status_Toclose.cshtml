@@ -51,7 +51,7 @@
                 <td>@item.PhysicainName</td>
                 <td>@item.RequestedDate</td>
                 <td>@item.Address</td>
-                <td>@item.Notes</td>
+                <td>@item.TransferNotes</td>
                 <td>
                     <div class="d-flex w-100 justify-content-between">
                         <a asp-route-id="@item.ProviderEmail" style="color : white ;width : 65% " class="m-1">
@@ -74,16 +74,18 @@
                         <button class="btn btn-outline-light" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Actions
                         </button>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item text-secondary" href="#"><i class="bi bi-view-list me-2"></i>View case</a></li>
-                            <li><a class="dropdown-item text-secondary" href="#"><i class="bi bi-file-earmark-arrow-up-fill me-2"></i>View Uploads</a></li>
-                            <li><a class="dropdown-item text-secondary" href="#"><i class="fa-regular fa-rectangle-list me-2"></i>View Notes</a></li>
-                            <li><a class="dropdown-item text-secondary" href="#"><i class="fa-solid fa-suitcase-medical me-2"></i>Orders</a></li>
-                            <li><a class="dropdown-item text-secondary" href="#"><i class="fa-regular fa-circle-xmark me-2"></i>Close case</a></li>
-                            <li><a class="dropdown-item text-secondary" href="#"><i class="fa-solid fa-book-medical me-2"></i>Doctor Notes</a></li>
-                            <li><a class="dropdown-item text-secondary" href="#"><i class="fa-regular fa-circle-xmark me-2"></i>Clear case</a></li>
-                            <li><a class="dropdown-item text-secondary" href="#"><i class="fa-solid fa-bell-concierge me-2"></i>Encounter</a></li>
-                        </ul>
+                        <form data-id="@item.RequestId">
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><button class="dropdown-item gotoaction text-secondary" actoin="ViewCase"><i class="bi bi-view-list me-2"></i>View case</button></li>
+                                <li><button class="dropdown-item gotoaction text-secondary" actoin="ViewUploads"><i class="bi bi-file-earmark-arrow-up-fill me-2"></i>View Uploads</button></li>
+                                <li><button class="dropdown-item gotoaction text-secondary" actoin="ViewNotes"><i class="fa-regular fa-rectangle-list me-2"></i>View Notes</button></li>
+                                <li><button class="dropdown-item gotoaction text-secondary" actoin="Orders"><i class="fa-solid fa-suitcase-medical me-2"></i>Orders</button></li>
+                                <li><button class="dropdown-item gotoaction text-secondary" actoin="Closecase"><i class="fa-regular fa-circle-xmark me-2"></i>Close case</button></li>
+                                <li><button class="dropdown-item gotoaction text-secondary" actoin="DoctorNotes"><i class="fa-solid fa-book-medical me-2"></i>Doctor Notes</button></li>
+                                <li><button class="dropdown-item gotoaction text-secondary" actoin="Clearcase"><i class="fa-regular fa-circle-xmark me-2"></i>Clear case</button></li>
+                                <li><button class="dropdown-item gotoaction text-secondary" actoin="Encounter"><i class="fa-solid fa-bell-concierge me-2"></i>Encounter</button></li>
+                            </ul>
+                        </form>
                     </div>
                 </td>
             </tr>

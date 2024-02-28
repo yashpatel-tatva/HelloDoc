@@ -1,6 +1,7 @@
 ﻿using DataAccess.Repository;
 using DataAccess.Repository.IRepository;
 using DataModels.AdminSideViewModels;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,5 +17,8 @@ namespace DataAccess.ServiceRepository.IServiceRepository
         RequestDataViewModel GetRequestById(int id);
         RequestNotesViewModel GetNotesById(int id);
         void SaveAdminNotes(int id, RequestNotesViewModel model);
+
+        byte[] DownloadExcle(string status);
+        void BlockCase(DashpopupsViewModel model);
     }
 }
