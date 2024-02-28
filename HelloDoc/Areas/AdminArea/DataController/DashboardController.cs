@@ -107,7 +107,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
 
         [Area("AdminArea")]
         [HttpPost]
-        public IActionResult BlockRequets(DashpopupsViewModel model)
+        public IActionResult BlockRequest(DashpopupsViewModel model)
         {
             _allrequest.BlockCase(model);
             var result = _blockcase.GetAll();
