@@ -122,7 +122,7 @@
                 <div class="row d-flex">
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="email" class="form-control" placeholder="" asp-for="Email"><span>Email</span>
+                            <input type="email" class="form-control" placeholder="" onblur="checkEmailExists()" asp-for="Email" id="patientEmail"><span>Email</span>
                         </div>
                         <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
@@ -151,7 +151,7 @@
                 <div class="row d-flex justify-content-end">
                     <div class="p-2 col-xl-1 col-md-2 col-4 align-items-center">
                         <div class="form-group d-flex  border-0">
-                            <button type="submit" class="p-2 uploadbtn rounded w-100  border-0">
+                            <button type="button" id="submitbtn" class="p-2 uploadbtn rounded w-100  border-0" onclick="checkEmailExists()">
                                 Submit
                             </button>
                         </div>
@@ -170,3 +170,35 @@
         </div>
     </form>
 </div>
+
+<script>
+    function checkEmailExists() {
+        var email = document.getElementById("patientEmail").value;
+        console.log("check");
+        fetch('/Credential/checkemail/' + email)
+            .then(response => response.json())
+            .then(data => {
+                if (data.exists) {
+                    document.getElementById("submitbtn").type = "submit";
+                } else {
+                    alert("Create Patient Account");
+                    $(document).ready(function () {
+                        console.log("outer");
+                        $.ajax({
+                            url: '../Credential/SendEmailforcreateaccount',
+                            type: 'GET',
+                            data: { email: email },
+                            success: function (result) {
+                                console.log("inner");
+                            },
+                            error: function (xhr, status, error) {
+                                console.error('Error: ' + error);
+                            },
+                        });
+                    });
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+</script>
+

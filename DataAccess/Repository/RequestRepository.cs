@@ -24,7 +24,7 @@ namespace DataAccess.Repository
 
         public void Update(Request request)
         {
-            _db.Update(request);
+            _db.Requests.Update(request);
         }
     }
 }

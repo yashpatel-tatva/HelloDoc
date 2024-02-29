@@ -13,5 +13,8 @@ namespace DataModels.AdminSideViewModels
 
         [NotNull]
         public string Blockreason { get; set; }
+
+        public int CaseTagID { get; set; }
+        public string CancleReason { get; set; }
     }
 }

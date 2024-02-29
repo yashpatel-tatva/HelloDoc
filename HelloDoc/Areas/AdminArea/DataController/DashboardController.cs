@@ -16,13 +16,15 @@ namespace HelloDoc.Areas.AdminArea.DataController
         public readonly IRequestRepository _requests;
         private readonly IAllRequestDataRepository _allrequest;
         private readonly IBlockCaseRepository _blockcase;
+        private readonly IRequestPopUpActionsRepository _requestpopupaction;
 
         public DashboardController(
             HelloDocDbContext db,
             IAdminRepository adminRepository,
             IRequestRepository requestRepository,
             IAllRequestDataRepository allRequestDataRepository,
-            IBlockCaseRepository blockCaseRepository
+            IBlockCaseRepository blockCaseRepository,
+            IRequestPopUpActionsRepository requestPopUpActionsRepository
             )
         {
             _db = db;
@@ -30,6 +32,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
             _requests = requestRepository;
             _allrequest = allRequestDataRepository;
             _blockcase = blockCaseRepository;
+            _requestpopupaction = requestPopUpActionsRepository;
         }
 
         [Area("AdminArea")]
@@ -107,11 +110,25 @@ namespace HelloDoc.Areas.AdminArea.DataController
 
         [Area("AdminArea")]
         [HttpPost]
+        public void CancleCase(DashpopupsViewModel dashpopupsViewModel)
+        {
+            _requestpopupaction.CancelCase(dashpopupsViewModel);
+        }
+
+        [Area("AdminArea")]
+        [HttpPost]
         public IActionResult BlockRequest(DashpopupsViewModel model)
         {
-            _allrequest.BlockCase(model);
+            _requestpopupaction.BlockCase(model);
             var result = _blockcase.GetAll();
             return View(result);
+        }
+
+        [Area("AdminArea")]
+        public List<Casetag> GetCaseTags()
+        {
+            var casetags = _db.Casetags.ToList();
+            return casetags;
         }
 
     }

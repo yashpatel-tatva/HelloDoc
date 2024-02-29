@@ -220,9 +220,11 @@
 
 @*<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>*@
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+
 <script>
-    $(document).ready(function () {
-        var table = $('.newtable').DataTable({ dom: 'lrtip' }); // Initialize your DataTable
+
+        var table = $('.newtable').DataTable({ dom: 'lrtip' });
+        console.log(table);// Initialize your DataTable
         $('input[type="search"]').on('keyup', function () {
             table.search(this.value).draw();
         });
@@ -238,29 +240,27 @@
         });
 
 
-        $(document).ready(function () {
-            $('.gotoaction').click(function (e) {
-                e.preventDefault();
-                console.log("clicked");
-                var action = $(this).attr('action');
-                var id = $(this).closest('form').data('id');
+        $('.gotoaction').click(function (e) {
+            e.preventDefault();
+            console.log("clicked");
+            var action = $(this).attr('action');
+            var id = $(this).closest('form').data('id');
 
-                $.ajax({
-                    url: '../Dashboard/' + action,
-                    type: 'GET',
-                    data: { id: id },
-                    success: function (result) {
+            $.ajax({
+                url: '../Dashboard/' + action,
+                type: 'GET',
+                data: { id: id },
+                success: function (result) {
 
-                        $('#nav-tabContent').html(result);
-                    },
-                    error: function (xhr, status, error) {
-                        console.error('Error: ' + error);
-                    },
-                });
+                    $('#nav-tabContent').html(result);
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error: ' + error);
+                },
             });
-
-
         });
+
+
         $('.gotomodel').on('click', function (e) {
             console.log("clicked")
             var name = $(this).closest('form').attr('value');
@@ -273,7 +273,24 @@
 
         });
 
-    });
+        $('.gotomodel[data-target="#CancelCaseModal"]').on('click', function () {
+            console.log("clickascaed");
+            $.ajax({
+                url: '../Dashboard/GetCaseTags',
+                success: function (data) {
+                    var casetagsdropdown = $('.cancleselect');
+                    casetagsdropdown.empty();
+
+                    $.each(data, function (index, item) {
+                        casetagsdropdown.append($('<option>', {
+                            value: item.casetagid,
+                            text: item.name
+                        }))
+                    });
+                }
+            });
+        });
+
 
 </script>
 

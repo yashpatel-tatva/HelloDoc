@@ -12,7 +12,6 @@ namespace DataAccess.Repository
 {
     public class AdminRepository : Repository<Admin>, IAdminRepository
     {
-        private HelloDocDbContext _db;
         private readonly IHttpContextAccessor _httpsession;
         public AdminRepository(IHttpContextAccessor httpContextAccessor, HelloDocDbContext db) : base(db)
         {

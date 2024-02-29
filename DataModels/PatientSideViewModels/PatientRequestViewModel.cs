@@ -31,7 +31,7 @@ namespace HelloDoc.Areas.PatientArea.ViewModels
 
 
 
-        [RegularExpression(@"^(?=.*\S)[a-zA-Z\s.'-]+$", ErrorMessage = "Enter a valid")]
+     
         [MaybeNull]
         public string Street { get; set; }
 

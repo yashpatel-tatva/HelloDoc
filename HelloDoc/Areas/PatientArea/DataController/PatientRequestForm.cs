@@ -67,6 +67,7 @@ namespace HelloDoc.Areas.PatientArea.DataController
                     Passwordhash = model.Password,
                     Email = model.Email,
                     Createddate = DateTime.Now,
+                    Phonenumber = model.PhoneNumber,
                 };
                 _context.Aspnetusers.Add(newaspnetuser);
                 _context.SaveChanges();

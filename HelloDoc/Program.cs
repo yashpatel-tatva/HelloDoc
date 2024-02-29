@@ -3,6 +3,9 @@ using DataAccess.Repository;
 using HelloDoc.DataContext;
 using DataAccess.ServiceRepository.IServiceRepository;
 using DataAccess.ServiceRepository;
+using NPOI.Util;
+using static HelloDoc.Areas.PatientArea.ViewModels.PatientDashboardViewModel;
+using NPOI.SS.Formula.Functions;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSession(options =>
@@ -15,12 +18,20 @@ builder.Services.AddSession(options =>
 builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddDbContext<HelloDocDbContext>();
+
+
+
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAspNetUserRepository, AspNetUserRepository>();
 builder.Services.AddScoped<IRequestRepository, RequestRepository>();
 builder.Services.AddScoped<IAdminRepository, AdminRepository>();
-builder.Services.AddScoped<IAllRequestDataRepository , AllRequestDataRepository>();
 builder.Services.AddScoped<IBlockCaseRepository, BlockCaseRepository>();
+builder.Services.AddScoped<IRequestStatusLogRepository , RequestStatusLogRepository>();
+
+
+builder.Services.AddScoped<IAllRequestDataRepository , AllRequestDataRepository>();
+builder.Services.AddScoped<ISendEmailRepository, SendEmailRepository>();
+builder.Services.AddScoped<IRequestPopUpActionsRepository , RequestPopUpActionsRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -43,8 +54,19 @@ app.MapControllerRoute(
     name: "Admin",
     pattern: "{area=AdminArea}/{controller=Home}/{action=AdminLogin}/{id?}");
 
-//app.MapControllerRoute(
-//    name: "Patient",
-//    pattern: "{area=PatientArea}/{controller=Home}/{action=Index}/{id?}");
-
+app.MapControllerRoute(
+    name: "Patient",
+    pattern: "{area=PatientArea}/{controller=Home}/{action=Index}/{id?}");
 app.Run();
+
+
+
+
+
+
+
+
+
+
+
+

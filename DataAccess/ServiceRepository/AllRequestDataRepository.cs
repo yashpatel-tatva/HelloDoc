@@ -26,7 +26,7 @@ namespace DataAccess.ServiceRepository
         private readonly IHttpContextAccessor _session;
         private readonly IBlockCaseRepository _blockcase;
 
-        public AllRequestDataRepository(HelloDocDbContext dbContext, IHttpContextAccessor httpContextAccessor , IBlockCaseRepository blockCaseRepository)
+        public AllRequestDataRepository(HelloDocDbContext dbContext, IHttpContextAccessor httpContextAccessor, IBlockCaseRepository blockCaseRepository)
         {
             _db = dbContext;
             _session = httpContextAccessor;
@@ -60,8 +60,11 @@ namespace DataAccess.ServiceRepository
 
                 if (status != 1)
                 {
-                    model.ProviderEmail = item.Physician.Email;
-                    model.PhysicainName = item.Physician.Firstname + " " + item.Physician.Lastname;
+                    if (item.Physician != null)
+                    {
+                        model.ProviderEmail = item.Physician.Email;
+                        model.PhysicainName = item.Physician.Firstname + " " + item.Physician.Lastname;
+                    }
                 }
                 var id = item.Requestid;
                 var reqstatuslog = item.Requeststatuslogs;
@@ -71,10 +74,14 @@ namespace DataAccess.ServiceRepository
                 }
                 else
                 {
-                    var date = reqstatuslog.ElementAt(0).Createddate;
-                    var afterphysicanid = reqstatuslog.ElementAt(0).Transtophysicianid;
-                    var afterphysician = reqstatuslog.ElementAt(0).Transtophysician.Firstname;
-                    model.TransferNotes = "Admin transferred case to " + afterphysician + " on " + date;
+                    if (reqstatuslog.ElementAt(0).Transtophysician != null)
+                    {
+                        var date = reqstatuslog.ElementAt(0).Createddate;
+                        var afterphysicanid = reqstatuslog.ElementAt(0).Transtophysicianid;
+                        var afterphysician = reqstatuslog.ElementAt(0).Transtophysician.Firstname;
+                        model.TransferNotes = "Admin transferred case to " + afterphysician + " on " + date;
+                    }
+
                 }
 
 
@@ -174,7 +181,7 @@ namespace DataAccess.ServiceRepository
             {
                 statuses[0] = 4;
                 statuses[1] = 5;
-                
+
             }
             else if (status == "status-conclude")
             {
@@ -186,25 +193,25 @@ namespace DataAccess.ServiceRepository
                 statuses[1] = 7;
                 statuses[2] = 8;
             }
-            else if(status == "status-unpaid")
+            else if (status == "status-unpaid")
             {
                 statuses[0] = 9;
             }
-            else if(status == "all")
+            else if (status == "all")
             {
-                statuses[0] = 1 ;
-                statuses[1] = 2 ;
-                statuses[2] = 3 ;
-                statuses[3] = 4 ;
-                statuses[4] = 5 ;
-                statuses[5] = 6 ;
-                statuses[6] = 7 ;
-                statuses[7] = 8 ;
-                statuses[8] = 9 ;
+                statuses[0] = 1;
+                statuses[1] = 2;
+                statuses[2] = 3;
+                statuses[3] = 4;
+                statuses[4] = 5;
+                statuses[5] = 6;
+                statuses[6] = 7;
+                statuses[7] = 8;
+                statuses[8] = 9;
             }
 
             List<AllRequestDataViewModel> model = new List<AllRequestDataViewModel>();
-            foreach(int s in statuses)
+            foreach (int s in statuses)
             {
                 List<AllRequestDataViewModel> model1 = Status(s);
                 model = model.Concat(model1).ToList();
@@ -235,7 +242,7 @@ namespace DataAccess.ServiceRepository
                 for (int i = 0; i < model.Count; i++)
                 {
                     IRow row = sheet.CreateRow(i + 1);
-                    row.CreateCell(0).SetCellValue(i+1);
+                    row.CreateCell(0).SetCellValue(i + 1);
                     row.CreateCell(1).SetCellValue(model[i].RequestId);
                     row.CreateCell(2).SetCellValue(model[i].PatientName);
                     row.CreateCell(3).SetCellValue(model[i].PatientDOB);
@@ -256,21 +263,14 @@ namespace DataAccess.ServiceRepository
 
                 using (var stream = new MemoryStream())
                 {
-                    workbook.Write(stream); 
+                    workbook.Write(stream);
                     var content = stream.ToArray();
                     return content;
                 }
             }
         }
 
-        public void BlockCase(DashpopupsViewModel model)
-        {
-            var adminid = _session.HttpContext.Session.GetInt32("AdminId");
-            var email  = _db.Admins.FirstOrDefault(x => x.Adminid ==  adminid).Email;
 
-            _blockcase.BlockRequest(model.RequestId , model.Blockreason);
-           
-        }
     }
 }
 

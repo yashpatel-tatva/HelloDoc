@@ -54,7 +54,7 @@
 <script>
     $(document).ready(function () {
 
-        $('#nav-tabContent').hide();
+
 
         var target = localStorage.getItem('target')
         $('.maintabs').on('click', function (e) {
@@ -104,13 +104,13 @@
             });
         });
 
+        //if (target == null) {
+        //    $('.maintabs[data-bs-target="#nav-home"]').trigger('click');
+
+        //}
+     
+
         $('.maintabs[data-bs-target="' + target + '"]').trigger('click');
-        if (target == null) {
-            $('.maintabs[data-bs-target="#nav-home"]').trigger('click');
-
-        }
-        $('#nav-tabContent').show();
-
     });
 
 </script>

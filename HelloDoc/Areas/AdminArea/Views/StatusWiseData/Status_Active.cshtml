@@ -300,6 +300,17 @@
                     },
                 });
             });
+            $('.gotomodel').on('click', function (e) {
+                console.log("clicked")
+                var name = $(this).closest('form').attr('value');
+                console.log(name);
+                $('.patientname').html(name);
+                var id = $(this).closest('form').data('id');
+
+                $('.inputhiddenrequestid').val(id);
+                console.log(id);
+
+            });
         });
 
     });
