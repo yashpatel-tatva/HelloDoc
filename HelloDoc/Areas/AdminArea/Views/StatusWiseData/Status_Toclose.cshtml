@@ -76,14 +76,14 @@
                         </button>
                         <form data-id="@item.RequestId">
                             <ul class="dropdown-menu dropdown-menu-end">
-                                <li><button class="dropdown-item gotoaction text-secondary" actoin="ViewCase"><i class="bi bi-view-list me-2"></i>View case</button></li>
-                                <li><button class="dropdown-item gotoaction text-secondary" actoin="ViewUploads"><i class="bi bi-file-earmark-arrow-up-fill me-2"></i>View Uploads</button></li>
-                                <li><button class="dropdown-item gotoaction text-secondary" actoin="ViewNotes"><i class="fa-regular fa-rectangle-list me-2"></i>View Notes</button></li>
-                                <li><button class="dropdown-item gotoaction text-secondary" actoin="Orders"><i class="fa-solid fa-suitcase-medical me-2"></i>Orders</button></li>
-                                <li><button class="dropdown-item gotoaction text-secondary" actoin="Closecase"><i class="fa-regular fa-circle-xmark me-2"></i>Close case</button></li>
-                                <li><button class="dropdown-item gotoaction text-secondary" actoin="DoctorNotes"><i class="fa-solid fa-book-medical me-2"></i>Doctor Notes</button></li>
-                                <li><button class="dropdown-item gotoaction text-secondary" actoin="Clearcase"><i class="fa-regular fa-circle-xmark me-2"></i>Clear case</button></li>
-                                <li><button class="dropdown-item gotoaction text-secondary" actoin="Encounter"><i class="fa-solid fa-bell-concierge me-2"></i>Encounter</button></li>
+                                <li><button class="dropdown-item gotoaction text-secondary" action="ViewCase"><i class="bi bi-view-list me-2"></i>View case</button></li>
+                                <li><button class="dropdown-item gotoaction text-secondary" action="ViewUploads"><i class="bi bi-file-earmark-arrow-up-fill me-2"></i>View Uploads</button></li>
+                                <li><button class="dropdown-item gotoaction text-secondary" action="ViewNotes"><i class="fa-regular fa-rectangle-list me-2"></i>View Notes</button></li>
+                                <li><button class="dropdown-item gotoaction text-secondary" action="Orders"><i class="fa-solid fa-suitcase-medical me-2"></i>Orders</button></li>
+                                <li><button class="dropdown-item gotoaction text-secondary" action="Closecase"><i class="fa-regular fa-circle-xmark me-2"></i>Close case</button></li>
+                                <li><button class="dropdown-item gotoaction text-secondary" action="DoctorNotes"><i class="fa-solid fa-book-medical me-2"></i>Doctor Notes</button></li>
+                                <li><button class="dropdown-item gotoaction text-secondary" action="Clearcase"><i class="fa-regular fa-circle-xmark me-2"></i>Clear case</button></li>
+                                <li><button class="dropdown-item gotoaction text-secondary" action="Encounter"><i class="fa-solid fa-bell-concierge me-2"></i>Encounter</button></li>
                             </ul>
                         </form>
                     </div>
@@ -246,7 +246,8 @@
 
                 var action = $(this).attr('action');
                 var id = $(this).closest('form').data('id');
-
+                console.log(action);
+                console.log(id);
                 $.ajax({
                     url: '../Dashboard/' + action,
                     type: 'GET',

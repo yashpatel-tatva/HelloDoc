@@ -81,6 +81,10 @@ namespace DataAccess.ServiceRepository
                         var afterphysician = reqstatuslog.ElementAt(0).Transtophysician.Firstname;
                         model.TransferNotes = "Admin transferred case to " + afterphysician + " on " + date;
                     }
+                    else
+                    {
+                        model.TransferNotes = "-";
+                    }
 
                 }
 
@@ -135,10 +139,17 @@ namespace DataAccess.ServiceRepository
             }
             else
             {
-                var date = _db.Requeststatuslogs.FirstOrDefault(x => x.Requestid == id).Createddate;
-                var afterphysicanid = _db.Requeststatuslogs.FirstOrDefault(y => y.Requestid == id).Transtophysicianid;
-                var afterphysician = _db.Physicians.FirstOrDefault(x => x.Physicianid == afterphysicanid).Firstname;
-                model.TransferNotes = "Admin transferred case to " + afterphysician + " on " + date;
+                if (reqstatuslog.Transtophysician != null)
+                {
+                    var date = _db.Requeststatuslogs.FirstOrDefault(x => x.Requestid == id).Createddate;
+                    var afterphysicanid = _db.Requeststatuslogs.FirstOrDefault(y => y.Requestid == id).Transtophysicianid;
+                    var afterphysician = _db.Physicians.FirstOrDefault(x => x.Physicianid == afterphysicanid).Firstname;
+                    model.TransferNotes = "Admin transferred case to " + afterphysician + " on " + date;
+                }
+                else
+                {
+                    model.TransferNotes = "-";
+                }
             }
             return model;
         }

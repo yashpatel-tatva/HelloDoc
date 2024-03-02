@@ -110,9 +110,11 @@ namespace HelloDoc.Areas.AdminArea.DataController
 
         [Area("AdminArea")]
         [HttpPost]
-        public void CancleCase(DashpopupsViewModel dashpopupsViewModel)
+        public IActionResult CancelCase(DashpopupsViewModel dashpopupsViewModel)
         {
             _requestpopupaction.CancelCase(dashpopupsViewModel);
+            return RedirectToAction("AdminTabsLayout", "Home");
+
         }
 
         [Area("AdminArea")]

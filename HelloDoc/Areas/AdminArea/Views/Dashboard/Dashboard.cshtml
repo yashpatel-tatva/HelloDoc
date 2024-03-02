@@ -21,8 +21,8 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form asp-action="CancleCase" asp-controller="Dashboard" method="post">
-                    <input type="number" class="inputhiddenrequestid" name="RequestId"  />
+                <form asp-action="CancelCase" asp-controller="Dashboard" method="post">
+                    <input type="number" class="inputhiddenrequestid" name="RequestId"  hidden/>
                     <div class="mb-3">Patient Name : <span class="patientname text-info"></span> </div>
                     <div class="">
                         <select class="form-select form-select-lg mb-3 fs-6 shadow-none cancleselect" asp-for="CaseTagID" aria-label=".form-select-lg example">
@@ -55,7 +55,7 @@
             <div class="modal-body">
                 <form asp-action="BlockRequest" method="post">
                     <div class="mb-3">Patient Name : <span class="patientname text-info"></span> </div>
-                    <input type="number" class="inputhiddenrequestid"  name="RequestId" />
+                    <input type="number" class="inputhiddenrequestid"  name="RequestId" hidden/>
                     <div class="form-group rounded d-flex align-items-center">
                         <textarea class="form-control  shadow-none" placeholder="" rows="5" asp-for="Blockreason"></textarea>
                         <span>Reason for Block Request</span>

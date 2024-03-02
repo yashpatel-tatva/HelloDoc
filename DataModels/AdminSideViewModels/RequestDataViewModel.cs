@@ -33,6 +33,6 @@ namespace DataModels.AdminSideViewModels
         public string Region { get; set; }
         public string BuisnessName { get; set; }
         public string Room { get; set; }
-        public int Status { get; set; } 
+        public short Status { get; set; } 
     }
 }

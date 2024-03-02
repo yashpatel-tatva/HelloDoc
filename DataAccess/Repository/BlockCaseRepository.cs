@@ -14,10 +14,13 @@ namespace DataAccess.Repository
     {
         private HelloDocDbContext _db;
         private readonly IHttpContextAccessor _httpsession;
-        public BlockCaseRepository(IHttpContextAccessor httpContextAccessor, HelloDocDbContext db) : base(db)
+        private readonly IAdminRepository _admin;
+
+        public BlockCaseRepository(IHttpContextAccessor httpContextAccessor , IAdminRepository adminRepository, HelloDocDbContext db) : base(db)
         {
             _db = db;
             _httpsession = httpContextAccessor;
+            _admin = adminRepository;
         }
 
         public void BlockRequest(int RequestId, string reason)
@@ -28,7 +31,12 @@ namespace DataAccess.Repository
             blockrequest.Createddate = DateTime.Now;
             blockrequest.Email = _db.Requests.FirstOrDefault(x => x.Requestid == RequestId).Email;
             blockrequest.Phonenumber = _db.Requests.FirstOrDefault(x => x.Requestid == RequestId).Phonenumber;
-
+            if(blockrequest.Phonenumber == null)
+            {
+                var admin = _admin.GetSessionAdminId();
+                var phone = _admin.GetFirstOrDefault(x => x.Adminid == admin).Mobile;
+                blockrequest.Phonenumber = phone;
+            }
             _db.Blockrequests.Add(blockrequest);
 
             var request = _db.Requests.FirstOrDefault(x => x.Requestid == RequestId);
