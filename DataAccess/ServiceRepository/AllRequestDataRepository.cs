@@ -81,6 +81,10 @@ namespace DataAccess.ServiceRepository
                         var afterphysician = reqstatuslog.ElementAt(0).Transtophysician.Firstname;
                         model.TransferNotes = "Admin transferred case to " + afterphysician + " on " + date.ToString("dd-MM-yyyy") +  " at " + date.ToString("hh:mm tt");
                     }
+                    else
+                    {
+                        model.TransferNotes = "-";
+                    }
 
                 }
 
