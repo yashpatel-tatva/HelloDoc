@@ -34,6 +34,34 @@ namespace DataAccess.ServiceRepository
             _requeststatus = requestStatusLogRepository;
         }
 
+        public void AssignCase(int requestId, int physicianId, int assignby , string description)
+        {
+            var request = _request.GetFirstOrDefault(x=>x.Requestid ==  requestId);
+            request.Status = 2;
+            request.Physicianid = physicianId;
+            _request.Update(request);
+
+            Requeststatuslog requeststatuslog   = new Requeststatuslog();
+            requeststatuslog.Requestid = requestId;
+            requeststatuslog.Status = 2;
+            requeststatuslog.Transtophysicianid = physicianId;
+            requeststatuslog.Createddate = DateTime.Now;
+            requeststatuslog.Notes = description;
+            requeststatuslog.Adminid = assignby;
+
+            _requeststatus.Add(requeststatuslog);
+
+            _db.SaveChanges();
+
+        }
+
+
+
+
+
+
+
+
         public void BlockCase(DashpopupsViewModel model)
         {
             var adminid = _admin.GetSessionAdminId();
@@ -47,7 +75,7 @@ namespace DataAccess.ServiceRepository
         {
             var id = model.RequestId;
             var casetag = model.CaseTagID;
-            var reason = model.CancleReason;
+            var reason = model.Notes;
 
             var request = _request.GetFirstOrDefault(x => x.Requestid == id);
             if(request.Casetag != null) { request.Casetag = request.Casetag + " , " + casetag;}

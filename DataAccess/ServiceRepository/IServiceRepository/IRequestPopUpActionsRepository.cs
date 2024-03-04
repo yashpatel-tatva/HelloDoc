@@ -9,6 +9,7 @@ namespace DataAccess.ServiceRepository.IServiceRepository
 {
     public interface IRequestPopUpActionsRepository
     {
+        void AssignCase(int requestId, int physicianId, int assignby , string description);
         void BlockCase(DashpopupsViewModel model);
 
         void CancelCase(DashpopupsViewModel model);

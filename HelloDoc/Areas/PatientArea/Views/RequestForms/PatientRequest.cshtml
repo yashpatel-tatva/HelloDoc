@@ -65,7 +65,7 @@
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                         <div class="telephone rounded">
                             <div class="input-group d-flex align-items-center rounded ">
-                                <input type="tel" name="phone_number[main]" id="phone_number" class="form-control" asp-for="PhoneNumber">
+                                <input type="tel" id="phone_number" class="form-control" asp-for="PhoneNumber">
                             </div>
                         </div>
                             <span asp-validation-for="PhoneNumber" class="text-danger"></span>
@@ -226,19 +226,4 @@
         console.log(pass)
     }
     
-</script>
-<script>
-    var phone_number = window.intlTelInput(document.querySelector("#phone_number"), {
-  separateDialCode: false,
-  preferredCountries:["in"],
-  hiddenInput: "full",
-  utilsScript: "//cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.3/js/utils.js"
-});
-
-$("form").submit(function() {
-  var full_number = phone_number.getNumber(intlTelInputUtils.numberFormat.E164);
-$("input[name='phone_number[full]'").val(full_number);
-$('input[asp-for="PhoneNumber"]').val(full_number);
-  
-});
 </script>

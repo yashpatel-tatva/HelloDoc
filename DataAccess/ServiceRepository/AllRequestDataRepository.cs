@@ -79,7 +79,7 @@ namespace DataAccess.ServiceRepository
                         var date = reqstatuslog.ElementAt(0).Createddate;
                         var afterphysicanid = reqstatuslog.ElementAt(0).Transtophysicianid;
                         var afterphysician = reqstatuslog.ElementAt(0).Transtophysician.Firstname;
-                        model.TransferNotes = "Admin transferred case to " + afterphysician + " on " + date;
+                        model.TransferNotes = "Admin transferred case to " + afterphysician + " on " + date.ToString("dd-MM-yyyy") +  " at " + date.ToString("hh:mm tt");
                     }
 
                 }
@@ -135,10 +135,12 @@ namespace DataAccess.ServiceRepository
             }
             else
             {
-                var date = _db.Requeststatuslogs.FirstOrDefault(x => x.Requestid == id).Createddate;
-                var afterphysicanid = _db.Requeststatuslogs.FirstOrDefault(y => y.Requestid == id).Transtophysicianid;
-                var afterphysician = _db.Physicians.FirstOrDefault(x => x.Physicianid == afterphysicanid).Firstname;
-                model.TransferNotes = "Admin transferred case to " + afterphysician + " on " + date;
+                if(reqstatuslog.Transtophysicianid != null) {
+                    var date = _db.Requeststatuslogs.FirstOrDefault(x => x.Requestid == id).Createddate;
+                    var afterphysicanid = _db.Requeststatuslogs.FirstOrDefault(y => y.Requestid == id).Transtophysicianid;
+                    var afterphysician = _db.Physicians.FirstOrDefault(x => x.Physicianid == afterphysicanid).Firstname;
+                    model.TransferNotes = "Admin transferred case to " + afterphysician + " on " + date.ToString("dd-MM-yyyy") + " at " + date.ToString("hh:mm tt");
+                }
             }
             return model;
         }

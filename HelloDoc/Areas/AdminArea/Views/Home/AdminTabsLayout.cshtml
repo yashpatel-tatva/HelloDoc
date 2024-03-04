@@ -19,9 +19,9 @@
     <div class="offcanvas offcanvas-start position-absolute" data-bs-scroll="false" style="width:65%" tabindex="-1" id="layoutnav" aria-labelledby="offcanvasWithBackdropLabel">
         <span class="p-2 "> <span class="small">Welcome , </span><b>@username</b></span>
         <div class="maintabsul">
-            <div class="maintabs" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Dashboard</div>
-            <div class="maintabs" data-bs-toggle="tab" data-bs-target="#nav-ProviderLocation" type="button" role="tab" aria-controls="nav-ProviderLocation" aria-selected="false">Provider </div>
-            <div class="maintabs" data-bs-toggle="tab" data-bs-target="#nav-Profile" type="button" role="tab" aria-controls="nav-Profile" aria-selected="false">My Profile</div>
+            <div class="accordianmaintabs" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Dashboard</div>
+            <div class="accordianmaintabs" data-bs-toggle="tab" data-bs-target="#nav-ProviderLocation" type="button" role="tab" aria-controls="nav-ProviderLocation" aria-selected="false">Provider </div>
+            <div class="accordianmaintabs" data-bs-toggle="tab" data-bs-target="#nav-Profile" type="button" role="tab" aria-controls="nav-Profile" aria-selected="false">My Profile</div>
             <div class="accordion customaccordion p-0" id="accordionExample">
                 <div class="accordion-item border-0 shadow-none">
                     <button class="accordion-button sidebar collapsed p-0 m-0" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
@@ -38,9 +38,9 @@
                     </div>
                 </div>
             </div>
-            <div class="maintabs" data-bs-toggle="tab" data-bs-target="#nav-Partners" type="button" role="tab" aria-controls="nav-Partners" aria-selected="false">Partners</div>
-            <div class="maintabs" data-bs-toggle="tab" data-bs-target="#nav-Access" type="button" role="tab" aria-controls="nav-Access" aria-selected="false">Access</div>
-            <div class="maintabs" data-bs-toggle="tab" data-bs-target="#nav-Records" type="button" role="tab" aria-controls="nav-Records" aria-selected="false">Records</div>
+            <div class="accordianmaintabs" data-bs-toggle="tab" data-bs-target="#nav-Partners" type="button" role="tab" aria-controls="nav-Partners" aria-selected="false">Partners</div>
+            <div class="accordianmaintabs" data-bs-toggle="tab" data-bs-target="#nav-Access" type="button" role="tab" aria-controls="nav-Access" aria-selected="false">Access</div>
+            <div class="accordianmaintabs" data-bs-toggle="tab" data-bs-target="#nav-Records" type="button" role="tab" aria-controls="nav-Records" aria-selected="false">Records</div>
         </div>
     </div>
     <div class="tab-content respadding" id="nav-tabContent">
@@ -54,16 +54,7 @@
 <script>
     $(document).ready(function () {
 
-
-
-        var target = localStorage.getItem('target')
-        $('.maintabs').on('click', function (e) {
-            e.preventDefault();
-            //$('.maintabs').removeClass('active');
-            $(this).addClass('active');
-            var target = $(this).data('bs-target');
-            console.log(target);
-            localStorage.setItem('target', target);
+        function handleTabClick(target) {
             var url;
             switch (target) {
                 case '#nav-home':
@@ -87,14 +78,12 @@
                 case '#nav-Records':
                     url = '../Dashboard/Status_Unpaid';
                     break;
-
                 default:
                     url = '../Home/AdminLogin';
             }
 
             $.ajax({
                 url: url,
-
                 success: function (response) {
                     $('#nav-tabContent').html(response);
                 },
@@ -102,15 +91,44 @@
                     console.error(error);
                 }
             });
+        }
+
+        function handleTabTriggers() {
+            var target = localStorage.getItem('target');
+            if (target == null) {
+                if ($(window).width() < 700) {
+                    $('.accordianmaintabs[data-bs-target="#nav-home"]').trigger('click');
+                } else {
+                    $('.maintabs[data-bs-target="#nav-home"]').trigger('click');
+                }
+            } else {
+                if ($(window).width() < 700) {
+                    $('.accordianmaintabs[data-bs-target="' + target + '"]').trigger('click');
+                } else {
+                    $('.maintabs[data-bs-target="' + target + '"]').trigger('click');
+                }
+            }
+        }
+
+        $('.maintabs').on('click', function (e) {
+            e.preventDefault();
+            $(this).addClass('active');
+            var target = $(this).data('bs-target');
+            localStorage.setItem('target', target);
+            handleTabClick(target);
+        });
+        $('.accordianmaintabs').on('click', function (e) {
+            e.preventDefault();
+            var target = $(this).data('bs-target');
+            localStorage.setItem('target', target);
+            handleTabClick(target);
         });
 
-        //if (target == null) {
-        //    $('.maintabs[data-bs-target="#nav-home"]').trigger('click');
+        handleTabTriggers();
 
-        //}
-     
-
-        $('.maintabs[data-bs-target="' + target + '"]').trigger('click');
+        $(window).resize(function () {
+            handleTabTriggers();
+        });
     });
 
 </script>

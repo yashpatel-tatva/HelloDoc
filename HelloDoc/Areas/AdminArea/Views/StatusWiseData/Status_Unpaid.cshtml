@@ -233,63 +233,8 @@
     </tbody>
 </table>
 
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
-<script>
-    $(document).ready(function () {
-        var table = $('.newtable').DataTable({ dom: 'lrtip' }); // Initialize your DataTable
-        $('input[type="search"]').on('keyup', function () {
-            table.search(this.value).draw();
-        });
-        $('input[name="requestby"]').on('change', function () {
-            var value = $(this).attr('id');
-            console.log(value);
-            if (value == 'requestbyAll') {
-                table.columns(0).search('').draw();
-            }
-            else {
-                table.columns(0).search(value).draw();
-            }
-        });
-
-        $(document).ready(function () {
-            $('.gotoaction').click(function (e) {
-                e.preventDefault();
-
-                var action = $(this).attr('action');
-                var id = $(this).closest('form').data('id');
-
-                $.ajax({
-                    url: '../Dashboard/' + action,
-                    type: 'GET',
-                    data: { id: id },
-                    success: function (result) {
-
-                        $('#nav-tabContent').html(result);
-                    },
-                    error: function (xhr, status, error) {
-                        console.error('Error: ' + error);
-                    },
-                });
-            });
-            $('.gotomodel').on('click', function (e) {
-                console.log("clicked")
-                var name = $(this).closest('form').attr('value');
-                console.log(name);
-                $('.patientname').html(name);
-                var id = $(this).closest('form').data('id');
-
-                $('.inputhiddenrequestid').val(id);
-                console.log(id);
-
-            });
-        });
-
-    });
-
-</script>
-
-
+<script src="~/js/statuses.js" asp-append-version="true"></script>
 
 

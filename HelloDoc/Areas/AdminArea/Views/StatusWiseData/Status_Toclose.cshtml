@@ -76,14 +76,14 @@
                         </button>
                         <form data-id="@item.RequestId">
                             <ul class="dropdown-menu dropdown-menu-end">
-                                <li><button class="dropdown-item gotoaction text-secondary" actoin="ViewCase"><i class="bi bi-view-list me-2"></i>View case</button></li>
-                                <li><button class="dropdown-item gotoaction text-secondary" actoin="ViewUploads"><i class="bi bi-file-earmark-arrow-up-fill me-2"></i>View Uploads</button></li>
-                                <li><button class="dropdown-item gotoaction text-secondary" actoin="ViewNotes"><i class="fa-regular fa-rectangle-list me-2"></i>View Notes</button></li>
-                                <li><button class="dropdown-item gotoaction text-secondary" actoin="Orders"><i class="fa-solid fa-suitcase-medical me-2"></i>Orders</button></li>
-                                <li><button class="dropdown-item gotoaction text-secondary" actoin="Closecase"><i class="fa-regular fa-circle-xmark me-2"></i>Close case</button></li>
-                                <li><button class="dropdown-item gotoaction text-secondary" actoin="DoctorNotes"><i class="fa-solid fa-book-medical me-2"></i>Doctor Notes</button></li>
-                                <li><button class="dropdown-item gotoaction text-secondary" actoin="Clearcase"><i class="fa-regular fa-circle-xmark me-2"></i>Clear case</button></li>
-                                <li><button class="dropdown-item gotoaction text-secondary" actoin="Encounter"><i class="fa-solid fa-bell-concierge me-2"></i>Encounter</button></li>
+                                <li><button class="dropdown-item gotoaction text-secondary" action="ViewCase"><i class="bi bi-view-list me-2"></i>View case</button></li>
+                                <li><button class="dropdown-item gotoaction text-secondary" action="ViewUploads"><i class="bi bi-file-earmark-arrow-up-fill me-2"></i>View Uploads</button></li>
+                                <li><button class="dropdown-item gotoaction text-secondary" action="ViewNotes"><i class="fa-regular fa-rectangle-list me-2"></i>View Notes</button></li>
+                                <li><button class="dropdown-item gotoaction text-secondary" action="Orders"><i class="fa-solid fa-suitcase-medical me-2"></i>Orders</button></li>
+                                <li><button class="dropdown-item gotoaction text-secondary" action="Closecase"><i class="fa-regular fa-circle-xmark me-2"></i>Close case</button></li>
+                                <li><button class="dropdown-item gotoaction text-secondary" action="DoctorNotes"><i class="fa-solid fa-book-medical me-2"></i>Doctor Notes</button></li>
+                                <li><button class="dropdown-item gotoaction text-secondary" action="Clearcase"><i class="fa-regular fa-circle-xmark me-2"></i>Clear case</button></li>
+                                <li><button class="dropdown-item gotoaction text-secondary" action="Encounter"><i class="fa-solid fa-bell-concierge me-2"></i>Encounter</button></li>
                             </ul>
                         </form>
                     </div>
@@ -220,67 +220,9 @@
     </tbody>
 </table>
 
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
-<script>
-    $(document).ready(function () {
-        var table = $('.newtable').DataTable({ dom: 'lrtip' }); // Initialize your DataTable
-        $('input[type="search"]').on('keyup', function () {
-            table.search(this.value).draw();
-        });
-        $('input[name="requestby"]').on('change', function () {
-            var value = $(this).attr('id');
-            console.log(value);
-            if (value == 'requestbyAll') {
-                table.columns(0).search('').draw();
-            }
-            else {
-                table.columns(0).search(value).draw();
-            }
-        });
-
-        $(document).ready(function () {
-            $('.gotoaction').click(function (e) {
-                e.preventDefault();
-
-                var action = $(this).attr('action');
-                var id = $(this).closest('form').data('id');
-
-                $.ajax({
-                    url: '../Dashboard/' + action,
-                    type: 'GET',
-                    data: { id: id },
-                    success: function (result) {
-
-                        $('#nav-tabContent').html(result);
-                    },
-                    error: function (xhr, status, error) {
-                        console.error('Error: ' + error);
-                    },
-                });
-            });
-            $('.gotomodel').on('click', function (e) {
-                console.log("clicked")
-                var name = $(this).closest('form').attr('value');
-                console.log(name);
-                $('.patientname').html(name);
-                var id = $(this).closest('form').data('id');
-
-                $('.inputhiddenrequestid').val(id);
-                console.log(id);
-
-            });
-        });
-
-    });
-
-</script>
-
-
-
-
-
+<script src="~/js/statuses.js" asp-append-version="true"></script>
 
 
 

@@ -101,18 +101,19 @@ namespace HelloDoc.Areas.AdminArea.DataController
         
         [Area("AdminArea")]
         [HttpPost]
-        public IActionResult SaveAdminNotes(RequestNotesViewModel model)
+        public IActionResult SaveAdminNotes([FromBody] RequestNotesViewModel model)
         {
             var id = model.RequestId;
             _allrequest.SaveAdminNotes(id, model);
-            return RedirectToAction("AdminTabsLayout", "Home");
+            return RedirectToAction("ViewNotes", "Dashboard" , new {id = id});
         }
 
         [Area("AdminArea")]
         [HttpPost]
-        public void CancleCase(DashpopupsViewModel dashpopupsViewModel)
+        public IActionResult CancelCase(DashpopupsViewModel dashpopupsViewModel)
         {
             _requestpopupaction.CancelCase(dashpopupsViewModel);
+            return RedirectToAction("AdminTabsLayout" , "Home");
         }
 
         [Area("AdminArea")]
@@ -123,12 +124,55 @@ namespace HelloDoc.Areas.AdminArea.DataController
             var result = _blockcase.GetAll();
             return View(result);
         }
+        
+        [Area("AdminArea")]
+        [HttpPost]
+        public IActionResult AssignCase(DashpopupsViewModel model)
+        {
+            _requestpopupaction.AssignCase(model.RequestId , model.PhysicianId , _admin.GetSessionAdminId() , model.Notes);
+            return RedirectToAction("AdminTabsLayout", "Home");
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         [Area("AdminArea")]
         public List<Casetag> GetCaseTags()
         {
             var casetags = _db.Casetags.ToList();
             return casetags;
+        }
+        
+        [Area("AdminArea")]
+        public List<Region> GetRegion()
+        {
+            var regions = _db.Regions.ToList();
+            return regions;
+        }
+        
+        [Area("AdminArea")]
+        public List<Physician> GetPhysician()
+        {
+            var physician = _db.Physicians.ToList();
+            return physician;
+        }
+        
+        [Area("AdminArea")]
+        [HttpPost]
+        public List<Physician> GetPhysician(int regionid)
+        {
+            var physician = _db.Physicians.ToList().Where(x => x.Regionid == regionid).ToList();
+            return physician;
         }
 
     }

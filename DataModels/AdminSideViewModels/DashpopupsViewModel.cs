@@ -1,6 +1,8 @@
-﻿using System;
+﻿using HelloDoc.DataModels;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +17,10 @@ namespace DataModels.AdminSideViewModels
         public string Blockreason { get; set; }
 
         public int CaseTagID { get; set; }
-        public string CancleReason { get; set; }
+        public string Notes { get; set; }
+
+        public int RegionId {  get; set; }
+        public int PhysicianId {  get; set; }
+
     }
 }
