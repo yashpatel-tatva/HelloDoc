@@ -27,11 +27,13 @@ builder.Services.AddScoped<IRequestRepository, RequestRepository>();
 builder.Services.AddScoped<IAdminRepository, AdminRepository>();
 builder.Services.AddScoped<IBlockCaseRepository, BlockCaseRepository>();
 builder.Services.AddScoped<IRequestStatusLogRepository , RequestStatusLogRepository>();
+builder.Services.AddScoped<IRequestwisefileRepository, RequestwisefileRepository>();
 
 
 builder.Services.AddScoped<IAllRequestDataRepository , AllRequestDataRepository>();
 builder.Services.AddScoped<ISendEmailRepository, SendEmailRepository>();
 builder.Services.AddScoped<IRequestPopUpActionsRepository , RequestPopUpActionsRepository>();
+builder.Services.AddScoped<IDocumentsRepository , DocumentsRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

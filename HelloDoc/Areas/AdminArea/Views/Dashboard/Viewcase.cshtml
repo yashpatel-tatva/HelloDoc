@@ -5,7 +5,7 @@
 @model RequestDataViewModel;
 <div class="container">
     <div class="d-flex justify-content-between">
-        <div><span class="h4">View Reservation</span> &nbsp; <span class="p-2 text-white rounded-3 bg-success">@Model.RequestTypeName(Model.RequesttypeID)</span></div>
+        <div class="viewcaseactionbtns d-flex justify-content-start align-items-center"><span class="h4 mb-0">@Model.Statusname(Model.Status) Request</span> &nbsp;<span class="p-1 text-white rounded-3 bg-success">@Model.RequestTypeName(Model.RequesttypeID)</span></div>
         <div>
             <a asp-action="AdminTabsLayout" asp-controller="Home">
                 <button class="d-flex babtn border border-info border-1 rounded align-items-center p-1 px-2">
@@ -50,11 +50,11 @@
                     <div class="input-group d-flex align-items-center rounded ">
                         @if (Model.Status != 1)
                         {
-                            <input type="tel" name="phone_number[main]" id="phone_number" class="form-control" asp-for="PatientMobile" readonly>
+                            <input type="tel" id="tel" class="form-control" asp-for="PatientMobile" readonly>
                         }
                         else
                         {
-                            <input type="tel" name="phone_number[main]" id="phone_number" class="form-control" asp-for="PatientMobile">
+                            <input type="tel" id="tel" class="form-control" asp-for="PatientMobile">
                         }
                     </div>
                     <span asp-validation-for="PatientMobile"></span>
@@ -84,7 +84,7 @@
             {
                 <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                     <div class="d-flex align-items-center rounded h-100">
-                        <button class="form-group h-100 border border-1  border-info bg-transparent text-info rounded w-25">Edit</button>
+                        <button class="form-group h-100 border border-1  border-info bg-transparent text-info rounded w-25" id="editbtn">Edit</button>
                     </div>
                 </div>
             }
@@ -113,23 +113,29 @@
                 </div>
             </div>
         </div>
-        <div class="d-flex justify-content-end">
-            @if (Model.Status == 1)
-            {
-                <div class="m-1"><button class="border-0 bg-info rounded-2 text-white p-2" id="AssignCase">Assign</button></div>
-            }
-            <div class="m-1"><button class="border-0 bg-info rounded-2 text-white p-2" id="ViewNotes">View Notes</button></div>
-            @if (Model.Status == 1)
-            {
-                <div class="m-1"><button class="border-0 bg-danger rounded-2 text-white p-2">Cancle</button></div>
-            }
-        </div>
+        <form data-id="@Model.RequestId" value="@Model.FirstName @Model.LastName">
+            <div class="d-flex justify-content-end viewcaseactionbtns">
+                @if (Model.Status == 1)
+                {
+                    <div class="m-1"><button type="button" class="border-0 bg-info rounded-2 text-white p-2 gotomodel" data-toggle="modal" data-target="#AssignCasemodal" id="AssignCase">Assign</button></div>
+                }
+                <div class="m-1"><button class="border-0 bg-info rounded-2 text-white p-2" id="ViewNotes">View Notes</button></div>
+                @if (Model.Status == 1)
+                {
+                    <div class="m-1"><button type="button" class="border-0 bg-danger rounded-2 text-white p-2 gotomodel" data-toggle="modal" data-target="#CancelCaseModal">Cancle</button></div>
+                }
+            </div>
+        </form>
     </div>
 </div>
 
-
+<script src="~/js/statuses.js"></script>
 
 <script>
+    var phoneInputField = document.querySelector("#tel");
+    var phoneInput = window.intlTelInput(phoneInputField, {
+        utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+    });
     $(document).ready(function () {
         $('#ViewNotes').click(function (e) {
             e.preventDefault();
@@ -149,6 +155,32 @@
                 error: function (xhr, status, error) {
                     console.error('Error: ' + error);
                 },
+            });
+        });
+        $('#editbtn').on('click', function () {
+            var requestid = @Model.RequestId;
+            var email = $("input[type='email']").val();
+            var phone = $("input[type='tel']").val();
+            var model = {
+                requestid: requestid,
+                patientemail: email,
+                patientmobile: phone
+            };
+
+            console.log(model);
+
+            $.ajax({
+                type: 'POST',
+                url: '../Dashboard/EditEmailPhone',
+                contentType: 'application/json',
+                data: JSON.stringify(model),
+                success: function (response) {
+                    console.log(response);
+                    $('#nav-tabContent').html(response);
+                },
+                error: function (error) {
+                    console.error('Error saving admin notes:', error);
+                }
             });
         });
     });

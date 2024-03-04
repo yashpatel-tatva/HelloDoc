@@ -1,10 +1,15 @@
 ﻿using DataAccess.Repository.IRepository;
 using DataAccess.ServiceRepository.IServiceRepository;
 using DataModels.AdminSideViewModels;
+using HelloDoc.Areas.PatientArea.ViewModels;
 using HelloDoc.DataContext;
 using HelloDoc.DataModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.IO.Compression;
 using System.Linq;
 
 namespace HelloDoc.Areas.AdminArea.DataController
@@ -17,6 +22,8 @@ namespace HelloDoc.Areas.AdminArea.DataController
         private readonly IAllRequestDataRepository _allrequest;
         private readonly IBlockCaseRepository _blockcase;
         private readonly IRequestPopUpActionsRepository _requestpopupaction;
+        private readonly IDocumentsRepository _documents;
+        private readonly IRequestwisefileRepository _requestwisefile;
 
         public DashboardController(
             HelloDocDbContext db,
@@ -24,7 +31,9 @@ namespace HelloDoc.Areas.AdminArea.DataController
             IRequestRepository requestRepository,
             IAllRequestDataRepository allRequestDataRepository,
             IBlockCaseRepository blockCaseRepository,
-            IRequestPopUpActionsRepository requestPopUpActionsRepository
+            IRequestPopUpActionsRepository requestPopUpActionsRepository,
+            IDocumentsRepository documentsRepository,
+            IRequestwisefileRepository requestwisefileRepository
             )
         {
             _db = db;
@@ -33,6 +42,8 @@ namespace HelloDoc.Areas.AdminArea.DataController
             _allrequest = allRequestDataRepository;
             _blockcase = blockCaseRepository;
             _requestpopupaction = requestPopUpActionsRepository;
+            _documents = documentsRepository;
+            _requestwisefile = requestwisefileRepository;
         }
 
         [Area("AdminArea")]
@@ -89,8 +100,17 @@ namespace HelloDoc.Areas.AdminArea.DataController
             var result = _allrequest.GetRequestById(id);
             return View(result);
         }
-        
-        
+
+        [Area("AdminArea")]
+        [HttpPost]
+        public IActionResult EditEmailPhone([FromBody] RequestDataViewModel model)
+        {
+            _allrequest.EditEmailPhone(model);
+            return RedirectToAction("ViewCase", "Dashboard", new { id = model.RequestId });
+        }
+
+
+
         [Area("AdminArea")]
         [HttpGet]
         public IActionResult ViewNotes(int id)
@@ -137,11 +157,70 @@ namespace HelloDoc.Areas.AdminArea.DataController
 
 
 
+        [Area("AdminArea")]
+        [HttpGet]
+        public IActionResult ViewUploads(int id)
+        {
+            var result = _allrequest.GetDocumentByRequestId(id);
+            return View(result);
+        }
 
+        [Area("AdminArea")]
+        public async Task<IActionResult> Download(int id)
+        {
+            var path = (await _db.Requestwisefiles.FirstOrDefaultAsync(x => x.Requestwisefileid == id)).Filename;
+            var provider = new FileExtensionContentTypeProvider();
+            if (!provider.TryGetContentType(path, out var contentType))
+            {
+                contentType = "application/octet-stream";
+            }
+            var bytes = _documents.Download(id);
+            return File(bytes, contentType, Path.GetFileName(path));
+        }
 
+        [Area("AdminArea")]
+        [HttpPost]
+        public IActionResult Delete(int id)
+        {
+            _documents.DeleteFile(id);
+            var requestid = _requestwisefile.GetFirstOrDefault(x => x.Requestwisefileid==id).Requestid;
+            return RedirectToAction("ViewUploads", "Dashboard",new {id = requestid});
+        }
+        [Area("AdminArea")]
+        [HttpPost]
+        public async Task<IActionResult> Download(PatientDashboardViewModel dashedit)
+        {
+            var checkbox = Request.Form["downloadselect"].ToList();
+            var zipname = dashedit.RequestsId.ToString() + "_" + DateTime.Now + ".zip";
+            using (var memoryStream = new MemoryStream())
+            {
+                using (var zipArchive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true))
+                {
+                    foreach (var item in checkbox)
+                    {
+                        var s = Int32.Parse(item);
+                        var file = await _db.Requestwisefiles.FirstOrDefaultAsync(x => x.Requestwisefileid == s);
+                        var path = file.Filename;
+                        var bytes = await System.IO.File.ReadAllBytesAsync(path);
+                        var zipEntry = zipArchive.CreateEntry(Path.GetFileName(path), CompressionLevel.Fastest);
+                        using (var zipStream = zipEntry.Open())
+                        {
+                            await zipStream.WriteAsync(bytes, 0, bytes.Length);
+                        }
+                    }
+                }
+                memoryStream.Position = 0; // Reset the position
+                return File(memoryStream.ToArray(), "application/zip", zipname, enableRangeProcessing: true);
+            }
+        }
 
-
-
+        [Area("AdminArea")]
+        [HttpPost]
+        public IActionResult UploadFiles(List<IFormFile> files, int RequestsId)
+        {
+            _requestwisefile.Add( RequestsId,  files);
+            return RedirectToAction("ViewUploads", "Dashboard", new { id = RequestsId });
+        }
 
 
 

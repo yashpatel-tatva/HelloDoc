@@ -56,6 +56,7 @@ namespace HelloDoc.Areas.PatientArea.DataController
             _context.SaveChanges();
         }
         [Area("PatientArea")]
+
         public async Task<IActionResult> Dashboard(PatientDashboardViewModel patientDashboardviewmodel)
         {
             if (HttpContext.Session.GetInt32("UserId") != null)
@@ -74,11 +75,11 @@ namespace HelloDoc.Areas.PatientArea.DataController
                 List<Requestwisefile> files;
                 if (patientDashboardviewmodel.RequestsId == 0)
                 {
-                    files = (from m in _context.Requestwisefiles select m).ToList();
+                    files = (from m in _context.Requestwisefiles where m.Isdeleted == null select m).ToList();
                 }
                 else
                 {
-                    files = (from m in _context.Requestwisefiles where m.Requestid == patientDashboardviewmodel.RequestsId select m).ToList();
+                    files = (from m in _context.Requestwisefiles where m.Requestid == patientDashboardviewmodel.RequestsId && m.Isdeleted == null select m).ToList();
                     patientDashboard.RequestsId = patientDashboardviewmodel.RequestsId;
                 }
                 patientDashboard.requestwisefiles = files;
@@ -135,7 +136,7 @@ namespace HelloDoc.Areas.PatientArea.DataController
             DateTime date = new DateTime(Convert.ToInt32(user.Intyear), DateTime.ParseExact(user.Strmonth, "MMMM", CultureInfo.InvariantCulture).Month, Convert.ToInt32(user.Intdate));
             patientDashboard.birthdate = date;
 
-            patientDashboard.requestwisefiles = requestwisefile;
+            patientDashboard.requestwisefiles = requestwisefile.Where(x => x.Isdeleted == null).ToList(); ;
             patientDashboard.showdocument = model.showdocument;
             return RedirectToAction("Dashboard", patientDashboard);
         }

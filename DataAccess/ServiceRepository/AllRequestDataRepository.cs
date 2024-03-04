@@ -25,12 +25,14 @@ namespace DataAccess.ServiceRepository
         private readonly HelloDocDbContext _db;
         private readonly IHttpContextAccessor _session;
         private readonly IBlockCaseRepository _blockcase;
+        private readonly IRequestRepository _request;
 
-        public AllRequestDataRepository(HelloDocDbContext dbContext, IHttpContextAccessor httpContextAccessor, IBlockCaseRepository blockCaseRepository)
+        public AllRequestDataRepository(HelloDocDbContext dbContext, IHttpContextAccessor httpContextAccessor, IBlockCaseRepository blockCaseRepository , IRequestRepository requestRepository)
         {
             _db = dbContext;
             _session = httpContextAccessor;
             _blockcase = blockCaseRepository;
+            _request = requestRepository;
         }
 
         public List<AllRequestDataViewModel> Status(int status)
@@ -48,11 +50,11 @@ namespace DataAccess.ServiceRepository
                 model.PatientDOB = new DateOnly(Convert.ToInt32(item.User.Intyear), DateTime.ParseExact(item.User.Strmonth, "MMMM", CultureInfo.InvariantCulture).Month, Convert.ToInt32(item.User.Intdate));
                 model.RequestorName = item.Firstname + " " + item.Lastname;
                 model.RequestedDate = item.Createddate;
-                model.PatientPhone = item.User.Mobile;
+                model.PatientPhone = item.Requestclients.FirstOrDefault(x => x.Requestid == item.Requestid).Phonenumber;
                 model.RequestorPhone = item.Phonenumber;
                 model.Address = item.Requestclients.FirstOrDefault(x => x.Requestid == item.Requestid).Address;
                 model.Notes = item.Requestclients.FirstOrDefault(x => x.Requestid == item.Requestid).Notes;
-                model.PatientEmail = item.User.Email;
+                model.PatientEmail = item.Requestclients.FirstOrDefault(x => x.Requestid == item.Requestid).Email;
                 model.RequestorEmail = item.Email;
                 model.RequestType = item.Requesttypeid;
                 model.Region = item.User.Region.Name;
@@ -276,7 +278,26 @@ namespace DataAccess.ServiceRepository
             }
         }
 
+        public void EditEmailPhone(RequestDataViewModel model)
+        {
+            var reqclient = _db.Requestclients.FirstOrDefault(x => x.Requestid == model.RequestId);
+            reqclient.Email = model.PatientEmail;
+            reqclient.Phonenumber = model.PatientMobile;
+            _db.Requestclients.Update(reqclient);
+            _db.SaveChanges();
+        }
 
+        public RequestViewUploadsViewModel GetDocumentByRequestId(int id)
+            {
+            var request = _db.Requests.Include(r=>r.Requestwisefiles).Include(r=>r.User).FirstOrDefault(x=>x.Requestid == id);
+            RequestViewUploadsViewModel model = new RequestViewUploadsViewModel();
+
+            model.RequestsId = id;
+            model.confirmation = request.Confirmationnumber;
+            model.requestwisefiles = request.Requestwisefiles.ToList().Where(x => x.Isdeleted == null).ToList();
+            model.patientname = request.User.Firstname + " " + request.User.Lastname;
+            return model;
+        }
     }
 }
 

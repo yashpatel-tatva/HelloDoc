@@ -4,8 +4,8 @@
     var fileChosen = document.getElementById('file-chosen');
 
     actualBtn.addEventListener('change', function () {
-        var filesnames = "";
-        for (var i = 0; i < this.files.length; i++) {
+        var filesnames = this.files[0].name;
+        for (var i = 1; i < this.files.length; i++) {
             filesnames = filesnames + ' + ' + this.files[i].name;
             console.log(this.files[i].name)
         }

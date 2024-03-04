@@ -19,5 +19,7 @@ namespace DataAccess.ServiceRepository.IServiceRepository
         void SaveAdminNotes(int id, RequestNotesViewModel model);
 
         byte[] DownloadExcle(string status);
+        void EditEmailPhone(RequestDataViewModel model);
+        RequestViewUploadsViewModel GetDocumentByRequestId(int id);
     }
 }

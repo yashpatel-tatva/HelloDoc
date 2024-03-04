@@ -55,6 +55,10 @@
     display: none;
 }
 
+.accordianmaintabs {
+    padding-left: 10%;
+}
+
 .acctable {
     display: none;
 }
@@ -62,6 +66,33 @@
 a {
     text-decoration: none
 }
+
+
+
+
+/*Datatables*/
+
+.dataTables_length label,
+.dataTables_info {
+    padding-left: 0.5rem
+}
+
+.paginate_button.current {
+    background: #0dcaf0 !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    background: #0dcaf0 !important;
+}
+.dataTables_info{
+
+}
+.paging_simple_numbers{
+    margin-bottom : 10px;
+}
+
+
+
 
 @media only screen and (max-width:1020px) {
     .respadding {
@@ -114,6 +145,10 @@ a {
 }
 
 @media only screen and (max-width:700px) {
+    .respadding {
+        padding: 0.75rem
+    }
+
     .sidebaroffcanvasbtn {
         display: inline;
     }
@@ -132,9 +167,9 @@ a {
         font-weight: 600;
     }
 
-        .maintabsul .maintabs.active {
-            background-color: #0dcaf04f;
-        }
+    .maintabsul .accordianmaintabs.active {
+        background-color: #0dcaf04f;
+    }
 
     .accordion-button:not(.collapsed).sidebar {
         color: inherit;
@@ -177,9 +212,33 @@ a {
     #DataTables_Table_1_wrapper {
         display: block;
     }
+
+    .paginate_button{
+        padding : 0px!important;
+        border : 1px solid #80808070 !important;
+        font-size : smaller;
+    }
+
 }
 
 @media only screen and (max-width:400px) {
+    .respadding {
+        padding: 0.5rem
+    }
+
+    .viewcaseactionbtns {
+        font-size: small
+    }
+
+    .container {
+        --bs-gutter-x: 0.7rem;
+    }
+
+    .viewcaseactionbtns .h4 {
+        font-size: medium;
+        font-weight: 700;
+    }
+
     .p-2px-3mx-2 {
         padding: 0.25rem 0.5rem;
         margin: 0rem 0.125rem;
@@ -192,10 +251,11 @@ a {
         display: flex;
         align-content: flex-end;
         align-items: baseline;
-        font-size : 0.9rem;
+        font-size: 0.9rem;
     }
-    .h6size{
-        font-size : 0.7rem
+
+    .h6size {
+        font-size: 0.7rem
     }
 
     .welcomespan {

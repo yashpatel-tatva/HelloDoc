@@ -1,4 +1,5 @@
 ﻿using HelloDoc.DataModels;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,8 +8,10 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Repository.IRepository
 {
-    public interface IRequestwisefilesRepository : IRepository<Requestwisefile>
+    public interface IRequestwisefileRepository : IRepository<Requestwisefile>
     {
-        void Save();
+        void Delete(int id);
+
+        void Add(int id, List<IFormFile> formFiles);
     }
 }
