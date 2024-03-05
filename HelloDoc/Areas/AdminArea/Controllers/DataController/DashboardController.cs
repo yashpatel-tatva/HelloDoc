@@ -11,6 +11,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.IO.Compression;
 using System.Linq;
+using System.Net.Mail;
+using System.Net;
 
 namespace HelloDoc.Areas.AdminArea.DataController
 {
@@ -24,6 +26,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
         private readonly IRequestPopUpActionsRepository _requestpopupaction;
         private readonly IDocumentsRepository _documents;
         private readonly IRequestwisefileRepository _requestwisefile;
+        private readonly ISendEmailRepository _sendemail;
 
         public DashboardController(
             HelloDocDbContext db,
@@ -33,7 +36,8 @@ namespace HelloDoc.Areas.AdminArea.DataController
             IBlockCaseRepository blockCaseRepository,
             IRequestPopUpActionsRepository requestPopUpActionsRepository,
             IDocumentsRepository documentsRepository,
-            IRequestwisefileRepository requestwisefileRepository
+            IRequestwisefileRepository requestwisefileRepository,
+            ISendEmailRepository sendEmailRepository
             )
         {
             _db = db;
@@ -44,6 +48,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
             _requestpopupaction = requestPopUpActionsRepository;
             _documents = documentsRepository;
             _requestwisefile = requestwisefileRepository;
+            _sendemail = sendEmailRepository;
         }
 
         [Area("AdminArea")]
@@ -51,12 +56,12 @@ namespace HelloDoc.Areas.AdminArea.DataController
         {
             return View();
         }
-        
+
         [Area("AdminArea")]
         public IActionResult Home()
         {
             AdminDashboardViewModel model = new AdminDashboardViewModel();
-            if(_admin.GetSessionAdminId() == -1)
+            if (_admin.GetSessionAdminId() == -1)
             {
                 return RedirectToAction("AdminLogin", "Home");
             }
@@ -118,14 +123,14 @@ namespace HelloDoc.Areas.AdminArea.DataController
             var result = _allrequest.GetNotesById(id);
             return View(result);
         }
-        
+
         [Area("AdminArea")]
         [HttpPost]
         public IActionResult SaveAdminNotes([FromBody] RequestNotesViewModel model)
         {
             var id = model.RequestId;
             _allrequest.SaveAdminNotes(id, model);
-            return RedirectToAction("ViewNotes", "Dashboard" , new {id = id});
+            return RedirectToAction("ViewNotes", "Dashboard", new { id = id });
         }
 
         [Area("AdminArea")]
@@ -145,12 +150,12 @@ namespace HelloDoc.Areas.AdminArea.DataController
             var result = _blockcase.GetAll();
             return View(result);
         }
-        
+
         [Area("AdminArea")]
         [HttpPost]
         public IActionResult AssignCase(DashpopupsViewModel model)
         {
-            _requestpopupaction.AssignCase(model.RequestId , model.PhysicianId , _admin.GetSessionAdminId() , model.Notes);
+            _requestpopupaction.AssignCase(model.RequestId, model.PhysicianId, _admin.GetSessionAdminId(), model.Notes);
             return RedirectToAction("AdminTabsLayout", "Home");
         }
 
@@ -178,13 +183,37 @@ namespace HelloDoc.Areas.AdminArea.DataController
             return File(bytes, contentType, Path.GetFileName(path));
         }
 
+
+        //[Area("AdminArea")]
+        //[HttpPost]
+        //public async Task<IActionResult> ViewFile(int id)
+        //{
+        //    var path = (await _db.Requestwisefiles.FirstOrDefaultAsync(x => x.Requestwisefileid == id)).Filename;
+        //    var provider = new FileExtensionContentTypeProvider();
+        //    if (!provider.TryGetContentType(path, out var contentType))
+        //    {
+        //        contentType = "application/octet-stream";
+        //    }
+        //    var bytes = _documents.Download(id);
+        //    return File(bytes, contentType, Path.GetFileName(path));
+        //}
+
+        [Area("AdminArea")]
+        [HttpPost]
+        public string ViewFile(int id)
+        {
+            var path = (_db.Requestwisefiles.FirstOrDefault(x => x.Requestwisefileid == id)).Filename;
+            var filename = Path.GetFileName(path);
+            return filename;
+        }
+
         [Area("AdminArea")]
         [HttpPost]
         public IActionResult Delete(int id)
         {
             _documents.DeleteFile(id);
-            var requestid = _requestwisefile.GetFirstOrDefault(x => x.Requestwisefileid==id).Requestid;
-            return RedirectToAction("ViewUploads", "Dashboard",new {id = requestid});
+            var requestid = _requestwisefile.GetFirstOrDefault(x => x.Requestwisefileid == id).Requestid;
+            return RedirectToAction("ViewUploads", "Dashboard", new { id = requestid });
         }
         [Area("AdminArea")]
         [HttpPost]
@@ -216,9 +245,26 @@ namespace HelloDoc.Areas.AdminArea.DataController
 
         [Area("AdminArea")]
         [HttpPost]
+        public IActionResult SendMail(List<int> RequestWiseFileId , int RequestsId)
+        {
+            List<string> filenames = new List<string>();
+            foreach (var s in RequestWiseFileId)
+            {
+                var file = _db.Requestwisefiles.FirstOrDefault(x => x.Requestwisefileid == s).Filename;
+                filenames.Add(file);
+            }
+
+            _sendemail.SendEmailwithAttachments("vinit2273@gmail.com", "Your Attachments", "Please Find Your Attachments Here", filenames);
+            return RedirectToAction("ViewUploads", "Dashboard", new { id = RequestsId });
+        }
+        
+
+
+        [Area("AdminArea")]
+        [HttpPost]
         public IActionResult UploadFiles(List<IFormFile> files, int RequestsId)
         {
-            _requestwisefile.Add( RequestsId,  files);
+            _requestwisefile.Add(RequestsId, files);
             return RedirectToAction("ViewUploads", "Dashboard", new { id = RequestsId });
         }
 
@@ -232,21 +278,21 @@ namespace HelloDoc.Areas.AdminArea.DataController
             var casetags = _db.Casetags.ToList();
             return casetags;
         }
-        
+
         [Area("AdminArea")]
         public List<Region> GetRegion()
         {
             var regions = _db.Regions.ToList();
             return regions;
         }
-        
+
         [Area("AdminArea")]
         public List<Physician> GetPhysician()
         {
             var physician = _db.Physicians.ToList();
             return physician;
         }
-        
+
         [Area("AdminArea")]
         [HttpPost]
         public List<Physician> GetPhysician(int regionid)

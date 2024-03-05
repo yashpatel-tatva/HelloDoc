@@ -13,5 +13,30 @@
         fileChosen.style.color = "black";
         fileChosen.style.fontSize = "large"
     })
+    $('.uploadbtn').on('click', function (e) {
+        e.preventDefault();
+
+        var formData = new FormData();
+        for (var i = 0; i < actualBtn.files.length; i++) {
+            formData.append('files', actualBtn.files[i]); // Append each selected file
+        }
+        formData.append('RequestsId', $('.RequestsId').val());
+        console.log(formData);
+        // Add any other data you need (e.g., RequestsId)
+
+        $.ajax({
+            url: '../Dashboard/UploadFiles', // Replace with your controller action URL
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                $('#nav-tabContent').html(response);
+            },
+            error: function (error) {
+                console.error('Error uploading files:', error);
+            }
+        });
+    });
 }
 catch { }

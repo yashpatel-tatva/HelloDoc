@@ -28,7 +28,7 @@ namespace DataAccess.Repository
                 string extension = Path.GetExtension(filename);
                 string filewith = filenameWithoutExtension + "_" + DateTime.Now.ToString("dd`MM`yyyy`HH`mm`ss") + extension;
 
-                string directoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "HalloDoc Request Documents", id.ToString());
+                string directoryPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Documents", id.ToString());
                 if (!Directory.Exists(directoryPath))
                 {
                     Directory.CreateDirectory(directoryPath);

@@ -10,7 +10,6 @@ try {
         fileChosen.style.color = "black";
         fileChosen.style.fontSize = "large"
     })
-
 }
 catch {
     console.log("erro")

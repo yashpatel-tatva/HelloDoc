@@ -103,8 +103,13 @@
     <div id="status-tabContent" class="bg-white rounded-4 mt-3">
         <div class="rounded-4 bg-white">
             <div class="displayflexorblockwithpad justify-content-between p-2 ">
-                <div class="">
+                <div class="d-flex gap-1 align-items-center searchandregiondropdown">
                     <div><input type="search" placeholder="Search" class="form-control rounded" /></div>
+                    <div>
+                        <select class="form-select  mb-0 fs-6 form-control drawbyregiondropdown">
+                            <option value="1234">All Region</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="d-flex align-Models-center">
                     <div class="d-flex rounded d-flex align-items-center ">
@@ -254,6 +259,20 @@
         link.click();
         document.body.removeChild(link);
     });
+
+        $.ajax({
+            url: '../Dashboard/GetRegion',
+            success: function (data) {
+                var drawbyregiondropdown = $('.drawbyregiondropdown');
+                $.each(data, function (index, regions) {
+                    drawbyregiondropdown.append($('<option>', {
+                        value: regions.name,
+                        text: regions.name
+                    }))
+                });
+                console.log(drawbyregiondropdown);
+            }
+        });
 
 </script>
 
