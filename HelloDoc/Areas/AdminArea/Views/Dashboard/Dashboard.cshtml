@@ -68,14 +68,32 @@
         });
 
 
-        $("#confirmbutton").on('click',function(){
+        $("#Assignconfirmbutton").on('click', function () {
             var regionid = $('.regiondropdown').val();
             var phyid = $('.physiciandropdown').val();
             console.log(regionid);
             console.log(phyid);
-            if(phyid == "invalid"){
+            if (phyid == "invalid") {
                 $("#physiciandropdown").css("border-color", "red");
-            }else{
+            } else {
+                $(this).closest('form').submit();
+            }
+        });
+        
+        $("#Cancelconfirmbutton").on('click', function () {
+            var castag = $('.cancleselect').val();
+            if (castag == "1234") {
+                $("#casetagdropdown").css("border-color", "red");
+            } else {
+                $(this).closest('form').submit();
+            }
+        });
+
+        $("#Blockconfirmbutton").on('click', function () {
+            var reaosn = $('.blocknotes').val();
+            if (reaosn == "") {
+                $(".blocknotes").css("border-color", "red");
+            } else {
                 $(this).closest('form').submit();
             }
         });

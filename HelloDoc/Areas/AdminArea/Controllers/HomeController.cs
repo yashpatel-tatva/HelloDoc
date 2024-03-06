@@ -1,9 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DataAccess.Repository.IRepository;
+using Microsoft.AspNetCore.Mvc;
 
 namespace HelloDoc.Areas.AdminArea.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IAdminRepository _admin;
+
+        public HomeController(IAdminRepository admin)
+        {
+            _admin = admin;
+        }
+
         public IActionResult Index()
         {
             return View();
@@ -25,6 +33,10 @@ namespace HelloDoc.Areas.AdminArea.Controllers
         [Area("AdminArea")]
         public IActionResult AdminTabsLayout()
         {
+            if (_admin.GetSessionAdminId() == -1)
+            {
+                return RedirectToAction("AdminLogin", "Home");
+            }
             return View();
         }
     }
