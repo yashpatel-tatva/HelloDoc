@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace HelloDoc.DataModels;
+namespace HelloDoc;
 
 [Table("requestnotes")]
 public partial class Requestnote

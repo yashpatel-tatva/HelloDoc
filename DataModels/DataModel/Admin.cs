@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace HelloDoc.DataModels;
+namespace HelloDoc;
 
 [Table("admin")]
 public partial class Admin
@@ -103,8 +103,4 @@ public partial class Admin
 
     [InverseProperty("Admin")]
     public virtual ICollection<Requestwisefile> Requestwisefiles { get; set; } = new List<Requestwisefile>();
-
-    [ForeignKey("Roleid")]
-    [InverseProperty("Admins")]
-    public virtual Aspnetuserrole? Role { get; set; }
 }

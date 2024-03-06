@@ -3,10 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Runtime.CompilerServices;
 using Microsoft.EntityFrameworkCore;
 
-namespace HelloDoc.DataModels;
+namespace HelloDoc;
 
 [Table("request")]
 public partial class Request
@@ -61,7 +60,7 @@ public partial class Request
     public string? Declinedby { get; set; }
 
     [Column("isurgentemailsent", TypeName = "bit(1)")]
-    public BitArray Isurgentemailsent { get; set; } = new BitArray(1);
+    public BitArray Isurgentemailsent { get; set; } = null!;
 
     [Column("lastwellnessdate", TypeName = "timestamp without time zone")]
     public DateTime? Lastwellnessdate { get; set; }

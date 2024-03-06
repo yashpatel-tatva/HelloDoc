@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace HelloDoc.DataModels;
+namespace HelloDoc;
 
 [Table("healthprofessionaltype")]
 public partial class Healthprofessionaltype
