@@ -1,8 +1,10 @@
-﻿using DataAccess.ServiceRepository.IServiceRepository;
+﻿using DataAccess.ServiceRepository;
+using DataAccess.ServiceRepository.IServiceRepository;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HelloDoc.Areas.AdminArea.DataController
 {
+    [AuthorizationRepository("Admin")]
     public class StatusWiseDataController : Controller
     {
         private readonly IAllRequestDataRepository _allrequestdata;

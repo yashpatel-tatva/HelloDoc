@@ -13,9 +13,11 @@ using System.IO.Compression;
 using System.Linq;
 using System.Net.Mail;
 using System.Net;
+using DataAccess.ServiceRepository;
 
 namespace HelloDoc.Areas.AdminArea.DataController
 {
+    [AuthorizationRepository("Admin")]
     public class DashboardController : Controller
     {
         private readonly HelloDocDbContext _db;
@@ -58,13 +60,14 @@ namespace HelloDoc.Areas.AdminArea.DataController
         }
 
         [Area("AdminArea")]
+
         public IActionResult Home()
         {
             AdminDashboardViewModel model = new AdminDashboardViewModel();
-            if (_admin.GetSessionAdminId() == -1)
-            {
-                return RedirectToAction("AdminLogin", "Home");
-            }
+                //if (_admin.GetSessionAdminId() == -1)
+                //{
+                //    return RedirectToAction("AdminLogin", "Home");
+                //}
             model.admin = _admin.GetFirstOrDefault(x => x.Adminid == _admin.GetSessionAdminId());
             model.requests = _requests.GetAll().ToList();
             return View(model);
@@ -96,7 +99,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
 
 
 
-
+        // ViewCase start
 
         [Area("AdminArea")]
         [HttpGet]
@@ -114,7 +117,9 @@ namespace HelloDoc.Areas.AdminArea.DataController
             return RedirectToAction("ViewCase", "Dashboard", new { id = model.RequestId });
         }
 
+        //Viewcase end
 
+        //ViewNotes start
 
         [Area("AdminArea")]
         [HttpGet]
@@ -132,6 +137,10 @@ namespace HelloDoc.Areas.AdminArea.DataController
             _allrequest.SaveAdminNotes(id, model);
             return RedirectToAction("ViewNotes", "Dashboard", new { id = id });
         }
+        // View notes end
+
+
+        // Pop-ups start
 
         [Area("AdminArea")]
         [HttpPost]
@@ -159,8 +168,9 @@ namespace HelloDoc.Areas.AdminArea.DataController
             return RedirectToAction("AdminTabsLayout", "Home");
         }
 
+        //Pop-up ends
 
-
+        // View uploads start
 
         [Area("AdminArea")]
         [HttpGet]
@@ -182,21 +192,6 @@ namespace HelloDoc.Areas.AdminArea.DataController
             var bytes = _documents.Download(id);
             return File(bytes, contentType, Path.GetFileName(path));
         }
-
-
-        //[Area("AdminArea")]
-        //[HttpPost]
-        //public async Task<IActionResult> ViewFile(int id)
-        //{
-        //    var path = (await _db.Requestwisefiles.FirstOrDefaultAsync(x => x.Requestwisefileid == id)).Filename;
-        //    var provider = new FileExtensionContentTypeProvider();
-        //    if (!provider.TryGetContentType(path, out var contentType))
-        //    {
-        //        contentType = "application/octet-stream";
-        //    }
-        //    var bytes = _documents.Download(id);
-        //    return File(bytes, contentType, Path.GetFileName(path));
-        //}
 
         [Area("AdminArea")]
         [HttpPost]
@@ -268,9 +263,10 @@ namespace HelloDoc.Areas.AdminArea.DataController
             return RedirectToAction("ViewUploads", "Dashboard", new { id = RequestsId });
         }
 
+        // View uploads end
 
 
-
+        // data from tables start
 
         [Area("AdminArea")]
         public List<Casetag> GetCaseTags()
@@ -300,6 +296,23 @@ namespace HelloDoc.Areas.AdminArea.DataController
             var physician = _db.Physicians.ToList().Where(x => x.Regionid == regionid).ToList();
             return physician;
         }
+
+        // data from tables end
+
+
+        // orders start
+
+        [Area("AdminArea")]
+        [HttpGet]
+        public IActionResult Orders(int id)
+        {
+            return View();
+        }
+
+
+        //order end
+
+
 
     }
 }

@@ -159,7 +159,7 @@
                 var id = $(this).closest('form').data('id');
 
                 $.ajax({
-                    url: '../Dashboard/' + action,
+                    url: 'AdminArea/Dashboard/' + action,
                     type: 'GET',
                     data: { id: id },
                     success: function (result) {
@@ -188,27 +188,27 @@
             switch (target1) {
                 case '#s_new':
                     $('#status_text').html("(New)")
-                    url = '../StatusWiseData/Status_New';
+                    url = 'AdminArea/StatusWiseData/Status_New';
                     break;
                 case '#s_pending':
                     $('#status_text').html("(Pending)")
-                    url = '../StatusWiseData/Status_Pending';
+                    url = 'AdminArea/StatusWiseData/Status_Pending';
                     break;
                 case '#s_active':
                     $('#status_text').html("(Active)")
-                    url = '../StatusWiseData/Status_Active';
+                    url = 'AdminArea/StatusWiseData/Status_Active';
                     break;
                 case '#s_conclude':
                     $('#status_text').html("(Conclude)")
-                    url = '../StatusWiseData/Status_Conclude';
+                    url = 'AdminArea/StatusWiseData/Status_Conclude';
                     break;
                 case '#s_toclose':
                     $('#status_text').html("(To Close)")
-                    url = '../StatusWiseData/Status_Toclose';
+                    url = 'AdminArea/StatusWiseData/Status_Toclose';
                     break;
                 case '#s_unpaid':
                     $('#status_text').html("(Unpaid)")
-                    url = '../StatusWiseData/Status_Unpaid';
+                    url = 'AdminArea/StatusWiseData/Status_Unpaid';
                     break;
 
                 default:
@@ -243,7 +243,7 @@
         }).get();
         var status = statuscollection[0];
         var link = document.createElement('a');
-        link.href = '../Dashboard/Export?status=' + status; 
+        link.href = 'AdminArea/Dashboard/Export?status=' + status; 
         link.style.display = 'none'; 
         document.body.appendChild(link);
         link.click();
@@ -253,7 +253,7 @@
 
     $('#exportall').on('click', function () {
         var link = document.createElement('a');
-        link.href = '../Dashboard/ExportAll'; 
+        link.href = 'AdminArea/Dashboard/ExportAll'; 
         link.style.display = 'none'; 
         document.body.appendChild(link);
         link.click();
@@ -261,7 +261,7 @@
     });
 
         $.ajax({
-            url: '../Dashboard/GetRegion',
+            url: 'AdminArea/Dashboard/GetRegion',
             success: function (data) {
                 var drawbyregiondropdown = $('.drawbyregiondropdown');
                 $.each(data, function (index, regions) {

@@ -3,7 +3,7 @@
     console.log(id);
     $.ajax({
         type: 'POST',
-        url: '../Dashboard/Delete',
+        url: 'AdminArea/Dashboard/Delete',
         data: { id: id },
         success: function (result) {
             $('#nav-tabContent').html(result);
@@ -19,7 +19,7 @@ $('.deleteall').on('click', function () {
         console.log(id);
         $.ajax({
             type: 'POST',
-            url: '../Dashboard/Delete',
+            url: 'AdminArea/Dashboard/Delete',
             data: { id: id },
             success: function (result) {
                 $('#nav-tabContent').html(result);
@@ -56,7 +56,7 @@ $('.sendemail').on('click', function () {
         console.log(formData);
 
         $.ajax({
-            url: '../Dashboard/SendMail', 
+            url: 'AdminArea/Dashboard/SendMail', 
             type: 'POST',
             data: formData,
             processData: false,

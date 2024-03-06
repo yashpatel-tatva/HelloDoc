@@ -17,7 +17,7 @@
     $(document).ready(function () {
 
         $.ajax({
-            url: '../Dashboard/Home',
+            url: 'AdminArea/Dashboard/Home',
             success: function (response) {
                 $('#dashboardView').html(response);
             },
@@ -31,7 +31,7 @@
             var regionid = $(this).val();
             console.log(regionid);
             $.ajax({
-                url: '../Dashboard/GetPhysician',
+                url: 'AdminArea/Dashboard/GetPhysician',
                 type: 'POST',
                 data: { regionid: regionid },
                 success: function (data) {

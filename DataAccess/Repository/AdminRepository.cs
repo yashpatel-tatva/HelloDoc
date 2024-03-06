@@ -23,12 +23,14 @@ namespace DataAccess.Repository
         {
             _httpsession.HttpContext.Session.SetInt32("AdminId", admin.Adminid);
             _httpsession.HttpContext.Session.SetString("UserName", admin.Firstname + " " + admin.Lastname);
+            _httpsession.HttpContext.Session.SetString("Role", "Admin");
         }
 
         public void RemoveSession()
         {
             _httpsession.HttpContext.Session.Remove("AdminId");
             _httpsession.HttpContext.Session.Remove("UserName");
+            _httpsession.HttpContext.Session.Remove("Role");
         }
         public int GetSessionAdminId()
         {

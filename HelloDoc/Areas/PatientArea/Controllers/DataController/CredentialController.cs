@@ -97,6 +97,11 @@ namespace HelloDoc.Areas.PatientArea.DataController
         {
             var correct = await _context.Aspnetusers.FirstOrDefaultAsync(m => m.Email == user.Email);
             var userdata = await _context.Users.FirstOrDefaultAsync(u => u.Email == user.Email);
+            if (userdata == null && correct!=null) {
+                TempData["Style"] = " border-danger";
+                TempData["WrongEmail"] = "This is not for Admin or Provider Panel";
+                return RedirectToAction("PatientLogin", "Home");
+            }
             if (correct != null)
             {
                 if (correct.Passwordhash == user.Passwordhash)

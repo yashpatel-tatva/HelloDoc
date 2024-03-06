@@ -49,7 +49,7 @@ $('.gotoaction').click(function (e) {
     var id = $(this).closest('form').data('id');
 
     $.ajax({
-        url: '../Dashboard/' + action,
+        url: 'AdminArea/Dashboard/' + action,
         type: 'GET',
         data: { id: id },
         success: function (result) {
@@ -78,7 +78,7 @@ $('.gotomodel').on('click', function (e) {
 $('.gotomodel[data-target="#CancelCaseModal"]').on('click', function () {
     console.log("clickascaed");
     $.ajax({
-        url: '../Dashboard/GetCaseTags',
+        url: 'AdminArea/Dashboard/GetCaseTags',
         success: function (data) {
             var casetagsdropdown = $('.cancleselect');
             casetagsdropdown.empty();
@@ -100,7 +100,7 @@ $('.gotomodel[data-target="#CancelCaseModal"]').on('click', function () {
 $('.gotomodel[data-target="#AssignCasemodal"]').on('click', function () {
     console.log("clickascaed");
     $.ajax({
-        url: '../Dashboard/GetRegion',
+        url: 'AdminArea/Dashboard/GetRegion',
         success: function (data) {
             var regiondropdown = $('.regiondropdown');
             regiondropdown.empty();
@@ -121,7 +121,7 @@ $('.gotomodel[data-target="#AssignCasemodal"]').on('click', function () {
         }
     });
     $.ajax({
-        url: '../Dashboard/GetPhysician',
+        url: 'AdminArea/Dashboard/GetPhysician',
         success: function (data) {
             var physiciandropdown = $('.physiciandropdown');
             physiciandropdown.empty();

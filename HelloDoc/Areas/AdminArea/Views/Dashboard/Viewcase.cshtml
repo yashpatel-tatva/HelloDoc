@@ -145,7 +145,7 @@
             console.log(id);
 
             $.ajax({
-                url: '../Dashboard/' + action,
+                url: 'AdminArea/Dashboard/' + action,
                 type: 'GET',
                 data: { id: id },
                 success: function (result) {
@@ -171,7 +171,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: '../Dashboard/EditEmailPhone',
+                url: 'AdminArea/Dashboard/EditEmailPhone',
                 contentType: 'application/json',
                 data: JSON.stringify(model),
                 success: function (response) {

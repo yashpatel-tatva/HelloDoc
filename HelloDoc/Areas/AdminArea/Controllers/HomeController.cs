@@ -1,4 +1,5 @@
 ﻿using DataAccess.Repository.IRepository;
+using DataAccess.ServiceRepository;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HelloDoc.Areas.AdminArea.Controllers
@@ -31,12 +32,13 @@ namespace HelloDoc.Areas.AdminArea.Controllers
 
 
         [Area("AdminArea")]
+        [AuthorizationRepository("Admin")]
         public IActionResult AdminTabsLayout()
         {
-            if (_admin.GetSessionAdminId() == -1)
-            {
-                return RedirectToAction("AdminLogin", "Home");
-            }
+            //if (_admin.GetSessionAdminId() == -1)
+            //{
+            //    return RedirectToAction("AdminLogin", "Home");
+            //}
             return View();
         }
     }

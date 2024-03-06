@@ -128,7 +128,7 @@
         console.log(id);
         $.ajax({
             type: 'POST',
-            url: '../Dashboard/ViewFile',
+            url: 'AdminArea/Dashboard/ViewFile',
             data: { id: id },
             success: function (result) {
                 window.open('/Documents/' + @Model.RequestsId + "/" + result);

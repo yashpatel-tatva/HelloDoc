@@ -37,7 +37,8 @@ body {
     font-size: 1em;
 }
 
-.form-group input {
+.form-group input,
+.form-group select{
     width: 100%;
     outline: none;
     border: 0;
@@ -115,8 +116,9 @@ body {
     transition: 0.5s;
 } */
 
-input:not(:placeholder-shown):not(:focus)+span,
-textarea:not(:placeholder-shown):not(:focus)+span {
+input:not(:placeholder-shown):not(:focus) + span,
+textarea:not(:placeholder-shown):not(:focus) + span,
+.floatspanfordropdown {
     /* color: inherit; */
     color: darkgray;
     transform: translateX(-3px) translateY(-14px);

@@ -34,6 +34,9 @@ builder.Services.AddScoped<IAllRequestDataRepository , AllRequestDataRepository>
 builder.Services.AddScoped<ISendEmailRepository, SendEmailRepository>();
 builder.Services.AddScoped<IRequestPopUpActionsRepository , RequestPopUpActionsRepository>();
 builder.Services.AddScoped<IDocumentsRepository , DocumentsRepository>();
+builder.Services.AddScoped<ISessionUtilsRepository , SessionUtilsRepository>();
+builder.Services.AddScoped<IAuthorizatoinRepository, AuthorizationRepository>();
+builder.Services.AddScoped<IJwtRepository, JwtRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -54,7 +57,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "Admin",
-    pattern: "{area=AdminArea}/{controller=Home}/{action=AdminLogin}/{id?}");
+    pattern: "{area=AdminArea}/{controller=Home}/{action=AdminTabsLayout}/{id?}");
 
 app.MapControllerRoute(
     name: "Patient",

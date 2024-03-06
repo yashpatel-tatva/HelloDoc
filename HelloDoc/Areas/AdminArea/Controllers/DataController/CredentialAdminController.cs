@@ -1,8 +1,7 @@
 ﻿using DataAccess.Repository.IRepository;
-using HelloDoc;
-using HelloDoc;
+using DataAccess.ServiceRepository.IServiceRepository;
+using DataModels.CommonViewModel;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace HelloDoc.Areas.AdminArea.DataController
 {
@@ -11,16 +10,19 @@ namespace HelloDoc.Areas.AdminArea.DataController
         public readonly HelloDocDbContext _context;
         private readonly IAspNetUserRepository _aspnetuser;
         private readonly IAdminRepository _admin;
+        private readonly IJwtRepository _jwtRepository;
 
         public CredentialAdminController(
             HelloDocDbContext context,
             IAspNetUserRepository aspnetUserRepository,
-            IAdminRepository adminRepository
+            IAdminRepository adminRepository,
+            IJwtRepository jwtRepository
             )
         {
             _context = context;
             _aspnetuser = aspnetUserRepository;
             _admin = adminRepository;
+            _jwtRepository = jwtRepository;
         }
 
         [Area("AdminArea")]
@@ -28,6 +30,17 @@ namespace HelloDoc.Areas.AdminArea.DataController
         public async Task<IActionResult> Login(Aspnetuser user)
         {
             var correct = _aspnetuser.GetFirstOrDefault(x => x.Email == user.Email);
+            if (correct != null)
+            {
+                LoggedInPersonViewModel loggedInPersonViewModel = new LoggedInPersonViewModel();
+                loggedInPersonViewModel.AspnetId = correct.Id;
+                loggedInPersonViewModel.UserName = correct.Username;
+                var Roleid = _context.Aspnetuserroles.FirstOrDefault(x => x.Userid == correct.Id).Roleid;
+                loggedInPersonViewModel.Role = _context.Aspnetroles.FirstOrDefault(x => x.Id == Roleid).Name;
+                //SessionUtilsRepository.SetLoggedInPerson(HttpContext.Session, loggedInPersonViewModel);
+                Response.Cookies.Append("jwt", _jwtRepository.GenerateJwtToken(loggedInPersonViewModel));
+            }
+
             if (correct != null)
             {
                 var admin = _admin.GetFirstOrDefault(u => u.Aspnetuserid == correct.Id);
@@ -64,6 +77,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
         public async Task<IActionResult> LogOut()
         {
             _admin.RemoveSession();
+            Response.Cookies.Delete("jwt");
             return RedirectToAction("AdminLogin", "Home");
         }
     }

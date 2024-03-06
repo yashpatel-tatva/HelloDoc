@@ -1,0 +1,63 @@
+﻿@{
+    Layout = null;
+}
+
+<div class="container">
+    <div class="d-flex justify-content-between">
+        <div class="d-flex justify-content-start align-items-center"><span class="h4 mb-0">Send Orders</span></div>
+        <div>
+            <a asp-action="AdminTabsLayout" asp-controller="Home">
+                <button class="d-flex babtn border border-info border-1 rounded align-items-center p-1 px-2">
+                    <div class="d-flex"><img src="~/res/back.png" width="15px" height="15px"></div>
+                    <div class="px-1"><span>Back</span></div>
+                </button>
+            </a>
+        </div>
+    </div>
+    <div class="bg-white rounded-3 p-3 mt-2 shadow">
+        <div class="bg-white rounded-3 p-3 mt-2 shadow">
+            <div class="row d-flex">
+                <div class="py-2 col-xl-6 col-md-6 col-sm-12">
+                    <div class="form-group d-flex align-items-center rounded">
+                        <select type="text" class="form-control" placeholder="" >
+                            <option>Select Profession</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="py-2 col-xl-6 col-md-6 col-sm-12">
+                    <div class="form-group d-flex align-items-center rounded">
+                        <input type="text" class="form-control" placeholder="" ><span>Business</span>
+                    </div>
+                </div>
+                <div class="py-2 col-xl-6 col-md-6 col-sm-12">
+                    <div class="form-group d-flex align-items-center rounded">
+                        <input type="text" class="form-control" placeholder="" ><span>Business Contact</span>
+                    </div>
+                </div>
+                <div class="py-2 col-xl-6 col-md-6 col-sm-12">
+                    <div class="form-group d-flex align-items-center rounded">
+                        <input type="email" class="form-control" placeholder="" ><span>Email</span>
+                    </div>
+                </div>
+                <div class="py-2 col-xl-6 col-md-6 col-sm-12">
+                    <div class="form-group d-flex align-items-center rounded">
+                        <input type="text" class="form-control" placeholder="" ><span>Fax Number</span>
+                    </div>
+                </div>
+                <div class="py-2 col-12 ">
+                    <div class="form-group rounded d-flex align-items-center">
+                        <textarea class="form-control" placeholder="" rows="3" ></textarea><span>Prescription or Order Detail</span>
+                    </div>
+                </div>
+                <div class="py-2 col-xl-6 col-md-6 col-sm-12">
+                    <div class="form-group d-flex align-items-center rounded">
+                        <select type="text" class="form-control" placeholder=" " >
+                            <option>Not Required</option>
+                        </select>
+                        <span class="floatspanfordropdown small">Number Of Refill</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
