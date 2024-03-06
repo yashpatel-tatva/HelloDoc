@@ -64,6 +64,11 @@ namespace HelloDoc.Areas.PatientArea.DataController
             };
             _context.Users.Add(newuser);
             _context.SaveChanges();
+            Aspnetuserrole aspnetuserrole = new Aspnetuserrole();
+            aspnetuserrole.Userid = newaspnetuser.Id;
+            aspnetuserrole.Roleid = "3";
+            _context.Aspnetuserroles.Add(aspnetuserrole);
+            _context.SaveChanges();
 
             return RedirectToAction("PatientLogin","Home");
         }

@@ -1,6 +1,4 @@
 ﻿using HelloDoc.Areas.PatientArea.ViewModels;
-using HelloDoc.DataContext;
-using HelloDoc.DataModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
@@ -92,6 +90,11 @@ namespace HelloDoc.Areas.PatientArea.DataController
                     Regionid = 3,
                 };
                 _context.Users.Add(newuser);
+                _context.SaveChanges();
+                Aspnetuserrole aspnetuserrole = new Aspnetuserrole();
+                aspnetuserrole.Userid = newaspnetuser.Id;
+                aspnetuserrole.Roleid = "3";
+                _context.Aspnetuserroles.Add(aspnetuserrole);
                 _context.SaveChanges();
             }
             var aspnetuser = await _context.Aspnetusers.FirstOrDefaultAsync(m => m.Email == model.Email);
