@@ -1,6 +1,6 @@
 ﻿using DataAccess.Repository.IRepository;
 using DataAccess.ServiceRepository.IServiceRepository;
-using HelloDoc.DataContext;
+using HelloDoc;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;

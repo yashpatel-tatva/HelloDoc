@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using HelloDoc.DataContext;
-using HelloDoc.DataModels;
+using HelloDoc;
+using HelloDoc;
 
 namespace HelloDoc.Areas.PatientArea.Controllers
 {

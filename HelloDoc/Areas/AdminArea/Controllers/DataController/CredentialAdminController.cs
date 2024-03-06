@@ -1,6 +1,6 @@
 ﻿using DataAccess.Repository.IRepository;
-using HelloDoc.DataContext;
-using HelloDoc.DataModels;
+using HelloDoc;
+using HelloDoc;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 

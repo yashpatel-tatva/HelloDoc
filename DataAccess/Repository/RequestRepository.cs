@@ -1,6 +1,6 @@
 ﻿using DataAccess.Repository.IRepository;
-using HelloDoc.DataContext;
-using HelloDoc.DataModels;
+using HelloDoc;
+using HelloDoc;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,4 +1,4 @@
-﻿using HelloDoc.DataModels;
+﻿using HelloDoc;
 using Microsoft.AspNetCore.Http;
 
 namespace HelloDoc.Areas.PatientArea.ViewModels

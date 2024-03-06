@@ -1,6 +1,6 @@
 ﻿using HelloDoc.Areas.PatientArea.ViewModels;
-using HelloDoc.DataContext;
-using HelloDoc.DataModels;
+using HelloDoc;
+using HelloDoc;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Drawing;

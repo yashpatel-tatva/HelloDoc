@@ -1,8 +1,8 @@
 ﻿using DataAccess.Repository;
 using DataAccess.ServiceRepository.IServiceRepository;
 using DataModels.AdminSideViewModels;
-using HelloDoc.DataContext;
-using HelloDoc.DataModels;
+using HelloDoc;
+using HelloDoc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;

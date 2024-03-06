@@ -1,6 +1,6 @@
-﻿using HelloDoc.DataContext;
+﻿using HelloDoc;
 using HelloDoc.Models;
-using HelloDoc.DataModels;
+using HelloDoc;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;

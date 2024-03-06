@@ -1,5 +1,5 @@
 ﻿using DataAccess.Repository.IRepository;
-using HelloDoc.DataContext;
+using HelloDoc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
