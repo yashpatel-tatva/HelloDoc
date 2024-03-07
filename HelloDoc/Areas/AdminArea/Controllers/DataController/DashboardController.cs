@@ -29,6 +29,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
         private readonly IDocumentsRepository _documents;
         private readonly IRequestwisefileRepository _requestwisefile;
         private readonly ISendEmailRepository _sendemail;
+        private readonly IOrderDetailRepository _orderDetail;
 
         public DashboardController(
             HelloDocDbContext db,
@@ -39,7 +40,8 @@ namespace HelloDoc.Areas.AdminArea.DataController
             IRequestPopUpActionsRepository requestPopUpActionsRepository,
             IDocumentsRepository documentsRepository,
             IRequestwisefileRepository requestwisefileRepository,
-            ISendEmailRepository sendEmailRepository
+            ISendEmailRepository sendEmailRepository,
+            IOrderDetailRepository orderDetailRepository
             )
         {
             _db = db;
@@ -51,7 +53,67 @@ namespace HelloDoc.Areas.AdminArea.DataController
             _documents = documentsRepository;
             _requestwisefile = requestwisefileRepository;
             _sendemail = sendEmailRepository;
+            _orderDetail = orderDetailRepository;
         }
+
+        // data from tables start
+
+        [Area("AdminArea")]
+        public List<Casetag> GetCaseTags()
+        {
+            var casetags = _db.Casetags.ToList();
+            return casetags;
+        }
+
+        [Area("AdminArea")]
+        public List<Region> GetRegion()
+        {
+            var regions = _db.Regions.ToList();
+            return regions;
+        }
+
+        [Area("AdminArea")]
+        public List<Physician> GetPhysician()
+        {
+            var physician = _db.Physicians.ToList();
+            return physician;
+        }
+
+        [Area("AdminArea")]
+        [HttpPost]
+        public List<Physician> GetPhysician(int regionid)
+        {
+            var physician = _db.Physicians.ToList();
+            if (regionid != 0)
+            {
+                physician = physician. Where(x => x.Regionid == regionid).ToList();
+            }
+            return physician;
+        }
+
+        [Area("AdminArea")]
+        public List<Healthprofessionaltype> GetProfession()
+        {
+            var healthproffession = _db.Healthprofessionaltypes.ToList();
+            return healthproffession;
+        }
+        [Area("AdminArea")]
+        public List<Healthprofessional> GetVendorbyProfession(int professoinid)
+        {
+            var healthproffession = _db.Healthprofessionals.ToList().Where(x => x.Profession == professoinid).ToList();
+            return healthproffession;
+        }
+        [Area("AdminArea")]
+        public Healthprofessional GetVendorbyVendorid(int vendorid)
+        {
+            var healthproffession = _db.Healthprofessionals.FirstOrDefault(x => x.Vendorid == vendorid);
+            return healthproffession;
+        }
+
+
+        // data from tables end
+
+
 
         [Area("AdminArea")]
         public IActionResult Dashboard()
@@ -64,10 +126,10 @@ namespace HelloDoc.Areas.AdminArea.DataController
         public IActionResult Home()
         {
             AdminDashboardViewModel model = new AdminDashboardViewModel();
-                //if (_admin.GetSessionAdminId() == -1)
-                //{
-                //    return RedirectToAction("AdminLogin", "Home");
-                //}
+            //if (_admin.GetSessionAdminId() == -1)
+            //{
+            //    return RedirectToAction("AdminLogin", "Home");
+            //}
             model.admin = _admin.GetFirstOrDefault(x => x.Adminid == _admin.GetSessionAdminId());
             model.requests = _requests.GetAll().ToList();
             return View(model);
@@ -240,7 +302,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
 
         [Area("AdminArea")]
         [HttpPost]
-        public IActionResult SendMail(List<int> RequestWiseFileId , int RequestsId)
+        public IActionResult SendMail(List<int> RequestWiseFileId, int RequestsId)
         {
             List<string> filenames = new List<string>();
             foreach (var s in RequestWiseFileId)
@@ -252,7 +314,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
             _sendemail.SendEmailwithAttachments("vinit2273@gmail.com", "Your Attachments", "Please Find Your Attachments Here", filenames);
             return RedirectToAction("ViewUploads", "Dashboard", new { id = RequestsId });
         }
-        
+
 
 
         [Area("AdminArea")]
@@ -266,38 +328,6 @@ namespace HelloDoc.Areas.AdminArea.DataController
         // View uploads end
 
 
-        // data from tables start
-
-        [Area("AdminArea")]
-        public List<Casetag> GetCaseTags()
-        {
-            var casetags = _db.Casetags.ToList();
-            return casetags;
-        }
-
-        [Area("AdminArea")]
-        public List<Region> GetRegion()
-        {
-            var regions = _db.Regions.ToList();
-            return regions;
-        }
-
-        [Area("AdminArea")]
-        public List<Physician> GetPhysician()
-        {
-            var physician = _db.Physicians.ToList();
-            return physician;
-        }
-
-        [Area("AdminArea")]
-        [HttpPost]
-        public List<Physician> GetPhysician(int regionid)
-        {
-            var physician = _db.Physicians.ToList().Where(x => x.Regionid == regionid).ToList();
-            return physician;
-        }
-
-        // data from tables end
 
 
         // orders start
@@ -306,8 +336,20 @@ namespace HelloDoc.Areas.AdminArea.DataController
         [HttpGet]
         public IActionResult Orders(int id)
         {
-            return View();
+            SendOrderViewModel model = new SendOrderViewModel();
+            model.RequestId = id;
+            return View(model);
         }
+
+        [Area("AdminArea")]
+        [HttpPost]
+        public IActionResult SendOrderDetails(SendOrderViewModel model)
+        {
+            model.CreatedBy = HttpContext.Session.GetString("AspNetId");
+            _orderDetail.Add(model);
+            return RedirectToAction("AdminTabsLayout" , "Home");
+        }
+
 
 
         //order end

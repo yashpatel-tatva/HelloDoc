@@ -26,6 +26,7 @@
             }
         });
 
+
         $('.regiondropdown').on('change', function () {
 
             var regionid = $(this).val();
@@ -35,7 +36,7 @@
                 type: 'POST',
                 data: { regionid: regionid },
                 success: function (data) {
-                    var physiciandropdown = $('.physiciandropdown');
+                    var physiciandropdown = $('#physiciandropdown');
                     physiciandropdown.empty();
                     console.log(data);
                     physiciandropdown.append($('<option>', {
@@ -61,7 +62,45 @@
                         });
                     }
                     console.log(physiciandropdown);
+                }
+            });
 
+        });
+        $('.transtoregiondropdown').on('change', function () {
+
+            var regionid = $(this).val();
+            console.log(regionid);
+            $.ajax({
+                url: 'AdminArea/Dashboard/GetPhysician',
+                type: 'POST',
+                data: { regionid: regionid },
+                success: function (data) {
+                    var physiciandropdown = $('#transtophysiciandropdown');
+                    physiciandropdown.empty();
+                    console.log(data);
+                    physiciandropdown.append($('<option>', {
+                        hidden: "hidden",
+                        value: "invaild",
+                        text: "Select Physician"
+                    }))
+                    console.log(data.length);
+                    if (data.length == 0) {
+                        physiciandropdown.append($('<option>', {
+                            value: "invalid",
+                            disabled: "disabled",
+                            text: "No Physician in this area",
+                            style: "color : red"
+                        }))
+                    }
+                    else {
+                        $.each(data, function (index, phy) {
+                            physiciandropdown.append($('<option>', {
+                                value: phy.physicianid,
+                                text: phy.firstname + " " + phy.lastname
+                            }))
+                        });
+                    }
+                    console.log(physiciandropdown);
                 }
             });
 
@@ -70,11 +109,22 @@
 
         $("#Assignconfirmbutton").on('click', function () {
             var regionid = $('.regiondropdown').val();
-            var phyid = $('.physiciandropdown').val();
+            var phyid = $('#physiciandropdown').val();
             console.log(regionid);
             console.log(phyid);
             if (phyid == "invalid") {
                 $("#physiciandropdown").css("border-color", "red");
+            } else {
+                $(this).closest('form').submit();
+            }
+        });
+        $("#Transferconfirmbutton").on('click', function () {
+            var regionid = $('.transtoregiondropdown').val();
+            var phyid = $('#transtophysiciandropdown').val();
+            console.log(regionid);
+            console.log(phyid);
+            if (phyid == "invalid") {
+                $("#transtophysiciandropdown").css("border-color", "red");
             } else {
                 $(this).closest('form').submit();
             }

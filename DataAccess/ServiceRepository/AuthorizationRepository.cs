@@ -37,7 +37,7 @@ namespace DataAccess.ServiceRepository
 
             if (token == null || !jwtservice.ValidateToken(token, out JwtSecurityToken jwttoken))
             {
-                context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Home", action = "AdminLogin" }));
+                context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Home", action = "ExpirePopUp" }));
                 return;
             }
 
@@ -52,6 +52,7 @@ namespace DataAccess.ServiceRepository
             if (string.IsNullOrEmpty(_role) || roleClaim.Value != _role)
             {
                 context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Home", action = "AdminLogin" }));
+                return;
             }
 
 

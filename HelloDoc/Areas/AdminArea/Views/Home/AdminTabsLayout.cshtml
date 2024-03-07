@@ -49,11 +49,16 @@
     <div class="tab-content respadding" id="nav-tabContent">
     </div>
 
+
+    @*Pop Up Models*@
+
+
+    @*AssignCaseModal*@
     <div class="modal fade rounded-3 shadow" id="AssignCasemodal" tabindex="-1" role="dialog" aria-labelledby="AssignCasemodal" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-info">
-                    <h5 class="modal-title text-white" id="exampleModalLabel">Assign Request</h5>
+                    <h5 class="modal-title text-white">Assign Request</h5>
                     <button class="btn" type="button" data-dismiss="modal">
                         <i class="fa-solid fa-xmark" style="color: #ffffff;"></i>
                     </button>
@@ -63,11 +68,12 @@
                         <input type="number" class="inputhiddenrequestid" name="RequestId" hidden />
 
                         <label class="my-2 text-secondary  fw-normal mb-3" style="font-size:12.8px">To Assign This Request, search and selectanother Physician</label>
-
-                        <select class="form-select form-select-lg mb-3 fs-6 form-control regiondropdown" asp-for="RegionId" aria-label=".form-select-lg example" required>
-                        </select>
-
-                        <select class="form-select form-select-lg mb-3 fs-6 form-control physiciandropdown" id="physiciandropdown" asp-for="PhysicianId" aria-label=".form-select-lg example" required>
+                        <div class="did-floating-label-content mb-3 form-group d-flex align-items-center rounded">
+                            <select class="form-select form-select-lg fs-6 form-control regiondropdown did-floating-select" onclick="this.setAttribute('value', this.value);" onchange="this.setAttribute('value', this.value);" value="" asp-for="RegionId" aria-label=".form-select-lg example" required>
+                            </select>
+                            <span class="did-floating-label">Narrow Search By Region</span>
+                        </div>
+                        <select class="form-select form-select-lg mb-3 fs-6 form-control" id="physiciandropdown" asp-for="PhysicianId" aria-label=".form-select-lg example" required>
                         </select>
 
                         <div class="form-group rounded d-flex align-items-center">
@@ -84,11 +90,13 @@
         </div>
     </div>
 
+    @*CancelCaseModal*@
+
     <div class="modal fade" id="CancelCaseModal" tabindex="-1" role="dialog" aria-labelledby="CancelcaseTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-info">
-                    <h5 class="modal-title text-white" id="exampleModalLabel">Confirm Cancellation</h5>
+                    <h5 class="modal-title text-white">Confirm Cancellation</h5>
                     <button type="button" class="btn" data-dismiss="modal" aria-label="Close">
                         <i class="fa-solid fa-xmark text-white"></i>
                     </button>
@@ -115,11 +123,13 @@
         </div>
     </div>
 
+    @*BlockPatientModal*@
+
     <div class="modal fade" id="BlockPatientsmodal" tabindex="-1" role="dialog" aria-labelledby="BlockCaseTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-info">
-                    <h5 class="modal-title text-white" id="exampleModalLabel">Confirm Block</h5>
+                    <h5 class="modal-title text-white" >Confirm Block</h5>
                     <button type="button" class="btn" data-dismiss="modal" aria-label="Close">
                         <i class="fa-solid fa-xmark text-white"></i>
                     </button>
@@ -143,6 +153,43 @@
         </div>
     </div>
 
+    @*TransferCaseModal*@
+
+    <div class="modal fade rounded-3 shadow" id="TransferCaseModal" tabindex="-1" role="dialog" aria-labelledby="TransferCaseModal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-info">
+                    <h5 class="modal-title text-white" >Transfer  Request</h5>
+                    <button class="btn" type="button" data-dismiss="modal">
+                        <i class="fa-solid fa-xmark" style="color: #ffffff;"></i>
+                    </button>
+                </div>
+                <form asp-action="AssignCase" asp-controller="Dashboard" method="post">
+                    <div class="modal-body">
+                        <input type="number" class="inputhiddenrequestid" name="RequestId" hidden />
+
+                        <label class="my-2 text-secondary  fw-normal mb-3" style="font-size:12.8px">To Transfer This Request, search and select another Physician</label>
+                        <div class="did-floating-label-content mb-3 form-group d-flex align-items-center rounded">
+                            <select class="form-select form-select-lg fs-6 form-control transtoregiondropdown did-floating-select" onclick="this.setAttribute('value', this.value);" onchange="this.setAttribute('value', this.value);" value="" asp-for="RegionId" aria-label=".form-select-lg example" required>
+                            </select>
+                            <span class="did-floating-label">Narrow Search By Region</span>
+                        </div>
+                        <select class="form-select form-select-lg mb-3 fs-6 form-control" id="transtophysiciandropdown" asp-for="PhysicianId" aria-label=".form-select-lg example" required>
+                        </select>
+
+                        <div class="form-group rounded d-flex align-items-center">
+                            <textarea class="form-control  shadow-none" asp-for="Notes" placeholder="" rows="5"></textarea>
+                            <span>Description</span>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0">
+                        <button type="button" id="Transferconfirmbutton" class="btn btn-info text-white ">Confirm</button>
+                        <button type="button" class="btn btn-outline-info" data-dismiss="modal">Cancle</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
 </div>
 

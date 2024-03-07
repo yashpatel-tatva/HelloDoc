@@ -28,6 +28,7 @@ builder.Services.AddScoped<IAdminRepository, AdminRepository>();
 builder.Services.AddScoped<IBlockCaseRepository, BlockCaseRepository>();
 builder.Services.AddScoped<IRequestStatusLogRepository , RequestStatusLogRepository>();
 builder.Services.AddScoped<IRequestwisefileRepository, RequestwisefileRepository>();
+builder.Services.AddScoped<IOrderDetailRepository , OrderDetailRepository>();   
 
 
 builder.Services.AddScoped<IAllRequestDataRepository , AllRequestDataRepository>();

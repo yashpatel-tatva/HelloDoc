@@ -1,10 +1,11 @@
 ﻿@{
     Layout = null;
 }
-
+@using DataModels.AdminSideViewModels
+@model SendOrderViewModel ;
 <div class="container">
     <div class="d-flex justify-content-between">
-        <div class="d-flex justify-content-start align-items-center"><span class="h4 mb-0">Send Orders</span></div>
+        <div class="d-flex justify-content-start align-items-center"><span class="h4 mb-0"><b>Send Orders</b></span></div>
         <div>
             <a asp-action="AdminTabsLayout" asp-controller="Home">
                 <button class="d-flex babtn border border-info border-1 rounded align-items-center p-1 px-2">
@@ -14,50 +15,126 @@
             </a>
         </div>
     </div>
-    <div class="bg-white rounded-3 p-3 mt-2 shadow">
+    <form asp-action="SendOrderDetails" asp-controller="Dashboard" method="post">
+        <input type="hidden"  asp-for="RequestId" value="@Model.RequestId" />
         <div class="bg-white rounded-3 p-3 mt-2 shadow">
             <div class="row d-flex">
                 <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                     <div class="form-group d-flex align-items-center rounded">
-                        <select type="text" class="form-control" placeholder="" >
-                            <option>Select Profession</option>
+                        <select type="text" class="professiondropdown" placeholder="" asp-for="ProfessionId">
                         </select>
                     </div>
                 </div>
                 <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                     <div class="form-group d-flex align-items-center rounded">
-                        <input type="text" class="form-control" placeholder="" ><span>Business</span>
+                        <select type="text" class="businessdropdown" placeholder="" asp-for="VendorId">
+                            <option hidden>Business</option>
+                        </select>
                     </div>
                 </div>
                 <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                     <div class="form-group d-flex align-items-center rounded">
-                        <input type="text" class="form-control" placeholder="" ><span>Business Contact</span>
+                        <input type="text" class="form-control" name="Contact" placeholder="" asp-for="Contact"><span>Business Contact</span>
                     </div>
                 </div>
                 <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                     <div class="form-group d-flex align-items-center rounded">
-                        <input type="email" class="form-control" placeholder="" ><span>Email</span>
+                        <input type="email" class="form-control" name="Email" placeholder="" asp-for="Email"><span>Email</span>
                     </div>
                 </div>
                 <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                     <div class="form-group d-flex align-items-center rounded">
-                        <input type="text" class="form-control" placeholder="" ><span>Fax Number</span>
+                        <input type="text" class="form-control" name="Fax" placeholder="" asp-for="Fax"><span>Fax Number</span>
                     </div>
                 </div>
                 <div class="py-2 col-12 ">
                     <div class="form-group rounded d-flex align-items-center">
-                        <textarea class="form-control" placeholder="" rows="3" ></textarea><span>Prescription or Order Detail</span>
+                        <textarea class="form-control" placeholder="" rows="3" asp-for="Prescription"></textarea><span>Prescription or Order Detail</span>
                     </div>
                 </div>
                 <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                     <div class="form-group d-flex align-items-center rounded">
-                        <select type="text" class="form-control" placeholder=" " >
-                            <option>Not Required</option>
+                        <select type="text" placeholder="" asp-for="Refill">
+                            <option hidden value="0">Not Required</option>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
                         </select>
                         <span class="floatspanfordropdown small">Number Of Refill</span>
                     </div>
                 </div>
             </div>
+            <div class="justify-content-end d-flex mt-4">
+
+                <div class="mx-1">
+                    <button type="submit" class="btn btn-info shadow-none text-white py-2">
+                        Submit
+                    </button>
+                </div>
+                <div class="mx-1">
+                    <button type="reset" class="btn btn-outline-info shadow-none py-2">
+                        Cancel
+                    </button>
+                </div>
+            </div>
         </div>
-    </div>
+    </form>
 </div>
+
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            url: 'AdminArea/Dashboard/GetProfession',
+            success: function (data) {
+                var proffession = $('.professiondropdown');
+                proffession.empty();
+                proffession.append($('<option>', {
+                    hidden: "hidden",
+                    value: "invalid",
+                    text: "Select Profession"
+                }))
+                $.each(data, function (index, item) {
+                    proffession.append($('<option>', {
+                        value: item.healthprofessionalid,
+                        text: item.professionname
+                    }))
+                });
+            }
+        });
+    });
+    $('.professiondropdown').on('change', function () {
+        $.ajax({
+            url: 'AdminArea/Dashboard/GetVendorbyProfession',
+            data: { professoinid: $(this).val() },
+            success: function (data) {
+                $('input[name="Contact"]').val("");
+                $('input[name="Email"]').val("");
+                $('input[name="Fax"]').val("");
+                var business = $('.businessdropdown');
+                business.empty();
+                business.append($('<option>', {
+                    hidden: "hidden",
+                    value: "invalid",
+                    text: "Business"
+                }))
+                $.each(data, function (index, item) {
+                    business.append($('<option>', {
+                        value: item.vendorid,
+                        text: item.vendorname
+                    }))
+                });
+            }
+        });
+    })
+    $('.businessdropdown').on('change', function () {
+        $.ajax({
+            url: 'AdminArea/Dashboard/GetVendorbyVendorid',
+            data: { vendorid: $(this).val() },
+            success: function (data) {
+                $('input[name="Contact"]').val(data.businesscontact);
+                $('input[name="Email"]').val(data.email);
+                $('input[name="Fax"]').val(data.faxnumber);
+            }
+        });
+    })
+</script>

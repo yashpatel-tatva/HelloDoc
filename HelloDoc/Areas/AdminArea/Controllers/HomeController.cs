@@ -29,6 +29,11 @@ namespace HelloDoc.Areas.AdminArea.Controllers
         { 
             return View(); 
         }
+        [Area("AdminArea")]
+        public IActionResult ExpirePopUp() 
+        { 
+            return View(); 
+        }
 
 
         [Area("AdminArea")]
@@ -41,5 +46,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers
             //}
             return View();
         }
+
+
     }
 }

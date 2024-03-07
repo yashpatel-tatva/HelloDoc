@@ -22,6 +22,7 @@ namespace DataAccess.Repository
         public void SetSession(Admin admin)
         {
             _httpsession.HttpContext.Session.SetInt32("AdminId", admin.Adminid);
+            _httpsession.HttpContext.Session.SetString("AspNetId", admin.Aspnetuserid);
             _httpsession.HttpContext.Session.SetString("UserName", admin.Firstname + " " + admin.Lastname);
             _httpsession.HttpContext.Session.SetString("Role", "Admin");
         }
@@ -30,6 +31,7 @@ namespace DataAccess.Repository
         {
             _httpsession.HttpContext.Session.Remove("AdminId");
             _httpsession.HttpContext.Session.Remove("UserName");
+            _httpsession.HttpContext.Session.Remove("AspNetId");
             _httpsession.HttpContext.Session.Remove("Role");
         }
         public int GetSessionAdminId()
