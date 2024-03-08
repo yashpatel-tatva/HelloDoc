@@ -9,6 +9,7 @@
     <thead style="--bs-table-bg: rgb(235, 235, 235)">
         <tr>
             <th class="d-none"></th>
+            <th class="d-none"></th>
             <th>Name</th>
             <th>Date of Birth</th>
             <th>Region</th>
@@ -45,6 +46,7 @@
             }
             <tr style="--bs-table-bg : @color ; --bs-table-color-state : 'white'" class="text-white align-middle">
                 <td class="d-none">@item.RequestType</td>
+                <td class="d-none">@item.Region</td>
                 <td>@item.PatientName</td>
                 <td>@item.PatientDOB</td>
                 <td>@item.Region</td>
@@ -99,6 +101,7 @@
         <tr>
             <th class="d-none"></th>
             <th class="d-none"></th>
+            <th class="d-none"></th>
         </tr>
     </thead>
     <tbody>
@@ -127,6 +130,7 @@
                 }
             <tr class="" style="--bs-table-bg:#0dcaf04f">
                 <td class="d-none">@item.RequestType</td>
+                <td class="d-none">@item.Region</td>
                 <td>
                     <form data-id="@item.RequestId">
                         <div class="accordion-item">

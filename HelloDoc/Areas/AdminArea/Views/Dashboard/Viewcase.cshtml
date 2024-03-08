@@ -117,12 +117,12 @@
             <div class="d-flex justify-content-end viewcaseactionbtns">
                 @if (Model.Status == 1)
                 {
-                    <div class="m-1"><button type="button" class="border-0 bg-info rounded-2 text-white p-2 gotomodel" data-toggle="modal" data-target="#AssignCasemodal" id="AssignCase">Assign</button></div>
+                    <div class="m-1"><button type="button" class="border-0 bg-info rounded-2 text-white p-2 gotoaction" data-toggle="modal" data-target="#AssignCasemodal" id="AssignCase">Assign</button></div>
                 }
                 <div class="m-1"><button class="border-0 bg-info rounded-2 text-white p-2" id="ViewNotes">View Notes</button></div>
                 @if (Model.Status == 1)
                 {
-                    <div class="m-1"><button type="button" class="border-0 bg-danger rounded-2 text-white p-2 gotomodel" data-toggle="modal" data-target="#CancelCaseModal">Cancle</button></div>
+                    <div class="m-1"><button type="button" class="border-0 bg-danger rounded-2 text-white p-2 gotoaction" data-toggle="modal" data-target="#CancelCaseModal">Cancle</button></div>
                 }
             </div>
         </form>
@@ -142,7 +142,6 @@
 
             var action = $(this).attr('id');
             var id = @Model.RequestId;
-            console.log(id);
 
             $.ajax({
                 url: 'AdminArea/Dashboard/' + action,
@@ -167,7 +166,6 @@
                 patientmobile: phone
             };
 
-            console.log(model);
 
             $.ajax({
                 type: 'POST',
@@ -175,7 +173,6 @@
                 contentType: 'application/json',
                 data: JSON.stringify(model),
                 success: function (response) {
-                    console.log(response);
                     $('#nav-tabContent').html(response);
                 },
                 error: function (error) {

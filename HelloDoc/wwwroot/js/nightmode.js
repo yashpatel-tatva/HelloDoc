@@ -4,10 +4,8 @@ imgmode.classList.remove("fa-spin");
 var bg = document.getElementsByClassName('bggray');
 btn.addEventListener('click', changetheme);
 var flag = 1;
-console.log(sessionStorage.getItem('flag'));
     if (sessionStorage.getItem('flag')) {
         flag = parseInt(sessionStorage.getItem('flag'));
-        console.log(flag);
     }
     changetheme();
 

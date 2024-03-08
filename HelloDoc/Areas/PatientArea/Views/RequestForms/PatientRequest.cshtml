@@ -199,7 +199,6 @@
 <script>
     function checkEmailExists() {
         var email = document.getElementById("patientEmail").value;
-        console.log("check")
         fetch('/Credential/checkemail/' + email)
             .then(response => response.json())
             .then(data => {
@@ -210,20 +209,17 @@
                     patientPassword.style.display = 'none';
                     patientConfirmPassword.style.display = 'none';
                     div.style.display = 'none';
-                    console.log("exist ")
                 }
                 else {
                     patientPassword.style.display = 'block';
                     patientConfirmPassword.style.display = 'block';
                     div.style.display = 'block';
-                    console.log(" not exist ")
                 }
             })
             .catch(error => console.error('Error:', error));
     }
     function print() {
         var pass = document.getElementById("showpass").value
-        console.log(pass)
     }
     
 </script>

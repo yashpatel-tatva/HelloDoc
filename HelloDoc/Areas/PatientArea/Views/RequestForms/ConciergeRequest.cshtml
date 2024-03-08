@@ -174,7 +174,6 @@
 <script>
     function checkEmailExists() {
         var email = document.getElementById("patientEmail").value;
-        console.log("check");
         fetch('/Credential/checkemail/' + email)
             .then(response => response.json())
             .then(data => {
@@ -183,13 +182,11 @@
                 } else {
                     alert("Create Patient Account");
                     $(document).ready(function () {
-                        console.log("outer");
                         $.ajax({
                             url: '../Credential/SendEmailforcreateaccount',
                             type: 'GET',
                             data: { email: email },
                             success: function (result) {
-                                console.log("inner");
                             },
                             error: function (xhr, status, error) {
                                 console.error('Error: ' + error);

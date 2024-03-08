@@ -62,20 +62,16 @@ namespace DataAccess.ServiceRepository
 
 
 
-        public void BlockCase(DashpopupsViewModel model)
+        public void BlockCase(int requestId , string description)
         {
-            var adminid = _admin.GetSessionAdminId();
-            var email = _db.Admins.FirstOrDefault(x => x.Adminid == adminid).Email;
-
-            _blockcase.BlockRequest(model.RequestId, model.Blockreason);
+            _blockcase.BlockRequest(requestId, description);
 
         }
 
-        public void CancelCase(DashpopupsViewModel model)
+        public void CancelCase(int requestid, int casetag, string note)
         {
-            var id = model.RequestId;
-            var casetag = model.CaseTagID;
-            var reason = model.Notes;
+            var id = requestid;
+            var reason = note;
 
             var request = _request.GetFirstOrDefault(x => x.Requestid == id);
             if(request.Casetag != null) { request.Casetag = request.Casetag + " , " + casetag;}

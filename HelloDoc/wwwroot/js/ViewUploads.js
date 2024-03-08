@@ -1,6 +1,5 @@
 ﻿$('.deletebtn').on('click', function () {
     var id = $(this).attr('id');
-    console.log(id);
     $.ajax({
         type: 'POST',
         url: 'AdminArea/Dashboard/Delete',
@@ -16,7 +15,6 @@
 $('.deleteall').on('click', function () {
     $('.childCheckbox:checked').each(function () {
         var id = $(this).val();
-        console.log(id);
         $.ajax({
             type: 'POST',
             url: 'AdminArea/Dashboard/Delete',
@@ -31,7 +29,6 @@ $('.deleteall').on('click', function () {
     });
 });
 $('.downloadall').on('click', function () {
-    console.log($('.childCheckbox:checked').length);
     if ($('.childCheckbox:checked').length === 0) {
         alert("Please select at least one item.");
     }
@@ -41,7 +38,6 @@ $('.downloadall').on('click', function () {
     }
 });
 $('.sendemail').on('click', function () {
-    console.log($('.childCheckbox:checked').length);
     if ($('.childCheckbox:checked').length === 0) {
         alert("Please select at least one item.");
     }
@@ -53,7 +49,6 @@ $('.sendemail').on('click', function () {
         });
 
         formData.append('RequestsId', $('.RequestsId').val());
-        console.log(formData);
 
         $.ajax({
             url: 'AdminArea/Dashboard/SendMail', 
@@ -72,7 +67,6 @@ $('.sendemail').on('click', function () {
 });
 
 $('.deleteall').on('click', function () {
-    console.log($('.childCheckbox:checked').length);
     if ($('.childCheckbox:checked').length === 0) {
         alert("Please select at least one item.");
     }

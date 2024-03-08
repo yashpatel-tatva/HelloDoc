@@ -86,7 +86,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
             var physician = _db.Physicians.ToList();
             if (regionid != 0)
             {
-                physician = physician. Where(x => x.Regionid == regionid).ToList();
+                physician = physician.Where(x => x.Regionid == regionid).ToList();
             }
             return physician;
         }
@@ -205,29 +205,80 @@ namespace HelloDoc.Areas.AdminArea.DataController
         // Pop-ups start
 
         [Area("AdminArea")]
-        [HttpPost]
-        public IActionResult CancelCase(DashpopupsViewModel dashpopupsViewModel)
+        [HttpGet]
+        public IActionResult CancelCase(int id)
         {
-            _requestpopupaction.CancelCase(dashpopupsViewModel);
+            DashpopupsViewModel dashpopupsViewModel = new DashpopupsViewModel();
+            dashpopupsViewModel.RequestId = id;
+            dashpopupsViewModel.PatientName = _requests.GetFirstOrDefault(x => x.Requestid == id).Firstname + " " + _requests.GetFirstOrDefault(x => x.Requestid == id).Lastname;
+            dashpopupsViewModel.casetags = _db.Casetags.ToList();
+            return PartialView("_CancelCasePopUp", dashpopupsViewModel);
+        }
+
+        [Area("AdminArea")]
+        [HttpPost]
+        public IActionResult CancelCase(int requestid , int casetag, string note)
+        {
+            _requestpopupaction.CancelCase( requestid,  casetag,  note);
             return RedirectToAction("AdminTabsLayout", "Home");
 
         }
 
         [Area("AdminArea")]
-        [HttpPost]
-        public IActionResult BlockRequest(DashpopupsViewModel model)
+        [HttpGet]
+        public IActionResult BlockCase(int id)
         {
-            _requestpopupaction.BlockCase(model);
-            var result = _blockcase.GetAll();
-            return View(result);
+            DashpopupsViewModel dashpopupsViewModel = new DashpopupsViewModel();
+            dashpopupsViewModel.RequestId = id;
+            dashpopupsViewModel.PatientName = _requests.GetFirstOrDefault(x => x.Requestid == id).Firstname + " " + _requests.GetFirstOrDefault(x => x.Requestid == id).Lastname;
+            return PartialView("_BlockCasePopUp", dashpopupsViewModel);
         }
 
         [Area("AdminArea")]
         [HttpPost]
-        public IActionResult AssignCase(DashpopupsViewModel model)
+        public IActionResult BlockCase(int requestid, string note)
         {
-            _requestpopupaction.AssignCase(model.RequestId, model.PhysicianId, _admin.GetSessionAdminId(), model.Notes);
+            _requestpopupaction.BlockCase(requestid,  note);
             return RedirectToAction("AdminTabsLayout", "Home");
+        }
+
+
+        [Area("AdminArea")]
+        [HttpGet]
+        public IActionResult AssignCase(int id)
+        {
+            DashpopupsViewModel dashpopupsViewModel = new DashpopupsViewModel();
+            dashpopupsViewModel.RequestId = id;
+            dashpopupsViewModel.regions = _db.Regions.ToList();
+            dashpopupsViewModel.physicians = _db.Physicians.ToList();
+            return PartialView("_AssignCasePopUp", dashpopupsViewModel);
+        }
+        [Area("AdminArea")]
+        [HttpGet]
+        public IActionResult TransferCase(int id)
+        {
+            DashpopupsViewModel dashpopupsViewModel = new DashpopupsViewModel();
+            dashpopupsViewModel.RequestId = id;
+            dashpopupsViewModel.regions = _db.Regions.ToList();
+            dashpopupsViewModel.physicians = _db.Physicians.ToList();
+            return PartialView("_AssignCasePopUp", dashpopupsViewModel);
+        }
+
+        [Area("AdminArea")]
+        [HttpPost]
+        public IActionResult AssignCase(int requestid, int phyid, string note)
+        {
+            _requestpopupaction.AssignCase(requestid, phyid, _admin.GetSessionAdminId(), note);
+            return RedirectToAction("AdminTabsLayout", "Home");
+        }
+
+
+
+        [Area("AdminArea")]
+        [HttpGet]
+        public IActionResult ClearCase(int id)
+        {
+            return PartialView("_ClearCasePopUp");
         }
 
         //Pop-up ends
@@ -347,7 +398,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
         {
             model.CreatedBy = HttpContext.Session.GetString("AspNetId");
             _orderDetail.Add(model);
-            return RedirectToAction("AdminTabsLayout" , "Home");
+            return RedirectToAction("AdminTabsLayout", "Home");
         }
 
 

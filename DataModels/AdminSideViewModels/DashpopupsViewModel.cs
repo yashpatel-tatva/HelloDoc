@@ -22,5 +22,10 @@ namespace DataModels.AdminSideViewModels
         public int RegionId {  get; set; }
         public int PhysicianId {  get; set; }
 
+        public string PatientName { get; set; }
+        public List<Casetag> casetags { get; set; }
+        public List<Region> regions { get; set; }
+        public List<Physician> physicians { get; set; }
+
     }
 }

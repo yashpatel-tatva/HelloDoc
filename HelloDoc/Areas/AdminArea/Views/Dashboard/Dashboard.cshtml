@@ -13,7 +13,6 @@
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
 
 <script>
-    console.log("das")
     $(document).ready(function () {
 
         $.ajax({
@@ -30,7 +29,6 @@
         $('.regiondropdown').on('change', function () {
 
             var regionid = $(this).val();
-            console.log(regionid);
             $.ajax({
                 url: 'AdminArea/Dashboard/GetPhysician',
                 type: 'POST',
@@ -38,13 +36,11 @@
                 success: function (data) {
                     var physiciandropdown = $('#physiciandropdown');
                     physiciandropdown.empty();
-                    console.log(data);
                     physiciandropdown.append($('<option>', {
                         hidden: "hidden",
                         value: "invaild",
                         text: "Select Physician"
                     }))
-                    console.log(data.length);
                     if (data.length == 0) {
                         physiciandropdown.append($('<option>', {
                             value: "invalid",
@@ -61,7 +57,6 @@
                             }))
                         });
                     }
-                    console.log(physiciandropdown);
                 }
             });
 
@@ -69,7 +64,6 @@
         $('.transtoregiondropdown').on('change', function () {
 
             var regionid = $(this).val();
-            console.log(regionid);
             $.ajax({
                 url: 'AdminArea/Dashboard/GetPhysician',
                 type: 'POST',
@@ -77,13 +71,11 @@
                 success: function (data) {
                     var physiciandropdown = $('#transtophysiciandropdown');
                     physiciandropdown.empty();
-                    console.log(data);
                     physiciandropdown.append($('<option>', {
                         hidden: "hidden",
                         value: "invaild",
                         text: "Select Physician"
                     }))
-                    console.log(data.length);
                     if (data.length == 0) {
                         physiciandropdown.append($('<option>', {
                             value: "invalid",
@@ -100,29 +92,16 @@
                             }))
                         });
                     }
-                    console.log(physiciandropdown);
                 }
             });
 
         });
 
 
-        $("#Assignconfirmbutton").on('click', function () {
-            var regionid = $('.regiondropdown').val();
-            var phyid = $('#physiciandropdown').val();
-            console.log(regionid);
-            console.log(phyid);
-            if (phyid == "invalid") {
-                $("#physiciandropdown").css("border-color", "red");
-            } else {
-                $(this).closest('form').submit();
-            }
-        });
+       
         $("#Transferconfirmbutton").on('click', function () {
             var regionid = $('.transtoregiondropdown').val();
             var phyid = $('#transtophysiciandropdown').val();
-            console.log(regionid);
-            console.log(phyid);
             if (phyid == "invalid") {
                 $("#transtophysiciandropdown").css("border-color", "red");
             } else {
@@ -130,15 +109,7 @@
             }
         });
         
-        $("#Cancelconfirmbutton").on('click', function () {
-            var castag = $('.cancleselect').val();
-            if (castag == "1234") {
-                $("#casetagdropdown").css("border-color", "red");
-            } else {
-                $(this).closest('form').submit();
-            }
-        });
-
+      
         $("#Blockconfirmbutton").on('click', function () {
             var reaosn = $('.blocknotes').val();
             if (reaosn == "") {

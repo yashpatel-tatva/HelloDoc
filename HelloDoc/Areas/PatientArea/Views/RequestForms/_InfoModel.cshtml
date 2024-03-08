@@ -32,12 +32,10 @@
         <i class="fa fa-thumbs-up"></i> Ok!
       `,
         willOpen: () => {
-           console.log("Hello")
             var ss = document.createElement('link');
             ss.rel = "stylesheet";
             if (sessionStorage.getItem('flag')) {
                 flag = parseInt(sessionStorage.getItem('flag'));
-                console.log(flag);
             }
             @{
                 var sweetalert = "@sweetalert2";

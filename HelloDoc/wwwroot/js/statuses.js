@@ -1,54 +1,48 @@
 ﻿
 
-console.log("status.js here");
 
-var table = $('.newtable').DataTable({
-    dom: 'lrtip',
-    "pageLength": 5,
-    "language": {
-        "info": "_START_ - _END_ of _TOTAL_",
-        "paginate": {
-            "next": '<i class="fa-solid fa-angle-right"></i>', // Right arrow icon
-            "previous": '<i class="fa-solid fa-angle-left"></i>' // Left arrow icon
+$(document).ready(function () {
+    $('.newtable').DataTable({
+        "initComplete": function (settings, json) {
+            var table = this.api(); // Get the DataTable instance
+            $('#my-search-input').val(settings.oPreviousSearch.sSearch);
+            $('#my-search-input').on('keyup', function () {
+                var searchValue = $(this).val();
+                settings.oPreviousSearch.sSearch = searchValue;
+                settings.oApi._fnReDraw(settings);
+            });
+            $('input[name="requestby"]').on('change', function () {
+                var value = $(this).attr('id');
+                if (value == 'requestbyAll') {
+                    table.column(0).search('').draw();
+                } else {
+                    table.column(0).search(value).draw();
+                }
+            });
+            $('.drawbyregiondropdown').on('change', function () {
+                var value = $(this).val();
+                if (value == '1234') {
+                    table.columns(1).search('').draw();
+                }
+                else {
+                    table.columns(1).search(value).draw();
+                }
+            });
+        },
+        "lengthMenu": [[5, 10, 25, -1], [5, 10, 25, "All"]],
+        "pageLength": 5,
+        language: {
+            oPaginate: {
+                sNext: '<i class="bi bi-caret-right-fill text-info"></i>',
+                sPrevious: '<i class="bi bi-caret-left-fill text-info"></i>'
+            }
         }
-    }
+    });
+    $('.dataTables_filter').hide();
 });
-console.log(table);// Initialize your DataTable
-
-
-$('input[type="search"]').on('keyup', function () {
-    table.search(this.value).draw();
-    console.log("status.js here");
-
-});
-
-
-
-$('input[name="requestby"]').on('change', function () {
-    var value = $(this).attr('id');
-    console.log(value);
-    if (value == 'requestbyAll') {
-        table.columns(0).search('').draw();
-    }
-    else {
-        table.columns(0).search(value).draw();
-    }
-});
-$('.drawbyregiondropdown').on('change', function () {
-    var value = $(this).val();
-    console.log(value);
-    if (value == '1234') {
-        table.columns(1).search('').draw();
-    }
-    else {
-        table.columns(1).search(value).draw();
-    }
-});
-
 
 $('.gotoaction').click(function (e) {
     e.preventDefault();
-    console.log("clicked");
     var action = $(this).attr('action');
     var id = $(this).closest('form').data('id');
 
@@ -66,21 +60,37 @@ $('.gotoaction').click(function (e) {
     });
 });
 
-
-$('.gotomodel').on('click', function (e) {
-    console.log("clicked")
-    var name = $(this).closest('form').attr('value');
-    console.log(name);
-    $('.patientname').html(name);
+$('.gotopopup').click(function (e) {
+    e.preventDefault();
+    var action = $(this).attr('action');
     var id = $(this).closest('form').data('id');
 
+    $.ajax({
+        url: 'AdminArea/Dashboard/' + action,
+        type: 'GET',
+        data: { id: id },
+        success: function (result) {
+
+            $('#PopUps').html(result);
+            var my = new bootstrap.Modal(document.getElementById('ModalToOpen'));
+            my.show();
+        },
+        error: function (xhr, status, error) {
+            console.error('Error: ' + error);
+        },
+    });
+});
+
+
+$('.gotoaction').on('click', function (e) {
+    var name = $(this).closest('form').attr('value');
+    $('.patientname').html(name);
+    var id = $(this).closest('form').data('id');
     $('.inputhiddenrequestid').val(id);
-    console.log(id);
 
 });
 
-$('.gotomodel[data-target="#CancelCaseModal"]').on('click', function () {
-    console.log("clickascaed");
+$('.gotoaction[data-target="#CancelCaseModal"]').on('click', function () {
     $.ajax({
         url: 'AdminArea/Dashboard/GetCaseTags',
         success: function (data) {
@@ -103,35 +113,29 @@ $('.gotomodel[data-target="#CancelCaseModal"]').on('click', function () {
 
 
 
-$('.gotomodel[data-target="#AssignCasemodal"]').on('click', function () {
-    console.log("clickascaed");
-    debugger;
+$('.gotoaction[data-target="#AssignCasemodal"]').on('click', function () {
     $.ajax({
         url: 'AdminArea/Dashboard/GetRegion',
         success: function (data) {
             var regiondropdown = $('.regiondropdown');
             regiondropdown.empty();
-            console.log(data);
             regiondropdown.append($('<option>', {
                 value: "",
                 text: ""
             }))
-            console.log(regiondropdown);
             $.each(data, function (index, regions) {
                 regiondropdown.append($('<option>', {
                     value: regions.regionid,
                     text: regions.name
                 }))
             });
-            console.log(regiondropdown);
-        }
+        },
     });
     $.ajax({
         url: 'AdminArea/Dashboard/GetPhysician',
         success: function (data) {
             var physiciandropdown = $('#physiciandropdown');
             physiciandropdown.empty();
-            console.log(data);
             physiciandropdown.append($('<option>', {
                 hidden: "hidden",
                 value: "invalid",
@@ -143,32 +147,25 @@ $('.gotomodel[data-target="#AssignCasemodal"]').on('click', function () {
                     text: phy.firstname + " " + phy.lastname
                 }))
             });
-            console.log(physiciandropdown);
-
         }
     });
 });
-$('.gotomodel[data-target="#TransferCaseModal"]').on('click', function () {
-    console.log("clickascaed");
-    debugger;
+$('.gotoaction[data-target="#TransferCaseModal"]').on('click', function () {
     $.ajax({
         url: 'AdminArea/Dashboard/GetRegion',
         success: function (data) {
             var regiondropdown = $('.transtoregiondropdown');
             regiondropdown.empty();
-            console.log(data);
             regiondropdown.append($('<option>', {
                 value: "",
                 text: ""
             }))
-            console.log(regiondropdown);
             $.each(data, function (index, regions) {
                 regiondropdown.append($('<option>', {
                     value: regions.regionid,
                     text: regions.name
                 }))
             });
-            console.log(regiondropdown);
         }
     });
     $.ajax({
@@ -176,7 +173,6 @@ $('.gotomodel[data-target="#TransferCaseModal"]').on('click', function () {
         success: function (data) {
             var physiciandropdown = $('#transtophysiciandropdown');
             physiciandropdown.empty();
-            console.log(data);
             physiciandropdown.append($('<option>', {
                 hidden: "hidden",
                 value: "invalid",
@@ -188,8 +184,6 @@ $('.gotomodel[data-target="#TransferCaseModal"]').on('click', function () {
                     text: phy.firstname + " " + phy.lastname
                 }))
             });
-            console.log(physiciandropdown);
-
         }
     });
 });

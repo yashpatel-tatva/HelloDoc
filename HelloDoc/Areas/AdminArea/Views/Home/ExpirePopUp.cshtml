@@ -1,25 +1,4 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-
-@*
-
-<script>
-    swal({
-        title: "Session Expired",
-        text: "Your session has expired. Please log in again.",
-        icon: "warning",
-        button: {
-            text: "Login",
-            closeModal: false,
-        },
-    }).then(function () {
-        window.location.href = "https://localhost:7249/AdminArea/Home/AdminLogin";
-    });
-</script>
-*@
-
-<script>
+﻿<script>
     Swal.fire({
         imageUrl: "https://localhost:7249/res/sessionclock.png",
         title: "Your Session has Expired",

@@ -9,6 +9,7 @@
     <thead style="--bs-table-bg: rgb(235, 235, 235)">
         <tr>
             <th class="d-none"></th>
+            <th class="d-none"></th>
             <th>Name</th>
             <th>Date of Birth</th>
             <th>Requestor</th>
@@ -46,6 +47,7 @@
             }
             <tr style="--bs-table-bg : @color ; --bs-table-color-state : 'white'" class="text-white align-middle">
                 <td class="d-none">@item.RequestType</td>
+                <td class="d-none">@item.Region</td>
                 <td>@item.PatientName</td>
                 <td>@item.PatientDOB</td>
                 <td>@item.RequestorName</td>
@@ -117,8 +119,8 @@
                                 <li><button type="button" class="dropdown-item gotoaction text-secondary" action="ViewCase"><i class="bi bi-view-list me-2"></i>View case</button></li>
                                 <li><button type="button" class="dropdown-item gotoaction text-secondary" action="Viewuploads"><i class="bi bi-file-earmark-arrow-up-fill me-2"></i>View Uploads</button></li>
                                 <li><button type="button" class="dropdown-item gotoaction text-secondary" action="ViewNotes"><i class="fa-regular fa-rectangle-list me-2"></i>View Notes</button></li>
-                                <li><button type="button" class="dropdown-item gotomodel text-secondary" data-toggle="modal" data-target="#TransferCaseModal"><i class="fa-solid fa-shuffle me-2"></i>Transfer</button></li>
-                                <li><button type="button" class="dropdown-item gotoaction text-secondary" action="ClearCase"><i class="fa-regular fa-circle-xmark me-2"></i>Clear case</button></li>
+                                <li><button type="button" class="dropdown-item gotopopup text-secondary" action="TransferCase"><i class="fa-solid fa-shuffle me-2"></i>Transfer</button></li>
+                                <li><button type="button" class="dropdown-item gotopopup text-secondary" action="ClearCase"><i class="fa-regular fa-circle-xmark me-2"></i>Clear case</button></li>
                                 <li><button type="button" class="dropdown-item gotoaction text-secondary" action="SendAgreenment"><i class="fa-solid fa-file-contract me-2"></i>Send Agrrenment</button></li>
                             </ul>
                         </form>
@@ -133,6 +135,7 @@
 <table class="table newtable w-100 mt-2 acctable">
     <thead>
         <tr>
+            <th class="d-none"></th>
             <th class="d-none"></th>
             <th class="d-none"></th>
         </tr>
@@ -163,6 +166,7 @@
                 }
             <tr class="" style="--bs-table-bg:#0dcaf04f">
                 <td class="d-none">@item.RequestType</td>
+                <td class="d-none">@item.Region</td>
                 <td>
                     <form data-id="@item.RequestId">
                         <div class="accordion-item">
@@ -226,9 +230,9 @@
                                     <div class="row  mt-4 d-flex flex-wrap">
                                         <div class="col-6 pt-2"><button type="button" class="w-100 small border-0 rounded-pill px-3 py-1 text-white gotoaction" action="" style="background-color : darkorange">Send Agreement</button></div>
                                         <div class="col-6 pt-2"><button type="button" class="w-100 small border-0 rounded-pill px-3 py-1 text-white gotoaction" action="ViewNotes" style="background-color : green">View Notes</button></div>
-                                        <div class="col-6 pt-2"><button type="button" class="w-100 small border-0 rounded-pill px-3 py-1 text-white gotomodel" data-toggle="modal" data-target="#TransferCaseModal" style="background-color : #0dcaf0">Transfer</button></div>
+                                        <div class="col-6 pt-2"><button type="button" class="w-100 small border-0 rounded-pill px-3 py-1 text-white gotopopup" action="TransferCase" style="background-color : #0dcaf0">Transfer</button></div>
                                         <div class="col-6 pt-2"><button type="button" class="w-100 small border-0 rounded-pill px-3 py-1 text-white gotoaction" action="ViewUploads" style="background-color : green">View Uploads</button></div>
-                                        <div class="col-6 pt-2"><button type="button" class="w-100 small border-0 rounded-pill px-3 py-1 text-white gotoaction" action="" style="background-color : darkorange">Clear Case</button></div>
+                                        <div class="col-6 pt-2"><button type="button" class="w-100 small border-0 rounded-pill px-3 py-1 text-white gotopopup" action="ClearCase" style="background-color : darkorange">Clear Case</button></div>
                                         <div class="col-6 pt-2"><button type="button" class="w-100 small border-0 rounded-pill px-3 py-1 text-white gotoaction" action="" style="background-color : green">Email</button></div>
                                     </div>
                                 </div>
@@ -246,4 +250,4 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
 
-<script src="~/js/statuses.js"></script>
+<script src="~/js/statuses.js" asp-append-version="true"></script>

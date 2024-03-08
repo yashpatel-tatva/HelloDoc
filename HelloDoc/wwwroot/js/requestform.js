@@ -1,6 +1,5 @@
 try {
     var actualBtn = document.getElementById('actual-btn');
-    console.log(actualBtn);
     var fileChosen = document.getElementById('file-chosen');
 
     actualBtn.addEventListener('change', function () {
@@ -12,7 +11,6 @@ try {
     })
 }
 catch {
-    console.log("erro")
 }  window.onload = function () {
 
         try {

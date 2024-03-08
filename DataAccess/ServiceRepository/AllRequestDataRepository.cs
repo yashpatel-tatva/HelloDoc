@@ -1,21 +1,11 @@
-﻿using DataAccess.Repository;
-using DataAccess.ServiceRepository.IServiceRepository;
+﻿using DataAccess.ServiceRepository.IServiceRepository;
 using DataModels.AdminSideViewModels;
-using HelloDoc;
 using HelloDoc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
-using Microsoft.AspNetCore.Mvc;
-using static HelloDoc.Areas.PatientArea.ViewModels.PatientDashboardViewModel;
 using DataAccess.Repository.IRepository;
 
 namespace DataAccess.ServiceRepository
@@ -26,13 +16,15 @@ namespace DataAccess.ServiceRepository
         private readonly IHttpContextAccessor _session;
         private readonly IBlockCaseRepository _blockcase;
         private readonly IRequestRepository _request;
+        private readonly IRequestStatusLogRepository _requeststatus;
 
-        public AllRequestDataRepository(HelloDocDbContext dbContext, IHttpContextAccessor httpContextAccessor, IBlockCaseRepository blockCaseRepository , IRequestRepository requestRepository)
+        public AllRequestDataRepository(HelloDocDbContext dbContext, IHttpContextAccessor httpContextAccessor, IBlockCaseRepository blockCaseRepository, IRequestRepository requestRepository, IRequestStatusLogRepository requeststatus)
         {
             _db = dbContext;
             _session = httpContextAccessor;
             _blockcase = blockCaseRepository;
             _request = requestRepository;
+            _requeststatus = requeststatus;
         }
 
         public List<AllRequestDataViewModel> Status(int status)
@@ -69,7 +61,7 @@ namespace DataAccess.ServiceRepository
                     }
                 }
                 var id = item.Requestid;
-                var reqstatuslog = item.Requeststatuslogs;
+                var reqstatuslog = item.Requeststatuslogs.ToList().OrderByDescending(x => x.Createddate);
                 if (reqstatuslog.Count() == 0)
                 {
                     model.TransferNotes = "-";
@@ -81,7 +73,7 @@ namespace DataAccess.ServiceRepository
                         var date = reqstatuslog.ElementAt(0).Createddate;
                         var afterphysicanid = reqstatuslog.ElementAt(0).Transtophysicianid;
                         var afterphysician = reqstatuslog.ElementAt(0).Transtophysician.Firstname;
-                        model.TransferNotes = "Admin transferred case to " + afterphysician + " on " + date.ToString("dd-MM-yyyy") +  " at " + date.ToString("hh:mm tt");
+                        model.TransferNotes = "Admin transferred case to " + afterphysician + " on " + date.ToString("dd-MM-yyyy") + " at " + date.ToString("hh:mm tt");
                     }
                     else
                     {
@@ -134,20 +126,25 @@ namespace DataAccess.ServiceRepository
                 model.PhysicianNotes = reqnotes.Physiciannotes;
                 model.AdminNotes = reqnotes.Adminnotes;
             }
-            var reqstatuslog = _db.Requeststatuslogs.FirstOrDefault(x => x.Requestid == id);
+            var reqstatuslog = _requeststatus.GetStatusbyId(id).Where(x => x.Transtophysicianid != null).ToList().OrderBy(x => x.Createddate);
+            List<string> notes = new List<string>();
             if (reqstatuslog == null)
             {
-                model.TransferNotes = "-";
+                notes.Add("-");
             }
             else
             {
-                if(reqstatuslog.Transtophysicianid != null) {
-                    var date = _db.Requeststatuslogs.FirstOrDefault(x => x.Requestid == id).Createddate;
-                    var afterphysicanid = _db.Requeststatuslogs.FirstOrDefault(y => y.Requestid == id).Transtophysicianid;
+                foreach (var note in reqstatuslog)
+                {
+                    var date = note.Createddate;
+                    var afterphysicanid = note.Transtophysicianid;
                     var afterphysician = _db.Physicians.FirstOrDefault(x => x.Physicianid == afterphysicanid).Firstname;
-                    model.TransferNotes = "Admin transferred case to " + afterphysician + " on " + date.ToString("dd-MM-yyyy") + " at " + date.ToString("hh:mm tt");
+                    var transfernote = "Admin transferred case to " + afterphysician + " on " + date.ToString("dd-MM-yyyy") + " at " + date.ToString("hh:mm tt");
+                    notes.Add(transfernote);
                 }
+                    
             }
+            model.TransferNotes = notes;
             return model;
         }
 
@@ -288,8 +285,8 @@ namespace DataAccess.ServiceRepository
         }
 
         public RequestViewUploadsViewModel GetDocumentByRequestId(int id)
-            {
-            var request = _db.Requests.Include(r=>r.Requestwisefiles).Include(r=>r.User).FirstOrDefault(x=>x.Requestid == id);
+        {
+            var request = _db.Requests.Include(r => r.Requestwisefiles).Include(r => r.User).FirstOrDefault(x => x.Requestid == id);
             RequestViewUploadsViewModel model = new RequestViewUploadsViewModel();
 
             model.RequestsId = id;

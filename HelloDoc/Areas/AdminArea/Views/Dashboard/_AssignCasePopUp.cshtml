@@ -1,0 +1,106 @@
+﻿@using DataModels.AdminSideViewModels
+@model DashpopupsViewModel
+
+<div class="modal fade rounded-3 shadow" id="ModalToOpen" tabindex="-1" role="dialog" aria-labelledby="AssignCasemodal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h5 class="modal-title text-white">Assign Request</h5>
+                <button class="btn" type="button" data-dismiss="modal">
+                    <i class="fa-solid fa-xmark" style="color: #ffffff;"></i>
+                </button>
+            </div>
+            <form>
+                <div class="modal-body">
+                    <input type="number" id="inputhiddenrequestid" asp-for="RequestId" value="@Model.RequestId" hidden />
+                    <label class="my-2 text-secondary  fw-normal mb-3" style="font-size:12.8px">To Assign This Request, search and selectanother Physician</label>
+                    <div class="did-floating-label-content mb-3 form-group d-flex align-items-center rounded">
+                        <select class="form-select form-select-lg fs-6 form-control regiondropdown did-floating-select" onclick="this.setAttribute('value', this.value);" onchange="this.setAttribute('value', this.value);" value="" asp-for="RegionId" aria-label=".form-select-lg example">
+                            <option value=""></option>
+                            @foreach (var item in Model.regions)
+                            {
+                                <option value="@item.Regionid">@item.Name</option>
+                            }
+                        </select>
+                        <span class="did-floating-label">Narrow Search By Region</span>
+                    </div>
+                    <select class="form-select form-select-lg mb-3 fs-6 form-control" id="physiciandropdown" aria-label=".form-select-lg example" required>
+                        <option value="invalid">Select Physician</option>
+                        @foreach (var item in Model.physicians)
+                        {
+                            <option value="@item.Physicianid">@item.Firstname @item.Lastname</option>
+                        }
+                    </select>
+
+                    <div class="form-group rounded d-flex align-items-center">
+                        <textarea class="form-control  shadow-none" id="AssigncaeTextarea" placeholder="" rows="5"></textarea>
+                        <span>Provide Additional Notes</span>
+                    </div>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" id="Assignconfirmbutton" class="btn btn-info text-white ">Confirm</button>
+                    <button type="button" class="btn btn-outline-info" data-dismiss="modal">Cancle</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+
+    $('#Assignconfirmbutton').on('click', function () {
+        var phyid = $('#physiciandropdown').val();
+        var note = $('#AssigncaeTextarea').val();
+        var requestid = $('#inputhiddenrequestid').val();
+        if (phyid == "invalid") {
+            $("#physiciandropdown").css("border-color", "red");
+        } else {
+            $.ajax({
+                url: 'AdminArea/Dashboard/AssignCase',
+                type: 'POST',
+                data: { requestid: requestid, phyid: phyid, note: note },
+                success: function (result) {
+                    location.reload();
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error: ' + error);
+                },
+            });
+        }
+    });
+    $('.regiondropdown').on('change', function () {
+
+        var regionid = $(this).val();
+        $.ajax({
+            url: 'AdminArea/Dashboard/GetPhysician',
+            type: 'POST',
+            data: { regionid: regionid },
+            success: function (data) {
+                var physiciandropdown = $('#physiciandropdown');
+                physiciandropdown.empty();
+                physiciandropdown.append($('<option>', {
+                    hidden: "hidden",
+                    value: "invaild",
+                    text: "Select Physician"
+                }))
+                if (data.length == 0) {
+                    physiciandropdown.append($('<option>', {
+                        value: "invalid",
+                        disabled: "disabled",
+                        text: "No Physician in this area",
+                        style: "color : red"
+                    }))
+                }
+                else {
+                    $.each(data, function (index, phy) {
+                        physiciandropdown.append($('<option>', {
+                            value: phy.physicianid,
+                            text: phy.firstname + " " + phy.lastname
+                        }))
+                    });
+                }
+            }
+        });
+
+    });
+
+</script>

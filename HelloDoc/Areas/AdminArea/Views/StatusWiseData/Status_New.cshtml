@@ -104,11 +104,11 @@
                         </button>
                         <form data-id="@item.RequestId" value="@item.PatientName">
                             <ul class="dropdown-menu">
-                                <li><button type="button" class="dropdown-item gotomodel text-secondary" data-toggle="modal" data-target="#AssignCasemodal"><i class="fa-regular fa-rectangle-list me-2"></i>Assign case</button></li>
-                                <li><button type="button" class="dropdown-item gotomodel text-secondary" data-toggle="modal" data-target="#CancelCaseModal"><i class="fa-regular fa-circle-xmark me-2"></i>Cancel case</button></li>
+                                <li><button type="button" class="dropdown-item gotopopup text-secondary" action="AssignCase"><i class="fa-regular fa-rectangle-list me-2"></i>Assign case</button></li>
+                                <li><button type="button" class="dropdown-item gotopopup text-secondary" action="CancelCase"><i class="fa-regular fa-circle-xmark me-2"></i>Cancel case</button></li>
                                 <li><button type="button" class="dropdown-item gotoaction text-secondary" action="ViewCase"><i class="bi bi-view-list me-2"></i>View case</button></li>
                                 <li><button type="button" class="dropdown-item gotoaction text-secondary" action="ViewNotes"><i class="fa-solid fa-book-journal-whills me-2"></i>View Notes</button></li>
-                                <li><button type="button" class="dropdown-item gotomodel text-secondary" data-toggle="modal" data-target="#BlockPatientsmodal"><i class="fa-solid fa-ban me-2"></i>Block Patients</button></li>
+                                <li><button type="button" class="dropdown-item gotopopup text-secondary" action="BlockCase"><i class="fa-solid fa-ban me-2"></i>Block Patients</button></li>
                             </ul>
                         </form>
 
@@ -205,10 +205,10 @@
                                         <div class="ps-1">@item.RequestorName</div>
                                     </div>
                                     <div class="row  mt-4 d-flex flex-wrap">
-                                        <div class="col-6 pt-2"><button type="button" class="w-100 border-0 rounded-pill px-3 py-1 small text-white gotomodel" data-toggle="modal" data-target="#AssignCasemodal" style="background-color : purple">Assign Case</button></div>
-                                        <div class="col-6 pt-2"><button type="button" class="w-100 border-0 rounded-pill px-3 py-1 small text-white gotomodel" data-toggle="modal" data-target="#CancelCaseModal" style="background-color : red">Cancle Case</button></div>
+                                        <div class="col-6 pt-2"><button type="button" class="w-100 border-0 rounded-pill px-3 py-1 small text-white gotoaction" data-toggle="modal" data-target="#AssignCasemodal" style="background-color : purple">Assign Case</button></div>
+                                        <div class="col-6 pt-2"><button type="button" class="w-100 border-0 rounded-pill px-3 py-1 small text-white gotoaction" data-toggle="modal" data-target="#CancelCaseModal" style="background-color : red">Cancle Case</button></div>
                                         <div class="col-6 pt-2"><button type="button" class="w-100 border-0 rounded-pill px-3 py-1 small text-white gotoaction" action="ViewNotes" style="background-color : green">View Notes</button></div>
-                                        <div class="col-6 pt-2"><button type="button" class="w-100 border-0 rounded-pill px-3 py-1 small text-white gotomodel" data-toggle="modal" data-target="#BlockPatientsmodal" style="background-color : red">Block Patient</button></div>
+                                        <div class="col-6 pt-2"><button type="button" class="w-100 border-0 rounded-pill px-3 py-1 small text-white gotoaction" data-toggle="modal" data-target="#BlockPatientsmodal" style="background-color : red">Block Patient</button></div>
                                         <div class="col-6 pt-2"><button type="button" class="w-100 border-0 rounded-pill px-3 py-1 small text-white gotoaction" action="" style="background-color : green">Email</button></div>
                                     </div>
                                 </div>

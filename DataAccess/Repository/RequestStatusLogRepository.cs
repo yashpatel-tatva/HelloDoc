@@ -21,6 +21,12 @@ namespace DataAccess.Repository
             _db.Requeststatuslogs.Add(requeststatuslog);
         }
 
+        public List<Requeststatuslog> GetStatusbyId(int RequestId)
+        {
+            var reqstatus = _db.Requeststatuslogs.ToList().Where(x => x.Requestid == RequestId);
+            return reqstatus.ToList();
+        }
+
         public void Update(Requeststatuslog requeststatuslog)
         {
               _db.Requeststatuslogs.Update(requeststatuslog);

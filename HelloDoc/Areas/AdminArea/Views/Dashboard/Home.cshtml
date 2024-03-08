@@ -104,7 +104,7 @@
         <div class="rounded-4 bg-white">
             <div class="displayflexorblockwithpad justify-content-between p-2 ">
                 <div class="d-flex gap-1 align-items-center searchandregiondropdown">
-                    <div><input type="search" placeholder="Search" class="form-control rounded" /></div>
+                    <div><input type="search" placeholder="Search" id="my-search-input" class="form-control rounded" /></div>
                     <div>
                         <select class="form-select  mb-0 fs-6 form-control drawbyregiondropdown">
                             <option value="1234">All Region</option>
@@ -154,7 +154,6 @@
         $(document).ready(function () {
             $('.gotoaction').click(function (e) {
                 e.preventDefault();
-                console.log("clicked");
                 var action = $(this).attr('action');
                 var id = $(this).closest('form').data('id');
 
@@ -163,7 +162,6 @@
                     type: 'GET',
                     data: { id: id },
                     success: function (result) {
-
                         $('#nav-tabContent').html(result);
                     },
                     error: function (xhr, status, error) {
@@ -270,7 +268,6 @@
                         text: regions.name
                     }))
                 });
-                console.log(drawbyregiondropdown);
             }
         });
 

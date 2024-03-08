@@ -23,12 +23,16 @@
                     <div class="p-1"><i class="fa-solid fa-right-left" style="font-size : x-large"></i></div>
                     <div class="p-1">
                         <div class="h6 mb-0">Transfer Notes</div>
-                        <div class="small">
-                            @if (Model.TransferNotes == null)
-                            {
-                                <span>-</span>
-                            } @Model.TransferNotes
-                        </div>
+                        @{
+                            var count = 1;
+                            <div class="small">
+                                @foreach (var note in Model.TransferNotes)
+                                {
+                                    <span>@count). @note</span><br />
+                                    count++ ;
+                                }
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
@@ -128,8 +132,7 @@
             requestid: requestid,
             AdminNotes: Notes
         };
-        
-        console.log(model);
+
 
         $.ajax({
             type: 'POST',
@@ -137,7 +140,6 @@
             contentType: 'application/json',
             data: JSON.stringify(model),
             success: function (response) {
-                console.log(response);
                 $('#nav-tabContent').html(response);
             },
             error: function (error) {

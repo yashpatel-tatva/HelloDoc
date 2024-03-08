@@ -1,0 +1,51 @@
+﻿@using DataModels.AdminSideViewModels
+@model DashpopupsViewModel
+
+<div class="modal fade" id="ModalToOpen" tabindex="-1" role="dialog" aria-labelledby="BlockCaseTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h5 class="modal-title text-white">Confirm Block</h5>
+                <button type="button" class="btn" data-dismiss="modal" aria-label="Close">
+                    <i class="fa-solid fa-xmark text-white"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">Patient Name : <span class="patientname text-info">@Model.PatientName</span> </div>
+                    <input type="number" id="inputhiddenrequestid" asp-for="RequestId" value="@Model.RequestId" hidden />
+                    <div class="form-group rounded d-flex align-items-center blocknotes">
+                        <textarea class="form-control blocknotes shadow-none" placeholder="" rows="5" id="Blockreason"></textarea>
+                        <span>Reason for Block Request</span>
+                    </div>
+                    <div class="d-flex float-end mt-4">
+                        <button type="button" id="Blockconfirmbutton" class="btn btn-info text-white mx-2 shadow-none ">Confirm</button>
+                        <button type="button" class="btn border-info text-info shadow-none" data-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $("#Blockconfirmbutton").on('click', function () {
+        var note = $('#Blockreason').val();
+        var requestid = $('#inputhiddenrequestid').val();
+        if (note == "") {
+            $(".blocknotes").css("border-color", "red");
+        } else {
+            $.ajax({
+                url: 'AdminArea/Dashboard/BlockCase',
+                type: 'POST',
+                data: { requestid: requestid, note: note },
+                success: function (result) {
+                    location.reload();
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error: ' + error);
+                },
+            });
+        }
+    });
+</script>

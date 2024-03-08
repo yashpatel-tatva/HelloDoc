@@ -40,10 +40,15 @@ namespace HelloDoc.Areas.AdminArea.Controllers
         [AuthorizationRepository("Admin")]
         public IActionResult AdminTabsLayout()
         {
-            //if (_admin.GetSessionAdminId() == -1)
-            //{
-            //    return RedirectToAction("AdminLogin", "Home");
-            //}
+            var aspnetid = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler().ReadJwtToken(Request.Cookies["jwt"]).Claims.FirstOrDefault(x => x.Type == "AspNetId").Value;
+
+            if (aspnetid == null)
+            {
+                return RedirectToAction("AdminLogin", "Home");
+            }
+
+            _admin.SetSession(_admin.GetFirstOrDefault(x => x.Aspnetuserid == aspnetid));
+
             return View();
         }
 
