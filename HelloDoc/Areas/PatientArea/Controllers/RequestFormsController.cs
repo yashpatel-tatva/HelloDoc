@@ -6,15 +6,18 @@ using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using HelloDoc.Areas.PatientArea.ViewModels;
+using DataAccess.ServiceRepository.IServiceRepository;
 
 namespace HelloDoc.Areas.PatientArea.Controllers
 {
     public class RequestFormsController : Controller
     {
         private readonly HelloDocDbContext _context;
-        public RequestFormsController(HelloDocDbContext context)
+        private readonly IPatientFormsRepository _patientForm;
+        public RequestFormsController(HelloDocDbContext context , IPatientFormsRepository patientFormsRepository)
         {
             _context = context;
+            _patientForm = patientFormsRepository;
         }
         [Area("PatientArea")]
         public IActionResult PatientRequest()
@@ -55,73 +58,13 @@ namespace HelloDoc.Areas.PatientArea.Controllers
 
             if (model.Password != null)
             {
-                Aspnetuser newaspnetuser = new Aspnetuser
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Username = model.FirstName + model.LastName,
-                    Passwordhash = model.Password,
-                    Email = model.Email,
-                    Createddate = DateTime.Now,
-                };
-                _context.Aspnetusers.Add(newaspnetuser);
-                _context.SaveChanges();
-                User newuser = new User
-                {
-                    Aspnetuserid = newaspnetuser.Id,
-                    Firstname = model.FirstName,
-                    Lastname = model.LastName,
-                    Email = model.Email,
-                    Street = model.Street,
-                    City = model.City,
-                    State = model.State,
-                    Zip = model.ZipCode,
-                    Strmonth = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(model.BirthDate.Month),
-                    Intdate = model.BirthDate.Day,
-                    Intyear = model.BirthDate.Year,
-                    Createdby = model.Email,
-                    Createddate = DateTime.Now,
-                    Regionid = 3,
-                };
-                _context.Users.Add(newuser);
-                _context.SaveChanges();
+                _patientForm.AddNewUserAndAspUser(model);
             }
             var aspnetuser = await _context.Aspnetusers.FirstOrDefaultAsync(m => m.Email == model.Email);
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == model.Email);
             if (aspnetuser != null)
             {
-                Request request = new Request
-                {
-                    Requesttypeid = model.Requesttypeid,
-                    Userid = user.Userid,
-                    Firstname = model.FirstName,
-                    Lastname = model.LastName,
-                    Email = model.Email,
-                    Phonenumber = model.PhoneNumber,
-                    Status = model.Status,
-                    Createddate = DateTime.Now,
-                    User = user,
-                };
-                _context.Add(request);
-                _context.SaveChanges();
-                Requestclient requestclient = new Requestclient
-                {
-                    Notes = model.Symptoms,
-                    Requestid = request.Requestid,
-                    Firstname = model.FirstName,
-                    Lastname = model.LastName,
-                    Email = model.Email,
-                    Phonenumber = model.PhoneNumber,
-                    State = model.State,
-                    Street = model.Street,
-                    City = model.City,
-                    Zipcode = model.ZipCode,
-                    Intdate = model.BirthDate.Day,
-                    Intyear = model.BirthDate.Year,
-                    Strmonth = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(model.BirthDate.Month),
-                    Regionid = (int)user.Regionid,
-                };
-                _context.Requestclients.Add(requestclient);
-                _context.SaveChanges();
+                _patientForm.AddRequestFromPatient(model);
                 return RedirectToAction("Index", "Home");
             }
             else

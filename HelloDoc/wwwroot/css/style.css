@@ -56,11 +56,11 @@ body {
         -webkit-appearance: none;
         -moz-appearance: none;
         appearance: none;
-        background: url(https://localhost:7249/res/downarrow.png) 96% / 3% no-repeat;
+        background: url(/res/downarrow.png) 96% / 3% no-repeat;
         transition : 0.3s ;
     }
     .form-group select:focus {
-        background: url(https://localhost:7249/res/uparrow.png) 96% / 3% no-repeat;
+        background: url(/res/uparrow.png) 96% / 3% no-repeat;
     }
 
 

@@ -1,6 +1,6 @@
 ﻿<script>
     Swal.fire({
-        imageUrl: "https://localhost:7249/res/sessionclock.png",
+        imageUrl: "/res/sessionclock.png",
         title: "Your Session has Expired",
         text: "Please Login Again",
         width: 900,
@@ -15,7 +15,7 @@
         showCancelButton: false,
     }).then((result) => {
         if (result.isConfirmed) {
-            window.location.href = "https://localhost:7249/AdminArea/Home/AdminLogin";
+            window.location.href = "/AdminArea/Home/AdminLogin";
         }
     });
 </script>

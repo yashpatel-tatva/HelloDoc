@@ -13,11 +13,13 @@ namespace HelloDoc.Areas.PatientArea.DataController
     {
         private readonly HelloDocDbContext _context;
         private readonly ISendEmailRepository _sendemail;
+        private readonly IPatientFormsRepository _patientFormsRepository;
 
-        public CredentialController(HelloDocDbContext context , ISendEmailRepository sendEmailRepository)
+        public CredentialController(HelloDocDbContext context , ISendEmailRepository sendEmailRepository, IPatientFormsRepository patientFormsRepository)
         {
             _context = context;
             _sendemail = sendEmailRepository;
+            _patientFormsRepository = patientFormsRepository;
         }
 
         [Area("PatientArea")]
@@ -32,43 +34,7 @@ namespace HelloDoc.Areas.PatientArea.DataController
         [HttpPost]
         public IActionResult CreateAccount(PatientRequestViewModel model)
         {
-            Aspnetuser aspnetuser = new Aspnetuser();
-            User users = new User();
-            Aspnetuser newaspnetuser = new Aspnetuser
-            {
-                Id = Guid.NewGuid().ToString(),
-                Username = model.FirstName + model.LastName,
-                Passwordhash = model.Password,
-                Email = model.Email,
-                Createddate = DateTime.Now,
-            };
-            _context.Aspnetusers.Add(newaspnetuser);
-            _context.SaveChanges();
-            User newuser = new User
-            {
-                Aspnetuserid = newaspnetuser.Id,
-                Firstname = model.FirstName,
-                Lastname = model.LastName,
-                Email = model.Email,
-                Mobile = model.PhoneNumber,
-                Street = model.Street,
-                City = model.City,
-                State = model.State,
-                Zip = model.ZipCode,
-                Strmonth = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(model.BirthDate.Month),
-                Intdate = model.BirthDate.Day,
-                Intyear = model.BirthDate.Year,
-                Createdby = model.Email,
-                Createddate = DateTime.Now,
-                Regionid = 3,
-            };
-            _context.Users.Add(newuser);
-            _context.SaveChanges();
-            Aspnetuserrole aspnetuserrole = new Aspnetuserrole();
-            aspnetuserrole.Userid = newaspnetuser.Id;
-            aspnetuserrole.Roleid = "3";
-            _context.Aspnetuserroles.Add(aspnetuserrole);
-            _context.SaveChanges();
+            _patientFormsRepository.AddNewUserAndAspUser(model);
 
             return RedirectToAction("PatientLogin","Home");
         }
