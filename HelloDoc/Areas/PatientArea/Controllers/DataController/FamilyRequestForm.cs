@@ -60,6 +60,7 @@ namespace HelloDoc.Areas.PatientArea.DataController
         {
             var aspnetuser = await _context.Aspnetusers.FirstOrDefaultAsync(m => m.Email == model.Email);
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == model.Email);
+            
             var region = await _context.Regions.FirstOrDefaultAsync(x => x.Regionid == user.Regionid);
             var requestcount = (from m in _context.Requests where m.Createddate.Date == DateTime.Now.Date select m).ToList();
             if (aspnetuser != null)

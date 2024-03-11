@@ -14,7 +14,6 @@
 
 <script>
     $(document).ready(function () {
-
         $.ajax({
             url: 'AdminArea/Dashboard/Home',
             success: function (response) {
@@ -24,108 +23,7 @@
                 console.error(error);
             }
         });
-
-
-        $('.regiondropdown').on('change', function () {
-
-            var regionid = $(this).val();
-            $.ajax({
-                url: 'AdminArea/Dashboard/GetPhysician',
-                type: 'POST',
-                data: { regionid: regionid },
-                success: function (data) {
-                    var physiciandropdown = $('#physiciandropdown');
-                    physiciandropdown.empty();
-                    physiciandropdown.append($('<option>', {
-                        hidden: "hidden",
-                        value: "invaild",
-                        text: "Select Physician"
-                    }))
-                    if (data.length == 0) {
-                        physiciandropdown.append($('<option>', {
-                            value: "invalid",
-                            disabled: "disabled",
-                            text: "No Physician in this area",
-                            style: "color : red"
-                        }))
-                    }
-                    else {
-                        $.each(data, function (index, phy) {
-                            physiciandropdown.append($('<option>', {
-                                value: phy.physicianid,
-                                text: phy.firstname + " " + phy.lastname
-                            }))
-                        });
-                    }
-                }
-            });
-
-        });
-        $('.transtoregiondropdown').on('change', function () {
-
-            var regionid = $(this).val();
-            $.ajax({
-                url: 'AdminArea/Dashboard/GetPhysician',
-                type: 'POST',
-                data: { regionid: regionid },
-                success: function (data) {
-                    var physiciandropdown = $('#transtophysiciandropdown');
-                    physiciandropdown.empty();
-                    physiciandropdown.append($('<option>', {
-                        hidden: "hidden",
-                        value: "invaild",
-                        text: "Select Physician"
-                    }))
-                    if (data.length == 0) {
-                        physiciandropdown.append($('<option>', {
-                            value: "invalid",
-                            disabled: "disabled",
-                            text: "No Physician in this area",
-                            style: "color : red"
-                        }))
-                    }
-                    else {
-                        $.each(data, function (index, phy) {
-                            physiciandropdown.append($('<option>', {
-                                value: phy.physicianid,
-                                text: phy.firstname + " " + phy.lastname
-                            }))
-                        });
-                    }
-                }
-            });
-
-        });
-
-
-       
-        $("#Transferconfirmbutton").on('click', function () {
-            var regionid = $('.transtoregiondropdown').val();
-            var phyid = $('#transtophysiciandropdown').val();
-            if (phyid == "invalid") {
-                $("#transtophysiciandropdown").css("border-color", "red");
-            } else {
-                $(this).closest('form').submit();
-            }
-        });
-        
-      
-        $("#Blockconfirmbutton").on('click', function () {
-            var reaosn = $('.blocknotes').val();
-            if (reaosn == "") {
-                $(".blocknotes").css("border-color", "red");
-            } else {
-                $(this).closest('form').submit();
-            }
-        });
-
-
     });
-
-
-
-
-
 </script>
 
 

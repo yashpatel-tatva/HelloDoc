@@ -1,4 +1,48 @@
 ﻿@{
     Layout = null;
 }
-clear cae   
+
+
+@using DataModels.AdminSideViewModels
+@model DashpopupsViewModel
+
+<div class="modal fade" id="ModalToOpen" tabindex="-1" role="dialog" aria-labelledby="BlockCaseTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form class="d-flex flex-column justify-content-center m-4">
+                    <input type="number" id="inputhiddenrequestid" asp-for="RequestId" value="@Model.RequestId" hidden />
+                    <div class="border border-1 border-warning rounded-circle d-flex my-5 align-self-center" style="width : min-content"><img src="~/res/warninggif.gif" height="100px" width="100px" /></div>
+                    <div class="d-flex justify-content-center">
+                        <h2 class="mb-0  align-self-center">Confirmation For Clear Case</h2>
+                    </div>
+                    <div class="d-flex justify-content-center py-3">
+                        <span class="text-muted" style="text-align :center"> Are you sure you want to clear this request? Once clear this request then you are not able to see this request  </span>
+                    </div>
+                    <div class="d-flex justify-content-center my-5 gap-2">
+                        <button type="button" id="confirmclearcase" class="btn btn-info text-white ">Clear</button>
+                        <button type="button" class="btn btn-outline-info" data-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#confirmclearcase').on('click', function () {
+        var requestid = $('#inputhiddenrequestid').val();
+        console.log(requestid);
+        $.ajax({
+            url: 'AdminArea/Dashboard/ClearCaseSubmit',
+            type: 'POST',
+            data: { requestid: requestid},
+            success: function (result) {
+                location.reload();
+            },
+            error: function (xhr, status, error) {
+                console.error('Error: ' + error);
+            },
+        });
+    });
+</script>

@@ -6,6 +6,7 @@ using HelloDoc;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,7 +27,8 @@ namespace DataAccess.ServiceRepository
             IAdminRepository adminRepository,
             IRequestRepository requestRepository,
             IRequestStatusLogRepository requestStatusLogRepository
-            ) {
+            )
+        {
             _db = helloDocDbContext;
             _blockcase = blockCaseRepository;
             _admin = adminRepository;
@@ -34,14 +36,14 @@ namespace DataAccess.ServiceRepository
             _requeststatus = requestStatusLogRepository;
         }
 
-        public void AssignCase(int requestId, int physicianId, int assignby , string description)
+        public void AssignCase(int requestId, int physicianId, int assignby, string description)
         {
-            var request = _request.GetFirstOrDefault(x=>x.Requestid ==  requestId);
+            var request = _request.GetFirstOrDefault(x => x.Requestid == requestId);
             request.Status = 2;
             request.Physicianid = physicianId;
             _request.Update(request);
 
-            Requeststatuslog requeststatuslog   = new Requeststatuslog();
+            Requeststatuslog requeststatuslog = new Requeststatuslog();
             requeststatuslog.Requestid = requestId;
             requeststatuslog.Status = 2;
             requeststatuslog.Transtophysicianid = physicianId;
@@ -62,7 +64,7 @@ namespace DataAccess.ServiceRepository
 
 
 
-        public void BlockCase(int requestId , string description)
+        public void BlockCase(int requestId, string description)
         {
             _blockcase.BlockRequest(requestId, description);
 
@@ -74,20 +76,37 @@ namespace DataAccess.ServiceRepository
             var reason = note;
 
             var request = _request.GetFirstOrDefault(x => x.Requestid == id);
-            if(request.Casetag != null) { request.Casetag = request.Casetag + " , " + casetag;}
+            if (request.Casetag != null) { request.Casetag = request.Casetag + " , " + casetag; }
             else { request.Casetag = casetag.ToString(); }
             request.Status = 3;
             _request.Update(request);
             _request.Save();
             Requeststatuslog requeststatuslog = new Requeststatuslog();
             requeststatuslog.Requestid = id;
-            requeststatuslog.Adminid = _admin.GetSessionAdminId();
+            if (_admin.GetSessionAdminId() != null)
+            {
+                requeststatuslog.Adminid = _admin.GetSessionAdminId();
+            }
             requeststatuslog.Status = 3;
             requeststatuslog.Notes = reason;
             requeststatuslog.Createddate = DateTime.Now;
-
             _requeststatus.Add(requeststatuslog);
+            _requeststatus.Save();
+        }
+
+        public void ClearCase(int requestid)
+        {
+            var request = _request.GetFirstOrDefault(x => x.Requestid == requestid);
+            request.Status = 10;
+            _request.Update(request);
             _request.Save();
+            Requeststatuslog requeststatuslog = new Requeststatuslog();
+            requeststatuslog.Requestid = requestid;
+            requeststatuslog.Adminid = _admin.GetSessionAdminId();
+            requeststatuslog.Status = 10;
+            requeststatuslog.Createddate = DateTime.Now;
+            _requeststatus.Add(requeststatuslog);
+            _requeststatus.Save();
         }
     }
 }

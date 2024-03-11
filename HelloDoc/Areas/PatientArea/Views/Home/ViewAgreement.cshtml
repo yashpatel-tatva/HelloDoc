@@ -1,0 +1,53 @@
+﻿
+<html>
+<head>
+    <title>Review Agreenment</title>
+</head>
+<body style="background-color : rgba(249,249,249,255)">
+    <div class="container pt-5" style="max-width : 54%">
+        <div class="h4">
+            To provide best medical service, we cannot determine the cost right away. If you agree to our service, so we will provide care and follow-up until all care is completed. So with this points, if you like us to provide care to you click on "Agree" and we'll get started immediately, if you do not agree simply click "Cancel".
+        </div>
+        <div class="d-flex justify-content-around pt-5 mt-5">
+            <button type="button" class="btn btn-success" id="agree">I Agree</button>
+            <button type="button" class="btn btn-danger" id="cancel">Cancel</button>
+        </div>
+    </div>
+    <div id="PopUps"></div>
+</body>
+</html>
+
+<script>
+    $('#cancel').on('click' , function(){
+        $.ajax({
+            url: '/AdminArea/Dashboard/CancelCase',
+            type: 'GET',
+            data: { id: @Model.requestid},
+            success: function (result) {
+
+                $('#PopUps').html(result);
+                var my = new bootstrap.Modal(document.getElementById('ModalToOpen'));
+                debugger;
+                my.show();
+            },
+            error: function (xhr, status, error) {
+                console.error('Error: ' + error);
+            },
+        });
+    });
+
+    $('#agree').on('click', function () {
+        $.ajax({
+            url: '/AdminArea/Dashboard/PatientAgree',
+            type: 'POST',
+            data: { requestid: @Model.requestid},
+            success: function (result) {
+                window.open('/PatientArea/Dashboard/Dashboard')
+            },
+            error: function (xhr, status, error) {
+                console.error('Error: ' + error);
+            },
+        });
+    });
+
+</script>

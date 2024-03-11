@@ -13,5 +13,6 @@ namespace DataAccess.ServiceRepository.IServiceRepository
         void BlockCase(int requestId, string description);
 
         void CancelCase(int requestid, int casetag, string note);
+        void ClearCase(int requestid);
     }
 }

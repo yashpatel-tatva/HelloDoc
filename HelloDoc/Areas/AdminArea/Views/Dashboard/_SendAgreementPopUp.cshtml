@@ -1,0 +1,88 @@
+﻿@using DataModels.AdminSideViewModels
+@model DashpopupsViewModel
+
+<div class="modal fade rounded-3 shadow" id="ModalToOpen" tabindex="-1" role="dialog" aria-labelledby="SendAgreement" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h5 class="modal-title text-white">Send Agreement</h5>
+                <button class="btn" type="button" data-dismiss="modal">
+                    <i class="fa-solid fa-xmark" style="color: #ffffff;"></i>
+                </button>
+            </div>
+            <form>
+                <div class="modal-body">
+                    <input type="number" id="inputhiddenrequestid" asp-for="RequestId" value="@Model.RequestId" hidden />
+                    <div class="d-flex small text-muted py-2">
+                        @if (Model.RequestType == 1)
+                        {
+                            <div><i class="fa-solid fa-circle" style="color: #66bb63;"></i></div>
+                            <span class="ps-2size">Patient</span>
+                        }
+                        @if (Model.RequestType == 2)
+                        {
+                            <div><i class="fa-solid fa-circle" style="color: #e59132;"></i></div>
+                            <span class="ps-2size">Family/Friend</span>
+                        }
+                        @if (Model.RequestType == 3)
+                        {
+                            <div><i class="fa-solid fa-circle" style="color: #077aba;"></i></div>
+                            <span class="ps-2size">Concierge</span>
+                        }
+                        @if (Model.RequestType == 4)
+                        {
+                            <div><i class="fa-solid fa-circle" style="color: #d8697b;"></i></div>
+                            <span class="ps-2size">Business</span>
+                        }
+                    </div>
+                    <div class="small text-muted py-2">
+                        To Send Agreement please make sure you are updating the correct contact information below for the responsible party.
+                    </div>
+                    <div>
+                        <div class="row d-flex">
+                            <div class="py-2 col-xl-12">
+                                <div class="form-group d-flex align-items-center rounded">
+                                    <input type="text" class="form-control" placeholder="" asp-for="PatientMobile" id="patientmobile"> <span>Phone Number</span>
+                                </div>
+                                <span asp-validation-for="PatientMobile" class="text-danger"></span>
+                            </div>
+                            <div class="py-2 col-xl-12 ">
+                                <div class="form-group d-flex align-items-center rounded">
+                                    <input type="email" class="form-control" placeholder="" asp-for="PatientEmail" id="patientemail"> <span>Email</span>
+                                </div>
+                                <span asp-validation-for="PatientEmail" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0">
+                        <button type="button" id="ConfirmSendAgreement" class="btn btn-info text-white ">Send</button>
+                        <button type="button" class="btn btn-outline-info" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#ConfirmSendAgreement').on('click' , function(){
+        var email = $('#patientemail').val();
+        var mobile = $('#patientmobile').val();
+        var requestid = $('#inputhiddenrequestid').val();
+        if (email == "") {
+            $("#patientemail").css("border-color", "red");
+        } else {
+            $.ajax({
+                url: 'AdminArea/Dashboard/SendAgreenment',
+                type: 'POST',
+                data: { requestid: requestid, email: email, mobile: mobile },
+                success: function (result) {
+                    location.reload();
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error: ' + error);
+                },
+            });
+        }
+    });
+</script>

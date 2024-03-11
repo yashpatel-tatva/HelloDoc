@@ -10,7 +10,7 @@ using NPOI.SS.Formula.Functions;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(60);
+    options.IdleTimeout = TimeSpan.FromMinutes(160);
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
@@ -38,6 +38,8 @@ builder.Services.AddScoped<IDocumentsRepository , DocumentsRepository>();
 builder.Services.AddScoped<ISessionUtilsRepository , SessionUtilsRepository>();
 builder.Services.AddScoped<IAuthorizatoinRepository, AuthorizationRepository>();
 builder.Services.AddScoped<IJwtRepository, JwtRepository>();
+builder.Services.AddScoped<IPatientFormsRepository, PatientFormsRepository>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

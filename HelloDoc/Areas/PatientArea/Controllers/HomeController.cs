@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Net.Mail;
 using System.Net;
+using DataAccess.ServiceRepository;
 
 namespace HelloDoc.Areas.PatientArea.Controllers
 {
@@ -93,6 +94,17 @@ namespace HelloDoc.Areas.PatientArea.Controllers
             _context.SaveChanges();
             return RedirectToAction("PatientLogin");
         }
+
+        [Area("PatientArea")]
+        public IActionResult ViewAgreement(string requestid)
+        {
+            var id = EncryptionRepository.Decrypt(requestid);
+            return View(new { requestid = id});
+        }
+
+
+
+
         [Area("PatientArea")]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

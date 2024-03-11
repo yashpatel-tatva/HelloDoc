@@ -217,9 +217,9 @@ namespace HelloDoc.Areas.AdminArea.DataController
 
         [Area("AdminArea")]
         [HttpPost]
-        public IActionResult CancelCase(int requestid , int casetag, string note)
+        public IActionResult CancelCase(int requestid, int casetag, string note)
         {
-            _requestpopupaction.CancelCase( requestid,  casetag,  note);
+            _requestpopupaction.CancelCase(requestid, casetag, note);
             return RedirectToAction("AdminTabsLayout", "Home");
 
         }
@@ -238,7 +238,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
         [HttpPost]
         public IActionResult BlockCase(int requestid, string note)
         {
-            _requestpopupaction.BlockCase(requestid,  note);
+            _requestpopupaction.BlockCase(requestid, note);
             return RedirectToAction("AdminTabsLayout", "Home");
         }
 
@@ -278,7 +278,61 @@ namespace HelloDoc.Areas.AdminArea.DataController
         [HttpGet]
         public IActionResult ClearCase(int id)
         {
-            return PartialView("_ClearCasePopUp");
+            DashpopupsViewModel dashpopupsViewModel = new DashpopupsViewModel();
+            dashpopupsViewModel.RequestId = id;
+            return PartialView("_ClearCasePopUp", dashpopupsViewModel);
+        }
+
+        [Area("AdminArea")]
+        [HttpPost]
+        public IActionResult ClearCaseSubmit(int requestid)
+        {
+            _requestpopupaction.ClearCase(requestid);
+            return RedirectToAction("AdminTabsLayout", "Home");
+        }
+
+        [Area("AdminArea")]
+        [HttpGet]
+        public IActionResult SendAgreenment(int id)
+        {
+            DashpopupsViewModel dashpopupsViewModel = new DashpopupsViewModel();
+
+            var request = _db.Requests.Include(r => r.Requestclients).FirstOrDefault(r => r.Requestid == id);
+            dashpopupsViewModel.RequestId = request.Requestid;
+            dashpopupsViewModel.RequestType = request.Requesttypeid;
+            dashpopupsViewModel.PatientEmail = request.Requestclients.ElementAt(0).Email;
+            dashpopupsViewModel.PatientMobile = request.Requestclients.ElementAt(0).Phonenumber;
+            return PartialView("_SendAgreementPopUp", dashpopupsViewModel);
+        }
+
+
+        [Area("AdminArea")]
+        [HttpPost]
+        public IActionResult SendAgreenment(int requestid, string mobile, string email)
+        {
+            var requestidcipher = EncryptionRepository.Encrypt(requestid.ToString());
+            //var reqplai = EncryptionRepository.Decrypt(requestidcipher);
+            var link = "https://localhost:7249/PatientArea/Home/ViewAgreement?requestid=" + requestidcipher;
+            _sendemail.Sendemail(email, "View Agreenment", link);
+            return RedirectToAction("AdminTabsLayout", "Home");
+        }
+
+        [Area("AdminArea")]
+        [HttpPost]
+        public void PatientAgree(int requestid)
+        {
+            var request = _requests.GetFirstOrDefault(x => x.Requestid == requestid);
+            request.Status = 4;
+            _requests.Update(request);
+            _requests.Save();
+            var reqstatus = new Requeststatuslog
+            {
+                Requestid = requestid,
+                Status = 4 ,
+                Createddate = DateTime.Now,
+            };
+            _db.Requeststatuslogs.Add(reqstatus);
+            _db.SaveChanges();
         }
 
         //Pop-up ends

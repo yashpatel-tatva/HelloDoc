@@ -17,14 +17,16 @@ namespace DataAccess.ServiceRepository
         private readonly IBlockCaseRepository _blockcase;
         private readonly IRequestRepository _request;
         private readonly IRequestStatusLogRepository _requeststatus;
+        private readonly IAdminRepository _admin;
 
-        public AllRequestDataRepository(HelloDocDbContext dbContext, IHttpContextAccessor httpContextAccessor, IBlockCaseRepository blockCaseRepository, IRequestRepository requestRepository, IRequestStatusLogRepository requeststatus)
+        public AllRequestDataRepository(HelloDocDbContext dbContext, IHttpContextAccessor httpContextAccessor, IBlockCaseRepository blockCaseRepository, IRequestRepository requestRepository, IRequestStatusLogRepository requeststatus, IAdminRepository adminRepository)
         {
             _db = dbContext;
             _session = httpContextAccessor;
             _blockcase = blockCaseRepository;
             _request = requestRepository;
             _requeststatus = requeststatus;
+            _admin = adminRepository;
         }
 
         public List<AllRequestDataViewModel> Status(int status)
@@ -73,7 +75,23 @@ namespace DataAccess.ServiceRepository
                         var date = reqstatuslog.ElementAt(0).Createddate;
                         var afterphysicanid = reqstatuslog.ElementAt(0).Transtophysicianid;
                         var afterphysician = reqstatuslog.ElementAt(0).Transtophysician.Firstname;
-                        model.TransferNotes = "Admin transferred case to " + afterphysician + " on " + date.ToString("dd-MM-yyyy") + " at " + date.ToString("hh:mm tt");
+                        var name = "";
+                        var position = "";
+                        if (reqstatuslog.ElementAt(0).Adminid != null)
+                        {
+                            var admin = _admin.GetFirstOrDefault(x => x.Adminid == reqstatuslog.ElementAt(0).Adminid);
+                            name = admin.Firstname + " " + admin.Lastname;
+                            position = "Admin";
+
+                        }
+                        if (reqstatuslog.ElementAt(0).Physicianid != null)
+                        {
+                            var physician = _db.Physicians.FirstOrDefault(x => x.Physicianid == reqstatuslog.ElementAt(0).Physicianid);
+                            name = physician.Firstname + " " + physician.Lastname;
+                            position = "Physician";
+                        }
+                        model.TransferNotes = name + "(" + position + ") transferred case to " + afterphysician + " on " + date.ToString("dd-MM-yyyy") + " at " + date.ToString("hh:mm tt");
+                        
                     }
                     else
                     {
@@ -137,12 +155,27 @@ namespace DataAccess.ServiceRepository
                 foreach (var note in reqstatuslog)
                 {
                     var date = note.Createddate;
+                    var name = "";
+                    var position = "";
                     var afterphysicanid = note.Transtophysicianid;
                     var afterphysician = _db.Physicians.FirstOrDefault(x => x.Physicianid == afterphysicanid).Firstname;
-                    var transfernote = "Admin transferred case to " + afterphysician + " on " + date.ToString("dd-MM-yyyy") + " at " + date.ToString("hh:mm tt");
+                    if (note.Adminid != null)
+                    {
+                        var admin = _admin.GetFirstOrDefault(x => x.Adminid == note.Adminid);
+                        name = admin.Firstname + " " + admin.Lastname;
+                        position = "Admin";
+
+                    }
+                    if (note.Physicianid != null)
+                    {
+                        var physician = _db.Physicians.FirstOrDefault(x => x.Physicianid == note.Physicianid);
+                        name = physician.Firstname + " " + physician.Lastname;
+                        position = "Physician";
+                    }
+                    var transfernote = name + "("+ position +") transferred case to " + afterphysician + " on " + date.ToString("dd-MM-yyyy") + " at " + date.ToString("hh:mm tt");
                     notes.Add(transfernote);
                 }
-                    
+
             }
             model.TransferNotes = notes;
             return model;

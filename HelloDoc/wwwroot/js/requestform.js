@@ -1,11 +1,14 @@
 try {
     var actualBtn = document.getElementById('actual-btn');
     var fileChosen = document.getElementById('file-chosen');
-
+    console.log(actualBtn);
+    console.log(fileChosen);
     actualBtn.addEventListener('change', function () {
-        for (var i = 0; i < this.files.length ; i++){
-            fileChosen.textContent = this.files[i].name;
+        var filesnames = this.files[0].name;
+        for (var i = 1; i < this.files.length; i++) {
+            filesnames = filesnames + ' + ' + this.files[i].name;
         }
+        fileChosen.textContent = filesnames;
         fileChosen.style.color = "black";
         fileChosen.style.fontSize = "large"
     })
