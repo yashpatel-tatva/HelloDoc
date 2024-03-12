@@ -51,7 +51,7 @@ $('.sendemail').on('click', function () {
         formData.append('RequestsId', $('.RequestsId').val());
 
         $.ajax({
-            url: 'AdminArea/Dashboard/SendMail', 
+            url: 'AdminArea/Dashboard/SendMail',
             type: 'POST',
             data: formData,
             processData: false,
@@ -78,6 +78,76 @@ $(document).ready(function () {
         ordering: true,
         paging: false,
         searching: false,
-
+        autoWidth: false
     });
+});
+$('.viewfile').on('click', function () {
+    var id = $(this).val();
+    var requestid = $('#inputhiddenrequestid').val();
+    $.ajax({
+        type: 'POST',
+        url: 'AdminArea/Dashboard/ViewFile',
+        data: { id: id },
+        success: function (result) {
+            window.open('/Documents/' + requestid + "/" + result);
+},
+    error: function (xhr, status, error) {
+        console.error('Error: ' + error);
+    },
+        });
+    });
+$('#Edit_Save').on('click', function () {
+    if ($('#Edit_Save').text() == "Edit") {
+        $('#Edit_Save').html("Save");
+        $('#Close_Cancle').html("Cancel")
+        $('.CloseCasePatientMobile').removeAttr('disabled');
+        $('.CloseCasePatientEmail').removeAttr('disabled');
+    }
+    else if ($('#Edit_Save').text() == "Save") {
+        var requestid = $('#inputhiddenrequestid').val();
+        var email = $("input[type='email']").val();
+        var phone = $("input[type='tel']").val();
+        var model = {
+            requestid: requestid,
+            patientemail: email,
+            patientmobile: phone,
+            pageredirectto : "CloseCase"
+        };
+
+
+        $.ajax({
+            type: 'POST',
+            url: 'AdminArea/Dashboard/EditEmailPhone',
+            contentType: 'application/json',
+            data: JSON.stringify(model),
+            success: function (response) {
+                $('#nav-tabContent').html(response);
+            },
+            error: function (error) {
+                console.error('Error saving admin notes:', error);
+            }
+        });
+    }
+});
+$('#Close_Cancle').on('click', function () {
+    if ($('#Edit_Save').text() == "Edit") {
+        var requestid = $('#inputhiddenrequestid').val();
+        $.ajax({
+            url: '/AdminArea/Dashboard/CloseCaseSubmit',
+            type: 'POST',
+            data: { requestid: requestid },
+            success: function (result) {
+                location.reload();
+            },
+            error: function (xhr, status, error) {
+                console.error('Error: ' + error);
+            },
+        });
+    }
+    else if ($('#Edit_Save').text() == "Save") {
+        $('#Edit_Save').html("Edit");
+        $('#Close_Cancle').html("Close Case")
+        $('.CloseCasePatientMobile').prop('disabled', true);
+        $('.CloseCasePatientEmail').prop('disabled', true);
+    }
 });

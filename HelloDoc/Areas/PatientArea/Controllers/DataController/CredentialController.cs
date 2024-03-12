@@ -49,7 +49,7 @@ namespace HelloDoc.Areas.PatientArea.DataController
 
 
         [Area("PatientArea")]
-        [Route("/Credential/checkemail/{email}")]
+        [Route("/PatientArea/Credential/checkemail/{email}")]
         [HttpGet]
         public async Task<IActionResult> CheckEmail(string email)
         {

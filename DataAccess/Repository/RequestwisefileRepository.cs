@@ -15,8 +15,11 @@ namespace DataAccess.Repository
 {
     public class RequestwisefileRepository : Repository<Requestwisefile>, IRequestwisefileRepository
     {
-        public RequestwisefileRepository(HelloDocDbContext db) : base(db)
+        private readonly IAdminRepository _admin;
+
+        public RequestwisefileRepository(HelloDocDbContext db , IAdminRepository adminRepository) : base(db)
         {
+            _admin = adminRepository;
         }
 
         public void Add(int id, List<IFormFile> formFiles)
@@ -45,6 +48,7 @@ namespace DataAccess.Repository
                     Requestid = id,
                     Filename = filePath,
                     Createddate = DateTime.Now,
+                    Adminid = _admin.GetSessionAdminId(),
                 };
 
                 _db.Requestwisefiles.Add(requestwisefile);

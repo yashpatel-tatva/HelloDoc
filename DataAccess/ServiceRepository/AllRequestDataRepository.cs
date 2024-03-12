@@ -7,6 +7,7 @@ using System.Globalization;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using DataAccess.Repository.IRepository;
+using HelloDoc.Areas.PatientArea.ViewModels;
 
 namespace DataAccess.ServiceRepository
 {
@@ -18,8 +19,9 @@ namespace DataAccess.ServiceRepository
         private readonly IRequestRepository _request;
         private readonly IRequestStatusLogRepository _requeststatus;
         private readonly IAdminRepository _admin;
+        private readonly IRequestwisefileRepository _requestwisefile;
 
-        public AllRequestDataRepository(HelloDocDbContext dbContext, IHttpContextAccessor httpContextAccessor, IBlockCaseRepository blockCaseRepository, IRequestRepository requestRepository, IRequestStatusLogRepository requeststatus, IAdminRepository adminRepository)
+        public AllRequestDataRepository(HelloDocDbContext dbContext, IRequestwisefileRepository requestwisefileRepository , IHttpContextAccessor httpContextAccessor, IBlockCaseRepository blockCaseRepository, IRequestRepository requestRepository, IRequestStatusLogRepository requeststatus, IAdminRepository adminRepository)
         {
             _db = dbContext;
             _session = httpContextAccessor;
@@ -27,6 +29,7 @@ namespace DataAccess.ServiceRepository
             _request = requestRepository;
             _requeststatus = requeststatus;
             _admin = adminRepository;
+            _requestwisefile = requestwisefileRepository;
         }
 
         public List<AllRequestDataViewModel> Status(int status)
@@ -91,7 +94,7 @@ namespace DataAccess.ServiceRepository
                             position = "Physician";
                         }
                         model.TransferNotes = name + "(" + position + ") transferred case to " + afterphysician + " on " + date.ToString("dd-MM-yyyy") + " at " + date.ToString("hh:mm tt");
-                        
+
                     }
                     else
                     {
@@ -172,7 +175,7 @@ namespace DataAccess.ServiceRepository
                         name = physician.Firstname + " " + physician.Lastname;
                         position = "Physician";
                     }
-                    var transfernote = name + "("+ position +") transferred case to " + afterphysician + " on " + date.ToString("dd-MM-yyyy") + " at " + date.ToString("hh:mm tt");
+                    var transfernote = name + "(" + position + ") transferred case to " + afterphysician + " on " + date.ToString("dd-MM-yyyy") + " at " + date.ToString("hh:mm tt");
                     notes.Add(transfernote);
                 }
 
@@ -319,14 +322,71 @@ namespace DataAccess.ServiceRepository
 
         public RequestViewUploadsViewModel GetDocumentByRequestId(int id)
         {
-            var request = _db.Requests.Include(r => r.Requestwisefiles).Include(r => r.User).FirstOrDefault(x => x.Requestid == id);
+            var request = _db.Requests.Include(r => r.Requestwisefiles).Include(r => r.User).Include(r => r.Requestclients).FirstOrDefault(x => x.Requestid == id);
             RequestViewUploadsViewModel model = new RequestViewUploadsViewModel();
-
+            var user = request.User;
             model.RequestsId = id;
             model.confirmation = request.Confirmationnumber;
             model.requestwisefiles = request.Requestwisefiles.ToList().Where(x => x.Isdeleted == null).ToList();
-            model.patientname = request.User.Firstname + " " + request.User.Lastname;
+            model.patientname = user.Firstname + " " + user.Lastname;
+            model.FirstName = request.Requestclients.ElementAt(0).Firstname;
+            model.LastName = request.Requestclients.ElementAt(0).Lastname;
+            model.PatientEmail = request.Requestclients.ElementAt(0).Email;
+            model.PatientMobile = request.Requestclients.ElementAt(0).Phonenumber;
+            model.PatientDOB = new DateTime(Convert.ToInt32(user.Intyear), DateTime.ParseExact(user.Strmonth, "MMMM", CultureInfo.InvariantCulture).Month, Convert.ToInt32(user.Intdate));
             return model;
+        }
+
+        public void AddRequestasAdmin(FamilyRequestViewModel model)
+        {
+            var aspnetuser = _db.Aspnetusers.FirstOrDefault(m => m.Email == model.Email);
+            var user = _db.Users.FirstOrDefault(x => x.Email == model.Email);
+
+            var region = _db.Regions.FirstOrDefault(x => x.Regionid == user.Regionid);
+            var requestcount = (from m in _db.Requests where m.Createddate.Date == DateTime.Now.Date select m).ToList();
+            if (aspnetuser != null)
+            {
+                Request request = new Request
+                {
+                    Requesttypeid = 5,
+                    Userid = user.Userid,
+                    Firstname = model.F_FirstName,
+                    Lastname = model.F_LastName,
+                    Email = model.F_Email,
+                    Phonenumber = model.F_Phone,
+                    Status = model.Status,
+                    Createddate = DateTime.Now,
+                    Relationname = model.Relation,
+                    Confirmationnumber = (region.Abbreviation.Substring(0, 2) + DateTime.Now.Day.ToString() + DateTime.Now.Month.ToString().PadLeft(2, '0') + model.LastName.Substring(0, 2) + model.FirstName.Substring(0, 2) + requestcount.Count().ToString().PadLeft(4, '0')).ToUpper(),
+                    User = user,
+                };
+                _db.Add(request);
+                _db.SaveChanges();
+                Requestclient requestclient = new Requestclient
+                {
+                    Notes = model.Symptoms,
+                    Requestid = request.Requestid,
+                    Firstname = model.FirstName,
+                    Lastname = model.LastName,
+                    Email = model.Email,
+                    Phonenumber = model.Phone,
+                    State = model.State,
+                    Street = model.Street,
+                    City = model.City,
+                    Zipcode = model.ZipCode,
+                    Address = model.Room + " , " + model.Street + " , " + model.City + " , " + model.State,
+                    Intdate = model.BirthDate.Day,
+                    Intyear = model.BirthDate.Year,
+                    Strmonth = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(model.BirthDate.Month),
+                    Regionid = (int)user.Regionid,
+                };
+                _db.Add(requestclient);
+                _db.SaveChanges();
+                if (model.Upload != null)
+                {
+                    _requestwisefile.Add(request.Requestid, model.Upload);
+                }
+            }
         }
     }
 }

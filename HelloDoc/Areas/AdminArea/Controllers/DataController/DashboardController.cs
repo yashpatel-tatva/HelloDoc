@@ -14,6 +14,7 @@ using System.Linq;
 using System.Net.Mail;
 using System.Net;
 using DataAccess.ServiceRepository;
+using System.Globalization;
 
 namespace HelloDoc.Areas.AdminArea.DataController
 {
@@ -159,6 +160,25 @@ namespace HelloDoc.Areas.AdminArea.DataController
             return File(record, contentType, filename);
         }
 
+        [Area("AdminArea")]
+        public IActionResult CreateRequest(FamilyRequestViewModel model)
+        {
+            var admin = _admin.GetFirstOrDefault(x => x.Adminid == _admin.GetSessionAdminId());
+            model.F_FirstName = admin.Firstname;
+            model.F_LastName = admin.Lastname;
+            model.F_Email = admin.Email;
+            model.F_Phone = admin.Mobile;
+            return View(model);
+        }
+
+        [Area("AdminArea")]
+        [HttpPost]
+        public IActionResult CreateRequestsubmit(FamilyRequestViewModel model)
+        {
+            _allrequest.AddRequestasAdmin(model);
+            return RedirectToAction("AdminTabsLayout" , "Home" );
+        }
+
 
 
         // ViewCase start
@@ -176,7 +196,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
         public IActionResult EditEmailPhone([FromBody] RequestDataViewModel model)
         {
             _allrequest.EditEmailPhone(model);
-            return RedirectToAction("ViewCase", "Dashboard", new { id = model.RequestId });
+            return RedirectToAction(model.pageredirectto, "Dashboard", new { id = model.RequestId });
         }
 
         //Viewcase end
@@ -460,6 +480,26 @@ namespace HelloDoc.Areas.AdminArea.DataController
         //order end
 
 
+        // Close Case Start
+
+        [Area("AdminArea")]
+        [HttpGet]
+        public IActionResult CloseCase(int id)
+        {
+            RequestViewUploadsViewModel model = new RequestViewUploadsViewModel();
+            model = _allrequest.GetDocumentByRequestId(id);
+            return View(model);
+        }
+
+        [Area("AdminArea")]
+        [HttpPost]
+        public IActionResult CloseCaseSubmit(int requestid)
+        {
+            _requestpopupaction.CloseCase(requestid);
+            return RedirectToAction("AdminTabsLayout", "Home");
+        }
+
+        // Close Case End
 
     }
 }

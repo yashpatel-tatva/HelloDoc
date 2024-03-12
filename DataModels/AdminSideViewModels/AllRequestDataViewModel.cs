@@ -33,7 +33,8 @@ namespace DataModels.AdminSideViewModels
             Patient,
             FriendorFamily,
             Concierge,
-            BusinessPartner
+            BusinessPartner,
+            VIP
         }
         public  string RequestTypeName(int by)
         {

@@ -108,5 +108,20 @@ namespace DataAccess.ServiceRepository
             _requeststatus.Add(requeststatuslog);
             _requeststatus.Save();
         }
+
+        public void CloseCase(int requestid)
+        {
+            var request = _request.GetFirstOrDefault(x => x.Requestid == requestid);
+            request.Status = 9;
+            _request.Update(request);
+            _request.Save();
+            Requeststatuslog requeststatuslog = new Requeststatuslog();
+            requeststatuslog.Requestid = requestid;
+            requeststatuslog.Adminid = _admin.GetSessionAdminId();
+            requeststatuslog.Status = 9;
+            requeststatuslog.Createddate = DateTime.Now;
+            _requeststatus.Add(requeststatuslog);
+            _requeststatus.Save();
+        }
     }
 }

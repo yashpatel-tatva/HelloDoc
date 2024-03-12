@@ -41,14 +41,14 @@
                 </div>
             </form>
             <form asp-action="Download" asp-controller="Dashboard" method="post" enctype="multipart/form-data">
-                <input type="hidden" asp-for="RequestsId" value="@Model.RequestsId"/>
-            <div class="d-flex justify-content-between align-items-center py-3">
-                <div class="h4 mb-0 fw-bold">Documents</div>
-                <button class="d-flex babtn rounded align-item-center p-1 px-2" type="submit">
-                    <div class="plusimg"><i class="bi bi-cloud-arrow-down"></i></div>
-                    <div class="cnr"><span>Download All</span></div>
-                </button>
-            </div>
+                <input type="hidden" asp-for="RequestsId" value="@Model.RequestsId" />
+                <div class="d-flex justify-content-between align-items-center py-3">
+                    <div class="h4 mb-0 fw-bold">Documents</div>
+                    <button class="d-flex babtn rounded align-item-center p-1 px-2" type="submit">
+                        <div class="plusimg"><i class="bi bi-cloud-arrow-down"></i></div>
+                        <div class="cnr"><span>Download All</span></div>
+                    </button>
+                </div>
                 <div class="table-responsive">
                     <table class="table table-hover small rounded" id="dtBasicExample1">
                         <thead class="thead-dark bg-body-secondary">
@@ -61,7 +61,7 @@
                                 <th class="text-dark">
                                     Upload Date
                                 </th>
-                                <th class ="text-dark">
+                                <th class="text-dark">
                                     Action
                                 </th>
                             </tr>
@@ -72,14 +72,25 @@
                                 <tr>
                                     <td><input type="checkbox" class="childCheckbox" id="download_@m.Requestwisefileid" name="downloadselect" value="@m.Requestwisefileid" /></td>
                                     <td>@System.IO.Path.GetFileName(@m.Filename)</td>
-                                    <td>@Model.Requests.FirstOrDefault(u => u.Requestid==m.Requestid).Firstname </td>
+
+                                    @if (m.Adminid != null)
+                                    {
+                                        <td> @m.Admin.Firstname  @m.Admin.Lastname </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            @Model.Requests.FirstOrDefault(u => u.Requestid==m.Requestid).Firstname
+                                        </td>
+                                    }
+
                                     <td>@m.Createddate.ToString("MMM dd , yyyy")</td>
                                     <td>
 
                                         <a asp-action="Download" asp-controller="Dashboard" asp-route-id="@m.Requestwisefileid" class="justify-content-start d-flex">
 
                                             <input type="hidden" asp-for="reqfileid" value="@m.Requestwisefileid" multiple>
-                                            <div class="babtn rounded align-item-center p-1 px-2"  style="width : 40px">
+                                            <div class="babtn rounded align-item-center p-1 px-2" style="width : 40px">
                                                 <div><i class="bi bi-cloud-arrow-down"></i></div>
                                             </div>
                                         </a>

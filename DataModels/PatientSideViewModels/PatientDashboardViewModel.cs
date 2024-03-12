@@ -42,5 +42,6 @@ namespace HelloDoc.Areas.PatientArea.ViewModels
 
         public int reqfileid { get; set; }
         public List<IFormFile> Upload { get; set; }
+        public string Uploader { get; set; }
     }
 }

@@ -81,7 +81,8 @@ namespace HelloDoc.Areas.PatientArea.DataController
                 }
                 else
                 {
-                    files = (from m in _context.Requestwisefiles where m.Requestid == patientDashboardviewmodel.RequestsId && m.Isdeleted == null select m).ToList();
+                    files = (from m in _context.Requestwisefiles join admin in _context.Admins on m.Adminid equals admin.Adminid where m.Requestid == patientDashboardviewmodel.RequestsId && m.Isdeleted == null select m).ToList();
+                    files = _context.Requestwisefiles.Include(r=>r.Admin).ToList().Where(x => x.Requestid == patientDashboardviewmodel.RequestsId).Where(x=>x.Isdeleted == null).ToList();
                     patientDashboard.RequestsId = patientDashboardviewmodel.RequestsId;
                 }
                 patientDashboard.requestwisefiles = files;
@@ -125,7 +126,7 @@ namespace HelloDoc.Areas.PatientArea.DataController
         [HttpPost]
         public async Task<IActionResult> Document(PatientDashboardViewModel model)
         {
-            var requestwisefile = (from m in _context.Requestwisefiles where m.Requestid == model.RequestsId select m).ToList();
+            var requestwisefile = (from m in _context.Requestwisefiles join admin in _context.Admins on m.Adminid equals admin.Adminid where m.Requestid == model.RequestsId select m).ToList();
             int id = (int)HttpContext.Session.GetInt32("UserId");
             PatientDashboardViewModel patientDashboard = new PatientDashboardViewModel();
             var user = await _context.Users.FirstOrDefaultAsync(m => m.Userid == id);

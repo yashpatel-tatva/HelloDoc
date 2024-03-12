@@ -1,6 +1,7 @@
 ﻿using DataAccess.Repository;
 using DataAccess.Repository.IRepository;
 using DataModels.AdminSideViewModels;
+using HelloDoc.Areas.PatientArea.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -21,5 +22,6 @@ namespace DataAccess.ServiceRepository.IServiceRepository
         byte[] DownloadExcle(string status);
         void EditEmailPhone(RequestDataViewModel model);
         RequestViewUploadsViewModel GetDocumentByRequestId(int id);
+        void AddRequestasAdmin(FamilyRequestViewModel model);
     }
 }

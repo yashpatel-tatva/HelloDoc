@@ -26,6 +26,14 @@ body {
     /* border: 1px solid; */
     border: 1px solid darkgray;
 }
+.selectedselectspan {
+    color: inherit;
+    color: darkgray;
+    transform: translateX(-3px) translateY(-14px);
+    font-size: 0.75em !important;
+    padding: 0px 5px;
+    background-color: transparent;
+}
 
     .form-group textarea {
         width: 100%;

@@ -116,6 +116,19 @@ a {
     display: none !important;
 }
 
+/* Move sorting icons to the right */
+table.dataTable thead .sorting:before,
+table.dataTable thead .sorting_asc:before,
+table.dataTable thead .sorting_desc:before,
+table.dataTable thead .sorting_asc_disabled:before,
+table.dataTable thead .sorting_desc_disabled:before {
+    content: ""; /* Remove the default icon */
+    float: right; /* Position the custom icon to the right */
+    /* Add your custom icon here (e.g., font-awesome or custom SVG) */
+    /* Example: content: "\f138"; (for a font-awesome arrow) */
+}
+
+
 @media only screen and (max-width:1020px) {
     .respadding {
         padding: 1.5rem

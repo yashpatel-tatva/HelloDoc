@@ -87,7 +87,7 @@ $('#exportall').on('click', function () {
 });
 
 $.ajax({
-    url: 'AdminArea/Dashboard/GetRegion',
+    url: '/AdminArea/Dashboard/GetRegion',
     success: function (data) {
         var drawbyregiondropdown = $('.drawbyregiondropdown');
         $.each(data, function (index, regions) {
@@ -97,4 +97,16 @@ $.ajax({
             }))
         });
     }
+});
+
+$("#createrequestbtn").on('click', function () {
+    $.ajax({
+        url: '/AdminArea/Dashboard/CreateRequest',
+        success: function (response) {
+            $('#nav-tabContent').html(response);
+        },
+        error: function (error) {
+            console.error('Error saving admin notes:', error);
+        }
+    });
 });

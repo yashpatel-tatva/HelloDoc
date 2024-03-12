@@ -1,0 +1,120 @@
+﻿@{
+    Layout = null;
+}
+@using DataModels.AdminSideViewModels
+@model AdminProfileViewModel
+<div class="container">
+    <div>
+        <div class="d-flex justify-content-between mx-3">
+            <div class="h3 subinfotext fw-bold">My Profile</div>
+            <div>
+                <button type="button" class="d-flex babtn rounded align-item-center p-1 px-2">
+                    <div><img src="~/res/back.png" width="15px" height="10px"></div>
+                    <div><span>Back</span></div>
+                </button>
+            </div>
+        </div>
+        <div class="bg-white rounded m-3 shadow" id="content">
+            <div class="p-3">
+                <div class="h5 fw-bold">Account Information</div>
+                <div class="d-flex row">
+                    <div class="py-2 col-xl-6 col-md-6 col-sm-12">
+                        <div class="form-group d-flex align-items-center rounded">
+                            <input type="text" class="form-control" placeholder="" value="Yash" disabled><span>Username</span>
+                        </div>
+                    </div>
+                    <div class="py-2 col-xl-6 col-md-6 col-sm-12">
+                        <div class="form-group d-flex align-items-center rounded">
+                            <input type="text" class="form-control" placeholder="" disabled><span>Password</span>
+                        </div>
+                    </div>
+                    <div class="py-2 col-xl-6 col-md-6 col-sm-12">
+                        <div class="form-group d-flex align-items-center rounded">
+                            <select class="form-select" disabled>
+                                <option>Active</option>
+                            </select>
+                            <span class="selectedselectspan">Status</span>
+                        </div>
+                    </div>
+                    <div class="py-2 col-xl-6 col-md-6 col-sm-12">
+                        <div class="form-group d-flex align-items-center rounded">
+                            <select class="form-select" disabled>
+                                <option>Master Admin</option>
+                            </select>
+                            <span class="selectedselectspan">Role</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-end py-4">
+                    <button type="button" class="btn border-info text-info shadow-none">Reset Password</button>
+                </div>
+
+                <div class="h5 fw-bold">Administrator Information</div>
+                <div class="row d-flex">
+                    <div class="py-2 col-xl-6 col-md-6 col-sm-12">
+                        <div class="form-group d-flex align-items-center rounded">
+                            <input type="text" class="form-control" placeholder="" asp-for="FirstName" disabled><span>First Name</span>
+                        </div>
+                        <span asp-validation-for="FirstName"></span>
+                    </div>
+                    <div class="py-2 col-xl-6 col-md-6 col-sm-12">
+                        <div class="form-group d-flex align-items-center rounded">
+                            <input type="text" class="form-control" placeholder="" asp-for="LastName" disabled><span>Last Name</span>
+                        </div>
+                        <span asp-validation-for="LastName"></span>
+                    </div>
+                    <div class="py-2 col-xl-6 col-md-6 col-sm-12">
+                        <div class="form-group d-flex align-items-center rounded">
+                            <input type="email" class="form-control CloseCasePatientEmail" placeholder="" asp-for="Email" disabled>
+                            <span>Email</span>
+                        </div>
+                        <span asp-validation-for="Email"></span>
+                    </div>
+                    <div class="py-2 col-xl-6 col-md-6 col-sm-12">
+                        <div class="form-group d-flex align-items-center rounded">
+                            <input type="email" class="form-control CloseCasePatientEmail" placeholder="" asp-for="ConfirmEmail" disabled>
+                            <span>Confirm Email</span>
+                        </div>
+                        <span asp-validation-for="ConfirmEmail"></span>
+                    </div>
+                    <div class="py-2 col-xl-6 col-md-6 col-sm-12">
+                        <div class="telephone rounded">
+                            <div class="input-group d-flex align-items-center rounded ">
+                                <input type="tel" id="tel" class="form-control CloseCasePatientMobile" asp-for="Mobile" disabled>
+                            </div>
+                            <span asp-validation-for="Mobile"></span>
+                        </div>
+                    </div>
+                    <div class="py-2 col-xl-6 col-md-6 col-sm-12">
+                        <div>
+                            <input type="checkbox" id="1" />
+                            <label for="1">District of Columbia</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" id="2" />
+                            <label for="2">New York</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" id="3" />
+                            <label for="3">Virginia</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" id="4" />
+                            <label for="4">Maryaland</label>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex justify-content-end gap-2 p-3">
+                <button type="button" class="btn btn-info text-white mx-2 shadow-none" id="Edit_Save">Edit</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var phoneInputField = document.querySelector("#tel");
+    var phoneInput = window.intlTelInput(phoneInputField, {
+        utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+    });
+</script>

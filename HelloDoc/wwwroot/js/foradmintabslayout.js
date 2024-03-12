@@ -9,7 +9,7 @@
                 url = 'AdminArea/Dashboard/Status_Pending';
                 break;
             case '#nav-Profile':
-                url = 'AdminArea/Dashboard/Status_Active';
+                url = 'AdminArea/AdminProfile/AdminProfile';
                 break;
             case '#nav-Providers':
                 url = 'AdminArea/Dashboard/Status_Conclude';

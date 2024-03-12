@@ -16,5 +16,12 @@ namespace DataModels.AdminSideViewModels
         public string patientname { get; set; }
         public List<IFormFile> Upload { get; set; }
         public List<Requestwisefile> requestwisefiles { get; set; }
+
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+
+        public DateTime PatientDOB { get; set; }
+        public string PatientEmail { get; set; }
+        public string PatientMobile { get; set; }
     }
 }

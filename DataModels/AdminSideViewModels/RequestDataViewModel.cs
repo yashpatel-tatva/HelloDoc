@@ -15,7 +15,8 @@ namespace DataModels.AdminSideViewModels
             Patient,
             FriendorFamily,
             Concierge,
-            BusinessPartner
+            BusinessPartner,
+            VIP
         }
 
         public enum Statuses
@@ -62,5 +63,6 @@ namespace DataModels.AdminSideViewModels
         public string BuisnessName { get; set; }
         public string Room { get; set; }
         public short Status { get; set; }
+        public string pageredirectto { get; set; }
     }
 }
