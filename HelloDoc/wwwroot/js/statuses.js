@@ -1,45 +1,42 @@
-﻿
-
-
-$(document).ready(function () {
-    $('.newtable').DataTable({
-        "initComplete": function (settings, json) {
-            var table = this.api(); // Get the DataTable instance
-            $('#my-search-input').val(settings.oPreviousSearch.sSearch);
-            $('#my-search-input').on('keyup', function () {
-                var searchValue = $(this).val();
-                settings.oPreviousSearch.sSearch = searchValue;
-                settings.oApi._fnReDraw(settings);
-            });
-            $('input[name="requestby"]').on('change', function () {
-                var value = $(this).attr('id');
-                if (value == 'requestbyAll') {
-                    table.column(0).search('').draw();
-                } else {
-                    table.column(0).search(value).draw();
-                }
-            });
-            $('.drawbyregiondropdown').on('change', function () {
-                var value = $(this).val();
-                if (value == '1234') {
-                    table.columns(1).search('').draw();
-                }
-                else {
-                    table.columns(1).search(value).draw();
-                }
-            });
-        },
-        "lengthMenu": [[5, 10, 25, -1], [5, 10, 25, "All"]],
-        "pageLength": 5,
-        language: {
-            oPaginate: {
-                sNext: '<i class="bi bi-caret-right-fill text-info"></i>',
-                sPrevious: '<i class="bi bi-caret-left-fill text-info"></i>'
-            }
-        }
-    });
-    $('.dataTables_filter').hide();
-});
+﻿//$(document).ready(function () {
+//    $('.newtable').DataTable({
+//        "initComplete": function (settings, json) {
+//            var table = this.api(); // Get the DataTable instance
+//            $('#my-search-input').val(settings.oPreviousSearch.sSearch);
+//            $('#my-search-input').on('keyup', function () {
+//                var searchValue = $(this).val();
+//                settings.oPreviousSearch.sSearch = searchValue;
+//                settings.oApi._fnReDraw(settings);
+//            });
+//            $('input[name="requestby"]').on('change', function () {
+//                var value = $(this).attr('id');
+//                if (value == 'requestbyAll') {
+//                    table.column(0).search('').draw();
+//                } else {
+//                    table.column(0).search(value).draw();
+//                }
+//            });
+//            $('.drawbyregiondropdown').on('change', function () {
+//                var value = $(this).val();
+//                if (value == '1234') {
+//                    table.columns(1).search('').draw();
+//                }
+//                else {
+//                    table.columns(1).search(value).draw();
+//                }
+//            });
+//        },
+//        "lengthMenu": [[5, 10, 25, -1], [5, 10, 25, "All"]],
+//        "pageLength": 5,
+//        language: {
+//            oPaginate: {
+//                sNext: '<i class="bi bi-caret-right-fill text-info"></i>',
+//                sPrevious: '<i class="bi bi-caret-left-fill text-info"></i>'
+//            }
+//        }
+//    });
+//    $('.dataTables_filter').hide();
+//});
 
 $('.gotoaction').click(function (e) {
     e.preventDefault();

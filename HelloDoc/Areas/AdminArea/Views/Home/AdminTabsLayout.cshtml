@@ -1,7 +1,7 @@
-﻿@*@{
+﻿@{
     int id = (int)Context.Session.GetInt32("AdminId");
     string username = Context.Session.GetString("UserName");
-}*@
+}
 @using DataModels.AdminSideViewModels;
 @model DashpopupsViewModel;
 
@@ -20,7 +20,7 @@
 </nav>
 <div class="position-relative">
     <div class="offcanvas offcanvas-start position-absolute" data-bs-scroll="false" style="width:65%" tabindex="-1" id="layoutnav" aria-labelledby="offcanvasWithBackdropLabel">
-        <span class="p-2 "> <span class="small">Welcome , </span><b>@*@username*@</b></span>
+        <span class="p-2 "> <span class="small">Welcome , </span><b>@username</b></span>
         <div class="maintabsul">
             <div class="accordianmaintabs" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Dashboard</div>
             <div class="accordianmaintabs" data-bs-toggle="tab" data-bs-target="#nav-ProviderLocation" type="button" role="tab" aria-controls="nav-ProviderLocation" aria-selected="false">Provider </div>

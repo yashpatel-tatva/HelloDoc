@@ -10,7 +10,7 @@ using NPOI.SS.Formula.Functions;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(160);
+    options.IdleTimeout = TimeSpan.FromMinutes(60);
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
@@ -39,6 +39,7 @@ builder.Services.AddScoped<ISessionUtilsRepository , SessionUtilsRepository>();
 builder.Services.AddScoped<IAuthorizatoinRepository, AuthorizationRepository>();
 builder.Services.AddScoped<IJwtRepository, JwtRepository>();
 builder.Services.AddScoped<IPatientFormsRepository, PatientFormsRepository>();
+builder.Services.AddScoped<IPaginationRepository, PaginationRepository>();  
 
 var app = builder.Build();
 

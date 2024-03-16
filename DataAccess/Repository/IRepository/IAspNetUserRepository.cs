@@ -16,5 +16,6 @@ namespace DataAccess.Repository.IRepository
 
         void Update(Aspnetuser user);   
         void Save();
+        void changepass(string aspnetid, string password);
     }
 }

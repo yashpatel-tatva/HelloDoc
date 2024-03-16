@@ -21,7 +21,8 @@
     font-size: 1.6rem;
 }
 
-.h6size {}
+.h6size {
+}
 
 .ps-2size {
     padding: 0rem .5rem
@@ -31,7 +32,8 @@
     padding: 0rem 3rem;
 }
 
-.welcomespan {}
+.welcomespan {
+}
 
 .sidebaroffcanvasbtn {
     display: none;
@@ -75,58 +77,42 @@ a {
     padding-left: 0.5rem
 }
 
-.paginate_button {
+.paginate_button,
+.paginate_Nextbutton,
+.paginate_Previousbutton {
     border-radius: 20% !important;
     margin-left: 7px !important;
-}
-
-.dataTables_wrapper .dataTables_paginate .paginate_button.current,
-.dataTables_wrapper .dataTables_paginate .paginate_button.current:hover,
-.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
-    background: #0dcaf0 !important;
-    color: #fff !important;
-    border: none;
-}
-
-.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
-    background: #0dcaf0 !important;
-}
-
-.dataTables_info {}
-
-.paging_simple_numbers {
-    margin-bottom: 10px;
-}
-
-#dtBasicExample1 tbody td {
+    padding: 0px !important;
+    border: 1px solid #80808070 !important;
+    font-size: medium;
+    height: 35px !important;
+    width: 35px !important;
     display: flex;
+    align-items: center;
+    justify-content: center;
     align-items: center;
 }
 
-#dtBasicExample1 tbody tr {
-    margin-top: 10px;
-}
+    .paginate_button.current {
+        background: #0dcaf0 !important;
+        color: #fff !important;
+        border: none;
+    }
 
-.table-hover>tbody>tr:hover>* {
-    --bs-table-color-state: none;
-    --bs-table-bg-state: none;
-}
+    .paginate_button:hover {
+        background: #0dcaf0 !important;
+    }
+
+    .paginate_Nextbutton:hover,
+    .paginate_Previousbutton:hover {
+        background: #0dcaf0 !important;
+        color: white !important
+    }
 
 .viewfilebtn {
     display: none !important;
 }
 
-/* Move sorting icons to the right */
-table.dataTable thead .sorting:before,
-table.dataTable thead .sorting_asc:before,
-table.dataTable thead .sorting_desc:before,
-table.dataTable thead .sorting_asc_disabled:before,
-table.dataTable thead .sorting_desc_disabled:before {
-    content: ""; /* Remove the default icon */
-    float: right; /* Position the custom icon to the right */
-    /* Add your custom icon here (e.g., font-awesome or custom SVG) */
-    /* Example: content: "\f138"; (for a font-awesome arrow) */
-}
 
 
 @media only screen and (max-width:1020px) {
@@ -139,32 +125,41 @@ table.dataTable thead .sorting_desc_disabled:before {
     .respadding {
         padding: 1rem
     }
+
     .resstartpadding {
         padding-left: 1rem
     }
+
     .displayflexorblock {
         display: block;
         padding: 1px;
         font-size: smaller;
     }
+
     .displayflexorblockwithpad {
         display: block;
         padding: 15px
     }
+
     .p-2px-3mx-2 {
         padding: 0.25rem 0.5rem;
         margin: 0rem 0.125rem;
         font-size: large;
     }
+
     .h3size {
         font-size: 1rem;
         font-weight: 700;
     }
-    .h6size {}
+
+    .h6size {
+    }
+
     .ps-2size {
         padding: 0rem .1rem;
         font-size: smaller;
     }
+
     .px-5size {
         padding: 0rem 1rem;
     }
@@ -174,19 +169,24 @@ table.dataTable thead .sorting_desc_disabled:before {
     .respadding {
         padding: 0.75rem
     }
+
     .sidebaroffcanvasbtn {
         display: inline;
     }
+
     .resstartpadding {
         display: none;
     }
+
     .searchandregiondropdown {
         flex-direction: column;
     }
-    .searchandregiondropdown div {
-        width: 100%;
-        margin-bottom: 10px;
-    }
+
+        .searchandregiondropdown div {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
     .maintabsul .maintabs,
     .maintabsul .accordion-header.sidebar,
     .maintabsul .accordion-body.sidebar,
@@ -196,119 +196,160 @@ table.dataTable thead .sorting_desc_disabled:before {
         font-size: small;
         font-weight: 600;
     }
+
     .maintabsul .accordianmaintabs.active {
         background-color: #0dcaf04f;
     }
+
     .accordion-button:not(.collapsed).sidebar {
         color: inherit;
         box-shadow: none;
     }
+
     .accordion-button.sidebar {
         font-size: small;
         font-weight: 600;
     }
+
     .customaccordion.sidebar .accordion-button[aria-expanded="true"] {
         background-color: #0dcaf04f;
     }
+
     .accordion-button.sidebar:not(.collapsed) {
         background-color: #0dcaf04f;
     }
+
     .accordion-button::after.sidebar {
         margin-right: 5%;
     }
+
     .accordion-collapse.collapse.show ul {
         background-color: #0dcaf04f;
     }
+
     .restable {
         display: none;
     }
+
     .acctable {
         display: inline-table;
     }
+
     .addresstextinaccordian {
         width: 70%;
     }
+
     .maplocationinaccordian {
         width: 25%;
     }
+
     #DataTables_Table_0_wrapper {
         display: none;
     }
+
     #DataTables_Table_1_wrapper {
         display: block;
     }
-    .paginate_button {
-        padding: 0px!important;
+
+    .paginate_button,
+    .paginate_Nextbutton,
+    .paginate_Previousbutton {
+        padding: 0px !important;
         border: 1px solid #80808070 !important;
         font-size: smaller;
         height: 25px !important;
         width: 25px !important;
     }
-    .dataTables_wrapper .dataTables_paginate .paginate_button {
+
+    .paginate_button,
+    .paginate_Nextbutton,
+    .paginate_Previousbutton {
         display: flex;
         align-items: center;
         justify-content: center;
     }
+
     .dataTables_info {
         font-size: small;
         font-weight: 600;
     }
+
     .dataTables_paginate {
         display: flex;
         justify-content: center;
         align-items: center;
         font-weight: 600;
     }
-    .dataTables_paginate span {
-        display: flex;
-    }
-    .dataTables_wrapper .dataTables_paginate .paginate_button.current,
-    .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover,
-    .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+
+        .dataTables_paginate span {
+            display: flex;
+        }
+
+    .paginate_button.current {
         background: #0dcaf0 !important;
         color: #fff !important;
         border: none;
     }
+
     thead.viewuploadtablehead {
         display: none !important;
         background-color: red;
     }
+
     .dataTables_wrapper {
         border-top: .5px solid rgba(0, 0, 0, 0.158);
     }
+
     tbody tr {
         flex-direction: column;
         border-bottom: .5px solid rgba(0, 0, 0, 0.158);
     }
+
     tbody td {
         border: none;
         padding: 4px 0px !important;
         width: 100% !important;
     }
+
     .viewfilebtn {
         display: flex !important;
     }
+    .pagination_div{
+        flex-wrap :wrap!important;
+    }
+        .pagination_div .info_div {
+            width: 100% !important;
+            text-align: center !important;
+            justify-content: center;
+            /*font-size: small;*/
+            font-weight: 550;
+        }
 }
 
 @media only screen and (max-width:400px) {
     .respadding {
         padding: 0.5rem
     }
+
     .viewcaseactionbtns {
         font-size: small
     }
+
     .container {
         --bs-gutter-x: 0.7rem;
     }
+
     .viewcaseactionbtns .h4 {
         font-size: medium;
         font-weight: 700;
     }
+
     .p-2px-3mx-2 {
         padding: 0.25rem 0.5rem;
         margin: 0rem 0.125rem;
         font-size: smaller;
     }
+
     .h3size {
         width: 40%;
         flex-wrap: wrap;
@@ -317,9 +358,11 @@ table.dataTable thead .sorting_desc_disabled:before {
         align-items: baseline;
         font-size: 0.9rem;
     }
+
     .h6size {
         font-size: 0.7rem
     }
+
     .welcomespan {
         display: none;
     }

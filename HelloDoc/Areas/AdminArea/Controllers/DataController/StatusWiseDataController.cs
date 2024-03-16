@@ -1,6 +1,10 @@
-﻿using DataAccess.ServiceRepository;
+﻿using DataAccess.Repository.IRepository;
+using DataAccess.ServiceRepository;
 using DataAccess.ServiceRepository.IServiceRepository;
+using DataModels.AdminSideViewModels;
+using FluentAssertions.Execution;
 using Microsoft.AspNetCore.Mvc;
+using System.Drawing;
 
 namespace HelloDoc.Areas.AdminArea.DataController
 {
@@ -8,47 +12,73 @@ namespace HelloDoc.Areas.AdminArea.DataController
     public class StatusWiseDataController : Controller
     {
         private readonly IAllRequestDataRepository _allrequestdata;
+        private readonly IPaginationRepository _paginator;
+        private readonly IRequestRepository _request;
 
-        public StatusWiseDataController(IAllRequestDataRepository allrequestdata)
+        public StatusWiseDataController(IAllRequestDataRepository allrequestdata, IPaginationRepository paginator , IRequestRepository requestRepository)
         {
             _allrequestdata = allrequestdata;
+            _paginator = paginator;
+            _request = requestRepository;
+        }
+        [Area("AdminArea")]
+        [HttpPost]
+        public IActionResult StatuswiseData(string state, int currentpage, int pagesize, int requesttype, string search, int region)
+        {
+            return RedirectToAction("Status_"+state , new {state ,currentpage , pagesize , requesttype , search , region});
+        }
+
+
+        [Area("AdminArea")]
+        public IActionResult Status_New(string state ,int currentpage, int pagesize, int requesttype, string search, int region)
+        {
+            List<Request> model1 = _paginator.requests(state, currentpage, pagesize, requesttype, search , region);
+            List<AllRequestDataViewModel> filtereddata = _allrequestdata.FilteredRequest(model1);
+            return View(filtereddata);
         }
 
         [Area("AdminArea")]
-        public IActionResult Status_New()
+        public IActionResult Status_Pending(string state, int currentpage, int pagesize, int requesttype, string search, int region)
         {
-            var model = _allrequestdata.Status(1);
-            return View(model);
+            List<Request> model1 = _paginator.requests(state, currentpage, pagesize, requesttype, search, region);
+            List<AllRequestDataViewModel> filtereddata = _allrequestdata.FilteredRequest(model1);
+            return View(filtereddata);
         }
         [Area("AdminArea")]
-        public IActionResult Status_Pending()
+        public IActionResult Status_Active(string state, int currentpage, int pagesize, int requesttype, string search, int region)
         {
-            var model = _allrequestdata.Status(2);
-            return View(model);
+            List<Request> model1 = _paginator.requests(state, currentpage, pagesize, requesttype, search, region);
+            List<AllRequestDataViewModel> filtereddata = _allrequestdata.FilteredRequest(model1);
+            return View(filtereddata);
         }
         [Area("AdminArea")]
-        public IActionResult Status_Active()
+        public IActionResult Status_Conclude(string state, int currentpage, int pagesize, int requesttype, string search, int region)
         {
-            var model = _allrequestdata.Status(4).Concat(_allrequestdata.Status(5)).ToList();
-            return View(model);
+            List<Request> model1 = _paginator.requests(state, currentpage, pagesize, requesttype, search, region);
+            List<AllRequestDataViewModel> filtereddata = _allrequestdata.FilteredRequest(model1);
+            return View(filtereddata);
         }
         [Area("AdminArea")]
-        public IActionResult Status_Conclude()
+        public IActionResult Status_Toclose(string state, int currentpage, int pagesize, int requesttype, string search, int region)
         {
-            var model = _allrequestdata.Status(6);
-            return View(model);
+            List<Request> model1 = _paginator.requests(state, currentpage, pagesize, requesttype, search, region);
+            List<AllRequestDataViewModel> filtereddata = _allrequestdata.FilteredRequest(model1);
+            return View(filtereddata);
         }
         [Area("AdminArea")]
-        public IActionResult Status_Toclose()
+        public IActionResult Status_Unpaid(string state, int currentpage, int pagesize, int requesttype, string search, int region)
         {
-            var model = _allrequestdata.Status(3).Concat(_allrequestdata.Status(7)).Concat(_allrequestdata.Status(8)).ToList();
-            return View(model);
+            List<Request> model1 = _paginator.requests(state, currentpage, pagesize, requesttype, search, region);
+            List<AllRequestDataViewModel> filtereddata = _allrequestdata.FilteredRequest(model1);
+            return View(filtereddata);
         }
+
         [Area("AdminArea")]
-        public IActionResult Status_Unpaid()
+        [HttpPost]
+        public int CountbyFilter(string state, int requesttype, string search, int region)
         {
-            var model = _allrequestdata.Status(9);
-            return View(model);
+            List<Request> model1 = _paginator.requests(state, 0, 0, requesttype, search, region);
+            return model1.Count();
         }
 
     }

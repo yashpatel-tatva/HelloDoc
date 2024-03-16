@@ -1,7 +1,9 @@
 ﻿using DataAccess.Repository.IRepository;
+using DataModels.AdminSideViewModels;
 using HelloDoc;
 using HelloDoc;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,10 +15,12 @@ namespace DataAccess.Repository
     public class AdminRepository : Repository<Admin>, IAdminRepository
     {
         private readonly IHttpContextAccessor _httpsession;
-        public AdminRepository(IHttpContextAccessor httpContextAccessor, HelloDocDbContext db) : base(db)
+        private readonly IAspNetUserRepository _aspnetuser;
+        public AdminRepository(IHttpContextAccessor httpContextAccessor, IAspNetUserRepository aspNetUserRepository, HelloDocDbContext db) : base(db)
         {
             _db = db;
             _httpsession = httpContextAccessor;
+            _aspnetuser = aspNetUserRepository;
         }
 
         public void SetSession(Admin admin)
@@ -45,6 +49,63 @@ namespace DataAccess.Repository
             {
                 return -1;
             }
+        }
+
+        public AdminProfileViewModel GetAdminProfile(int id)
+        {
+            var admin = _db.Admins.Include(r=>r.Aspnetuser).FirstOrDefault(x => x.Adminid == id);
+            AdminProfileViewModel model = new AdminProfileViewModel();
+            model.Username = admin.Aspnetuser.Username;
+            model.Password = admin.Aspnetuser.Passwordhash;
+            if(admin.Status == 0)
+            {
+                model.Status = "Disable";
+            }
+            else if(admin.Status == 1)
+            {
+                model.Status = "Active";
+            }
+            //model.Role = _db.Roles.FirstOrDefault(x => x.Roleid == admin.Roleid).Name;
+            model.FirstName = admin.Firstname;
+            model.LastName = admin.Lastname;
+            model.Email = admin.Email;
+            model.Mobile = admin.Mobile;
+            model.Address1 = admin.Address1;
+            model.Address2 = admin.Address2;
+            model.Zip = admin.Zip;
+            model.Region = (int)admin.Regionid;
+            model.Aspnetid = admin.Aspnetuserid;
+            return model;
+        }
+
+        public void Edit(int adminid ,AdminProfileViewModel viewModel)
+        {
+            var admin = GetFirstOrDefault(x => x.Adminid == adminid);
+            var aspnet = _aspnetuser.GetFirstOrDefault(x => x.Id == admin.Aspnetuserid);
+            admin.Firstname = viewModel.FirstName;
+            admin.Lastname = viewModel.LastName;
+            admin.Email = viewModel.Email;
+            aspnet.Email = viewModel.Email;
+            admin.Mobile = viewModel.Mobile;
+            aspnet.Phonenumber = viewModel.Mobile;
+            //admin.Address1 = viewModel.Address1;
+            //admin.Address2 = viewModel.Address2;
+            //admin.Zip = viewModel.Zip;
+            //admin.Regionid = viewModel.Region;
+            _db.Admins.Update(admin);
+            _aspnetuser.Update(aspnet);
+            _db.SaveChanges();
+        }
+
+        public void EditBillingDetails(int adminid, AdminProfileViewModel viewModel)
+        {
+            var admin = GetFirstOrDefault(x => x.Adminid == adminid);
+            admin.Address1 = viewModel.Address1;
+            admin.Address2 = viewModel.Address2;
+            admin.Zip = viewModel.Zip;
+            admin.Regionid = viewModel.Region;
+            _db.Admins.Update(admin);
+            _db.SaveChanges();
         }
     }
 }

@@ -25,6 +25,13 @@ namespace HelloDoc.Areas.PatientArea.Controllers
             //@TempData["Display"] = "d-none";
             return View();
         }
+        
+        [Area("PatientArea")]
+        public IActionResult PatientRequestFromEmail(PatientRequestViewModel model)
+        {
+            //@TempData["Display"] = "d-none";
+            return View(model);
+        }
         [Area("PatientArea")]
         public IActionResult FamilyRequest()
         {
@@ -80,11 +87,22 @@ namespace HelloDoc.Areas.PatientArea.Controllers
                 //ViewBag.ZipCode = model.ZipCode;
                 //TempData["Password Fields"] = "<div class=\"row d-flex\"> <div class=\"py-2 col-xl-6 col-md-6 col-sm-12 \"> <div class=\"form-group d-flex align-items-center rounded\"> <input type=\"password\" class=\"form-control\" id=\"showpass\" placeholder=\"\" required=\"required\" asp-for=\"Password\"><span>Password</span> <label id=\"eyeiconlabel\" class=\"px-2\"><i class=\"fa-regular fa-eye-slash\" id=\"eyeicon\"></i></label> </div> </div> <div class=\"py-2 col-xl-6 col-md-6 col-sm-12\"> <div class=\"form-group d-flex align-items-center rounded\"> <input type=\"password\" class=\"form-control\" id=\"showpass1\" placeholder=\"\" required=\"required\" ><span>Confirm Password</span> <label id=\"eyeiconlabel1\" class=\"px-2\"><i class=\"fa-regular fa-eye-slash\" id=\"eyeicon1\"></i></label> </div> </div> </div>";
                 //@TempData["Display"] = "d-flex";
-                return RedirectToAction("PatientRequest", model);
+                return RedirectToAction("PatientRequestFromEmail", model);
             }
         }
 
 
+
+        [Area("PatientArea")]
+        public IActionResult EmaillinkToOpenPatientRequest(string firstname, string lastname, string email, string mobile)
+        {
+            PatientRequestViewModel model = new PatientRequestViewModel();
+            model.Email = email;
+            model.FirstName = firstname;
+            model.LastName = lastname;
+            model.PhoneNumber = mobile;
+            return RedirectToAction("PatientRequestFromEmail", model);
+        }
 
         [Area("PatientArea")]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

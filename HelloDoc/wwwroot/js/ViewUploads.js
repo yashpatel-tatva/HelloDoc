@@ -90,18 +90,22 @@ $('.viewfile').on('click', function () {
         data: { id: id },
         success: function (result) {
             window.open('/Documents/' + requestid + "/" + result);
-},
-    error: function (xhr, status, error) {
-        console.error('Error: ' + error);
-    },
-        });
+        },
+        error: function (xhr, status, error) {
+            console.error('Error: ' + error);
+        },
     });
+});
+var beforeemail;
+var beforemobile;
 $('#Edit_Save').on('click', function () {
     if ($('#Edit_Save').text() == "Edit") {
         $('#Edit_Save').html("Save");
         $('#Close_Cancle').html("Cancel")
         $('.CloseCasePatientMobile').removeAttr('disabled');
         $('.CloseCasePatientEmail').removeAttr('disabled');
+        beforeemail = $("input[type='email']").val();
+        beforemobile = $("input[type='tel']").val();
     }
     else if ($('#Edit_Save').text() == "Save") {
         var requestid = $('#inputhiddenrequestid').val();
@@ -111,7 +115,7 @@ $('#Edit_Save').on('click', function () {
             requestid: requestid,
             patientemail: email,
             patientmobile: phone,
-            pageredirectto : "CloseCase"
+            pageredirectto: "CloseCase"
         };
 
 
@@ -149,5 +153,7 @@ $('#Close_Cancle').on('click', function () {
         $('#Close_Cancle').html("Close Case")
         $('.CloseCasePatientMobile').prop('disabled', true);
         $('.CloseCasePatientEmail').prop('disabled', true);
+        $("input[type='email']").val(beforeemail);
+        $("input[type='tel']").val(beforemobile);
     }
 });

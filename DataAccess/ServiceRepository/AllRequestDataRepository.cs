@@ -32,14 +32,9 @@ namespace DataAccess.ServiceRepository
             _requestwisefile = requestwisefileRepository;
         }
 
-        public List<AllRequestDataViewModel> Status(int status)
+        public List<AllRequestDataViewModel> FilteredRequest(List<Request> requests)
         {
             List<AllRequestDataViewModel> allRequestDataViewModels = new List<AllRequestDataViewModel>();
-            var requests = _db.Requests.Include(r => r.User).Include(r => r.Requestclients).Include(r => r.Physician).Include(r => r.User.Region).Include(r => r.Requeststatuslogs).ToList().Where(r => r.Status == status);
-            //if(status == 0)
-            //{
-            //     requests = _db.Requests.Include(r => r.User).Include(r => r.Requestclients).Include(r => r.Physician).Include(r => r.User.Region).Include(r => r.Requeststatuslogs);
-            //}
             foreach (var item in requests)
             {
                 AllRequestDataViewModel model = new AllRequestDataViewModel();
@@ -56,8 +51,9 @@ namespace DataAccess.ServiceRepository
                 model.RequestType = item.Requesttypeid;
                 model.Region = item.User.Region.Name;
                 model.RequestId = item.Requestid;
+                model.status = _request.GetstatebyStatus(item.Status);
 
-                if (status != 1)
+                if (item.Status != 1)
                 {
                     if (item.Physician != null)
                     {
@@ -207,60 +203,11 @@ namespace DataAccess.ServiceRepository
             _db.SaveChanges();
         }
 
-        public byte[] DownloadExcle(string status)
+        public byte[] DownloadExcle(List<AllRequestDataViewModel> model)
         {
-            int[] statuses = new int[9];
-            if (status == "status-new")
-            {
-                statuses[0] = 1;
-            }
-            else if (status == "status-pending")
-            {
-                statuses[0] = 2;
-            }
-            else if (status == "status-active")
-            {
-                statuses[0] = 4;
-                statuses[1] = 5;
-
-            }
-            else if (status == "status-conclude")
-            {
-                statuses[0] = 6;
-            }
-            else if (status == "status-toclose")
-            {
-                statuses[0] = 3;
-                statuses[1] = 7;
-                statuses[2] = 8;
-            }
-            else if (status == "status-unpaid")
-            {
-                statuses[0] = 9;
-            }
-            else if (status == "all")
-            {
-                statuses[0] = 1;
-                statuses[1] = 2;
-                statuses[2] = 3;
-                statuses[3] = 4;
-                statuses[4] = 5;
-                statuses[5] = 6;
-                statuses[6] = 7;
-                statuses[7] = 8;
-                statuses[8] = 9;
-            }
-
-            List<AllRequestDataViewModel> model = new List<AllRequestDataViewModel>();
-            foreach (int s in statuses)
-            {
-                List<AllRequestDataViewModel> model1 = Status(s);
-                model = model.Concat(model1).ToList();
-            }
-
             using (var workbook = new XSSFWorkbook())
             {
-                ISheet sheet = workbook.CreateSheet(status);
+                ISheet sheet = workbook.CreateSheet("FilteredRecord");
                 IRow headerRow = sheet.CreateRow(0);
                 headerRow.CreateCell(0).SetCellValue("Sr No.");
                 headerRow.CreateCell(1).SetCellValue("Request Id");
@@ -279,6 +226,7 @@ namespace DataAccess.ServiceRepository
                 headerRow.CreateCell(14).SetCellValue("RequestType");
                 headerRow.CreateCell(15).SetCellValue("Region");
                 headerRow.CreateCell(16).SetCellValue("PhysicainName");
+                headerRow.CreateCell(17).SetCellValue("Status");
 
                 for (int i = 0; i < model.Count; i++)
                 {
@@ -300,6 +248,7 @@ namespace DataAccess.ServiceRepository
                     row.CreateCell(14).SetCellValue(model[i].RequestType);
                     row.CreateCell(15).SetCellValue(model[i].Region);
                     row.CreateCell(16).SetCellValue(model[i].PhysicainName);
+                    row.CreateCell(17).SetCellValue(model[i].status);
                 }
 
                 using (var stream = new MemoryStream())

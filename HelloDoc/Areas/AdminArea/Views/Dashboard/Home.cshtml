@@ -11,7 +11,7 @@
                     <div class="d-flex p-1">
                         <div class="px-2 icons float-start  small"><i class="bi bi-plus-circle-dotted"></i></div><div class="small fw-bold">NEW</div>
                     </div>
-                    <div class="fw-bolder fs-4 p-1 text-start">@Model.requests.Count(x => x.Status == 1)</div>
+                    <div class="fw-bolder fs-4 p-1 text-start">@Model.newrequest</div>
                 </div>
                 <div class="bottomarrow"></div>
             </button>
@@ -22,7 +22,7 @@
                     <div class="d-flex p-1">
                         <div class="px-2 icons float-start small"><i class="bi bi-plus-circle-dotted"></i></div><div class="small fw-bold">PENDING</div>
                     </div>
-                    <div class="fw-bolder fs-4 p-1 text-start">@Model.requests.Count(x => x.Status == 2)</div>
+                    <div class="fw-bolder fs-4 p-1 text-start">@Model.pendingrequest</div>
                 </div>
                 <div class="bottomarrow"></div>
             </button>
@@ -33,7 +33,7 @@
                     <div class="d-flex p-1">
                         <div class="px-2 icons float-start small"><i class="bi bi-plus-circle-dotted"></i></div><div class="small fw-bold">ACTIVE</div>
                     </div>
-                    <div class="fw-bolder fs-4 p-1 text-start">@Model.requests.Count(x => x.Status == 4 || x.Status==5)</div>
+                    <div class="fw-bolder fs-4 p-1 text-start">@Model.activerequest</div>
                 </div>
                 <div class="bottomarrow"></div>
             </button>
@@ -44,7 +44,7 @@
                     <div class="d-flex p-1">
                         <div class="px-2 icons float-start small"><i class="bi bi-plus-circle-dotted"></i></div><div class="small fw-bold">CONCLUDE</div>
                     </div>
-                    <div class="fw-bolder fs-4 p-1 text-start">@Model.requests.Count(x => x.Status == 6)</div>
+                    <div class="fw-bolder fs-4 p-1 text-start">@Model.concluderequest</div>
                 </div>
                 <div class="bottomarrow"></div>
             </button>
@@ -55,7 +55,7 @@
                     <div class="d-flex p-1">
                         <div class="px-2 icons float-start small"><i class="bi bi-plus-circle-dotted"></i></div><div class="small fw-bold">TO CLOSE</div>
                     </div>
-                    <div class="fw-bolder fs-4 p-1 text-start">@Model.requests.Count(x => x.Status == 3 || x.Status == 7 || x.Status ==8)</div>
+                    <div class="fw-bolder fs-4 p-1 text-start">@Model.tocloserequest</div>
                 </div>
                 <div class="bottomarrow"></div>
             </button>
@@ -66,7 +66,7 @@
                     <div class="d-flex p-1">
                         <div class="px-2 icons  float-start small"><i class="bi bi-plus-circle-dotted"></i></div><div class="small fw-bold">UNPAID</div>
                     </div>
-                    <div class="fw-bolder fs-4 p-1 text-start">@Model.requests.Count(x => x.Status == 9)</div>
+                    <div class="fw-bolder fs-4 p-1 text-start">@Model.unpaidrequest</div>
                 </div>
                 <div class="bottomarrow"></div>
             </button>
@@ -78,7 +78,7 @@
     <div class="d-flex mt-4 align-items-center justify-content-between">
         <div class="h3size mb-0">Patients<small class="h6size px-2" style="color: #203F9A" id="status_text"></small></div>
         <div class="d-flex">
-            <button class="p-2px-3mx-2 text-white bg-info rounded border-info d-flex align-items-center">
+            <button class="p-2px-3mx-2 text-white bg-info rounded border-info d-flex align-items-center" id="sendlinkbtn">
                 <i class="fa-regular fa-paper-plane  "></i>
                 <span class="d-none d-lg-block ps-2">Send Link</span>
             </button>
@@ -94,7 +94,7 @@
                 <i class="fa-solid fa-share-from-square"></i>
                 <span class="d-none d-lg-block ps-2">Export All</span>
             </button>
-            <button class="p-2px-3mx-2 text-white bg-info rounded border-info d-flex align-items-center">
+            <button class="p-2px-3mx-2 text-white bg-info rounded border-info d-flex align-items-center" id="requestDTY">
                 <i class="fa-solid fa-user-doctor "></i>
                 <span class="d-none d-lg-block ps-2">Request DTY Support</span>
             </button>
@@ -102,19 +102,19 @@
     </div>
     <div id="status-tabContent" class="bg-white rounded-4 mt-3">
         <div class="rounded-4 bg-white">
-            <div class="displayflexorblockwithpad justify-content-between p-2 ">
+            <div class="displayflexorblockwithpad justify-content-between p-3 ">
                 <div class="d-flex gap-1 align-items-center searchandregiondropdown">
                     <div><input type="search" placeholder="Search" id="my-search-input" class="form-control rounded" /></div>
                     <div>
                         <select class="form-select  mb-0 fs-6 form-control drawbyregiondropdown">
-                            <option value="1234">All Region</option>
+                            <option value="0">All Region</option>
                         </select>
                     </div>
                 </div>
                 <div class="d-flex align-Models-center">
                     <div class="d-flex rounded d-flex align-items-center ">
-                        <input type="radio" name="requestby" id="requestbyAll" class="btn-check" autocomplete="off" />
-                        <label class="displayflexorblock btn" for="requestbyAll"><div><i class="fa-solid fa-circle d-block d-sm-none" style="color: #ffffff;"></i></div><span class="ps-2size">All</span></label>
+                        <input type="radio" name="requestby" id="0" class="btn-check" autocomplete="off" checked />
+                        <label class="displayflexorblock btn" for="0"><div><i class="fa-solid fa-circle d-block d-sm-none" style="color: #ffffff;"></i></div><span class="ps-2size">All</span></label>
                     </div>
                     <div class="d-flex rounded ">
                         <input type="radio" name="requestby" id="1" class="btn-check" autocomplete="off" />
@@ -139,7 +139,34 @@
                 </div>
             </div>
         </div>
-        <div class="table-responsive" id="dashtables"></div>
+        <div class="table-responsive small" id="dashtables"></div>
+        <div class="d-flex align-items-center justify-content-between p-3 pagination_div">
+            <div class="info_div">
+                Show
+                <select id="pagesizedropdown">
+                    <option value="1">1</option>
+                    <option value="2">2 </option>
+                    <option value="3">3</option>
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="20">25</option>
+                </select>
+                Entry
+            </div>
+            <div class="info_div">
+                <span id="fromthisrequest"></span>
+                <span>-</span>
+                <span id="tothisrequest"></span>
+                <span>out of</span>
+                <span id="totalcountofrequest"></span>
+            </div>
+            <div class="d-flex align-items-center info_div">
+                <div class="paginate_Previousbutton text-info"><i class="bi bi-chevron-left"></i></i></div>
+                <div class="dataTables_paginate d-flex"></div>
+                <div class="paginate_Nextbutton text-info"><i class="bi bi-chevron-right"></i></div>
+            </div>
+
+        </div>
     </div>
 </div>
 

@@ -1,4 +1,5 @@
-﻿using HelloDoc;
+﻿using DataModels.AdminSideViewModels;
+using HelloDoc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,5 +13,8 @@ namespace DataAccess.Repository.IRepository
         void SetSession(Admin admin);
         void RemoveSession();
         int GetSessionAdminId();
+        AdminProfileViewModel GetAdminProfile(int id);
+        void Edit(int adminid ,AdminProfileViewModel viewModel);
+        void EditBillingDetails(int adminid ,AdminProfileViewModel viewModel);
     }
 }

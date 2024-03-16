@@ -50,5 +50,13 @@ namespace DataAccess.Repository
                 return false;
             }
         }
+
+        public void changepass(string aspnetid, string password)
+        {
+            var aspnet = _db.Aspnetusers.FirstOrDefault(x=>x.Id == aspnetid);
+            aspnet.Passwordhash = password;
+            _db.Aspnetusers.Update(aspnet);
+            _db.SaveChanges();
+        }
     }
 }

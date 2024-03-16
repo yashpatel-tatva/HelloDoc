@@ -15,6 +15,7 @@ using System.Net.Mail;
 using System.Net;
 using DataAccess.ServiceRepository;
 using System.Globalization;
+using System.Drawing;
 
 namespace HelloDoc.Areas.AdminArea.DataController
 {
@@ -31,6 +32,8 @@ namespace HelloDoc.Areas.AdminArea.DataController
         private readonly IRequestwisefileRepository _requestwisefile;
         private readonly ISendEmailRepository _sendemail;
         private readonly IOrderDetailRepository _orderDetail;
+        private readonly IPaginationRepository _paginator;
+        private readonly IAllRequestDataRepository _allrequestdata;
 
         public DashboardController(
             HelloDocDbContext db,
@@ -42,7 +45,9 @@ namespace HelloDoc.Areas.AdminArea.DataController
             IDocumentsRepository documentsRepository,
             IRequestwisefileRepository requestwisefileRepository,
             ISendEmailRepository sendEmailRepository,
-            IOrderDetailRepository orderDetailRepository
+            IOrderDetailRepository orderDetailRepository,
+            IPaginationRepository paginationRepository,
+            IAllRequestDataRepository allRequestDataRepository1
             )
         {
             _db = db;
@@ -55,6 +60,8 @@ namespace HelloDoc.Areas.AdminArea.DataController
             _requestwisefile = requestwisefileRepository;
             _sendemail = sendEmailRepository;
             _orderDetail = orderDetailRepository;
+            _paginator = paginationRepository;
+            _allrequestdata = allRequestDataRepository1;
         }
 
         // data from tables start
@@ -127,23 +134,26 @@ namespace HelloDoc.Areas.AdminArea.DataController
         public IActionResult Home()
         {
             AdminDashboardViewModel model = new AdminDashboardViewModel();
-            //if (_admin.GetSessionAdminId() == -1)
-            //{
-            //    return RedirectToAction("AdminLogin", "Home");
-            //}
             model.admin = _admin.GetFirstOrDefault(x => x.Adminid == _admin.GetSessionAdminId());
-            model.requests = _requests.GetAll().ToList();
+            model.newrequest = _requests.Countbystate("New");
+            model.pendingrequest = _requests.Countbystate("Pending");
+            model.activerequest = _requests.Countbystate("Active");
+            model.concluderequest = _requests.Countbystate("Conclude");
+            model.tocloserequest = _requests.Countbystate("Toclose");
+            model.unpaidrequest = _requests.Countbystate("Unpaid");
             return View(model);
         }
 
         [Area("AdminArea")]
         [HttpGet]
-        public IActionResult Export(string status)
+        public IActionResult Export(string state, int requesttype, string search, int region)
         {
-            var record = _allrequest.DownloadExcle(status);
+            List<Request> model1 = _paginator.requests(state, 0, 0, requesttype, search, region);
+            List<AllRequestDataViewModel> filtereddata = _allrequestdata.FilteredRequest(model1);
+            var record = _allrequest.DownloadExcle(filtereddata);
             string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
             var strDate = DateTime.Now.ToString("yyyyMMdd");
-            string filename = $"{status}_{strDate}.xlsx";
+            string filename = $"{state}_{strDate}.xlsx";
 
             return File(record, contentType, filename);
         }
@@ -152,7 +162,9 @@ namespace HelloDoc.Areas.AdminArea.DataController
         [HttpGet]
         public IActionResult ExportAll()
         {
-            var record = _allrequest.DownloadExcle("all");
+            List<Request> model1 = _requests.GetAll().ToList();
+            List<AllRequestDataViewModel> filtereddata = _allrequestdata.FilteredRequest(model1);
+            var record = _allrequest.DownloadExcle(filtereddata);
             string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
             var strDate = DateTime.Now.ToString("yyyyMMdd");
             string filename = $"All Request_{strDate}.xlsx";
@@ -176,7 +188,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
         public IActionResult CreateRequestsubmit(FamilyRequestViewModel model)
         {
             _allrequest.AddRequestasAdmin(model);
-            return RedirectToAction("AdminTabsLayout" , "Home" );
+            return RedirectToAction("AdminTabsLayout", "Home");
         }
 
 
@@ -281,7 +293,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
             dashpopupsViewModel.RequestId = id;
             dashpopupsViewModel.regions = _db.Regions.ToList();
             dashpopupsViewModel.physicians = _db.Physicians.ToList();
-            return PartialView("_AssignCasePopUp", dashpopupsViewModel);
+            return PartialView("_TransferCasePopUp", dashpopupsViewModel);
         }
 
         [Area("AdminArea")]
@@ -348,13 +360,32 @@ namespace HelloDoc.Areas.AdminArea.DataController
             var reqstatus = new Requeststatuslog
             {
                 Requestid = requestid,
-                Status = 4 ,
+                Status = 4,
                 Createddate = DateTime.Now,
             };
             _db.Requeststatuslogs.Add(reqstatus);
             _db.SaveChanges();
         }
 
+        [Area("AdminArea")]
+        public IActionResult RequestDTYSupport()
+        {
+            return PartialView("_RequestSupport");
+        }
+
+        [Area("AdminArea")]
+        public IActionResult Sendlinktorequest()
+        {
+            return PartialView("_SendLinkPopUp");
+        }
+
+        [Area("AdminArea")]
+        [HttpPost]
+        public void SendEmailFromSendLinkPopUp(string firstname , string lastname , string email ,string mobile)
+        {
+            var url = Url.Action("EmaillinkToOpenPatientRequest", "RequestForms", new { Area = "PatientArea", firstname = firstname , lastname = lastname , email = email , mobile = mobile }, Request.Scheme, Request.Host.Value);
+            _sendemail.Sendemail(email, "Submit Your Request" , url);
+        }
         //Pop-up ends
 
         // View uploads start

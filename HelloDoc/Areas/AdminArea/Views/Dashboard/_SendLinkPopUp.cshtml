@@ -1,0 +1,44 @@
+﻿<div class="modal fade" id="ModalToOpen" tabindex="-1" role="dialog" aria-labelledby="BlockCaseTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header p-2 px-4 bg-info">
+                <h5 class="modal-title text-white">Send Mail to Patient to Submitting Request</h5>
+                <button type="button" class="btn" data-dismiss="modal" aria-label="Close">
+                    <i class="fa-solid fa-xmark text-white"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group rounded d-flex align-itsems-center my-3">
+                        <input type="text" class="form-control  shadow-none" placeholder="" id="sendlinkfirstname" />
+                        <span>FirstName</span>
+                    </div>
+                    <div class="form-group rounded d-flex align-itsems-center my-3">
+                        <input type="text" class="form-control  shadow-none" placeholder="" id="sendlinklastname" />
+                        <span>LastName</span>
+                    </div>
+                    <div class="telephone rounded">
+                        <div class="input-group d-flex align-items-center rounded ">
+                            <input type="tel" class="form-control adminedit " id="sendlinkmobile">
+                        </div>
+                    </div>
+                    <div class="form-group rounded d-flex align-itsems-center my-3">
+                        <input type="email" class="form-control  shadow-none" placeholder="" id="sendlinkemail" />
+                        <span>Email</span>
+                    </div>
+                    <div class="d-flex float-end mt-4">
+                        <button type="button" id="SendLinkSubmitBtn" class="btn btn-info text-white mx-2 shadow-none ">Send</button>
+                        <button type="button" class="btn border-info text-info shadow-none" data-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/js/forhomepage.js" asp-append-version="true"></script>
+<script>
+    var phoneInputField = document.querySelector("#sendlinkmobile");
+    var phoneInput = window.intlTelInput(phoneInputField, {
+        utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+    });
+</script>

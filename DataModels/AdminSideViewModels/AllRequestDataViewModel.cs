@@ -41,5 +41,6 @@ namespace DataModels.AdminSideViewModels
             string By = ((Requestby)by).ToString();
             return By;
         }
+        public string status { get; set; }
     }
 }

@@ -33,7 +33,7 @@ namespace DataAccess.ServiceRepository
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var expires = DateTime.UtcNow.AddMinutes(20);
+            var expires = DateTime.UtcNow.AddHours(2);
 
             var token = new JwtSecurityToken(
                 configuration["Jwt:Issuer"],
