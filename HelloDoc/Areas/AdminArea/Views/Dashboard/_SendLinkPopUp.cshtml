@@ -1,4 +1,4 @@
-﻿<div class="modal fade" id="ModalToOpen" tabindex="-1" role="dialog" aria-labelledby="BlockCaseTitle" aria-hidden="true">
+﻿<div class="modal fade" id="ModalToOpen" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header p-2 px-4 bg-info">
@@ -35,10 +35,41 @@
         </div>
     </div>
 </div>
-<script src="~/js/forhomepage.js" asp-append-version="true"></script>
 <script>
     var phoneInputField = document.querySelector("#sendlinkmobile");
     var phoneInput = window.intlTelInput(phoneInputField, {
         utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
     });
+
+    $('#SendLinkSubmitBtn').on('click', function () {
+        console.log('clicked');
+        var firstname = $('#sendlinkfirstname').val();
+        var lastname = $('#sendlinklastname').val();
+        var mobile = $('#sendlinkmobile').val();
+        var email = $('#sendlinkemail').val();
+        var flage = true;
+        console.log(email);
+        if (email == null || email == "") {
+            $('#sendlinkemail').css("border", "1px solid red");
+            flage = false;
+        }
+        if (mobile == null || mobile == "") {
+            $('#sendlinkmobile').css("border", "1px solid red");
+            flage = false;
+        }
+        if (flage == true) {
+            $.ajax({
+                url: '/AdminArea/Dashboard/SendEmailFromSendLinkPopUp',
+                type: 'POST',
+                data: { firstname: firstname, lastname: lastname, email: email, mobile: mobile },
+                success: function () {
+                    location.reload();
+                },
+                error: function (error) {
+                    console.error('Error:', error);
+                }
+            });
+        }
+    });
+
 </script>

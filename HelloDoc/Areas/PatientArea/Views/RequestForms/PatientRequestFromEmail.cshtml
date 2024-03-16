@@ -145,7 +145,7 @@
                 <div class="row d-flex justify-content-end">
                     <div class="py-2 col-xl-1 col-md-2 col-4 align-items-center">
                         <div class="form-group d-flex  border-0">
-                            <button type="submit" class="p-2 uploadbtn rounded w-100  border-0">
+                            <button type="button" id="submitrequestfromemail" class="p-2 uploadbtn rounded w-100  border-0">
                                 Submit
                             </button>
                         </div>
@@ -221,5 +221,24 @@
     function print() {
         var pass = document.getElementById("showpass").value
     }
+    $('#submitrequestfromemail').on('click', function () {
+        var email = document.getElementById("patientEmail").value;
+        fetch('/PatientArea/Credential/checkemail/' + email)
+            .then(response => response.json())
+            .then(data => {
+                var div = document.getElementById("passwordf")
+                var patientPassword = document.getElementById('showpass');
+                var patientConfirmPassword = document.getElementById('showpass1');
+                if (data.exists) {
+                    $(this).closest('form').submit();
+                }
+                else {
+                    patientPassword.style.display = 'block';
+                    patientConfirmPassword.style.display = 'block';
+                    div.style.display = 'block';
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    });
 
 </script>

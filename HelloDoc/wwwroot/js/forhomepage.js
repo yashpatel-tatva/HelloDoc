@@ -1,5 +1,5 @@
 ﻿
-console.log("Homejshere");
+//console.log("Homejshere");
 
 $('#dashtables').hide();
 
@@ -13,12 +13,12 @@ var search = $('#my-search-input').val();
 var filteredcount;
 var buttoncount;
 
-console.log("state          :" + state);
-console.log("pagesize       :" + pagesize);
-console.log("region         :" + region);
-console.log("requesttype    :" + requesttype);
-console.log("search         :" + search);
-console.log("filteredcount  :" + filteredcount);
+//console.log("state          :" + state);
+//console.log("pagesize       :" + pagesize);
+//console.log("region         :" + region);
+//console.log("requesttype    :" + requesttype);
+//console.log("search         :" + search);
+//console.log("filteredcount  :" + filteredcount);
 
 
 
@@ -104,6 +104,7 @@ $('#requestDTY').on('click', function () {
     });
 });
 $("#sendlinkbtn").on('click', function () {
+    console.log("sendlinkclicked");
     $.ajax({
         url: '/AdminArea/Dashboard/Sendlinktorequest',
         success: function (result) {
@@ -115,37 +116,6 @@ $("#sendlinkbtn").on('click', function () {
             console.error('Error saving admin notes:', error);
         }
     });
-});
-
-$('#SendLinkSubmitBtn').on('click', function () {
-    console.log('clicked');
-    var firstname = $('#sendlinkfirstname').val();
-    var lastname = $('#sendlinklastname').val();
-    var mobile = $('#sendlinkmobile').val();
-    var email = $('#sendlinkemail').val();
-    var flage = true;
-    console.log(email);
-    if (email == null || email=="") {
-        $('#sendlinkemail').css("border", "1px solid red");
-        flage = false;
-    }
-    if (mobile == null || mobile == "") {
-        $('#sendlinkmobile').css("border", "1px solid red");
-        flage = false;
-    }
-    if (flage == true) {
-        $.ajax({
-            url: '/AdminArea/Dashboard/SendEmailFromSendLinkPopUp',
-            type: 'POST',
-            data: { firstname: firstname, lastname: lastname, email: email, mobile: mobile },
-            success: function () {
-                location.reload();
-            },
-            error: function (error) {
-                console.error('Error:', error);
-            }
-        });
-    }
 });
 
 $.ajax({
@@ -304,13 +274,13 @@ function filter(state, currentpage, pagesize, requesttype, search, region) {
             console.error(error);
         }
     });
-    console.log("Filtered");
-    console.log("state          :" + state);
-    console.log("pagesize       :" + pagesize);
-    console.log("region         :" + region);
-    console.log("requesttype    :" + requesttype);
-    console.log("search         :" + search);
-    console.log("filteredcount  :" + filteredcount);
-    console.log("currentpage    :" + currentpage)
-    console.log("buttoncount    :" + buttoncount)
+    //console.log("Filtered");
+    //console.log("state          :" + state);
+    //console.log("pagesize       :" + pagesize);
+    //console.log("region         :" + region);
+    //console.log("requesttype    :" + requesttype);
+    //console.log("search         :" + search);
+    //console.log("filteredcount  :" + filteredcount);
+    //console.log("currentpage    :" + currentpage)
+    //console.log("buttoncount    :" + buttoncount)
 }
