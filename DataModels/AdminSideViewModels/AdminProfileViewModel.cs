@@ -27,5 +27,6 @@ namespace DataModels.AdminSideViewModels
         public string Zip { get; set; }
         [MaybeNull]
         public string BillMobile { get; set; }
+        public List<string> SelectRegion { get; set; }
     }
 }

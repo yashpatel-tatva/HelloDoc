@@ -11,7 +11,14 @@
             <button class="nav-link maintabs me-3" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Dashboard</button>
             <button class="nav-link maintabs me-3" data-bs-toggle="tab" data-bs-target="#nav-ProviderLocation" type="button" role="tab" aria-controls="nav-ProviderLocation" aria-selected="false">Provider Location</button>
             <button class="nav-link maintabs me-3" data-bs-toggle="tab" data-bs-target="#nav-Profile" type="button" role="tab" aria-controls="nav-Profile" aria-selected="false">My Profile</button>
-            <button class="nav-link maintabs me-3" data-bs-toggle="tab" data-bs-target="#nav-Providers" type="button" role="tab" aria-controls="nav-Providers" aria-selected="false">Providers</button>
+            <button class="nav-link me-3 dropdown ms-2" type="button" data-bs-toggle="dropdown" role="tab" aria-expanded="false">
+                Providers
+            </button>
+            <div class="dropdown-menu dropdown-menu-right provider-dropdown">
+                <button type="button" class="dropdown-item maintabs text-center" data-bs-target="#providers">Provider</button>
+                <button type="button" class="dropdown-item maintabs text-center" data-bs-target="#scheduling">Scheduling</button>
+                <button type="button" class="dropdown-item maintabs text-center" data-bs-target="#invoicing">Invoicing</button>
+            </div>
             <button class="nav-link maintabs me-3" data-bs-toggle="tab" data-bs-target="#nav-Partners" type="button" role="tab" aria-controls="nav-Partners" aria-selected="false">Partners</button>
             <button class="nav-link maintabs me-3" data-bs-toggle="tab" data-bs-target="#nav-Access" type="button" role="tab" aria-controls="nav-Access" aria-selected="false">Access</button>
             <button class="nav-link maintabs me-3" data-bs-toggle="tab" data-bs-target="#nav-Records" type="button" role="tab" aria-controls="nav-Records" aria-selected="false">Records</button>
@@ -61,11 +68,11 @@
 
     @*BlockPatientModal*@
 
-    
+
 
     @*TransferCaseModal*@
 
-    
+
 
 </div>
 

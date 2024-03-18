@@ -53,7 +53,7 @@ namespace DataAccess.Repository
 
         public AdminProfileViewModel GetAdminProfile(int id)
         {
-            var admin = _db.Admins.Include(r=>r.Aspnetuser).FirstOrDefault(x => x.Adminid == id);
+            var admin = _db.Admins.Include(r=>r.Aspnetuser).Include(x=>x.Adminregions).FirstOrDefault(x => x.Adminid == id);
             AdminProfileViewModel model = new AdminProfileViewModel();
             model.Username = admin.Aspnetuser.Username;
             model.Password = admin.Aspnetuser.Passwordhash;
@@ -75,12 +75,16 @@ namespace DataAccess.Repository
             model.Zip = admin.Zip;
             model.Region = (int)admin.Regionid;
             model.Aspnetid = admin.Aspnetuserid;
+            foreach (var item in admin.Adminregions)
+            {
+                model.SelectRegion.Add(item.Regionid.ToString());
+            }
             return model;
         }
 
         public void Edit(int adminid ,AdminProfileViewModel viewModel)
         {
-            var admin = GetFirstOrDefault(x => x.Adminid == adminid);
+            var admin = _db.Admins.Include(x => x.Adminregions).FirstOrDefault(x => x.Adminid == adminid);
             var aspnet = _aspnetuser.GetFirstOrDefault(x => x.Id == admin.Aspnetuserid);
             admin.Firstname = viewModel.FirstName;
             admin.Lastname = viewModel.LastName;
@@ -92,7 +96,29 @@ namespace DataAccess.Repository
             //admin.Address2 = viewModel.Address2;
             //admin.Zip = viewModel.Zip;
             //admin.Regionid = viewModel.Region;
-            _db.Admins.Update(admin);
+            var RegionToDelete = admin.Adminregions.Select(x=>x.Regionid.ToString()).Except(viewModel.SelectRegion);
+            foreach (var item in RegionToDelete)
+            {
+                Adminregion? adminRegionToDelete = _db.Adminregions
+            .FirstOrDefault(ar => ar.Adminid == adminid && ar.Regionid.ToString() == item);
+
+                if (adminRegionToDelete != null)
+                {
+                    _db.Adminregions.Remove(adminRegionToDelete);
+                }
+            }
+            IEnumerable<string> regionsToAdd = viewModel.SelectRegion.Except(admin.Adminregions.Select(x=>x.Regionid.ToString()));
+
+            foreach (var item in regionsToAdd)
+            {
+                Adminregion newAdminRegion = new Adminregion
+                {
+                    Adminid = (int)adminid,
+                    Regionid = int.Parse(item),
+                };
+                _db.Adminregions.Add(newAdminRegion);
+            }
+            _db.Update(admin);
             _aspnetuser.Update(aspnet);
             _db.SaveChanges();
         }

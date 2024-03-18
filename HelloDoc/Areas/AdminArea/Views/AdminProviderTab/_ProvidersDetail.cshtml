@@ -1,0 +1,37 @@
+﻿@{
+    Layout = null;
+}
+@using DataModels.AdminSideViewModels;
+@model List<ProviderMenuViewModel> ;
+
+<table class="w-100">
+    <tbody>
+        @foreach (var physician in Model)
+        {
+            <tr class="p-1" style="border-top : 10px solid transparent ; border-bottom : 10px solid transparent">
+                <td style="width : 12%; text-align : center!important"></td>
+                <td style="width : 24%">@physician.Name</td>
+                <td style="width : 17%">@physician.Role</td>
+                <td style="width : 21%">@physician.OnCallStatus</td>
+                <td style="width : 14%">@physician.Status</td>
+                <td style="width : 13% ; text-align : center!important">
+                    <div class="d-flex justify-content-start">
+                        <button type="button" class="bg-transparent border-0 justify-content-start d-flex" value="@physician.PhysicanId">
+                            <div class="babtn rounded align-item-center p-1 px-2">
+                                <div>Contact</div>
+                            </div>
+                        </button>
+                        <button type="button" class="bg-transparent border-0 justify-content-start d-flex" value="@physician.PhysicanId">
+                            <div class="babtn rounded align-item-center p-1 px-2">
+                                <div>Edit</div>
+                            </div>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+

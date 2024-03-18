@@ -11,8 +11,14 @@
             case '#nav-Profile':
                 url = 'AdminArea/AdminProfile/AdminProfile';
                 break;
-            case '#nav-Providers':
-                url = 'AdminArea/Dashboard/Status_Conclude';
+            case '#providers':
+                url = 'AdminArea/AdminProviderTab/Providers';
+                break;
+            case '#scheduling':
+                url = 'AdminArea/AdminProviderTab/Scheduling';
+                break;
+            case '#invoicing':
+                url = 'AdminArea/AdminProviderTab/Invoicing';
                 break;
             case '#nav-Partners':
                 url = 'AdminArea/Dashboard/Status_Toclose';
@@ -24,7 +30,7 @@
                 url = 'AdminArea/Dashboard/Status_Unpaid';
                 break;
             default:
-                url = 'AdminArea/Home/AdminLogin';
+                url = 'AdminArea/Home/AdminTabsLayout';
         }
 
         $.ajax({
@@ -55,6 +61,7 @@
     }
     $('.maintabs').on('click', function (e) {
         e.preventDefault();
+        $('.maintabs').removeClass('active');
         $(this).addClass('active');
         var target = $(this).data('bs-target');
         localStorage.setItem('target', target);
@@ -71,6 +78,19 @@
     });
 
     handleTabTriggers();
+    $('.dropdown-item').on('click', function () {
+        if ($(this).hasClass('active')) {
+            $('.dropdown').addClass('active');
+        } else {
+            $('.dropdown').removeClass('active');
+        }
+    });
+
+    if ($('.dropdown-item').hasClass('active')) {
+        $('.dropdown').addClass('active');
+    } else {
+        $('.dropdown').removeClass('active');
+    }
 
     //$(window).resize(function () {
     //    handleTabTriggers();

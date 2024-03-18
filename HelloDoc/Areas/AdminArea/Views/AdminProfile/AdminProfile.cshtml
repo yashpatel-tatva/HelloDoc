@@ -16,7 +16,7 @@
             </a>
             </div>*@
         </div>
-        <div class="bg-white rounded m-3 shadow" id="content">
+        <div class="bg-light rounded m-3 shadow" id="content">
             <div class="p-3">
                 <div class="h5 fw-bold">Account Information</div>
                 <div class="d-flex row">
@@ -77,7 +77,7 @@
                         </div>
                         <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                             <div class="form-group d-flex align-items-center rounded">
-                                <input type="email" class="form-control adminedit  " id="admineditconfirmemail" placeholder="" asp-for="ConfirmEmail" disabled>
+                                <input type="email" class="form-control adminedit  " id="admineditconfirmemail" value="@Model.Email" asp-for="ConfirmEmail" disabled>
                                 <span>Confirm Email</span>
                             </div>
                             <span class="text-danger" asp-validation-for="ConfirmEmail"></span>
@@ -91,22 +91,13 @@
                             </div>
                         </div>
                         <div class="py-2 col-xl-6 col-md-6 col-sm-12 d-flex justify-content-between align-items-center">
-                            <div>
-                                <input type="checkbox" name="admineditregion" id="1" disabled />
-                                <label for="1">District of Columbia</label>
-                            </div>
-                            <div>
-                                <input type="checkbox" name="admineditregion" id="2" disabled />
-                                <label for="2">New York</label>
-                            </div>
-                            <div>
-                                <input type="checkbox" name="admineditregion" id="3" disabled />
-                                <label for="3">Virginia</label>
-                            </div>
-                            <div>
-                                <input type="checkbox" name="admineditregion" id="4" disabled />
-                                <label for="4">Maryaland</label>
-                            </div>
+                            @foreach(var item in Model.State)
+                            {
+                                <div>
+                                    <input type="checkbox" name="admineditregion" id="region_@item.Regionid" value="@item.Regionid" disabled />
+                                    <label for="region_@item.Regionid">@item.Name</label>
+                                </div>
+                            }
                         </div>
                     </div>
                     <div class="d-flex justify-content-end gap-2 p-3 " id="adminsaveandcancel">
@@ -170,5 +161,6 @@
 </div>
 <script>
     $('#state').val(@Model.Region);
+
 </script>
 <script src="~/js/AdminProfile.js" asp-append-version="true"></script>

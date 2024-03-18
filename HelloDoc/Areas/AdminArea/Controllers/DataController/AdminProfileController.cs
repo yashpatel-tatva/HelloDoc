@@ -36,6 +36,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         [HttpPost]
         public IActionResult AdminInfoEdit(AdminProfileViewModel viewModel)
         {
+            viewModel.SelectRegion = Request.Form["admineditregion"].ToList();
             _admin.Edit(_admin.GetSessionAdminId(), viewModel);
             return RedirectToAction("AdminTabsLayout", "Home");
         }

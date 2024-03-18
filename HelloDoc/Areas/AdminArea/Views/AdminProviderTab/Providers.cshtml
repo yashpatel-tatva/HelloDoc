@@ -1,0 +1,40 @@
+﻿@{
+    Layout = null;
+}
+@using DataModels.AdminSideViewModels;
+@model List<ProviderMenuViewModel> ;
+<div class="container">
+    <div class="d-flex justify-content-between mx-3">
+        <div class="h3 subinfotext fw-bold">Providers Information</div>
+    </div>
+    <div class="bg-light rounded m-3 shadow" id="content">
+        <div class="p-3 px-4 d-flex justify-content-between">
+            <div>
+                <select class="form-select  mb-0 fs-6 form-control drawbyregiondropdown">
+                    <option value="0">All Region</option>
+                </select>
+            </div>
+            <div>
+                <button class="p-2px-3mx-2 text-white bg-info rounded border-info d-flex align-items-center">
+                    <i class="bi bi-plus-square"></i>
+                    <span class="d-none d-lg-block ps-2">Create Provider Account</span>
+                </button>
+            </div>
+        </div>
+        <table class="w-100">
+            <thead class="p-1" style="background-color: rgb(235, 235, 235) ; color: black !important">
+                <tr>
+                    <th style="width : 12%; text-align : center!important">Stop <br />Notification</th>
+                    <th style="width : 24%" id="ordericon">Provider Name <i class="bi bi-arrow-up"></i></th>
+                    <th style="width : 17%">Role</th>
+                    <th style="width : 21%">On Call Status</th>
+                    <th style="width : 14%">Status</th>
+                    <th style="width : 13% ; text-align : center!important">Action</th>
+                </tr>
+            </thead>
+        </table>
+        <partial id="providerslist"></partial>
+    </div>
+</div>
+
+<script src="~/js/ProviderMenu.js"></script>

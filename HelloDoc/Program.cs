@@ -29,6 +29,7 @@ builder.Services.AddScoped<IBlockCaseRepository, BlockCaseRepository>();
 builder.Services.AddScoped<IRequestStatusLogRepository , RequestStatusLogRepository>();
 builder.Services.AddScoped<IRequestwisefileRepository, RequestwisefileRepository>();
 builder.Services.AddScoped<IOrderDetailRepository , OrderDetailRepository>();   
+builder.Services.AddScoped<IPhysicianRepository, PhysicianRepository>();
 
 
 builder.Services.AddScoped<IAllRequestDataRepository , AllRequestDataRepository>();
@@ -40,6 +41,7 @@ builder.Services.AddScoped<IAuthorizatoinRepository, AuthorizationRepository>();
 builder.Services.AddScoped<IJwtRepository, JwtRepository>();
 builder.Services.AddScoped<IPatientFormsRepository, PatientFormsRepository>();
 builder.Services.AddScoped<IPaginationRepository, PaginationRepository>();  
+builder.Services.AddScoped<IProviderMenuRepository, ProviderMenuRepository>();
 
 var app = builder.Build();
 
