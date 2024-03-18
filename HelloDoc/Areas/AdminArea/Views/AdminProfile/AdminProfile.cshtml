@@ -94,7 +94,9 @@
                             @foreach(var item in Model.State)
                             {
                                 <div>
-                                    <input type="checkbox" name="admineditregion" id="region_@item.Regionid" value="@item.Regionid" disabled />
+                                    <input type="checkbox" name="admineditregion" id="region_@item.Regionid" value="@item.Regionid" 
+                                                                        
+                                    disabled />
                                     <label for="region_@item.Regionid">@item.Name</label>
                                 </div>
                             }
