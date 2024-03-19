@@ -80,14 +80,9 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
 
         [Area("AdminArea")]
         [HttpPost]
-        public IActionResult EditProviderPersonal(PhysicianAccountViewModel viewModel)
+        public IActionResult EditProviderPersonal([FromBody] PhysicianAccountViewModel viewModel)
         {
-            List<int> selectedregion = new List<int>();
-            foreach (var item in Request.Form["physicianeditregion"])
-            {
-                selectedregion.Add(int.Parse(item));
-            }
-            viewModel.SelectedRegionCB = selectedregion;
+            _providerMenu.EditPersonalinfo(viewModel);
             return RedirectToAction("EditProviderPage", new { physicianid = viewModel.PhysicianId });
         }
 

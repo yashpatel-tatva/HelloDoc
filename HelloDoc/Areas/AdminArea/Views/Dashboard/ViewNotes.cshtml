@@ -107,6 +107,7 @@
 
         <div class="col-12 p-2">
             <form>
+                <input type="hidden" value="@Model.RequestId" id="hiddenrequestid"/>
                 <div class="bg-white shadow rounded-2 p-3">
                     <div class="form-group rounded d-flex align-items-center">
                         <textarea class="form-control" placeholder="" asp-for="@Model.AdminNotes" rows="5" id="AdminNotes"></textarea><span>Admin Notes</span>
@@ -121,32 +122,4 @@
         </div>
     </div>
 </div>
-
-<script>
-    $('#NoteSaveSubmitButton').on('click', function () {
-
-        var requestid = @Model.RequestId;
-        var Notes = $('#AdminNotes').val();
-
-        var model = {
-            requestid: requestid,
-            AdminNotes: Notes
-        };
-
-
-        $.ajax({
-            type: 'POST',
-            url: 'AdminArea/Dashboard/SaveAdminNotes',
-            contentType: 'application/json',
-            data: JSON.stringify(model),
-            success: function (response) {
-                $('#nav-tabContent').html(response);
-            },
-            error: function (error) {
-                console.error('Error saving admin notes:', error);
-            }
-        });
-
-    });
-
-</script>
+<script src="~/js/viewnotes.js"></script>

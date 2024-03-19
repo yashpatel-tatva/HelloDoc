@@ -56,23 +56,23 @@
 
             <div class="h5 fw-bold">Administrator Information</div>
             <form asp-action="EditProviderPersonal" asp-controller="AdminProviderTab" method="post">
-                <input type="text" class="form-control" placeholder="" value="@Model.PhysicianId" asp-for="PhysicianId" hidden>
+                <input type="text" class="form-control" placeholder="" value="@Model.PhysicianId" id="inputhiddenid" asp-for="PhysicianId" hidden>
                 <div class="row d-flex">
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="text" class="form-control personalinfordit" placeholder="" asp-for="FirstName" disabled><span>First Name</span>
+                            <input type="text" class="form-control personalinfordit" placeholder="" id= "editfirstname" asp-for="FirstName" disabled><span>First Name</span>
                         </div>
                         <span class="text-danger" asp-validation-for="FirstName"></span>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="text" class="form-control personalinfordit" placeholder="" asp-for="LastName" disabled><span>Last Name</span>
+                            <input type="text" class="form-control personalinfordit" placeholder="" id="editlastname" asp-for="LastName" disabled><span>Last Name</span>
                         </div>
                         <span class="text-danger" asp-validation-for="LastName"></span>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="email" class="form-control personalinfordit" placeholder="" asp-for="Email" disabled><span>Email</span>
+                            <input type="email" class="form-control personalinfordit" placeholder="" id="editemail" asp-for="Email" disabled><span>Email</span>
                         </div>
                         <span class="text-danger" asp-validation-for="Email"></span>
                     </div>
@@ -86,19 +86,19 @@
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="text" class="form-control personalinfordit" placeholder="" asp-for="MedicalLicense" disabled><span>Medical License #</span>
+                            <input type="text" class="form-control personalinfordit" placeholder="" id="editmedical" asp-for="MedicalLicense" disabled><span>Medical License #</span>
                         </div>
                         <span class="text-danger" asp-validation-for="MedicalLicense"></span>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="text" class="form-control personalinfordit" placeholder="" asp-for="NPINumber" disabled><span>NPI Number</span>
+                            <input type="text" class="form-control personalinfordit" placeholder="" id="editnpi" asp-for="NPINumber" disabled><span>NPI Number</span>
                         </div>
                         <span class="text-danger" asp-validation-for="NPINumber"></span>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="email" class="form-control personalinfordit" placeholder="" asp-for="SynchronizationEmail" disabled><span>Synchronization Email</span>
+                            <input type="email" class="form-control personalinfordit" placeholder="" id="editsyncemail" asp-for="SynchronizationEmail" disabled><span>Synchronization Email</span>
                         </div>
                         <span class="text-danger" asp-validation-for="SynchronizationEmail"></span>
                     </div>

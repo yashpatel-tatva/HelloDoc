@@ -96,13 +96,53 @@ namespace DataAccess.ServiceRepository
             model.MedicalLicense = physician.Medicallicense;
             model.NPINumber = physician.Npinumber;
             model.SynchronizationEmail = physician.Syncemailaddress;
-            foreach (var region in physician.Physicianregions)
+            List<int> regionid = new List<int>();
+            foreach (var item in physician.Physicianregions)
             {
-                model.SelectedRegionCB.Add(region.Regionid);
+                regionid.Add(item.Regionid);
             }
+            model.SelectedRegionCB = regionid;
             model.regions = _db.Regions.ToList();
             return model;
         }
 
+        public void EditPersonalinfo(PhysicianAccountViewModel model)
+        {
+            var physician = _db.Physicians.Include(x => x.Aspnetuser).Include(r => r.Physicianregions).FirstOrDefault(x => x.Physicianid == model.PhysicianId);
+            physician.Physicianid =  model.PhysicianId ;
+            physician.Firstname =  model.FirstName ;
+            physician.Lastname =  model.LastName ;
+            physician.Email =  model.Email ;
+            physician.Mobile =  model.Phone ;
+            physician.Medicallicense =  model.MedicalLicense ;
+            physician.Npinumber =  model.NPINumber;
+            physician.Syncemailaddress = model.SynchronizationEmail;
+            var RegionToDelete = physician.Physicianregions.Select(x => x.Regionid).Except(model.SelectedRegionCB);
+            foreach (var item in RegionToDelete)
+            {
+                Physicianregion? regiontodelete = _db.Physicianregions
+            .FirstOrDefault(ar => ar.Physicianid == model.PhysicianId && ar.Regionid == item);
+
+                if (regiontodelete != null)
+                {
+                    _db.Physicianregions.Remove(regiontodelete);
+                }
+            }
+            IEnumerable<int> regionsToAdd = model.SelectedRegionCB.Except(physician.Physicianregions.Select(x=>x.Regionid));
+
+            foreach (var item in regionsToAdd)
+            {
+                Physicianregion newRegion = new Physicianregion
+                {
+                    Physicianid = model.PhysicianId,
+                    Regionid = item,
+                };
+                _db.Physicianregions.Add(newRegion);
+            }
+            _db.SaveChanges();
+            model.regions = _db.Regions.ToList();
+            _db.Update(physician);
+            _db.SaveChanges();
+        }
     }
 }

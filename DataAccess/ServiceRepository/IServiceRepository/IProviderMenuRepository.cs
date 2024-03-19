@@ -12,5 +12,6 @@ namespace DataAccess.ServiceRepository.IServiceRepository
         List<ProviderMenuViewModel> GetAllProviderDetailToDisplay(int region, int order);
         void ChangeNotification(List<int> checkedToUnchecked, List<int> uncheckedToChecked);
         PhysicianAccountViewModel GetPhysicianAccountById(int Physicianid);
+        void EditPersonalinfo(PhysicianAccountViewModel viewModel);
     }
 }
