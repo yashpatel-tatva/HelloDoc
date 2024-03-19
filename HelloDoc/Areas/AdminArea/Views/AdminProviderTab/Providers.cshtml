@@ -21,19 +21,22 @@
                 </button>
             </div>
         </div>
-        <table class="w-100">
-            <thead class="p-1" style="background-color: rgb(235, 235, 235) ; color: black !important">
-                <tr>
-                    <th style="width : 12%; text-align : center!important">Stop <br />Notification</th>
-                    <th style="width : 24%" id="ordericon">Provider Name <i class="bi bi-arrow-up"></i></th>
-                    <th style="width : 17%">Role</th>
-                    <th style="width : 21%">On Call Status</th>
-                    <th style="width : 14%">Status</th>
-                    <th style="width : 13% ; text-align : center!important">Action</th>
-                </tr>
-            </thead>
-        </table>
-        <partial id="providerslist"></partial>
+        <div class="table-responsive">
+            <table class="w-100">
+                <thead class="p-1" style="background-color: rgb(235, 235, 235) ; color: black !important">
+                    <tr>
+                        <th style="width : 12%; text-align : center!important">Stop <br />Notification</th>
+                        <th style="width : 24%" id="ordericon">Provider Name <i class="bi bi-arrow-up"></i></th>
+                        <th style="width : 17%">Role</th>
+                        <th style="width : 21%">On Call Status</th>
+                        <th style="width : 14%">Status</th>
+                        <th style="width : 13% ; text-align : center!important">Action</th>
+                    </tr>
+                </thead>
+            </table>
+            <partial id="providerslist"></partial>
+        </div>
+        <partial id="_ContactProvider"></partial>
     </div>
 </div>
 

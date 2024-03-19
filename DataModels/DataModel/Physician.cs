@@ -39,7 +39,7 @@ public partial class Physician
     public string? Medicallicense { get; set; }
 
     [Column("photo")]
-    [StringLength(100)]
+    [StringLength(500)]
     public string? Photo { get; set; }
 
     [Column("adminnotes")]

@@ -2,6 +2,26 @@ body {
     font-family: 'Poppins', sans-serif;
 }
 
+input[type = "checkbox"] {
+    --bs-form-check-bg-image: "";
+    box-shadow: none !important;
+}
+
+    input[type = "checkbox"]:checked {
+        background-color: #0dcaf0 !important;
+        border-color: #0dcaf0;
+    }
+
+input[type = "radio"] {
+    --bs-form-check-bg-image: "";
+    box-shadow: none !important;
+}
+
+    input[type = "radio"]:checked {
+        background-color: #0dcaf0 !important;
+        border-color: #0dcaf0;
+    }
+
 .bggray {
     background-color: #f9f9f9;
 }
@@ -26,6 +46,7 @@ body {
     /* border: 1px solid; */
     border: 1px solid darkgray;
 }
+
 .selectedselectspan {
     color: inherit;
     color: darkgray;
@@ -35,61 +56,62 @@ body {
     background-color: transparent;
 }
 
-    .form-group textarea {
-        width: 100%;
-        outline: none;
-        border: 0;
-        background-color: transparent;
-        margin-top: 15px;
-        padding: 0px 15px 10px 15px;
-        font-size: 1em;
-    }
+.form-group textarea {
+    width: 100%;
+    outline: none;
+    border: 0;
+    background-color: transparent;
+    margin-top: 15px;
+    padding: 0px 15px 10px 15px;
+    font-size: 1em;
+}
 
-    .form-group input {
-        width: 100%;
-        outline: none;
-        border: 0;
-        background-color: transparent;
-        padding: 15px 15px 10px 15px;
-        font-size: 1em;
-    }
+.form-group input {
+    width: 100%;
+    outline: none;
+    border: 0;
+    background-color: transparent;
+    padding: 15px 15px 10px 15px;
+    font-size: 1em;
+}
 
-    .form-group select {
-        width: 100%;
-        outline: none;
-        border: 0;
-        background-color: transparent;
-        padding: 15px 15px 10px 15px;
-        font-size: 1em;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        appearance: none;
-        background: url(/res/downarrow.png) 96% / 3% no-repeat;
-        transition : 0.3s ;
-    }
+.form-group select {
+    width: 100%;
+    outline: none;
+    border: 0;
+    background-color: transparent;
+    padding: 15px 15px 10px 15px;
+    font-size: 1em;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background: url(/res/downarrow.png) 96% / 3% no-repeat;
+    transition: 0.3s;
+}
+
     .form-group select:focus {
         background: url(/res/uparrow.png) 96% / 3% no-repeat;
     }
 
 
-    .telephone input {
-        width: 100%;
-        outline: none;
-        border: 0;
-        background-color: transparent;
-        padding: 12.5px 15px 12.5px 15px;
-        font-size: 1em;
-    }
+.telephone input {
+    width: 100%;
+    outline: none;
+    border: 0;
+    background-color: transparent;
+    padding: 12.5px 15px 12.5px 15px;
+    font-size: 1em;
+}
 
-    .form-group span {
-        position: absolute;
-        left: 15px;
-        top: 13px;
-        pointer-events: none;
-        font-size: 1em;
-        transition: 0.5s;
-        color: darkgrey;
-    }
+.form-group span {
+    position: absolute;
+    left: 15px;
+    top: 13px;
+    pointer-events: none;
+    font-size: 1em;
+    transition: 0.5s;
+    color: darkgrey;
+}
 
 
 /* input[type="date"]::-webkit-calendar-picker-indicator {

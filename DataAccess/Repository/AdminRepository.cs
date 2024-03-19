@@ -75,10 +75,12 @@ namespace DataAccess.Repository
             model.Zip = admin.Zip;
             model.Region = (int)admin.Regionid;
             model.Aspnetid = admin.Aspnetuserid;
+            List<string> regionidstring = new List<string>();
             foreach (var item in admin.Adminregions)
             {
-                model.SelectRegion.Add(item.Regionid.ToString());
+               regionidstring.Add(item.Regionid.ToString());
             }
+            model.SelectRegion = regionidstring;
             return model;
         }
 

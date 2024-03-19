@@ -15,7 +15,7 @@ var region = 0;
 var order = 0;
 
 $.ajax({
-    url: 'AdminArea/AdminProviderTab/Providersfilter?region=' + region + '&order=' + order,
+    url: '/AdminArea/AdminProviderTab/Providersfilter?region=' + region + '&order=' + order,
     success: function (response) {
         $('#providerslist').html(response);
     },
@@ -27,7 +27,7 @@ $.ajax({
 $('.drawbyregiondropdown').on('change', function () {
     region = $('.drawbyregiondropdown').val();
     $.ajax({
-        url: 'AdminArea/AdminProviderTab/Providersfilter?region=' + region + '&order=' + order,
+        url: '/AdminArea/AdminProviderTab/Providersfilter?region=' + region + '&order=' + order,
         success: function (response) {
             $('#providerslist').html(response);
         },
@@ -48,7 +48,7 @@ $('#ordericon').on('click', function () {
 
     }
     $.ajax({
-        url: 'AdminArea/AdminProviderTab/Providersfilter?region=' + region + '&order=' + order,
+        url: '/AdminArea/AdminProviderTab/Providersfilter?region=' + region + '&order=' + order,
         success: function (response) {
 
             $('#providerslist').html(response);

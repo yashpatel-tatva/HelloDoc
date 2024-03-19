@@ -1,7 +1,7 @@
-﻿    var phoneInputField = document.querySelector("#admineditmobile");
-    var phoneInput = window.intlTelInput(phoneInputField, {
-        utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
-    }); var phoneInputField = document.querySelector("#addresseditBillMobile");
+﻿var phoneInputField = document.querySelector("#admineditmobile");
+var phoneInput = window.intlTelInput(phoneInputField, {
+    utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+}); var phoneInputField = document.querySelector("#addresseditBillMobile");
 var phoneInput = window.intlTelInput(phoneInputField, {
     utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
 });
@@ -74,7 +74,7 @@ $('#adminsaveandcancel').on('click', '#admincancel', function () {
     $('.adminedit').prop('disabled', true);
     $('input[name="admineditregion"]').prop('disabled', true);
     $('#adminEdit_Save').text("Edit");
-    $(this).css('display' , 'none');
+    $(this).css('display', 'none');
 });
 
 var address1;

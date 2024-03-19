@@ -10,5 +10,7 @@ namespace DataAccess.ServiceRepository.IServiceRepository
     public interface IProviderMenuRepository
     {
         List<ProviderMenuViewModel> GetAllProviderDetailToDisplay(int region, int order);
+        void ChangeNotification(List<int> checkedToUnchecked, List<int> uncheckedToChecked);
+        PhysicianAccountViewModel GetPhysicianAccountById(int Physicianid);
     }
 }

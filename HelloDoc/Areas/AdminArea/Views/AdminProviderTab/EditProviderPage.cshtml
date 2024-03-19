@@ -1,0 +1,135 @@
+﻿@{
+    Layout = null;
+}
+@using DataModels.AdminSideViewModels
+@model PhysicianAccountViewModel
+<div class="container">
+    <div class="d-flex justify-content-between mx-3">
+        <div class="h3 subinfotext fw-bold">Edit Physician Account</div>
+        <div>
+            <a asp-action="AdminTabsLayout" asp-controller="Home">
+                <button type="button" class="d-flex babtn rounded align-item-center p-1 px-2">
+                    <div><img src="~/res/back.png" width="15px" height="10px"></div>
+                    <div><span>Back</span></div>
+                </button>
+            </a>
+        </div>
+    </div>
+    <div class="bg-light rounded m-3 shadow" id="content">
+        <div class="p-3">
+            <div class="h5 fw-bold">Account Information</div>
+            <div class="d-flex row">
+                <div class="py-2 col-xl-6 col-md-6 col-sm-12">
+                    <div class="form-group d-flex align-items-center rounded">
+                        <input type="text" class="form-control" placeholder="" asp-for="Username" disabled><span>Username</span>
+                    </div>
+                </div>
+                <div class="py-2 col-xl-6 col-md-6 col-sm-12">
+                    <div class="form-group d-flex align-items-center rounded">
+                        <input type="text" class="form-control" placeholder="" asp-for="Password" id="password" disabled><span>Password</span>
+                        <input type="text" class="form-control" placeholder="" value="@Model.Aspnetid" id="aspnetid" hidden>
+                    </div>
+                    <span class="text-danger" asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div class="py-2 col-xl-6 col-md-6 col-sm-12">
+                    <div class="form-group d-flex align-items-center rounded">
+                        <select class="form-select" disabled>
+                            <option>Active</option>
+                        </select>
+                        <span class="selectedselectspan">Status</span>
+                    </div>
+                </div>
+                <div class="py-2 col-xl-6 col-md-6 col-sm-12">
+                    <div class="form-group d-flex align-items-center rounded">
+                        <select class="form-select" disabled>
+                            <option>Physician</option>
+                        </select>
+                        <span class="selectedselectspan">Role</span>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex justify-content-end py-4" id="passsaveandcancle">
+                <button type="button" class="btn border-info text-info shadow-none" id="resetpassword">Reset Password</button>
+            </div>
+
+
+
+            <div class="h5 fw-bold">Administrator Information</div>
+            <form asp-action="EditProviderPersonal" asp-controller="AdminProviderTab" method="post">
+                <input type="text" class="form-control" placeholder="" value="@Model.PhysicianId" asp-for="PhysicianId" hidden>
+                <div class="row d-flex">
+                    <div class="py-2 col-xl-6 col-md-6 col-sm-12">
+                        <div class="form-group d-flex align-items-center rounded">
+                            <input type="text" class="form-control personalinfordit" placeholder="" asp-for="FirstName" disabled><span>First Name</span>
+                        </div>
+                        <span class="text-danger" asp-validation-for="FirstName"></span>
+                    </div>
+                    <div class="py-2 col-xl-6 col-md-6 col-sm-12">
+                        <div class="form-group d-flex align-items-center rounded">
+                            <input type="text" class="form-control personalinfordit" placeholder="" asp-for="LastName" disabled><span>Last Name</span>
+                        </div>
+                        <span class="text-danger" asp-validation-for="LastName"></span>
+                    </div>
+                    <div class="py-2 col-xl-6 col-md-6 col-sm-12">
+                        <div class="form-group d-flex align-items-center rounded">
+                            <input type="email" class="form-control personalinfordit" placeholder="" asp-for="Email" disabled><span>Email</span>
+                        </div>
+                        <span class="text-danger" asp-validation-for="Email"></span>
+                    </div>
+                    <div class="py-2 col-xl-6 col-md-6 col-sm-12">
+                        <div class="telephone rounded">
+                            <div class="input-group d-flex align-items-center rounded ">
+                                <input type="tel" class="form-control  personalinfordit" id="personalinforditphone" asp-for="Phone" disabled>
+                            </div>
+                            <span class="text-danger" asp-validation-for="Phone"></span>
+                        </div>
+                    </div>
+                    <div class="py-2 col-xl-6 col-md-6 col-sm-12">
+                        <div class="form-group d-flex align-items-center rounded">
+                            <input type="text" class="form-control personalinfordit" placeholder="" asp-for="MedicalLicense" disabled><span>Medical License #</span>
+                        </div>
+                        <span class="text-danger" asp-validation-for="MedicalLicense"></span>
+                    </div>
+                    <div class="py-2 col-xl-6 col-md-6 col-sm-12">
+                        <div class="form-group d-flex align-items-center rounded">
+                            <input type="text" class="form-control personalinfordit" placeholder="" asp-for="NPINumber" disabled><span>NPI Number</span>
+                        </div>
+                        <span class="text-danger" asp-validation-for="NPINumber"></span>
+                    </div>
+                    <div class="py-2 col-xl-6 col-md-6 col-sm-12">
+                        <div class="form-group d-flex align-items-center rounded">
+                            <input type="email" class="form-control personalinfordit" placeholder="" asp-for="SynchronizationEmail" disabled><span>Synchronization Email</span>
+                        </div>
+                        <span class="text-danger" asp-validation-for="SynchronizationEmail"></span>
+                    </div>
+                    <div class="py-2 col-xl-6 col-md-6 col-sm-12 d-flex justify-content-between align-items-center flex-wrap">
+                        @foreach (var item in Model.regions)
+                        {
+                            <div class="form-check form-check-inline ">
+                                @if (Model.SelectedRegionCB == null)
+                                {
+                                    <input type="checkbox" name="physicianeditregion" id="region_@item.Regionid" value="@item.Regionid" disabled />
+                                }
+                                else if (Model.SelectedRegionCB.Contains(item.Regionid))
+                                {
+                                    <input type="checkbox" class="form-check-input" name="physicianeditregion" id="region_@item.Regionid" value="@item.Regionid" checked disabled />
+                                }
+                                else
+                                {
+                                    <input type="checkbox" class="form-check-input" name="physicianeditregion" id="region_@item.Regionid" value="@item.Regionid" disabled />
+                                }
+                                <label for="region_@item.Regionid">@item.Name</label>
+                            </div>
+                        }
+                    </div>
+                    <div class="d-flex justify-content-end gap-2 p-3 " id="phyiciansaveandcancel">
+                        <button type="button" class="btn btn-info text-white mx-2 px-3 shadow-none" id="physicianEdit_Save">Edit</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<script src="~/js/ProviderAccount.js"></script>

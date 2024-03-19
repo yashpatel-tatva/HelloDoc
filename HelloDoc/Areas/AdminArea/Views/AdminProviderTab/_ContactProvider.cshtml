@@ -1,0 +1,71 @@
+﻿<div class="modal fade" id="ModalToOpen" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header p-2 px-4 bg-info">
+                <h5 class="modal-title text-white">Contact Your Provider</h5>
+                <button type="button" class="btn" data-dismiss="modal" aria-label="Close">
+                    <i class="fa-solid fa-xmark text-white"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="Post">
+                    <input type="number" id="inputhiddenrequestid" value="@Model.physicianid" hidden />
+
+                    <div class="mb-3">Choose Communication to sent Message</div>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="radio" name="msgtype" value="typesms">
+                        <label class="form-check-label" for="typesms">
+                            SMS
+                        </label>
+                    </div>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="radio" name="msgtype" value="typeemail">
+                        <label class="form-check-label" for="typeemail">
+                            Email
+                        </label>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="radio" name="msgtype" value="typeboth" checked>
+                        <label class="form-check-label" for="typeboth">
+                            Both
+                        </label>
+                    </div>
+                    <div class="form-group rounded d-flex align-itsems-center messagetosend">
+                        <textarea class="form-control  shadow-none" placeholder="" rows="3" id="messageforprovider"></textarea>
+                        <span>Message</span>
+                    </div>
+                    <div class="d-flex float-end mt-4">
+                        <button type="button" id="Contactconfirmbutton" class="btn btn-info text-white mx-2 shadow-none ">Send</button>
+                        <button type="button" id="ContactCancelbutton" class="btn border-info text-info shadow-none" data-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#Contactconfirmbutton').on('click', function () {
+        var physicianid = $('#inputhiddenrequestid').val();
+        var msgtype = $('input[name="msgtype"]:checked').val();
+        var msg = $('#messageforprovider').val();
+        console.log(msg);
+        console.log(msgtype);
+        console.log(physicianid);
+        if (msg == null || msg == "" || msg == " ") {
+            $('#messageforprovider').closest('.form-group').css("border", "1px solid red");
+        }
+        else {
+            $.ajax({
+                url: '/AdminArea/AdminProviderTab/ContactThisProvider',
+                data: { physicianid: physicianid, msgtype: msgtype, msg: msg },
+                type: 'POST',
+                success: function () {
+                    $('#ContactCancelbutton').trigger('click');
+                }
+            });
+        }
+    });
+
+
+</script>
