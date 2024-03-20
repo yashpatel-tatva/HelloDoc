@@ -75,14 +75,22 @@
         </div>
     </footer>
     <script>
-        var phoneInputField = document.querySelector("#tel");
-        var phoneInput = window.intlTelInput(phoneInputField, {
-            utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+        $('input[type="tel"]').each(function () {
+            var iti = window.intlTelInput(this, {
+                nationalMode: false,
+                utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"
+            });
+            $(this).on('blur', function () {
+                var fullNumber = iti.getNumber();
+                var countryCode = iti.getSelectedCountryData().dialCode;
+                if (fullNumber.startsWith("+" + countryCode + "+" + countryCode)) {
+                    fullNumber = fullNumber.replace("+" + countryCode + "+", "+");
+                }
+                console.log(fullNumber);
+                $(this).val(fullNumber);
+            });
         });
-        var phoneInputField1 = document.querySelector("#tel1");
-        var phoneInput1 = window.intlTelInput(phoneInputField1, {
-            utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
-        });
+
     </script>
     @*<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>*@
     <script src="~/js/requestform.js" asp-append-version="true"></script>

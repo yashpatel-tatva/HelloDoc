@@ -1,10 +1,21 @@
-﻿var phoneInputField = document.querySelector("#admineditmobile");
-var phoneInput = window.intlTelInput(phoneInputField, {
-    utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
-}); var phoneInputField = document.querySelector("#addresseditBillMobile");
-var phoneInput = window.intlTelInput(phoneInputField, {
-    utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+﻿
+$('input[type="tel"]').each(function () {
+    var iti = window.intlTelInput(this, {
+        nationalMode: false,
+        utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"
+    });
+    $(this).on('blur', function () {
+        var fullNumber = iti.getNumber();
+        var countryCode = iti.getSelectedCountryData().dialCode;
+        if (fullNumber.startsWith("+" + countryCode + "+" + countryCode)) {
+            fullNumber = fullNumber.replace("+" + countryCode + "+", "+");
+        }
+        console.log(fullNumber);
+        $(this).val(fullNumber);
+    });
 });
+
+
 console.log("admin")
 var password;
 $('#resetpassword').on('click', function () {
@@ -63,7 +74,38 @@ $('#adminEdit_Save').on('click', function () {
     }
     else {
         console.log("click");
-        $(this).closest('form').submit();
+        //var selectedCountryData = phoneInput.getSelectedCountryData();
+        //var selectedCountryDialCode = selectedCountryData.dialCode;
+        //mobile = $('#admineditmobile').val();
+        //$('#admineditmobile').val("+" + selectedCountryDialCode + mobile);
+        function validateForm() {
+            var firstname = $('#admineditfirstname').val();
+            var lastname = $('#admineditlastname').val();
+            var email = $('#admineditemail').val();
+            var mobile = $('#admineditmobile').val();
+
+            if (!firstname) {
+                $('#admineditfirstname').css("border", "1px solid red");
+                return false;
+            }
+            if (!lastname) {
+                $('#admineditlastname').css("border", "1px solid red");
+                return false;
+            }
+            if (!email) {
+                $('#admineditemail').css("border", "1px solid red");
+                return false;
+            }
+            if (!mobile) {
+                $('#admineditmobile').css("border", "1px solid red");
+                return false;
+            }
+
+            return true;
+        }
+        if (validateForm()) {
+            $(this).closest('form').submit();
+        }
     }
 });
 $('#adminsaveandcancel').on('click', '#admincancel', function () {

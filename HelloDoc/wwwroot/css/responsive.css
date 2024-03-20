@@ -79,7 +79,8 @@ a {
 
 .paginate_button,
 .paginate_Nextbutton,
-.paginate_Previousbutton {
+.paginate_Previousbutton,
+.paginate_buttonNaN {
     border-radius: 20% !important;
     margin-left: 7px !important;
     padding: 0px !important;
@@ -253,7 +254,7 @@ a {
 
     .paginate_button,
     .paginate_Nextbutton,
-    .paginate_Previousbutton {
+    .paginate_Previousbutton, .paginate_buttonNaN {
         padding: 0px !important;
         border: 1px solid #80808070 !important;
         font-size: smaller;
@@ -263,7 +264,8 @@ a {
 
     .paginate_button,
     .paginate_Nextbutton,
-    .paginate_Previousbutton {
+    .paginate_Previousbutton,
+    .paginate_buttonNaN {
         display: flex;
         align-items: center;
         justify-content: center;
@@ -314,9 +316,11 @@ a {
     .viewfilebtn {
         display: flex !important;
     }
-    .pagination_div{
-        flex-wrap :wrap!important;
+
+    .pagination_div {
+        flex-wrap: wrap !important;
     }
+
         .pagination_div .info_div {
             width: 100% !important;
             text-align: center !important;

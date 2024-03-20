@@ -29,13 +29,13 @@ input[type = "radio"] {
 .babtn {
     background-color: transparent;
     border: 1px solid;
-    border-color: #00b8e6;
-    color: #00b8e6;
+    border-color: #0dcaf0;
+    color: #0dcaf0;
     font-size: medium;
 }
 
 .subbtn {
-    background-color: #00b8e6;
+    background-color: #0dcaf0;
     color: white;
     border: 0;
 }
@@ -182,7 +182,7 @@ textarea:focus + span,
 textarea:not(:placeholder-shown) + span,
 .floatspanfordropdown,
 .did-floating-select:not([value=""]):valid ~ .did-floating-label {
-    color: #00b8e6;
+    color: #0dcaf0;
     transform: translateX(-3px) translateY(-14px);
     font-size: 0.75em !important;
     padding: 0px 5px;
@@ -196,14 +196,14 @@ textarea:not(:placeholder-shown) + span,
 
 .form-group:focus-within,
 .telephone:focus-within {
-    border: 1px solid #00b8e6;
+    border: 1px solid #0dcaf0;
 }
 
 .subbtn:focus {
-    background-color: #00b8e6;
+    background-color: #0dcaf0;
 }
 
 a:link,
 a:visited {
-    color: #00b8e6;
+    color: #0dcaf0;
 }

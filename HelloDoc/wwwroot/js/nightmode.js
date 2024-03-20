@@ -15,7 +15,7 @@ function changetheme() {
         document.querySelector('body').setAttribute('data-bs-theme', 'dark');
         imgmode.classList.replace("fa-sun", "fa-moon")
         imgmode.style.color = "rgb(0, 184, 230)"
-        btn.style.borderColor = "#00b8e6";
+        btn.style.borderColor = "#0dcaf0";
         if (document.querySelector('body').style.backgroundColor === "rgb(247, 247, 247)") {
             document.querySelector('body').style.backgroundColor = "black";
         }

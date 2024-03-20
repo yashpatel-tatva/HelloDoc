@@ -1,8 +1,6 @@
 try {
     var actualBtn = document.getElementById('actual-btn');
     var fileChosen = document.getElementById('file-chosen');
-    console.log(actualBtn);
-    console.log(fileChosen);
     actualBtn.addEventListener('change', function () {
         var filesnames = this.files[0].name;
         for (var i = 1; i < this.files.length; i++) {
@@ -11,6 +9,17 @@ try {
         fileChosen.textContent = filesnames;
         fileChosen.style.color = "black";
         fileChosen.style.fontSize = "large"
+    })
+    var actualBtn1 = document.getElementById('actual-btn1');
+    var fileChosen1 = document.getElementById('file-chosen1');
+    actualBtn1.addEventListener('change', function () {
+        var filesnames = this.files[0].name;
+        for (var i = 1; i < this.files.length; i++) {
+            filesnames = filesnames + ' + ' + this.files[i].name;
+        }
+        fileChosen1.textContent = filesnames;
+        fileChosen1.style.color = "black";
+        fileChosen1.style.fontSize = "large"
     })
 }
 catch {

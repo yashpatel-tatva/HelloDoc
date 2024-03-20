@@ -1,5 +1,5 @@
 .uploadbtn {
-    background-color: #00b8e6;
+    background-color: #0dcaf0;
     color: white;
     border-top-right-radius: 0.375rem;
     border-bottom-right-radius: 0.375rem;
@@ -60,7 +60,7 @@
     input:not(:placeholder-shown)+span,
     textarea:focus+span,
     textarea:not(:placeholder-shown)+span {
-        color: #00b8e6;
+        color: #0dcaf0;
         transform: translateX(-3px) translateY(-10.5px);
         font-size: 0.57em;
         padding: 0px 5px;
