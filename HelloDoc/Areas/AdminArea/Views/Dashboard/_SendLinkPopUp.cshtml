@@ -36,9 +36,20 @@
     </div>
 </div>
 <script>
-    var phoneInputField = document.querySelector("#sendlinkmobile");
-    var phoneInput = window.intlTelInput(phoneInputField, {
-        utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+    $('input[type="tel"]').each(function () {
+        var iti = window.intlTelInput(this, {
+            nationalMode: false,
+            utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"
+        });
+        $(this).on('blur', function () {
+            var fullNumber = iti.getNumber();
+            var countryCode = iti.getSelectedCountryData().dialCode;
+            if (fullNumber.startsWith("+" + countryCode + "+" + countryCode)) {
+                fullNumber = fullNumber.replace("+" + countryCode + "+", "+");
+            }
+            console.log(fullNumber);
+            $(this).val(fullNumber);
+        });
     });
 
     $('#SendLinkSubmitBtn').on('click', function () {
@@ -63,7 +74,16 @@
                 type: 'POST',
                 data: { firstname: firstname, lastname: lastname, email: email, mobile: mobile },
                 success: function () {
-                    location.reload();
+                    Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: "Email Sent",
+                        showConfirmButton: false,
+                        timer: 1000
+                    });
+                    setTimeout(function () {
+                        location.reload();
+                    }, 1500);
                 },
                 error: function (error) {
                     console.error('Error:', error);

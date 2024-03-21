@@ -59,7 +59,7 @@
                     {
                         <td>
                             <div class="">
-                                <div class="border border-1 border-white rounded w-100 d-flex justify-content-around"><i class="bi bi-telephone"></i>  @item.PatientPhone</div>
+                                <div class="border border-1 border-white rounded  d-flex justify-content-around" style="width : max-content !important"><i class="bi bi-telephone"></i>  @item.PatientPhone</div>
                                 <div>(Patient)</div>
                             </div>
                         </td>
@@ -93,7 +93,7 @@
                 <td>@item.Address</td>
                 <td>@item.TransferNotes</td>
                 <td>
-                    <div class="d-flex w-100 justify-content-between">
+                    <div class="d-flex gap-2">
                         <a asp-route-id="@item.ProviderEmail" style="color : white ; " class="m-1">
                             <div class="border border-1 border-white rounded d-flex justify-content-around align-items-center p-1">
                                 <i class="fa-solid fa-user-doctor"></i>

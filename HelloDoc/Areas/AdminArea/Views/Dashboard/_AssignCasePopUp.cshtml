@@ -59,7 +59,17 @@
                 type: 'POST',
                 data: { requestid: requestid, phyid: phyid, note: note },
                 success: function (result) {
-                    location.reload();
+                    console.log(result);
+                    Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: "Case Transfered to",
+                        showConfirmButton: false,
+                        timer: 1000
+                    });
+                    setTimeout(function () {
+                        location.reload();
+                    }, 1500);
                 },
                 error: function (xhr, status, error) {
                     console.error('Error: ' + error);
@@ -68,13 +78,15 @@
         }
     });
     $('.regiondropdown').on('change', function () {
-
+        var requestid = $('#inputhiddenrequestid').val();
+        console.log(requestid);
         var regionid = $(this).val();
         $.ajax({
             url: 'AdminArea/Dashboard/GetPhysician',
             type: 'POST',
-            data: { regionid: regionid },
+            data: { regionid: regionid, requestid: requestid },
             success: function (data) {
+                console.log(data);
                 var physiciandropdown = $('#physiciandropdown');
                 physiciandropdown.empty();
                 physiciandropdown.append($('<option>', {

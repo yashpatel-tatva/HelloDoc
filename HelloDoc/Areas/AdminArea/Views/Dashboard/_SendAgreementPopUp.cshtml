@@ -77,7 +77,16 @@
                 type: 'POST',
                 data: { requestid: requestid, email: email, mobile: mobile },
                 success: function (result) {
-                    location.reload();
+                    Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: "Email Sent For Agreement",
+                        showConfirmButton: false,
+                        timer: 1000
+                    });
+                    setTimeout(function () {
+                        location.reload();
+                    }, 1500);
                 },
                 error: function (xhr, status, error) {
                     console.error('Error: ' + error);

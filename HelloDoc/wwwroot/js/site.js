@@ -11,6 +11,9 @@
         fileChosen.style.color = "black";
         fileChosen.style.fontSize = "large"
     })
+
+
+
     $('.uploadbtn').on('click', function (e) {
         e.preventDefault();
 
@@ -28,6 +31,13 @@
             processData: false,
             contentType: false,
             success: function (response) {
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "File Uploaded",
+                    showConfirmButton: false,
+                    timer: 1000
+                });
                 $('#nav-tabContent').html(response);
             },
             error: function (error) {

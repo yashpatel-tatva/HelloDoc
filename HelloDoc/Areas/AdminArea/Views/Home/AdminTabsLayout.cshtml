@@ -75,9 +75,21 @@
 
 
 </div>
-
+@if (TempData["FileDeletedMessage"] != null)
+{
+    <script>
+        Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: "@TempData["FileDeletedMessage"]",
+            showConfirmButton: false,
+            timer: 1000
+        });
+    </script>
+}
 <partial id="PopUps" />
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
 <script src="~/js/foradmintabslayout.js" asp-append-version="true"></script>
+

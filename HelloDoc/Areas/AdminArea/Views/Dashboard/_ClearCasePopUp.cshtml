@@ -38,7 +38,16 @@
             type: 'POST',
             data: { requestid: requestid},
             success: function (result) {
-                location.reload();
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "Case Cleared",
+                    showConfirmButton: false,
+                    timer: 1000
+                });
+                setTimeout(function () {
+                    location.reload();
+                }, 1500);
             },
             error: function (xhr, status, error) {
                 console.error('Error: ' + error);

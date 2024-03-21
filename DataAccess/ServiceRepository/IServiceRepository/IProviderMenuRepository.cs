@@ -25,5 +25,6 @@ namespace DataAccess.ServiceRepository.IServiceRepository
         void AddNDA(int physicianid, IFormFile file);
         void AddLicense(int physicianid, IFormFile file);
         void AddCredential(int physicianid, IFormFile file);
+        void DeleteThisAccount(int physicianid);
     }
 }

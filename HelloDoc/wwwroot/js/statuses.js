@@ -67,7 +67,6 @@ $('.gotopopup').click(function (e) {
         type: 'GET',
         data: { id: id },
         success: function (result) {
-
             $('#PopUps').html(result);
             var my = new bootstrap.Modal(document.getElementById('ModalToOpen'));
             my.show();

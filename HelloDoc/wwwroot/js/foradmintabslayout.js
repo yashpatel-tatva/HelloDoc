@@ -24,7 +24,7 @@
                 url = 'AdminArea/Dashboard/Status_Toclose';
                 break;
             case '#nav-Access':
-                url = 'AdminArea/Dashboard/Status_Unpaid';
+                url = 'AdminArea/AccessTab/AccessPage';
                 break;
             case '#nav-Records':
                 url = 'AdminArea/Dashboard/Status_Unpaid';

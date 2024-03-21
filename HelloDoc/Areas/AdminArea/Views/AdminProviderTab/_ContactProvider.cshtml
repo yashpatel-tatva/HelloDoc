@@ -61,6 +61,13 @@
                 data: { physicianid: physicianid, msgtype: msgtype, msg: msg },
                 type: 'POST',
                 success: function () {
+                    Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: "Email Sent",
+                        showConfirmButton: false,
+                        timer: 1000
+                    });
                     $('#ContactCancelbutton').trigger('click');
                 }
             });

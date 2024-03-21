@@ -81,24 +81,34 @@ namespace HelloDoc.Areas.AdminArea.DataController
         }
 
         [Area("AdminArea")]
-        public List<Physician> GetPhysician()
+        public List<Physician> GetPhysician(int requestid)
         {
-            var physician = _db.Physicians.ToList();
+            var request = _requests.GetFirstOrDefault(x => x.Requestid == requestid);
+            var physician = _db.Physicians.Where(x => x.Physicianid != request.Physicianid).ToList();
             return physician;
         }
-
         [Area("AdminArea")]
         [HttpPost]
-        public List<Physician> GetPhysician(int regionid)
+        public List<Physician> GetPhysician(int regionid , int requestid)
         {
-            var physician = _db.Physicians.ToList();
+            var request = _requests.GetFirstOrDefault(x=>x.Requestid == requestid);
+            var physician = _db.Physicians.Include(x => x.Physicianregions).Where(x => x.Physicianid != request.Physicianid).ToList();
+            var phyregion = _db.Physicianregions.Include(x => x.Physician).ToList();
             if (regionid != 0)
             {
-                physician = physician.Where(x => x.Regionid == regionid).ToList();
+                physician = phyregion.Where(x => x.Regionid == regionid).Select(x => x.Physician).Where(x=>x.Physicianid!=request.Physicianid).ToList();
             }
-            return physician;
+            List<Physician> result = new List<Physician>();
+            foreach(var phy in physician)
+            {
+                Physician model = new Physician();
+                model.Firstname = phy.Firstname;
+                model.Lastname = phy.Lastname;
+                model.Physicianid = phy.Physicianid;
+                result.Add(model);
+            }
+            return result;
         }
-
         [Area("AdminArea")]
         public List<Healthprofessionaltype> GetProfession()
         {
@@ -279,21 +289,23 @@ namespace HelloDoc.Areas.AdminArea.DataController
         [HttpGet]
         public IActionResult AssignCase(int id)
         {
+            var request = _requests.GetFirstOrDefault(x => x.Requestid == id);
             DashpopupsViewModel dashpopupsViewModel = new DashpopupsViewModel();
             dashpopupsViewModel.RequestId = id;
             dashpopupsViewModel.regions = _db.Regions.ToList();
-            dashpopupsViewModel.physicians = _db.Physicians.ToList();
+            dashpopupsViewModel.physicians = _db.Physicians.Where(x => x.Physicianid != request.Physicianid).ToList();
             return PartialView("_AssignCasePopUp", dashpopupsViewModel);
         }
         [Area("AdminArea")]
         [HttpGet]
         public IActionResult TransferCase(int id)
         {
+            var request = _requests.GetFirstOrDefault(x => x.Requestid == id);
             DashpopupsViewModel dashpopupsViewModel = new DashpopupsViewModel();
             dashpopupsViewModel.RequestId = id;
             dashpopupsViewModel.regions = _db.Regions.ToList();
-            dashpopupsViewModel.physicians = _db.Physicians.ToList();
-            return PartialView("_TransferCasePopUp", dashpopupsViewModel);
+            dashpopupsViewModel.physicians = _db.Physicians.Where(x => x.Physicianid != request.Physicianid).ToList();
+            return PartialView("_AssignCasePopUp", dashpopupsViewModel);
         }
 
         [Area("AdminArea")]
@@ -460,14 +472,28 @@ namespace HelloDoc.Areas.AdminArea.DataController
         [HttpPost]
         public IActionResult SendMail(List<int> RequestWiseFileId, int RequestsId)
         {
+            var request = _requests.GetFirstOrDefault(c=>c.Requestid == RequestsId);
+            var emailto  = _db.Requestclients.FirstOrDefault(x => x.Requestid == request.Requestid);
+            Emaillog emaillog = new Emaillog();
+            emaillog.Emailid = emailto.Email;
+            emaillog.Filepath = " ";
             List<string> filenames = new List<string>();
             foreach (var s in RequestWiseFileId)
             {
                 var file = _db.Requestwisefiles.FirstOrDefault(x => x.Requestwisefileid == s).Filename;
                 filenames.Add(file);
+                emaillog.Filepath = emaillog.Filepath + " |||| " + file;
             }
-
-            _sendemail.SendEmailwithAttachments("vinit2273@gmail.com", "Your Attachments", "Please Find Your Attachments Here", filenames);
+            emaillog.Sentdate = DateTime.Now;
+            emaillog.Createdate = DateTime.Now;
+            emaillog.Subjectname = "Please Find Your Attachments Here";
+            emaillog.Requestid = request.Requestid;
+            emaillog.Confirmationnumber = request.Confirmationnumber;
+            emaillog.Adminid = _admin.GetSessionAdminId();
+            emaillog.Emailtemplate = "For Files";
+            _db.Emaillogs.Add(emaillog);
+            _db.SaveChanges();
+            _sendemail.SendEmailwithAttachments(emailto.Email, "Your Attachments", "Please Find Your Attachments Here", filenames);
             return RedirectToAction("ViewUploads", "Dashboard", new { id = RequestsId });
         }
 
@@ -503,6 +529,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
         {
             model.CreatedBy = HttpContext.Session.GetString("AspNetId");
             _orderDetail.Add(model);
+            TempData["FileDeletedMessage"] = "Order Submitted";
             return RedirectToAction("AdminTabsLayout", "Home");
         }
 

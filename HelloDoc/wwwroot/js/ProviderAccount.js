@@ -44,6 +44,13 @@ $('#resetpassword').on('click', function () {
                     $('#resetpassword').text("Reset Password");
                     $('#passcancel').remove();
                     $('#password').css("border", "0px");
+                    Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: "Saved",
+                        showConfirmButton: false,
+                        timer: 1000
+                    });
                 }
             });
         }
@@ -115,6 +122,13 @@ $('#physicianEdit_Save').on('click', function () {
                 data: JSON.stringify(model),
                 success: function (response) {
                     $('#nav-tabContent').html(response);
+                    Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: "Saved",
+                        showConfirmButton: false,
+                        timer: 1000
+                    });
                 }
             });
         }
@@ -156,6 +170,13 @@ $('#addressEdit_Save').on('click', function () {
             data: JSON.stringify(model),
             success: function (response) {
                 $('#nav-tabContent').html(response);
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "Saved",
+                    showConfirmButton: false,
+                    timer: 1000
+                });
             }
         });
     }
@@ -182,6 +203,13 @@ $('#adminnoteEdit_Save').on('click', function () {
             data: { physicianid, adminnote },
             success: function (response) {
                 $('#nav-tabContent').html(response);
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "Saved",
+                    showConfirmButton: false,
+                    timer: 1000
+                });
             }
         });
     }
@@ -205,6 +233,13 @@ $('#uploadphoto').on('click', function () {
             data: { physicianid, base64String },
             success: function (response) {
                 $('#nav-tabContent').html(response);
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "Photo Uploaded",
+                    showConfirmButton: false,
+                    timer: 1000
+                });
             }
         });
     };
@@ -222,6 +257,13 @@ $('#uploadsign').on('click', function () {
             data: { physicianid, base64String },
             success: function (response) {
                 $('#nav-tabContent').html(response);
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "Sign Uploaded",
+                    showConfirmButton: false,
+                    timer: 1000
+                });
             }
         });
     };
@@ -258,6 +300,13 @@ $('#SelectFileToUpload').on('change', function () {
         contentType: false,
         success: function (data) {
             $('#nav-tabContent').html(data);
+            Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: "File Uploaded",
+                showConfirmButton: false,
+                timer: 1000
+            });
         },
         error: function (jqXHR, textStatus, errorThrown) {
             $('#errormessageforfile').text(jqXHR.responseText);
@@ -281,7 +330,7 @@ $('.fileviewbtn').on('click', function () {
     }
 
 
-    window.open('/wwwroot/Documents/PhysicianDocuments/' + physicianid + "/" + result +'.pdf');
+    window.open('/PhysicianDocuments/' + physicianid + "/" + result + '.pdf');
     //$.ajax({
     //    type: 'POST',
     //    url: $(this).data('url'),
@@ -292,4 +341,33 @@ $('.fileviewbtn').on('click', function () {
     //        console.error('Error: ' + error);
     //    },
     //});
+});
+
+$('#DeleteAccount').on('click', function () {
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '/AdminArea/AdminProviderTab/DeleteProviderAccount',
+                data: { physicianid },
+                type: 'POST',
+                success: function (response) {
+                    Swal.fire({
+                        title: "Deleted!",
+                        text: "Account has been deleted.",
+                        icon: "success"
+                    });
+                    $('#nav-tabContent').html(response);
+                }
+            });
+
+        }
+    });
 });

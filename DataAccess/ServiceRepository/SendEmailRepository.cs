@@ -6,11 +6,21 @@ using System.Net.Mail;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using HelloDoc;
+using DataAccess.Repository.IRepository;
+using System.Collections;
 
 namespace DataAccess.ServiceRepository
 {
     public class SendEmailRepository : ISendEmailRepository
     {
+        private readonly HelloDocDbContext _context;
+        private readonly IAdminRepository _admin;
+        public SendEmailRepository(HelloDocDbContext helloDocDbContext, IAdminRepository adminRepository)
+        {
+            _context = helloDocDbContext;
+            _admin = adminRepository;
+        }
         public Task Sendemail(string email, string subject, string message)
         {
             var mail = "tatva.dotnet.yashpatel@outlook.com";
@@ -21,7 +31,18 @@ namespace DataAccess.ServiceRepository
                 EnableSsl = true,
                 Credentials = new NetworkCredential(mail, password)
             };
-
+            Emaillog emaillog = new Emaillog();
+            emaillog.Emailid = email;
+            emaillog.Sentdate = DateTime.Now;
+            emaillog.Createdate = DateTime.Now;
+            emaillog.Subjectname = subject;
+            emaillog.Emailtemplate = message;
+            if (_admin.GetSessionAdminId() != -1)
+            {
+                emaillog.Adminid = _admin.GetSessionAdminId();
+            }
+            _context.Emaillogs.Add(emaillog);
+            _context.SaveChanges();
             return client.SendMailAsync(new MailMessage(from: mail, to: email, subject, message));
         }
 

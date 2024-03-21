@@ -1,15 +1,37 @@
 ﻿$('.deletebtn').on('click', function () {
-    var id = $(this).attr('id');
+    var id = $(this).val();
     $.ajax({
         type: 'POST',
         url: 'AdminArea/Dashboard/Delete',
         data: { id: id },
         success: function (result) {
+            Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: "File Deleted",
+                showConfirmButton: false,
+                timer: 1000
+            });
             $('#nav-tabContent').html(result);
         },
         error: function (xhr, status, error) {
             console.error('Error: ' + error);
         },
+    });
+});
+$('input[type="tel"]').each(function () {
+    var iti = window.intlTelInput(this, {
+        nationalMode: false,
+        utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"
+    });
+    $(this).on('blur', function () {
+        var fullNumber = iti.getNumber();
+        var countryCode = iti.getSelectedCountryData().dialCode;
+        if (fullNumber.startsWith("+" + countryCode + "+" + countryCode)) {
+            fullNumber = fullNumber.replace("+" + countryCode + "+", "+");
+        }
+        console.log(fullNumber);
+        $(this).val(fullNumber);
     });
 });
 $('.deleteall').on('click', function () {
@@ -20,6 +42,13 @@ $('.deleteall').on('click', function () {
             url: 'AdminArea/Dashboard/Delete',
             data: { id: id },
             success: function (result) {
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "Files Deleted",
+                    showConfirmButton: false,
+                    timer: 1000
+                });
                 $('#nav-tabContent').html(result);
             },
             error: function (xhr, status, error) {
@@ -57,6 +86,13 @@ $('.sendemail').on('click', function () {
             processData: false,
             contentType: false,
             success: function (response) {
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "Files Sent",
+                    showConfirmButton: false,
+                    timer: 1000
+                });
                 $('#nav-tabContent').html(response);
             },
             error: function (error) {
@@ -83,7 +119,7 @@ $(document).ready(function () {
 });
 $('.viewfile').on('click', function () {
     var id = $(this).val();
-    var requestid = $('#inputhiddenrequestid').val();
+    var requestid = $('#hiddenrequestid').val();
     $.ajax({
         type: 'POST',
         url: 'AdminArea/Dashboard/ViewFile',
@@ -125,6 +161,13 @@ $('#Edit_Save').on('click', function () {
             contentType: 'application/json',
             data: JSON.stringify(model),
             success: function (response) {
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "Email and Mobile Edited",
+                    showConfirmButton: false,
+                    timer: 1000
+                });
                 $('#nav-tabContent').html(response);
             },
             error: function (error) {
@@ -141,7 +184,16 @@ $('#Close_Cancle').on('click', function () {
             type: 'POST',
             data: { requestid: requestid },
             success: function (result) {
-                location.reload();
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "Case Closed",
+                    showConfirmButton: false,
+                    timer: 1000
+                });
+                setTimeout(function () {
+                    location.reload();
+                }, 1500);
             },
             error: function (xhr, status, error) {
                 console.error('Error: ' + error);

@@ -165,7 +165,13 @@
                 success: function (response) {
                     $('#Cancelbutton').trigger('click');
                     $('#nav-tabContent').html(response);
-
+                    Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: "Sign Uploaded",
+                        showConfirmButton: false,
+                        timer: 1000
+                    });
                 }
             });
         }, false);

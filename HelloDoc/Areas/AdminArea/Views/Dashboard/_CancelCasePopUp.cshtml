@@ -51,7 +51,16 @@
                 type: 'POST',
                 data: { requestid: requestid, casetag : casetag, note: note },
                 success: function (result) {
-                    location.reload();
+                    Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: "Case Cancelled",
+                        showConfirmButton: false,
+                        timer: 1000
+                    });
+                    setTimeout(function () {
+                        location.reload();
+
                 },
                 error: function (xhr, status, error) {
                     console.error('Error: ' + error);

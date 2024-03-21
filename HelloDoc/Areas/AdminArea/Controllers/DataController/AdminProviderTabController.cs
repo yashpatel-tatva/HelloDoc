@@ -211,12 +211,13 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
 
             return BadRequest("No file uploaded.");
         }
-        //[Area("AdminArea")]
-        //[HttpPost]
-        //public string ViewFile(int physicianid)
-        //{
-            
-        //}
+        [Area("AdminArea")]
+        [HttpPost]
+        public IActionResult DeleteProviderAccount(int physicianid)
+        {
+            _providerMenu.DeleteThisAccount(physicianid );
+            return RedirectToAction("Providers");
+        }
 
         [Area("AdminArea")]
         public IActionResult Invoicing()

@@ -5,9 +5,11 @@ using HelloDoc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using NPOI.SS.Formula.Functions;
+using Org.BouncyCastle.Asn1.Ocsp;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,10 +30,12 @@ namespace DataAccess.ServiceRepository
         public List<ProviderMenuViewModel> GetAllProviderDetailToDisplay(int region, int order)
         {
 
-            var physicians = _physician.getAll();
+            var physicians = _physician.getAll().Where(x=>x.Isdeleted == null); 
+            var phyregion = _db.Physicianregions.Include(x => x.Physician).ToList();
+
             if (region != 0)
             {
-                physicians = physicians.Where(x => x.Regionid == region).ToList();
+                physicians = phyregion.Where(x => x.Regionid == region).Select(x => x.Physician).ToList();
             }
             if (order == 1)
             {
@@ -41,6 +45,7 @@ namespace DataAccess.ServiceRepository
             {
                 physicians = physicians.OrderBy(x => x.Firstname).ToList();
             }
+            physicians = physicians.Where(x => x.Isdeleted == null);
             List<ProviderMenuViewModel> providers = new List<ProviderMenuViewModel>();
             foreach (var physician in physicians)
             {
@@ -85,7 +90,7 @@ namespace DataAccess.ServiceRepository
 
         public PhysicianAccountViewModel GetPhysicianAccountById(int Physicianid)
         {
-            var physician = _db.Physicians.Include(x => x.Aspnetuser).Include(r => r.Physicianregions).FirstOrDefault(x => x.Physicianid == Physicianid);
+            var physician = _db.Physicians.Include(x => x.Aspnetuser).Include(r => r.Physicianregions).FirstOrDefault(x => (x.Physicianid == Physicianid) && (x.Isdeleted == null));
             PhysicianAccountViewModel model = new PhysicianAccountViewModel();
             model.PhysicianId = Physicianid;
             model.Aspnetid = physician.Aspnetuserid;
@@ -131,7 +136,7 @@ namespace DataAccess.ServiceRepository
 
         public void EditPersonalinfo(PhysicianAccountViewModel model)
         {
-            var physician = _db.Physicians.Include(x => x.Aspnetuser).Include(r => r.Physicianregions).FirstOrDefault(x => x.Physicianid == model.PhysicianId);
+            var physician = _db.Physicians.Include(x => x.Aspnetuser).Include(r => r.Physicianregions).FirstOrDefault(x => (x.Physicianid == model.PhysicianId) && (x.Isdeleted == null));
             physician.Physicianid = model.PhysicianId;
             physician.Firstname = model.FirstName;
             physician.Lastname = model.LastName;
@@ -170,7 +175,7 @@ namespace DataAccess.ServiceRepository
 
         public void EditProviderMailingInfo(PhysicianAccountViewModel model)
         {
-            var physician = _db.Physicians.Include(x => x.Aspnetuser).Include(r => r.Physicianregions).FirstOrDefault(x => x.Physicianid == model.PhysicianId);
+            var physician = _db.Physicians.Include(x => x.Aspnetuser).Include(r => r.Physicianregions).FirstOrDefault(x => (x.Physicianid == model.PhysicianId) && (x.Isdeleted == null));
             physician.Address1 = model.Address1;
             physician.Address2 = model.Address2;
             physician.City = model.City;
@@ -183,7 +188,7 @@ namespace DataAccess.ServiceRepository
 
         public void EditProviderAuthenticationInfo(PhysicianAccountViewModel model)
         {
-            var physician = _db.Physicians.Include(x => x.Aspnetuser).Include(r => r.Physicianregions).FirstOrDefault(x => x.Physicianid == model.PhysicianId);
+            var physician = _db.Physicians.Include(x => x.Aspnetuser).Include(r => r.Physicianregions).FirstOrDefault(x => (x.Physicianid == model.PhysicianId) && (x.Isdeleted == null));
             physician.Businessname = model.BusinessName;
             physician.Businesswebsite = model.BusinessWebSite;
             physician.Photo = model.Photo;
@@ -195,7 +200,7 @@ namespace DataAccess.ServiceRepository
 
         public void EditProviderAdminNote(int physicianid, string adminnote)
         {
-            var physician = _physician.GetFirstOrDefault(x => x.Physicianid == physicianid);
+            var physician = _physician.GetFirstOrDefault(x => (x.Physicianid == physicianid) && (x.Isdeleted == null));
             physician.Adminnotes = adminnote;
             _db.Update(physician);
             _db.SaveChanges();
@@ -203,14 +208,14 @@ namespace DataAccess.ServiceRepository
 
         public void EditProviderPhoto(int physicianid, string base64string)
         {
-            var physician = _physician.GetFirstOrDefault(x => x.Physicianid == physicianid);
+            var physician = _physician.GetFirstOrDefault(x => (x.Physicianid == physicianid) && (x.Isdeleted == null));
             physician.Photo = base64string;
             _db.Update(physician);
             _db.SaveChanges();
         }
         public void EditProviderSign(int physicianid, string base64string)
         {
-            var physician = _physician.GetFirstOrDefault(x => x.Physicianid == physicianid);
+            var physician = _physician.GetFirstOrDefault(x => (x.Physicianid == physicianid) && (x.Isdeleted == null));
             physician.Signature = base64string;
             _db.Update(physician);
             _db.SaveChanges();
@@ -231,7 +236,7 @@ namespace DataAccess.ServiceRepository
                 file.CopyTo(fileStream);
             }
 
-            var physician = _physician.GetFirstOrDefault(x => x.Physicianid == id);
+            var physician = _physician.GetFirstOrDefault(x => (x.Physicianid == id) && (x.Isdeleted == null));
             if (filename == "AgreementDoc")
             {
                 physician.Isagreementdoc[0] = true;
@@ -288,6 +293,16 @@ namespace DataAccess.ServiceRepository
         public void AddCredential(int physicianid, IFormFile file)
         {
             AddThisFile(physicianid, file, "CredentialDoc");
+        }
+
+        public void DeleteThisAccount(int physicianid)
+        {
+            var physician = _physician.GetFirstOrDefault(x=>x.Physicianid == physicianid);
+            BitArray b = new BitArray(1);
+            b[0] = true;
+            physician.Isdeleted = b;
+            _db.Physicians.Update(physician);
+            _db.SaveChanges();
         }
     }
 }
