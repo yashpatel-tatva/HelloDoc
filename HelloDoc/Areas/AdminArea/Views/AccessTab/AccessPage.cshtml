@@ -3,7 +3,7 @@
 }
 <div class="container">
     <div class="d-flex justify-content-between mx-3">
-        <div class="h3 subinfotext fw-bold">Edit Physician Account</div>
+        <div class="h3 subinfotext fw-bold">Account Access</div>
         <div>
             <a asp-action="AdminTabsLayout" asp-controller="Home">
                 <button type="button" class="d-flex babtn rounded align-item-center p-1 px-2">
@@ -14,8 +14,50 @@
         </div>
     </div>
     <div class="bg-light rounded m-3 shadow" id="content">
-        <div class="d-flex justify-content-end py-4" id="passsaveandcancle">
-            <button type="button" class="btn border-info text-info shadow-none">Create Access</button>
+        <div class="d-flex justify-content-end py-2 px-4 mb-1">
+            <button type="button" class="btn border-info text-info shadow-none d-flex align-items-center" id="createaccessbtn">
+                <i class="bi bi-plus-square"></i>
+                <span class="d-none d-lg-block ps-2">Create Access</span>
+            </button>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="thead-dark bg-body-secondary">
+                    <tr style="--bs-table-bg: #ebebeb; color : black">
+                        <th style="width : 45%!important" scope="col">Name</th>
+                        <th style="width : 45%!important" scope="col">Account Type</th>
+                        <th style="width : 45%!important" scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>sdvsvsdvsdv</td>
+                        <td>svssdvsvds</td>
+                        <td class="d-flex gap-2">
+                            <button type="button" class="btn border-info text-info shadow-none">
+                                <span>Edit</span>
+                            </button>
+                            <button type="button" class="btn border-info text-info shadow-none">
+                                <span>Delete</span>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>sdvsvsdvsdv</td>
+                        <td>svssdvsvds</td>
+                        <td class="d-flex gap-2">
+                            <button type="button" class="btn border-info text-info shadow-none">
+                                <span>Edit</span>
+                            </button>
+                            <button type="button" class="btn border-info text-info shadow-none">
+                                <span>Delete</span>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
+
+<script src="~/js/Accesstab.js" asp-append-version="true"></script>

@@ -30,9 +30,9 @@ builder.Services.AddScoped<IRequestStatusLogRepository , RequestStatusLogReposit
 builder.Services.AddScoped<IRequestwisefileRepository, RequestwisefileRepository>();
 builder.Services.AddScoped<IOrderDetailRepository , OrderDetailRepository>();   
 builder.Services.AddScoped<IPhysicianRepository, PhysicianRepository>();
-builder.Services.AddScoped<IRoleRepository, RoleRepository>();
-builder.Services.AddScoped<IMenuRepository, MenuRepository>();
-builder.Services.AddScoped<IRolemenuRepository, RolemenuRepositorty>();
+builder.Services.AddScoped<IRoleMenuRepository , RoleMenuRepository>();
+builder.Services.AddScoped<IRoleRepository , RoleRepository>();
+builder.Services.AddScoped<IMenuRepository  , MenuRepository>();
 
 
 builder.Services.AddScoped<IAllRequestDataRepository , AllRequestDataRepository>();

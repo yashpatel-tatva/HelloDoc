@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Repository
 {
-    public class RolemenuRepositorty : Repository<Rolemenu> , IRolemenuRepository
+    public class RoleMenuRepository : Repository<Rolemenu>, IRoleMenuRepository
     {
-        public RolemenuRepositorty(HelloDocDbContext db) : base(db)
+        public RoleMenuRepository(HelloDocDbContext db) : base(db)
         {
         }
     }

@@ -193,7 +193,7 @@ $('#Close_Cancle').on('click', function () {
                 });
                 setTimeout(function () {
                     location.reload();
-                }, 1500);
+                }, 1000);
             },
             error: function (xhr, status, error) {
                 console.error('Error: ' + error);

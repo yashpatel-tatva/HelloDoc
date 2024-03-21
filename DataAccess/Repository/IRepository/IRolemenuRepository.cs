@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Repository.IRepository
 {
-    public interface IRolemenuRepository : IRepository<Rolemenu>
+    public interface IRoleMenuRepository : IRepository<Rolemenu>
     {
     }
 }
