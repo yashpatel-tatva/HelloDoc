@@ -21,7 +21,7 @@ namespace DataModels.AdminSideViewModels
         public string Username { get; set; }
 
         [Required]
-        
+
         public string Password { get; set; }
 
         public int Status { get; set; }
