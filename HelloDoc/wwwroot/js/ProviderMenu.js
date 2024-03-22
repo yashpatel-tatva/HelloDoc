@@ -58,3 +58,13 @@ $('#ordericon').on('click', function () {
         }
     });
 });
+
+$('#createaccountpage').on('click', function () {
+    console.log('clicked')
+    $.ajax({
+        url: '/AdminArea/AdminProviderTab/CreateAccountPage',
+        success: function (response) {
+            $('#nav-tabContent').html(response);
+        }
+    });
+});

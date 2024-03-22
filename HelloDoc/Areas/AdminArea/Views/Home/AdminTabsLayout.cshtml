@@ -75,13 +75,13 @@
 
 
 </div>
-@if (TempData["FileDeletedMessage"] != null)
+@if (TempData["Message"] != null)
 {
     <script>
         Swal.fire({
             position: "top-end",
             icon: "success",
-            title: "@TempData["FileDeletedMessage"]",
+            title: "@TempData["Message"]",
             showConfirmButton: false,
             timer: 1000
         });

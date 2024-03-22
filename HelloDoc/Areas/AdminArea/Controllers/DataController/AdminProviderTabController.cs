@@ -15,13 +15,17 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         private readonly IPhysicianRepository _physician;
         private readonly IAdminRepository _admin;
         private readonly IAspNetUserRepository _userRepository;
-        public AdminProviderTabController(IProviderMenuRepository providerMenu, ISendEmailRepository sendEmail, IPhysicianRepository physicianRepository, IAdminRepository adminRepository, IAspNetUserRepository userRepository)
+        private readonly IRoleRepository _role;
+        private readonly HelloDocDbContext _db;
+        public AdminProviderTabController(IProviderMenuRepository providerMenu, ISendEmailRepository sendEmail, IPhysicianRepository physicianRepository, IAdminRepository adminRepository, IAspNetUserRepository userRepository, HelloDocDbContext helloDocDbContext, IRoleRepository role)
         {
             _providerMenu = providerMenu;
             _sendEmail = sendEmail;
             _physician = physicianRepository;
             _admin = adminRepository;
             _userRepository = userRepository;
+            _db = helloDocDbContext;
+            _role = role;
         }
         [Area("AdminArea")]
         public IActionResult Scheduling()
@@ -41,9 +45,11 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         }
         [Area("AdminArea")]
         [HttpPost]
-        public void ChangeNotification(List<int> checkedToUnchecked, List<int> uncheckedToChecked)
+        public IActionResult ChangeNotification(List<int> checkedToUnchecked, List<int> uncheckedToChecked)
         {
             _providerMenu.ChangeNotification(checkedToUnchecked, uncheckedToChecked);
+            TempData["Message"] = "Changes Saved";
+            return RedirectToAction("AdminTabsLayout", "Home");
         }
         [Area("AdminArea")]
         [HttpPost]
@@ -147,7 +153,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         [HttpPost]
         public IActionResult UploadBackDocdoc(int physicianid, IFormFile file)
         {
-            if(file != null)
+            if (file != null)
             {
                 var extension = Path.GetExtension(file.FileName);
                 if (extension.ToLower() != ".pdf")
@@ -164,7 +170,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         [HttpPost]
         public IActionResult UploadCredentialdoc(int physicianid, IFormFile file)
         {
-            if(file != null)
+            if (file != null)
             {
                 var extension = Path.GetExtension(file.FileName);
                 if (extension.ToLower() != ".pdf")
@@ -181,7 +187,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         [HttpPost]
         public IActionResult UploadNDAdoc(int physicianid, IFormFile file)
         {
-            if(file != null)
+            if (file != null)
             {
                 var extension = Path.GetExtension(file.FileName);
                 if (extension.ToLower() != ".pdf")
@@ -198,7 +204,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         [HttpPost]
         public IActionResult UploadLicensedoc(int physicianid, IFormFile file)
         {
-            if(file != null)
+            if (file != null)
             {
                 var extension = Path.GetExtension(file.FileName);
                 if (extension.ToLower() != ".pdf")
@@ -215,8 +221,24 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         [HttpPost]
         public IActionResult DeleteProviderAccount(int physicianid)
         {
-            _providerMenu.DeleteThisAccount(physicianid );
+            _providerMenu.DeleteThisAccount(physicianid);
             return RedirectToAction("Providers");
+        }
+
+        [Area("AdminArea")]
+        public IActionResult CreateAccountPage()
+        {
+            PhysicianAccountViewModel physicianAccountViewModel = new PhysicianAccountViewModel();
+            physicianAccountViewModel.regions = _db.Regions.ToList();
+            physicianAccountViewModel.roles = _role.GetAllRolesToSelect();
+            return View(physicianAccountViewModel);
+        }
+
+        [Area("AdminArea")]
+        [HttpPost]
+        public void CreateProvider(PhysicianAccountViewModel physicianAccountViewModel)
+        {
+            var model = physicianAccountViewModel;
         }
 
         [Area("AdminArea")]

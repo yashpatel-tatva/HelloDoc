@@ -23,13 +23,15 @@
                     <div class="form-group d-flex align-items-center rounded">
                         <input type="text" class="form-control" placeholder="" asp-for="Username" disabled><span>Username</span>
                     </div>
+                    <span class="text-danger" asp-validation-for="Username"></span>
+
                 </div>
                 <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                     <div class="form-group d-flex align-items-center rounded">
                         <input type="text" class="form-control" placeholder="" asp-for="Password" id="password" disabled><span>Password</span>
                         <input type="text" class="form-control" placeholder="" value="@Model.Aspnetid" id="aspnetid" hidden>
                     </div>
-                    <span class="text-danger" asp-validation-for="Password" class="text-danger"></span>
+                    <span class="text-danger" asp-validation-for="Password" ></span>
                 </div>
                 <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                     <div class="form-group d-flex align-items-center rounded">
@@ -156,7 +158,7 @@
                                     <option value="@item.Regionid">@item.Name</option>
                                 }
                             </select>
-                            <span class="selectedselectspan">Status</span>
+                            <span class="selectedselectspan">State</span>
                         </div>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12">
@@ -183,20 +185,20 @@
                 <div class="row d-flex">
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="text" class="form-control authedit" id="authbusinessname" placeholder="" asp-for="BusinessName" disabled><span>Address1</span>
+                            <input type="text" class="form-control authedit" id="authbusinessname" placeholder="" asp-for="BusinessName" disabled><span>Business Name</span>
                         </div>
                         <span class="text-danger" asp-validation-for="BusinessName"></span>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="text" class="form-control authedit" id="authbusinessweb" placeholder="" asp-for="BusinessWebSite" disabled><span>Address1</span>
+                            <input type="text" class="form-control authedit" id="authbusinessweb" placeholder="" asp-for="BusinessWebSite" disabled><span>Business WebSite</span>
                         </div>
                         <span class="text-danger" asp-validation-for="BusinessWebSite"></span>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                         <div class="form-group rounded d-flex align-items-center justify-content-between uploadbtndiv">
                             <div class="px-3 table-responsive">
-                                <input type="file" id="actual-btn" asp-for="Photo" hidden />
+                                <input type="file" id="actual-btn" accept=".jpg" asp-for="Photo" hidden />
                                 <label role="button" for="actual-btn" id="file-chosen" class="choosenfile text-dark text-nowrap">No item selected</label>
                             </div>
                             <button type="button" class="uploadbtn px-2 py-1 d-flex ms-1 border-0" id="uploadphoto">

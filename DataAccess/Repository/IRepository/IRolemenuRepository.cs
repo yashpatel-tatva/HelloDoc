@@ -9,5 +9,6 @@ namespace DataAccess.Repository.IRepository
 {
     public interface IRoleMenuRepository : IRepository<Rolemenu>
     {
+        void AddMenusToRole(int roleid, List<int> menuitems);
     }
 }

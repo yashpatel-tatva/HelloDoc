@@ -11,17 +11,24 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         private readonly IRoleMenuRepository _rolemenu;
         private readonly IRoleRepository _role;
         private readonly IMenuRepository _menu;
-        public AccessTabController(IRoleMenuRepository roleMenuRepository, IRoleRepository role, IMenuRepository menu)
+        private readonly IAdminRepository _admin;
+        private readonly HelloDocDbContext _db;
+        public AccessTabController(IRoleMenuRepository roleMenuRepository, IRoleRepository role, IMenuRepository menu, IAdminRepository adminRepository, HelloDocDbContext helloDocDbContext)
         {
             _rolemenu = roleMenuRepository;
             _role = role;
             _menu = menu;
+            _admin = adminRepository;
+            _db = helloDocDbContext;
         }
 
         [Area("AdminArea")]
         public IActionResult AccessPage()
         {
-            return View();
+            List<Role> roles = new List<Role>();
+            roles = _role.GetAllRolesToSelect();
+            return View(roles);
+
         }
         [Area("AdminArea")]
         public IActionResult CreateRolePage()
@@ -39,6 +46,37 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
                 menuList = menuList.Where(x => x.Accounttype == accounttype).ToList();
             }
             return menuList;
+        }
+        [Area("AdminArea")]
+        [HttpPost]
+        public bool IsThisRoleExist(string Role_Name)
+        {
+            var name = _db.Roles.FirstOrDefault(x => x.Name == Role_Name);
+            if (name == null)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+        [Area("AdminArea")]
+        [HttpPost]
+        public IActionResult AddThisRole(string Rolename, List<int> menuitems, int accounttype)
+        {
+            _role.AddThisRole(Rolename, accounttype, menuitems, _admin.GetFirstOrDefault(x => x.Adminid == _admin.GetSessionAdminId()).Aspnetuserid);
+            TempData["Message"] = Rolename + " Role Created";
+            return RedirectToAction("AdminTabsLayout", "Home");
+        }
+        [Area("AdminArea")]
+        [HttpPost]
+        public IActionResult DeleteThisRole(int roleid)
+        {
+            var Rolename = _role.GetFirstOrDefault(x => x.Roleid ==  roleid).Name;
+            _role.DeleteThisRole(roleid);
+            TempData["Message"] = Rolename + " Role Created";
+            return RedirectToAction("AdminTabsLayout", "Home");
         }
     }
 }

@@ -29,20 +29,81 @@ $('#accounttypedropdown').on('change', function () {
 
 var nameregex = /^[a-zA-Z]+$/i
 var Role_Name = $('#Role_Name').val();
-function validateforrolecreation() {
-    console.log("acs");
+var bool = false;
+function validateforrolename() {
     if (!nameregex.test(Role_Name)) {
-        $('#Role_Name').closest('.form-group').css("border-color", "red");
+        $('#Role_Name').css("border", "1px solid red");
         $('#Error_for_name').html('Enter Valid Name for Role');
         return false;
     }
+    if (nameregex.test(Role_Name)) {
+        $('#Role_Name').css("border", "none");
+        $('#Error_for_name').html('');
+        $.ajax({
+            url: '/AdminArea/AccessTab/IsThisRoleExist',
+            data: { Role_Name },
+            type: 'POST',
+            success: function (data) {
+                if (data == true) {
+                    $('#Role_Name').css("border", "1px solid red");
+                    $('#Error_for_name').html('Role Name already taken');
+                    bool = false;
+                }
+                else {
+                    $('#Role_Name').css("border", "none");
+                    $('#Error_for_name').html('');
+                    bool = true;
+                }
+            }
+        })
+        return bool;
+    }
 }
-$('#Role_Save').on('click', function () {
-
-    console.log("clicked");
-    validateforrolecreation();
-    
-
+function validatemenu() {
+    if ($('input[name="menuitem"]:checked').length === 0) {
+        Swal.fire("Select Atleast One Menu for this role!");
+        return false;
+    }
+    return true;
+}
+$('#Role_Name').on('input', function () {
+    Role_Name = $('#Role_Name').val();
+    validateforrolename();
 });
 
+$('#Role_Save').on('click', function () {
+    Role_Name = $('#Role_Name').val();
+    var formData = new FormData();
+    formData.append('Rolename', Role_Name);
+    $('input[name="menuitem"]:checked').each(function () {
+        formData.append('menuitems', $(this).val());
+    });
 
+    formData.append('accounttype', $('#accounttypedropdown').val());
+    console.log(validateforrolename())
+    console.log(validatemenu())
+    if (validateforrolename() && validatemenu()) {
+        $.ajax({
+            url: '/AdminArea/AccessTab/AddThisRole',
+            data: formData,
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                $('#nav-tabContent').html(response);
+            }
+        });
+    }
+});
+
+$('.roledeletebtn').on('click', function () {
+    var roleid = $(this).data('id');
+    $.ajax({
+        url: '/AdminArea/AccessTab/DeleteThisRole',
+        type: 'POST',
+        data: { roleid },
+        success: function (response) {
+            $('#nav-tabContent').html(response);
+        }
+    });
+});

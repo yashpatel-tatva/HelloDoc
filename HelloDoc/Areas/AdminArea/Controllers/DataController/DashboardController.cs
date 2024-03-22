@@ -172,7 +172,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
         [HttpGet]
         public IActionResult ExportAll()
         {
-            List<Request> model1 = _requests.GetAll().ToList();
+            List<Request> model1 = _db.Requests.Include(r => r.User).Include(r => r.Requestclients).Include(r => r.Physician).Include(r => r.User.Region).Include(r => r.Requeststatuslogs).ToList();
             List<AllRequestDataViewModel> filtereddata = _allrequestdata.FilteredRequest(model1);
             var record = _allrequest.DownloadExcle(filtereddata);
             string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
@@ -529,7 +529,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
         {
             model.CreatedBy = HttpContext.Session.GetString("AspNetId");
             _orderDetail.Add(model);
-            TempData["FileDeletedMessage"] = "Order Submitted";
+            TempData["Message"] = "Order Submitted";
             return RedirectToAction("AdminTabsLayout", "Home");
         }
 

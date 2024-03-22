@@ -1,6 +1,8 @@
 ﻿@{
     Layout = null;
 }
+@using DataModels;
+@model List<Role>;
 <div class="container">
     <div class="d-flex justify-content-between mx-3">
         <div class="h3 subinfotext fw-bold">Account Access</div>
@@ -30,30 +32,39 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>sdvsvsdvsdv</td>
-                        <td>svssdvsvds</td>
-                        <td class="d-flex gap-2">
-                            <button type="button" class="btn border-info text-info shadow-none">
-                                <span>Edit</span>
-                            </button>
-                            <button type="button" class="btn border-info text-info shadow-none">
-                                <span>Delete</span>
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>sdvsvsdvsdv</td>
-                        <td>svssdvsvds</td>
-                        <td class="d-flex gap-2">
-                            <button type="button" class="btn border-info text-info shadow-none">
-                                <span>Edit</span>
-                            </button>
-                            <button type="button" class="btn border-info text-info shadow-none">
-                                <span>Delete</span>
-                            </button>
-                        </td>
-                    </tr>
+                    @foreach (var role in Model)
+                    {
+                        <tr>
+                            <td>@role.Name</td>
+                            @if (role.Accounttype == 0)
+                            {
+                                <td>
+                                    All
+                                </td>
+                            }
+                            else if (role.Accounttype == 1)
+                            {
+                                <td>
+                                    Admin
+                                </td>
+                            }
+                            else if (role.Accounttype == 2)
+                            {
+                                <td>
+                                    Physician
+                                </td>
+                            }
+                            <td class="d-flex gap-2">
+                                <button type="button" class="btn border-info text-info shadow-none roleeditbtn" data-id="@role.Roleid">
+                                    <span>Edit</span>
+                                </button>
+                                <button type="button" class="btn border-info text-info shadow-none roledeletebtn" data-id="@role.Roleid">
+                                    <span>Delete</span>
+                                </button>
+                            </td>
+
+                        </tr>
+                    }
                 </tbody>
             </table>
         </div>
