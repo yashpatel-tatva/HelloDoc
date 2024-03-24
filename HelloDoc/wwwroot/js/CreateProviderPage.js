@@ -17,10 +17,18 @@
 document.querySelectorAll('.fileToUpload').forEach(function (inputElement) {
     inputElement.addEventListener('change', function () {
         var correspondingCheckbox = this.parentElement.parentElement.querySelector('.fileToUploadCheck');
-        if (this.value) {
-            correspondingCheckbox.checked = true;
-        } else {
-            correspondingCheckbox.checked = false;
+        var file = this.files[0];
+        if (file) {
+            var fileName = file.name;
+            var fileExtension = fileName.split('.').pop().toLowerCase();
+            if (fileExtension !== 'pdf') {
+                alert('Please upload only PDF files.');
+                $(this).val('');
+                correspondingCheckbox.checked = false;
+            }
+            else {
+                correspondingCheckbox.checked = true;
+            }
         }
     });
 });
@@ -59,7 +67,8 @@ $('#editlastname').on('input', function () {
 })
 
 
+
 $('#CreateAccountBtn').on('click', function () {
-    
+
     $(this).closest('form').submit();
 });
