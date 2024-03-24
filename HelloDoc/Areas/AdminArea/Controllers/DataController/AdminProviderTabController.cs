@@ -238,6 +238,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         [HttpPost]
         public void CreateProvider(PhysicianAccountViewModel physicianAccountViewModel)
         {
+            var select = Request.Form["selectedregion"].ToList();
             var model = physicianAccountViewModel;
         }
 

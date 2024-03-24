@@ -47,6 +47,16 @@ actualBtn.addEventListener('change', function () {
     reader.readAsDataURL(file);
 });
 
+function usernamefill() {
+    $('#usernamefield').val("MD." + $('#editfirstname').val() + "." + $('#editlastname').val());
+}
+
+$('#editfirstname').on('input', function () {
+    usernamefill();
+});
+$('#editlastname').on('input', function () {
+    usernamefill();
+})
 
 
 $('#CreateAccountBtn').on('click', function () {
