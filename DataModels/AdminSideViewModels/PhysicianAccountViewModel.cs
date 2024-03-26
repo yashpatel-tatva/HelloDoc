@@ -17,7 +17,6 @@ namespace DataModels.AdminSideViewModels
         public string Aspnetid { get; set; }
 
         [Required]
-        [RegularExpression(@"^[a-zA-Z0-9_]+$", ErrorMessage = "Username can only contain alphanumeric characters and underscores.")]
         public string Username { get; set; }
 
         [Required]
