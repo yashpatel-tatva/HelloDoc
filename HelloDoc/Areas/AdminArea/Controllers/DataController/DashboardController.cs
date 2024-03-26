@@ -87,6 +87,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
             var physician = _db.Physicians.Where(x => x.Physicianid != request.Physicianid).ToList();
             return physician;
         }
+
         [Area("AdminArea")]
         [HttpPost]
         public List<Physician> GetPhysician(int regionid , int requestid)
@@ -97,6 +98,28 @@ namespace HelloDoc.Areas.AdminArea.DataController
             if (regionid != 0)
             {
                 physician = phyregion.Where(x => x.Regionid == regionid).Select(x => x.Physician).Where(x=>x.Physicianid!=request.Physicianid).ToList();
+            }
+            List<Physician> result = new List<Physician>();
+            foreach(var phy in physician)
+            {
+                Physician model = new Physician();
+                model.Firstname = phy.Firstname;
+                model.Lastname = phy.Lastname;
+                model.Physicianid = phy.Physicianid;
+                result.Add(model);
+            }
+            return result;
+        }
+        
+        [Area("AdminArea")]
+        [HttpPost]
+        public List<Physician> GetPhysicianByRegion(int regionid)
+        {
+            var physician = _db.Physicians.Include(x => x.Physicianregions).ToList();
+            var phyregion = _db.Physicianregions.Include(x => x.Physician).ToList();
+            if (regionid != 0)
+            {
+                physician = phyregion.Where(x => x.Regionid == regionid).Select(x => x.Physician).ToList();
             }
             List<Physician> result = new List<Physician>();
             foreach(var phy in physician)

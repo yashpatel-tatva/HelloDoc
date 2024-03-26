@@ -26,5 +26,6 @@ namespace DataAccess.ServiceRepository.IServiceRepository
         void AddLicense(int physicianid, IFormFile file);
         void AddCredential(int physicianid, IFormFile file);
         void DeleteThisAccount(int physicianid);
+        int AddAccount(PhysicianAccountViewModel physicianAccountViewModel);
     }
 }

@@ -1,0 +1,8 @@
+﻿#pending:checked + label .pendinground {
+    border: 3px solid #9e758c
+}
+#approved:checked + label .approveround {
+    border: 3px solid #7da882
+}
+
+

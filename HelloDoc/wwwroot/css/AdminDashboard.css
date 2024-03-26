@@ -128,9 +128,8 @@
     }
 
 .btn-check:checked + .btn, .btn.active, .btn.show, .btn:first-child:active, :not(.btn-check) + .btn:active {
-    color: var(--bs-btn-active-color);
+    color: white;
     background-color: var(--bs-btn-active-bg);
-    border-color: #d0d0d0;
 }
 
 #sig-canvas {
@@ -200,3 +199,5 @@
         justify-content: center;
     }
 }
+
+

@@ -27,16 +27,18 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             _db = helloDocDbContext;
             _role = role;
         }
-        [Area("AdminArea")]
-        public IActionResult Scheduling()
-        {
-            return View();
-        }
+
+        /// <summary>
+        /// Providers
+        /// </summary>
+        /// <returns></returns>
+
         [Area("AdminArea")]
         public IActionResult Providers()
         {
             return View();
         }
+
         [Area("AdminArea")]
         public IActionResult Providersfilter(int region, int order)
         {
@@ -235,12 +237,66 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         }
 
         [Area("AdminArea")]
-        [HttpPost]
-        public void CreateProvider(PhysicianAccountViewModel physicianAccountViewModel)
+
+        public IActionResult CreateProvider(PhysicianAccountViewModel physicianAccountViewModel)
         {
             var select = Request.Form["selectedregion"].ToList();
-
+            var list = new List<int>();
+            foreach (var item in select)
+            {
+                list.Add(int.Parse(item));
+            }
+            physicianAccountViewModel.SelectedRegionCB = list;
+            physicianAccountViewModel.Createby = _admin.GetFirstOrDefault(x => x.Adminid == _admin.GetSessionAdminId()).Aspnetuserid;
+            var physicianid = _providerMenu.AddAccount(physicianAccountViewModel);
+            return RedirectToAction("AdminTabsLayout", "Home");
         }
+
+
+        /// <summary>
+        /// Scheduling
+        /// </summary>
+        /// <returns></returns>
+
+        [Area("AdminArea")]
+        public IActionResult Scheduling()
+        {
+            return View();
+        }
+        [Area("AdminArea")]
+        public IActionResult CreateShiftPopUp()
+        {
+            return PartialView("_CreateShiftPopUp");
+        }
+
+
+        [Area("AdminArea")]
+        [HttpPost]
+        public IActionResult DayWiseData(DateTime currentDate)
+        {
+            return PartialView("_Daywisedata");
+        }
+        [Area("AdminArea")]
+        [HttpPost]
+        public IActionResult WeekWiseData(DateTime currentDate)
+        {
+            return PartialView("_Weekwisedata");
+        }
+        [Area("AdminArea")]
+        [HttpPost]
+        public IActionResult MonthWiseData(DateTime currentDate)
+        {
+            return PartialView("_Monthwisedata");
+        }
+
+
+
+        /// <summary>
+        /// Invoicing
+        /// </summary>
+        /// <returns></returns>
+
+
 
         [Area("AdminArea")]
         public IActionResult Invoicing()

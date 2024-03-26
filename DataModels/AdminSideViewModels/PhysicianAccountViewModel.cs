@@ -16,6 +16,8 @@ namespace DataModels.AdminSideViewModels
         public int PhysicianId { get; set; }
         public string Aspnetid { get; set; }
 
+        public string Createby { get; set; }    
+
         [Required]
         public string Username { get; set; }
 
