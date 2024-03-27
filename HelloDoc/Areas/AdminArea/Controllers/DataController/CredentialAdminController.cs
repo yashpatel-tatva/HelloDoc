@@ -54,7 +54,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
                     if (_aspnetuser.checkpass(user))
                     {
                         _admin.SetSession(admin);
-                        TempData["Message"] = "Welcome" + admin.Firstname + " " + admin.Lastname ;
+                        TempData["Message"] = "Welcome" + admin.Firstname + " " + admin.Lastname;
                         return RedirectToAction("AdminTabsLayout", "Home");
                     }
                     else

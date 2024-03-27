@@ -1,9 +1,6 @@
 ﻿using HelloDoc.Areas.PatientArea.ViewModels;
-using HelloDoc;
-using HelloDoc;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Drawing;
 using System.Globalization;
 
 namespace HelloDoc.Areas.PatientArea.DataController
@@ -26,7 +23,7 @@ namespace HelloDoc.Areas.PatientArea.DataController
             var requestcount = (from m in _context.Requests where m.Createddate.Date == DateTime.Now.Date select m).ToList();
             if (aspnetuser != null)
             {
-                
+
                 Request request = new Request
                 {
                     Requesttypeid = model.Requesttypeid,

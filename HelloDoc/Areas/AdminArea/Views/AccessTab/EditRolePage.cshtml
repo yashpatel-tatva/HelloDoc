@@ -1,0 +1,130 @@
+﻿@{
+    Layout = null;
+}
+
+<div class="container">
+    <div class="d-flex justify-content-between mx-3">
+        <div class="h3 subinfotext fw-bold">Create Role</div>
+        <div>
+            <a asp-action="AdminTabsLayout" asp-controller="Home">
+                <button type="button" class="d-flex babtn rounded align-item-center p-1 px-2">
+                    <div><img src="~/res/back.png" width="15px" height="10px"></div>
+                    <div><span>Back</span></div>
+                </button>
+            </a>
+        </div>
+    </div>
+    <form>
+        <div class="bg-light rounded m-3 shadow" id="content">
+            <div class="p-3">
+                <div class="h5 fw-bold">Details</div>
+                <div class="row d-flex">
+                    <div class="py-2 col-xl-6 col-md-6 col-sm-12">
+                        <div class="form-group d-flex align-items-center rounded">
+                            <input type="text" class="form-control" id="Role_Name" placeholder="" value="@Model.rolename" disabled><span>Role Name</span>
+                        </div>
+                        <label class="text-danger" id="Error_for_name"></label>
+                    </div>
+                    <div class="py-2 col-xl-6 col-md-6 col-sm-12">
+                        <div class="form-group d-flex align-items-center rounded">
+                            <select class="form-select shadow-none" id="accounttypedropdown">
+                                <option value="0">All</option>
+                                <option value="1">Admin</option>
+                                <option value="2">Phycisian</option>
+                            </select>
+                            <span class="selectedselectspan">Account Type</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex row">
+                    <div class="mt-2 d-flex row w-50" id="selectedmenu">
+                    </div>
+                    <div class="mt-2 d-flex row w-50" id="notselectedmenu">
+                    </div>
+                </div>
+                <div>
+                    <span class="text-danger" id="Error_for_checkbox"></span>
+                    <div class="d-flex justify-content-end gap-2 p-3">
+                        <button type="button" class=" p-2 px-3 text-white bg-info rounded border-info  mx-2 px-3 shadow-none" id="Role_Save">Save</button>
+                        <button type="reset" class="ms-2 btn border-info text-info shadow-none" id="Role_Cancel">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    console.log(@Model.accounttype);
+    $('#accounttypedropdown').val(@Model.accounttype);
+
+    function menus(accounttype, roleid) {
+        $.ajax({
+            url: '/AdminArea/AccessTab/GetSelectedMenusByRoleId',
+            data: { accounttype: @Model.accounttype, roleid: @Model.roleid },
+            type: 'GET',
+            success: function (data) {
+                console.log(data);
+                $('#selectedmenu').html("");
+                $.each(data, function (index, menu) {
+                    $('#selectedmenu').append('<div class="col-xl-6 col-md-6 col-sm-6 col-6 d-flex gap-2 align-items-center"><input type = "checkbox" name = "menuitem" class= "form-check-input mt-0" id = "menu_' + menu.menuid + '" value = "' + menu.menuid + '" checked /><label for="menu_' + menu.menuid + '">' + menu.name + '</label></div > ');
+                });
+            },
+        });
+        $.ajax({
+            url: '/AdminArea/AccessTab/GetRemainingMenusByRole',
+            data: { accounttype: @Model.accounttype, roleid: @Model.roleid },
+            type: 'GET',
+            success: function (data) {
+                console.log(data);
+                $('#notselectedmenu').html("");
+                $.each(data, function (index, menu) {
+                    $('#notselectedmenu').append('<div class="col-xl-6 col-md-6 col-sm-6 col-6 d-flex gap-2 align-items-center"><input type = "checkbox" name = "menuitem" class= "form-check-input mt-0" id = "menu_' + menu.menuid + '" value = "' + menu.menuid + '" /><label for="menu_' + menu.menuid + '">' + menu.name + '</label></div > ');
+                });
+            },
+        });
+    }
+    menus($('#accounttypedropdown').val(), @Model.roleid);
+
+    $('#accounttypedropdown').on('change', function () {
+        menus($(this).val(), @Model.roleid);
+    });
+
+
+
+    var nameregex = /^[a-zA-Z]+$/i
+    var Role_Name = $('#Role_Name').val();
+    var bool = false;
+
+    function validatemenu() {
+        if ($('input[name="menuitem"]:checked').length === 0) {
+            Swal.fire("Select Atleast One Menu for this role!");
+            return false;
+        }
+        return true;
+    }
+
+    $('#Role_Save').on('click', function () {
+        Role_Name = $('#Role_Name').val();
+        var formData = new FormData();
+        formData.append('Roleid', @Model.roleid);
+        $('input[name="menuitem"]:checked').each(function () {
+            formData.append('menuitems', $(this).val());
+        });
+
+        formData.append('accounttype', $('#accounttypedropdown').val());
+        console.log(validatemenu())
+        if (validatemenu()) {
+            $.ajax({
+                url: '/AdminArea/AccessTab/EditThisRole',
+                data: formData,
+                type: 'POST',
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    $('#nav-tabContent').html(response);
+                }
+            });
+        }
+    });
+</script>

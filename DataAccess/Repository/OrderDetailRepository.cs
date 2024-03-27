@@ -1,11 +1,6 @@
 ﻿using DataAccess.Repository.IRepository;
 using DataModels.AdminSideViewModels;
 using HelloDoc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.Repository
 {
@@ -13,7 +8,7 @@ namespace DataAccess.Repository
     {
         public OrderDetailRepository(HelloDocDbContext db) : base(db)
         {
-            _db =db;
+            _db = db;
         }
 
         public void Add(SendOrderViewModel model)
@@ -27,9 +22,9 @@ namespace DataAccess.Repository
             orderdetail.Prescription = model.Prescription;
             orderdetail.Noofrefill = model.Refill;
             orderdetail.Createddate = DateTime.Now;
-            orderdetail.Createdby = model.CreatedBy; 
+            orderdetail.Createdby = model.CreatedBy;
             _db.Orderdetails.Add(orderdetail);
-            _db.SaveChanges();  
+            _db.SaveChanges();
         }
     }
 }

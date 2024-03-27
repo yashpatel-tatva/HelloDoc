@@ -2,9 +2,7 @@
 using DataAccess.ServiceRepository;
 using DataAccess.ServiceRepository.IServiceRepository;
 using DataModels.AdminSideViewModels;
-using FluentAssertions.Execution;
 using Microsoft.AspNetCore.Mvc;
-using System.Drawing;
 
 namespace HelloDoc.Areas.AdminArea.DataController
 {
@@ -15,7 +13,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
         private readonly IPaginationRepository _paginator;
         private readonly IRequestRepository _request;
 
-        public StatusWiseDataController(IAllRequestDataRepository allrequestdata, IPaginationRepository paginator , IRequestRepository requestRepository)
+        public StatusWiseDataController(IAllRequestDataRepository allrequestdata, IPaginationRepository paginator, IRequestRepository requestRepository)
         {
             _allrequestdata = allrequestdata;
             _paginator = paginator;
@@ -25,14 +23,14 @@ namespace HelloDoc.Areas.AdminArea.DataController
         [HttpPost]
         public IActionResult StatuswiseData(string state, int currentpage, int pagesize, int requesttype, string search, int region)
         {
-            return RedirectToAction("Status_"+state , new {state ,currentpage , pagesize , requesttype , search , region});
+            return RedirectToAction("Status_" + state, new { state, currentpage, pagesize, requesttype, search, region });
         }
 
 
         [Area("AdminArea")]
-        public IActionResult Status_New(string state ,int currentpage, int pagesize, int requesttype, string search, int region)
+        public IActionResult Status_New(string state, int currentpage, int pagesize, int requesttype, string search, int region)
         {
-            List<Request> model1 = _paginator.requests(state, currentpage, pagesize, requesttype, search , region);
+            List<Request> model1 = _paginator.requests(state, currentpage, pagesize, requesttype, search, region);
             List<AllRequestDataViewModel> filtereddata = _allrequestdata.FilteredRequest(model1);
             return View(filtereddata);
         }

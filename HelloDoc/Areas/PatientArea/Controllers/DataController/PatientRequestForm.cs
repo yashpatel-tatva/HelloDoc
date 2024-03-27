@@ -114,7 +114,7 @@ namespace HelloDoc.Areas.PatientArea.DataController
                     Status = model.Status,
                     Createddate = DateTime.Now,
                     User = user,
-                    Confirmationnumber = (region.Abbreviation.Substring(0,2) + DateTime.Now.Day.ToString() + DateTime.Now.Month.ToString().PadLeft(2, '0') + model.LastName.Substring(0,2) + model.FirstName.Substring(0,2) + requestcount.Count().ToString().PadLeft(4,'0')).ToUpper(),
+                    Confirmationnumber = (region.Abbreviation.Substring(0, 2) + DateTime.Now.Day.ToString() + DateTime.Now.Month.ToString().PadLeft(2, '0') + model.LastName.Substring(0, 2) + model.FirstName.Substring(0, 2) + requestcount.Count().ToString().PadLeft(4, '0')).ToUpper(),
                 };
                 _context.Add(request);
                 _context.SaveChanges();

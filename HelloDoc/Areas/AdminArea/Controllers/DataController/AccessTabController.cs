@@ -1,5 +1,4 @@
-﻿using DataAccess.Repository;
-using DataAccess.Repository.IRepository;
+﻿using DataAccess.Repository.IRepository;
 using DataAccess.ServiceRepository;
 using Microsoft.AspNetCore.Mvc;
 
@@ -48,6 +47,19 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             return menuList;
         }
         [Area("AdminArea")]
+        [HttpGet]
+        public List<Menu> GetSelectedMenusByRoleId(int accounttype, int roleid)
+        {
+            return _role.GetMenusByRole(roleid).Where(x => x.Accounttype == accounttype).ToList();
+        }
+        [Area("AdminArea")]
+        [HttpGet]
+        public List<Menu> GetRemainingMenusByRole(int accounttype, int roleid)
+        {
+            return _role.GetRemainingMenusByRole(roleid).Where(x => x.Accounttype == accounttype).ToList();
+        }
+
+        [Area("AdminArea")]
         [HttpPost]
         public bool IsThisRoleExist(string Role_Name)
         {
@@ -73,9 +85,26 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         [HttpPost]
         public IActionResult DeleteThisRole(int roleid)
         {
-            var Rolename = _role.GetFirstOrDefault(x => x.Roleid ==  roleid).Name;
+            var Rolename = _role.GetFirstOrDefault(x => x.Roleid == roleid).Name;
             _role.DeleteThisRole(roleid);
             TempData["Message"] = Rolename + " Role Created";
+            return RedirectToAction("AdminTabsLayout", "Home");
+        }
+        [Area("AdminArea")]
+        [HttpPost]
+        public IActionResult EditRolePage(int roleid)
+        {
+            var rolename = _role.GetFirstOrDefault(x => x.Roleid == roleid).Name;
+            var accounttype = _role.GetFirstOrDefault(x => x.Roleid == roleid).Accounttype;
+            return View(new { roleid, rolename, accounttype });
+        }
+        [Area("AdminArea")]
+        [HttpPost]
+        public IActionResult EditThisRole(int Roleid, List<int> menuitems, int accounttype)
+        {
+            _role.EditThisRole(Roleid, accounttype, menuitems, _admin.GetFirstOrDefault(x => x.Adminid == _admin.GetSessionAdminId()).Aspnetuserid);
+            var Rolename = _role.GetFirstOrDefault(x => x.Roleid == Roleid).Name;
+            TempData["Message"] = Rolename + " Role Edited";
             return RedirectToAction("AdminTabsLayout", "Home");
         }
     }

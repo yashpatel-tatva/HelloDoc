@@ -1,12 +1,8 @@
-﻿using Azure.Core;
-using HelloDoc.Areas.PatientArea.ViewModels;
-using HelloDoc;
-using HelloDoc;
+﻿using HelloDoc.Areas.PatientArea.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
-using System.IO;
 using System.IO.Compression;
 
 namespace HelloDoc.Areas.PatientArea.DataController
@@ -27,7 +23,7 @@ namespace HelloDoc.Areas.PatientArea.DataController
                 string filename = file.FileName;
                 string filenameWithoutExtension = Path.GetFileNameWithoutExtension(filename);
                 string extension = Path.GetExtension(filename);
-                string filewith = filenameWithoutExtension +"_"+ DateTime.Now.ToString("dd`MM`yyyy`HH`mm`ss") + extension;
+                string filewith = filenameWithoutExtension + "_" + DateTime.Now.ToString("dd`MM`yyyy`HH`mm`ss") + extension;
 
                 //string directoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "HalloDoc Request Documents", requestid.ToString());
                 string directoryPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Documents", requestid.ToString());
@@ -82,7 +78,7 @@ namespace HelloDoc.Areas.PatientArea.DataController
                 else
                 {
                     files = (from m in _context.Requestwisefiles join admin in _context.Admins on m.Adminid equals admin.Adminid where m.Requestid == patientDashboardviewmodel.RequestsId && m.Isdeleted == null select m).ToList();
-                    files = _context.Requestwisefiles.Include(r=>r.Admin).ToList().Where(x => x.Requestid == patientDashboardviewmodel.RequestsId).Where(x=>x.Isdeleted == null).ToList();
+                    files = _context.Requestwisefiles.Include(r => r.Admin).ToList().Where(x => x.Requestid == patientDashboardviewmodel.RequestsId).Where(x => x.Isdeleted == null).ToList();
                     patientDashboard.RequestsId = patientDashboardviewmodel.RequestsId;
                 }
                 patientDashboard.requestwisefiles = files;
@@ -226,7 +222,7 @@ namespace HelloDoc.Areas.PatientArea.DataController
             model.LastName = user.Lastname;
             model.BirthDate = new DateTime(Convert.ToInt32(user.Intyear), DateTime.ParseExact(user.Strmonth, "MMMM", CultureInfo.InvariantCulture).Month, Convert.ToInt32(user.Intdate));
             model.Email = user.Email;
-            model.PhoneNumber = user.Mobile ;
+            model.PhoneNumber = user.Mobile;
             return View(model);
         }
         [Area("PatientArea")]

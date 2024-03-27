@@ -1,9 +1,4 @@
 ﻿using HelloDoc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.Repository.IRepository
 {
@@ -14,7 +9,7 @@ namespace DataAccess.Repository.IRepository
         bool checkemail(Aspnetuser user);
 
 
-        void Update(Aspnetuser user);   
+        void Update(Aspnetuser user);
         void Save();
         void changepass(string aspnetid, string password);
     }

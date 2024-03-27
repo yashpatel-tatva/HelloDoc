@@ -20,7 +20,7 @@ namespace HelloDoc.Areas.PatientArea.ViewModels
 
         [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Enter a valid")]
         [MaybeNull]
-        public string HostelName{ get; set; }
+        public string HostelName { get; set; }
 
         public string Symptoms { get; set; }
 
@@ -41,7 +41,7 @@ namespace HelloDoc.Areas.PatientArea.ViewModels
         public DateOnly BirthDate { get; set; }
 
 
-      
+
         [MaybeNull]
         public string C_Street { get; set; }
 

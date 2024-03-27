@@ -1,11 +1,8 @@
 ﻿
 using DataAccess.ServiceRepository.IServiceRepository;
 using HelloDoc.Areas.PatientArea.ViewModels;
-using HelloDoc;
-using HelloDoc;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Globalization;
 
 namespace HelloDoc.Areas.PatientArea.DataController
 {
@@ -15,7 +12,7 @@ namespace HelloDoc.Areas.PatientArea.DataController
         private readonly ISendEmailRepository _sendemail;
         private readonly IPatientFormsRepository _patientFormsRepository;
 
-        public CredentialController(HelloDocDbContext context , ISendEmailRepository sendEmailRepository, IPatientFormsRepository patientFormsRepository)
+        public CredentialController(HelloDocDbContext context, ISendEmailRepository sendEmailRepository, IPatientFormsRepository patientFormsRepository)
         {
             _context = context;
             _sendemail = sendEmailRepository;
@@ -36,7 +33,7 @@ namespace HelloDoc.Areas.PatientArea.DataController
         {
             _patientFormsRepository.AddNewUserAndAspUser(model);
 
-            return RedirectToAction("PatientLogin","Home");
+            return RedirectToAction("PatientLogin", "Home");
         }
 
         [Area("PatientArea")]
@@ -63,7 +60,8 @@ namespace HelloDoc.Areas.PatientArea.DataController
         {
             var correct = await _context.Aspnetusers.FirstOrDefaultAsync(m => m.Email == user.Email);
             var userdata = await _context.Users.FirstOrDefaultAsync(u => u.Email == user.Email);
-            if (userdata == null && correct!=null) {
+            if (userdata == null && correct != null)
+            {
                 TempData["Style"] = " border-danger";
                 TempData["WrongEmail"] = "This is not for Admin or Provider Panel";
                 return RedirectToAction("PatientLogin", "Home");

@@ -15,7 +15,7 @@ namespace DataModels.AdminSideViewModels
         public string LastName { get; set; }
         public string Email { get; set; }
 
-        [Compare("Email" , ErrorMessage ="Email not match")]
+        [Compare("Email", ErrorMessage = "Email not match")]
         public string ConfirmEmail { get; set; }
         public string Mobile { get; set; }
         public string Address1 { get; set; }

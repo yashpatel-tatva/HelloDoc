@@ -1,5 +1,4 @@
-﻿using HelloDoc;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 
 namespace HelloDoc.Areas.PatientArea.ViewModels
 {
@@ -24,7 +23,7 @@ namespace HelloDoc.Areas.PatientArea.ViewModels
             CancelledByPatient, //To-close
             Closed,             //To-close
             Unpaid,             //Unpaid
-            Clear              
+            Clear
         }
         public User User { get; set; }
         public List<Request> Requests { get; set; }

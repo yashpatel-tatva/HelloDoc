@@ -107,3 +107,15 @@ $('.roledeletebtn').on('click', function () {
         }
     });
 });
+
+$('.roleeditbtn').on('click', function () {
+    var roleid = $(this).data('id');
+    $.ajax({
+        url: '/AdminArea/AccessTab/EditRolePage',
+        type: 'POST',
+        data: { roleid },
+        success: function (response) {
+            $('#nav-tabContent').html(response);
+        }
+    });
+});

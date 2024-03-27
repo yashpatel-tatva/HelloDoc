@@ -24,7 +24,7 @@ namespace HelloDoc.Areas.PatientArea.ViewModels
 
         public string PropertyName { get; set; }
 
-        public string CaseNumber {  get; set; }
+        public string CaseNumber { get; set; }
 
 
         [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Enter a valid")]

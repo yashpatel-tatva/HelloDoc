@@ -2,24 +2,21 @@
 using DataAccess.ServiceRepository.IServiceRepository;
 using DataModels.CommonViewModel;
 using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.ServiceRepository
 {
     public class SessionUtilsRepository : ISessionUtilsRepository
     {
         private readonly IAdminRepository _admin;
-        public SessionUtilsRepository(IAdminRepository adminRepository) { 
+        public SessionUtilsRepository(IAdminRepository adminRepository)
+        {
             _admin = adminRepository;
         }
         public static LoggedInPersonViewModel GetLoggedInPerson(ISession session)
         {
-            LoggedInPersonViewModel viewModel = null ;
-            if(!string.IsNullOrEmpty(session.GetString("AspNetId")))
+            LoggedInPersonViewModel viewModel = null;
+            if (!string.IsNullOrEmpty(session.GetString("AspNetId")))
             {
                 viewModel = new LoggedInPersonViewModel();
                 viewModel.AspnetId = session.GetString("AspNetID");
@@ -29,19 +26,19 @@ namespace DataAccess.ServiceRepository
             return viewModel;
         }
 
-        public  void SetAdminSeesion(string aspnetid)
+        public void SetAdminSeesion(string aspnetid)
         {
-                _admin.SetSession(_admin.GetFirstOrDefault(x => x.Aspnetuserid == aspnetid));
+            _admin.SetSession(_admin.GetFirstOrDefault(x => x.Aspnetuserid == aspnetid));
 
         }
 
-        public  void SetLoggedInPerson(ISession session, LoggedInPersonViewModel viewModel)
+        public void SetLoggedInPerson(ISession session, LoggedInPersonViewModel viewModel)
         {
-            if(viewModel != null)
+            if (viewModel != null)
             {
-                session.SetString("AspNetId" , viewModel.AspnetId);
-                session.SetString("UserName" , viewModel.UserName);
-                session.SetString("Role" , viewModel.Role);
+                session.SetString("AspNetId", viewModel.AspnetId);
+                session.SetString("UserName", viewModel.UserName);
+                session.SetString("Role", viewModel.Role);
 
             }
         }

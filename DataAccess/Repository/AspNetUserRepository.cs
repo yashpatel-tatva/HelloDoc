@@ -1,11 +1,5 @@
 ﻿using DataAccess.Repository.IRepository;
 using HelloDoc;
-using HelloDoc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.Repository
 {
@@ -30,7 +24,8 @@ namespace DataAccess.Repository
         public bool checkpass(Aspnetuser user)
         {
             var admin = GetFirstOrDefault(x => x.Email == user.Email);
-            if (admin.Passwordhash == user.Passwordhash) { 
+            if (admin.Passwordhash == user.Passwordhash)
+            {
                 return true; ;
             }
             else
@@ -39,7 +34,8 @@ namespace DataAccess.Repository
             }
         }
 
-        public bool checkemail(Aspnetuser user) {
+        public bool checkemail(Aspnetuser user)
+        {
             var admin = GetFirstOrDefault(x => x.Email == user.Email);
             if (admin != null)
             {
@@ -53,7 +49,7 @@ namespace DataAccess.Repository
 
         public void changepass(string aspnetid, string password)
         {
-            var aspnet = _db.Aspnetusers.FirstOrDefault(x=>x.Id == aspnetid);
+            var aspnet = _db.Aspnetusers.FirstOrDefault(x => x.Id == aspnetid);
             aspnet.Passwordhash = password;
             _db.Aspnetusers.Update(aspnet);
             _db.SaveChanges();

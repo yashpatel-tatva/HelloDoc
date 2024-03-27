@@ -1,11 +1,6 @@
 ﻿using DataAccess.Repository.IRepository;
 using DataAccess.ServiceRepository.IServiceRepository;
 using HelloDoc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.ServiceRepository
 {
@@ -41,7 +36,7 @@ namespace DataAccess.ServiceRepository
             {
                 request = request.Skip((currentpage - 1) * pagesize).Take(pagesize).ToList();
             }
-            return request.OrderByDescending(e=>e.Createddate).ToList();
+            return request.OrderByDescending(e => e.Createddate).ToList();
         }
     }
 }

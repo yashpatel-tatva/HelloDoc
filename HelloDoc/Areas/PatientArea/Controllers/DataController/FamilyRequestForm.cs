@@ -1,9 +1,6 @@
 ﻿using HelloDoc.Areas.PatientArea.ViewModels;
-using HelloDoc;
-using HelloDoc;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Drawing;
 using System.Globalization;
 
 namespace HelloDoc.Areas.PatientArea.DataController
@@ -60,7 +57,7 @@ namespace HelloDoc.Areas.PatientArea.DataController
         {
             var aspnetuser = await _context.Aspnetusers.FirstOrDefaultAsync(m => m.Email == model.Email);
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == model.Email);
-            
+
             var region = await _context.Regions.FirstOrDefaultAsync(x => x.Regionid == user.Regionid);
             var requestcount = (from m in _context.Requests where m.Createddate.Date == DateTime.Now.Date select m).ToList();
             if (aspnetuser != null)
@@ -105,9 +102,9 @@ namespace HelloDoc.Areas.PatientArea.DataController
                 {
                     AddPatientRequestWiseFile(model.Upload, request.Requestid);
                 }
-                if(HttpContext.Session.IsAvailable)
+                if (HttpContext.Session.IsAvailable)
                 {
-                    return RedirectToAction("Dashboard" , "Dashboard");
+                    return RedirectToAction("Dashboard", "Dashboard");
                 }
                 return RedirectToAction("Index", "Home");
             }

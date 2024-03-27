@@ -1,21 +1,12 @@
 ﻿using DataAccess.Repository.IRepository;
+using DataAccess.ServiceRepository;
 using DataAccess.ServiceRepository.IServiceRepository;
 using DataModels.AdminSideViewModels;
 using HelloDoc.Areas.PatientArea.ViewModels;
-using HelloDoc;
-using HelloDoc;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 using System.IO.Compression;
-using System.Linq;
-using System.Net.Mail;
-using System.Net;
-using DataAccess.ServiceRepository;
-using System.Globalization;
-using System.Drawing;
 
 namespace HelloDoc.Areas.AdminArea.DataController
 {
@@ -90,17 +81,17 @@ namespace HelloDoc.Areas.AdminArea.DataController
 
         [Area("AdminArea")]
         [HttpPost]
-        public List<Physician> GetPhysician(int regionid , int requestid)
+        public List<Physician> GetPhysician(int regionid, int requestid)
         {
-            var request = _requests.GetFirstOrDefault(x=>x.Requestid == requestid);
+            var request = _requests.GetFirstOrDefault(x => x.Requestid == requestid);
             var physician = _db.Physicians.Include(x => x.Physicianregions).Where(x => x.Physicianid != request.Physicianid).ToList();
             var phyregion = _db.Physicianregions.Include(x => x.Physician).ToList();
             if (regionid != 0)
             {
-                physician = phyregion.Where(x => x.Regionid == regionid).Select(x => x.Physician).Where(x=>x.Physicianid!=request.Physicianid).ToList();
+                physician = phyregion.Where(x => x.Regionid == regionid).Select(x => x.Physician).Where(x => x.Physicianid != request.Physicianid).ToList();
             }
             List<Physician> result = new List<Physician>();
-            foreach(var phy in physician)
+            foreach (var phy in physician)
             {
                 Physician model = new Physician();
                 model.Firstname = phy.Firstname;
@@ -110,7 +101,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
             }
             return result;
         }
-        
+
         [Area("AdminArea")]
         [HttpPost]
         public List<Physician> GetPhysicianByRegion(int regionid)
@@ -122,7 +113,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
                 physician = phyregion.Where(x => x.Regionid == regionid).Select(x => x.Physician).ToList();
             }
             List<Physician> result = new List<Physician>();
-            foreach(var phy in physician)
+            foreach (var phy in physician)
             {
                 Physician model = new Physician();
                 model.Firstname = phy.Firstname;
@@ -416,10 +407,10 @@ namespace HelloDoc.Areas.AdminArea.DataController
 
         [Area("AdminArea")]
         [HttpPost]
-        public void SendEmailFromSendLinkPopUp(string firstname , string lastname , string email ,string mobile)
+        public void SendEmailFromSendLinkPopUp(string firstname, string lastname, string email, string mobile)
         {
-            var url = Url.Action("EmaillinkToOpenPatientRequest", "RequestForms", new { Area = "PatientArea", firstname = firstname , lastname = lastname , email = email , mobile = mobile }, Request.Scheme, Request.Host.Value);
-            _sendemail.Sendemail(email, "Submit Your Request" , url);
+            var url = Url.Action("EmaillinkToOpenPatientRequest", "RequestForms", new { Area = "PatientArea", firstname = firstname, lastname = lastname, email = email, mobile = mobile }, Request.Scheme, Request.Host.Value);
+            _sendemail.Sendemail(email, "Submit Your Request", url);
         }
         //Pop-up ends
 
@@ -495,8 +486,8 @@ namespace HelloDoc.Areas.AdminArea.DataController
         [HttpPost]
         public IActionResult SendMail(List<int> RequestWiseFileId, int RequestsId)
         {
-            var request = _requests.GetFirstOrDefault(c=>c.Requestid == RequestsId);
-            var emailto  = _db.Requestclients.FirstOrDefault(x => x.Requestid == request.Requestid);
+            var request = _requests.GetFirstOrDefault(c => c.Requestid == RequestsId);
+            var emailto = _db.Requestclients.FirstOrDefault(x => x.Requestid == request.Requestid);
             Emaillog emaillog = new Emaillog();
             emaillog.Emailid = emailto.Email;
             emaillog.Filepath = " ";

@@ -1,12 +1,7 @@
 ﻿using DataAccess.ServiceRepository.IServiceRepository;
 using HelloDoc;
 using HelloDoc.Areas.PatientArea.ViewModels;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.ServiceRepository
 {

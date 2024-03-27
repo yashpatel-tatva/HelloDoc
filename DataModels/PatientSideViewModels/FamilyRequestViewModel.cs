@@ -43,7 +43,7 @@ namespace HelloDoc.Areas.PatientArea.ViewModels
 
 
 
-        
+
         [MaybeNull] public string Street { get; set; }
 
 

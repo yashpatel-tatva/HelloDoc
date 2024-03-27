@@ -1,14 +1,8 @@
-﻿using DataAccess.ServiceRepository.IServiceRepository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Mail;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DataAccess.Repository.IRepository;
+using DataAccess.ServiceRepository.IServiceRepository;
 using HelloDoc;
-using DataAccess.Repository.IRepository;
-using System.Collections;
+using System.Net;
+using System.Net.Mail;
 
 namespace DataAccess.ServiceRepository
 {

@@ -1,10 +1,5 @@
 ﻿using DataModels.CommonViewModel;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.ServiceRepository.IServiceRepository
 {
@@ -12,6 +7,6 @@ namespace DataAccess.ServiceRepository.IServiceRepository
     {
         string GenerateJwtToken(LoggedInPersonViewModel loggedInPerson);
 
-        bool ValidateToken(string token , out JwtSecurityToken jwtSecurityToken);
+        bool ValidateToken(string token, out JwtSecurityToken jwtSecurityToken);
     }
 }

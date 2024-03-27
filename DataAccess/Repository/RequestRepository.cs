@@ -1,12 +1,6 @@
 ﻿using DataAccess.Repository.IRepository;
 using HelloDoc;
-using HelloDoc;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.Repository
 {
@@ -81,7 +75,7 @@ namespace DataAccess.Repository
             {
                 return GetRequestsbyStatus(9);
             }
-            else if(state == "all")
+            else if (state == "all")
             {
                 return GetAll().ToList();
             }

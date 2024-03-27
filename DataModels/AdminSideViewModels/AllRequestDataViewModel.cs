@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static HelloDoc.Areas.PatientArea.ViewModels.PatientDashboardViewModel;
-
-namespace DataModels.AdminSideViewModels
+﻿namespace DataModels.AdminSideViewModels
 {
     public class AllRequestDataViewModel
     {
-        public int RequestId { get; set; } 
+        public int RequestId { get; set; }
         public string PatientName { get; set; }
-        public DateOnly PatientDOB { get; set;}
+        public DateOnly PatientDOB { get; set; }
         public string RequestorName { get; set; }
         public DateTime RequestedDate { get; set; }
         public string PatientPhone { get; set; }
@@ -36,7 +29,7 @@ namespace DataModels.AdminSideViewModels
             BusinessPartner,
             VIP
         }
-        public  string RequestTypeName(int by)
+        public string RequestTypeName(int by)
         {
             string By = ((Requestby)by).ToString();
             return By;

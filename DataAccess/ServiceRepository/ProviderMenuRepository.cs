@@ -4,15 +4,7 @@ using DataModels.AdminSideViewModels;
 using HelloDoc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using NPOI.SS.Formula.Functions;
-using Org.BouncyCastle.Asn1.Ocsp;
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.ServiceRepository
 {
@@ -30,7 +22,7 @@ namespace DataAccess.ServiceRepository
         public List<ProviderMenuViewModel> GetAllProviderDetailToDisplay(int region, int order)
         {
 
-            var physicians = _physician.getAll().Where(x=>x.Isdeleted == null || x.Isdeleted[0] == false); 
+            var physicians = _physician.getAll().Where(x => x.Isdeleted == null || x.Isdeleted[0] == false);
             var phyregion = _db.Physicianregions.Include(x => x.Physician).ToList();
 
             if (region != 0)
@@ -263,7 +255,7 @@ namespace DataAccess.ServiceRepository
                 Directory.CreateDirectory(directoryPath);
             }
 
-            string filePath = Path.Combine(directoryPath, filename+extension);
+            string filePath = Path.Combine(directoryPath, filename + extension);
             using (var fileStream = new FileStream(filePath, FileMode.Create))
             {
                 file.CopyTo(fileStream);
@@ -335,7 +327,7 @@ namespace DataAccess.ServiceRepository
 
         public void DeleteThisAccount(int physicianid)
         {
-            var physician = _physician.GetFirstOrDefault(x=>x.Physicianid == physicianid);
+            var physician = _physician.GetFirstOrDefault(x => x.Physicianid == physicianid);
             BitArray b = new BitArray(1);
             b[0] = true;
             physician.Isdeleted = b;
@@ -345,7 +337,7 @@ namespace DataAccess.ServiceRepository
 
         public int AddAccount(PhysicianAccountViewModel model)
         {
-            Aspnetuser aspnetuser   = new Aspnetuser();
+            Aspnetuser aspnetuser = new Aspnetuser();
             aspnetuser.Id = Guid.NewGuid().ToString();
             aspnetuser.Username = model.Username;
             aspnetuser.Passwordhash = model.Password;
@@ -375,11 +367,11 @@ namespace DataAccess.ServiceRepository
             physician.Businesswebsite = model.BusinessWebSite;
             physician.Roleid = model.Roleid;
             physician.Npinumber = model.NPINumber;
-            _db.Physicians.Add( physician );
+            _db.Physicians.Add(physician);
             _db.SaveChanges();
             BitArray fortrue = new BitArray(1); fortrue[0] = true;
             BitArray forfalse = new BitArray(1); forfalse[0] = false;
-            if(model.AgreementDoc != null)
+            if (model.AgreementDoc != null)
             {
                 AddICA(physician.Physicianid, model.AgreementDoc);
                 physician.Isagreementdoc = fortrue;
@@ -388,7 +380,7 @@ namespace DataAccess.ServiceRepository
             {
                 physician.Isagreementdoc = forfalse;
             }
-            if(model.BackgroundDoc != null)
+            if (model.BackgroundDoc != null)
             {
                 AddBackDoc(physician.Physicianid, model.BackgroundDoc);
                 physician.Isbackgrounddoc = fortrue;
@@ -397,7 +389,7 @@ namespace DataAccess.ServiceRepository
             {
                 physician.Isbackgrounddoc = forfalse;
             }
-            if(model.CredentialDoc != null)
+            if (model.CredentialDoc != null)
             {
                 AddCredential(physician.Physicianid, model.CredentialDoc);
                 physician.Iscredentialdoc = fortrue;
@@ -406,7 +398,7 @@ namespace DataAccess.ServiceRepository
             {
                 physician.Iscredentialdoc = forfalse;
             }
-            if(model.NonDisclosureDoc != null)
+            if (model.NonDisclosureDoc != null)
             {
                 AddNDA(physician.Physicianid, model.NonDisclosureDoc);
                 physician.Isnondisclosuredoc = fortrue;
@@ -426,7 +418,7 @@ namespace DataAccess.ServiceRepository
                 physicianregion.Regionid = item;
                 _db.Physicianregions.Add(physicianregion);
             }
-            Physiciannotification  physiciannotification = new Physiciannotification();
+            Physiciannotification physiciannotification = new Physiciannotification();
             physiciannotification.Pysicianid = physician.Physicianid;
             physiciannotification.Isnotificationstopped = forfalse;
             _db.Physiciannotifications.Add(physiciannotification);

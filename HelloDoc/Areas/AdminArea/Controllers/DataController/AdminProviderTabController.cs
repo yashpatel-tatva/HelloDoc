@@ -1,5 +1,4 @@
-﻿using DataAccess.Repository;
-using DataAccess.Repository.IRepository;
+﻿using DataAccess.Repository.IRepository;
 using DataAccess.ServiceRepository;
 using DataAccess.ServiceRepository.IServiceRepository;
 using DataModels.AdminSideViewModels;

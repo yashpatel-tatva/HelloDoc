@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DataModels.AdminSideViewModels
+﻿namespace DataModels.AdminSideViewModels
 {
     public class RequestNotesViewModel
     {
@@ -14,7 +8,7 @@ namespace DataModels.AdminSideViewModels
         public string AdminNotes { get; set; }
         public string AdminCancellationNotes { get; set; }
         public string PatientCancellationNotes { get; set; }
-        public string PatientNotes { get; set;}
+        public string PatientNotes { get; set; }
         public string PhysicianCancellationNotes { get; set; }
 
     }

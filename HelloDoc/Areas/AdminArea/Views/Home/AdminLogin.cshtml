@@ -60,6 +60,19 @@
     </div>
 </div>
 
+@if (TempData["Message"] != null)
+{
+    <script>
+        Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: "@TempData["Message"]",
+            showConfirmButton: false,
+            timer: 1000
+        });
+    </script>
+}
+
 
 <script>
     const eyeiconlabel = document.getElementById('eyeiconlabel');

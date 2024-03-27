@@ -1,12 +1,9 @@
-﻿using HelloDoc;
-using HelloDoc.Models;
-using HelloDoc;
-using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
-using Microsoft.EntityFrameworkCore;
-using System.Globalization;
+﻿using DataAccess.ServiceRepository.IServiceRepository;
 using HelloDoc.Areas.PatientArea.ViewModels;
-using DataAccess.ServiceRepository.IServiceRepository;
+using HelloDoc.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 namespace HelloDoc.Areas.PatientArea.Controllers
 {
@@ -14,7 +11,7 @@ namespace HelloDoc.Areas.PatientArea.Controllers
     {
         private readonly HelloDocDbContext _context;
         private readonly IPatientFormsRepository _patientForm;
-        public RequestFormsController(HelloDocDbContext context , IPatientFormsRepository patientFormsRepository)
+        public RequestFormsController(HelloDocDbContext context, IPatientFormsRepository patientFormsRepository)
         {
             _context = context;
             _patientForm = patientFormsRepository;
@@ -25,7 +22,7 @@ namespace HelloDoc.Areas.PatientArea.Controllers
             //@TempData["Display"] = "d-none";
             return View();
         }
-        
+
         [Area("PatientArea")]
         public IActionResult PatientRequestFromEmail(PatientRequestViewModel model)
         {

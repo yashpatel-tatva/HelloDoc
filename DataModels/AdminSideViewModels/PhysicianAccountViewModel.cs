@@ -1,10 +1,5 @@
 ﻿using HelloDoc;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataModels.AdminSideViewModels
 {
@@ -16,7 +11,7 @@ namespace DataModels.AdminSideViewModels
         public int PhysicianId { get; set; }
         public string Aspnetid { get; set; }
 
-        public string Createby { get; set; }    
+        public string Createby { get; set; }
 
         [Required]
         public string Username { get; set; }

@@ -1,11 +1,9 @@
-﻿using HelloDoc;
-using HelloDoc;
+﻿using DataAccess.ServiceRepository;
 using HelloDoc.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using System.Net.Mail;
 using System.Net;
-using DataAccess.ServiceRepository;
+using System.Net.Mail;
 
 namespace HelloDoc.Areas.PatientArea.Controllers
 {
@@ -99,7 +97,7 @@ namespace HelloDoc.Areas.PatientArea.Controllers
         public IActionResult ViewAgreement(string requestid)
         {
             var id = EncryptionRepository.Decrypt(requestid);
-            return View(new { requestid = id});
+            return View(new { requestid = id });
         }
 
 

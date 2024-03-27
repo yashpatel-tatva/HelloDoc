@@ -1,11 +1,7 @@
 ﻿using HelloDoc.Areas.PatientArea.ViewModels;
-using HelloDoc;
-using HelloDoc;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Drawing;
 using System.Globalization;
-using System.Net;
 
 namespace HelloDoc.Areas.PatientArea.DataController
 {
@@ -13,7 +9,8 @@ namespace HelloDoc.Areas.PatientArea.DataController
     {
         public readonly HelloDocDbContext _context;
 
-        public ConciergeRequestForm(HelloDocDbContext context) {
+        public ConciergeRequestForm(HelloDocDbContext context)
+        {
             _context = context;
         }
         [Area("PatientArea")]
@@ -62,7 +59,8 @@ namespace HelloDoc.Areas.PatientArea.DataController
                 };
                 _context.Add(requestclient);
                 _context.SaveChanges();
-                Concierge concierge = new Concierge {
+                Concierge concierge = new Concierge
+                {
                     Conciergename = model.C_FirstName + model.C_LastName,
                     Address = model.Room + " , " + model.C_Street + " , " + model.C_City + " , " + model.C_State,
                     State = model.C_State,
@@ -80,7 +78,7 @@ namespace HelloDoc.Areas.PatientArea.DataController
                 {
                     Requestid = requestdata.Requestid,
                     Conciergeid = conciergedata.Conciergeid,
-                    
+
                 };
                 _context.Add(requestconcierge);
                 _context.SaveChanges();

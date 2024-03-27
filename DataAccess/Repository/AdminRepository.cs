@@ -1,14 +1,8 @@
 ﻿using DataAccess.Repository.IRepository;
 using DataModels.AdminSideViewModels;
 using HelloDoc;
-using HelloDoc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.Repository
 {
@@ -53,15 +47,15 @@ namespace DataAccess.Repository
 
         public AdminProfileViewModel GetAdminProfile(int id)
         {
-            var admin = _db.Admins.Include(r=>r.Aspnetuser).Include(x=>x.Adminregions).FirstOrDefault(x => x.Adminid == id);
+            var admin = _db.Admins.Include(r => r.Aspnetuser).Include(x => x.Adminregions).FirstOrDefault(x => x.Adminid == id);
             AdminProfileViewModel model = new AdminProfileViewModel();
             model.Username = admin.Aspnetuser.Username;
             model.Password = admin.Aspnetuser.Passwordhash;
-            if(admin.Status == 0)
+            if (admin.Status == 0)
             {
                 model.Status = "Disable";
             }
-            else if(admin.Status == 1)
+            else if (admin.Status == 1)
             {
                 model.Status = "Active";
             }
@@ -78,13 +72,13 @@ namespace DataAccess.Repository
             List<string> regionidstring = new List<string>();
             foreach (var item in admin.Adminregions)
             {
-               regionidstring.Add(item.Regionid.ToString());
+                regionidstring.Add(item.Regionid.ToString());
             }
             model.SelectRegion = regionidstring;
             return model;
         }
 
-        public void Edit(int adminid ,AdminProfileViewModel viewModel)
+        public void Edit(int adminid, AdminProfileViewModel viewModel)
         {
             var admin = _db.Admins.Include(x => x.Adminregions).FirstOrDefault(x => x.Adminid == adminid);
             var aspnet = _aspnetuser.GetFirstOrDefault(x => x.Id == admin.Aspnetuserid);
@@ -98,7 +92,7 @@ namespace DataAccess.Repository
             //admin.Address2 = viewModel.Address2;
             //admin.Zip = viewModel.Zip;
             //admin.Regionid = viewModel.Region;
-            var RegionToDelete = admin.Adminregions.Select(x=>x.Regionid.ToString()).Except(viewModel.SelectRegion);
+            var RegionToDelete = admin.Adminregions.Select(x => x.Regionid.ToString()).Except(viewModel.SelectRegion);
             foreach (var item in RegionToDelete)
             {
                 Adminregion? adminRegionToDelete = _db.Adminregions
@@ -109,7 +103,7 @@ namespace DataAccess.Repository
                     _db.Adminregions.Remove(adminRegionToDelete);
                 }
             }
-            IEnumerable<string> regionsToAdd = viewModel.SelectRegion.Except(admin.Adminregions.Select(x=>x.Regionid.ToString()));
+            IEnumerable<string> regionsToAdd = viewModel.SelectRegion.Except(admin.Adminregions.Select(x => x.Regionid.ToString()));
 
             foreach (var item in regionsToAdd)
             {

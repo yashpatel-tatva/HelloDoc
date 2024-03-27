@@ -1,10 +1,5 @@
 ﻿using DataAccess.Repository.IRepository;
 using HelloDoc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.Repository
 {
@@ -23,6 +18,15 @@ namespace DataAccess.Repository
                 rolemenu.Menuid = menuitem;
                 _db.Rolemenus.Add(rolemenu);
             }
+            _db.SaveChanges();
+        }
+
+        public void DeleteMenusFromRole(int roleid, List<int> rolemenutodelete)
+        {
+            var rolemenusToDelete = _db.Rolemenus.Where(x => x.Roleid == roleid && rolemenutodelete.Contains(x.Menuid));
+
+            _db.Rolemenus.RemoveRange(rolemenusToDelete);
+
             _db.SaveChanges();
         }
     }

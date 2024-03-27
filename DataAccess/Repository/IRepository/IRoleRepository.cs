@@ -1,9 +1,4 @@
 ﻿using HelloDoc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.Repository.IRepository
 {
@@ -11,6 +6,10 @@ namespace DataAccess.Repository.IRepository
     {
         void AddThisRole(string rolename, int accounttype, List<int> menuitems, string aspnetuserid);
         void DeleteThisRole(int roleid);
+        void EditThisRole(int rolenid, int accounttype, List<int> menuitems, string aspnetuserid);
         List<Role> GetAllRolesToSelect();
+
+        List<Menu> GetMenusByRole(int roleid);
+        List<Menu> GetRemainingMenusByRole(int roleid);
     }
 }

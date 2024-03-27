@@ -1,13 +1,13 @@
-﻿using DataAccess.ServiceRepository.IServiceRepository;
+﻿using DataAccess.Repository.IRepository;
+using DataAccess.ServiceRepository.IServiceRepository;
 using DataModels.AdminSideViewModels;
 using HelloDoc;
+using HelloDoc.Areas.PatientArea.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using System.Globalization;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
-using DataAccess.Repository.IRepository;
-using HelloDoc.Areas.PatientArea.ViewModels;
+using System.Globalization;
 
 namespace DataAccess.ServiceRepository
 {
@@ -21,7 +21,7 @@ namespace DataAccess.ServiceRepository
         private readonly IAdminRepository _admin;
         private readonly IRequestwisefileRepository _requestwisefile;
 
-        public AllRequestDataRepository(HelloDocDbContext dbContext, IRequestwisefileRepository requestwisefileRepository , IHttpContextAccessor httpContextAccessor, IBlockCaseRepository blockCaseRepository, IRequestRepository requestRepository, IRequestStatusLogRepository requeststatus, IAdminRepository adminRepository)
+        public AllRequestDataRepository(HelloDocDbContext dbContext, IRequestwisefileRepository requestwisefileRepository, IHttpContextAccessor httpContextAccessor, IBlockCaseRepository blockCaseRepository, IRequestRepository requestRepository, IRequestStatusLogRepository requeststatus, IAdminRepository adminRepository)
         {
             _db = dbContext;
             _session = httpContextAccessor;

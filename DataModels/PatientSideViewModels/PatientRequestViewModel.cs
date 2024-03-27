@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
-using System.Runtime.InteropServices;
 
 namespace HelloDoc.Areas.PatientArea.ViewModels
 {
@@ -31,7 +30,7 @@ namespace HelloDoc.Areas.PatientArea.ViewModels
 
 
 
-     
+
         [MaybeNull]
         public string Street { get; set; }
 

@@ -1,15 +1,7 @@
 ﻿using DataAccess.Repository.IRepository;
 using HelloDoc;
-using HelloDoc;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.Repository
 {
@@ -17,7 +9,7 @@ namespace DataAccess.Repository
     {
         private readonly IAdminRepository _admin;
 
-        public RequestwisefileRepository(HelloDocDbContext db , IAdminRepository adminRepository) : base(db)
+        public RequestwisefileRepository(HelloDocDbContext db, IAdminRepository adminRepository) : base(db)
         {
             _admin = adminRepository;
         }
@@ -59,7 +51,7 @@ namespace DataAccess.Repository
 
         public void Delete(int id)
         {
-            var file = _db.Requestwisefiles.FirstOrDefault(x=>x.Requestwisefileid == id);
+            var file = _db.Requestwisefiles.FirstOrDefault(x => x.Requestwisefileid == id);
             BitArray r = new BitArray(1);
             r[0] = true;
             file.Isdeleted = r;
