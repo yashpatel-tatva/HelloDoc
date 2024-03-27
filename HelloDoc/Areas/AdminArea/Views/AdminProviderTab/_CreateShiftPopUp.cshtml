@@ -9,14 +9,15 @@
             </div>
             <div class="modal-body">
                 <form method="Post">
-                    <div class="form-group d-flex align-items-center rounded my-3">
-                        <select class="form-select shadow-none drawbyregiondropdown">
-                            <option value="0">All Region</option>
+                    <div class="did-floating-label-content my-3 form-group d-flex align-items-center rounded">
+                        <select class="form-select form-select-lg fs-6 form-control drawbyregiondrop did-floating-select" onclick="this.setAttribute('value', this.value);" onchange="this.setAttribute('value', this.value);" value="" aria-label=".form-select-lg example">
+                            <option value=""></option>
                         </select>
-                        <span class="selectedselectspan">Region</span>
+                        <span class="did-floating-label">Region</span>
                     </div>
                     <div class="form-group d-flex align-items-center rounded my-3">
-                        <select class="form-select shadow-none drawphysician">
+                        <select class="form-select shadow-none drawphysician" disabled>
+                            <option value="invalid" hidden>Select Physician</option>
                         </select>
                         <span class="selectedselectspan">Physician</span>
                     </div>
@@ -24,7 +25,7 @@
                         @{
                             string today = DateTime.Today.ToString("yyyy-MM-dd");
                         }
-                        <input type="date" class="form-control" placeholder="" min=@today><span>Shift Date</span>
+                        <input type="date" class="form-control" placeholder="" min=@today id="shiftdate"><span>Shift Date</span>
                     </div>
                     <div class="d-flex row my-3">
                         <div class="col-xl-6 col-md-6 col-sm-12">
@@ -40,53 +41,53 @@
                     </div>
                     <div class="d-flex align-items-center gap-3">
                         <span>Repeat : </span>
-                        <input class="tgl tgl-light" id="repeatonoff" type="checkbox"/>
+                        <input class="tgl tgl-light" id="repeatonoff" type="checkbox" />
                         <label class="tgl-btn" for="repeatonoff"></label>
                     </div>
                     <div class="small">
                         <span>Repeat Days</span>
                         <div>
                             <div class="form-check form-check-inline ">
-                                <input type="checkbox" class="form-check-input" name="repeatdays" id="Monday" />
+                                <input type="checkbox" class="form-check-input" name="repeatdays" value="1" id="Monday" />
                                 <label for="Monday">Every Monday</label>
                             </div>
                             <div class="form-check form-check-inline ">
-                                <input type="checkbox" class="form-check-input" name="repeatdays" id="Tuesday" />
+                                <input type="checkbox" class="form-check-input" name="repeatdays" value="2" id="Tuesday" />
                                 <label for="Tuesday">Every Tuesday</label>
                             </div>
                             <div class="form-check form-check-inline ">
-                                <input type="checkbox" class="form-check-input" name="repeatdays" id="Wednesday" />
+                                <input type="checkbox" class="form-check-input" name="repeatdays" value="3" id="Wednesday" />
                                 <label for="Wednesday">Every Wednesday</label>
                             </div>
                             <div class="form-check form-check-inline ">
-                                <input type="checkbox" class="form-check-input" name="repeatdays" id="Thursday" />
+                                <input type="checkbox" class="form-check-input" name="repeatdays" value="4" id="Thursday" />
                                 <label for="Thursday">Every Thursday</label>
                             </div>
                             <div class="form-check form-check-inline ">
-                                <input type="checkbox" class="form-check-input" name="repeatdays" id="Friday" />
+                                <input type="checkbox" class="form-check-input" name="repeatdays" value="5" id="Friday" />
                                 <label for="Friday">Every Friday</label>
                             </div>
                             <div class="form-check form-check-inline ">
-                                <input type="checkbox" class="form-check-input" name="repeatdays" id="Saturday" />
+                                <input type="checkbox" class="form-check-input" name="repeatdays" value="6" id="Saturday" />
                                 <label for="Saturday">Every Saturday</label>
                             </div>
                             <div class="form-check form-check-inline ">
-                                <input type="checkbox" class="form-check-input" name="repeatdays" id="Sunday" />
+                                <input type="checkbox" class="form-check-input" name="repeatdays" value="7" id="Sunday" />
                                 <label for="Sunday">Every Sunday</label>
                             </div>
                         </div>
                     </div>
                     <div class="form-group d-flex align-items-center rounded my-3">
                         <select class="form-select shadow-none drawrepeat">
+                            <option value="1">1-times</option>
                             <option value="2">2-times</option>
                             <option value="3">3-times</option>
-                            <option value="4">4-times</option>
                             <option value="4">4-times</option>
                         </select>
                         <span class="selectedselectspan">Repeat Times</span>
                     </div>
                     <div class="d-flex float-end mt-4">
-                        <button type="button" id="Contactconfirmbutton" class=" p-2 px-3 text-white bg-info rounded border-info  mx-2 shadow-none ">Save</button>
+                        <button type="button" id="Createconfirmbutton" class=" p-2 px-3 text-white bg-info rounded border-info  mx-2 shadow-none ">Save</button>
                         <button type="button" id="ContactCancelbutton" class="btn border-info text-info shadow-none" data-dismiss="modal">Cancel</button>
                     </div>
                 </form>
@@ -95,83 +96,9 @@
     </div>
 </div>
 
-<script>
-    $.ajax({
-        url: '/AdminArea/Dashboard/GetRegion',
-        success: function (data) {
-            var drawbyregiondropdown = $('.drawbyregiondropdown');
-            $.each(data, function (index, regions) {
-                drawbyregiondropdown.append($('<option>', {
-                    value: regions.regionid,
-                    text: regions.name
-                }))
-            });
-        }
-    });
-    getphysician(0);
-    function getphysician(regionid) {
-        $.ajax({
-            url: 'AdminArea/Dashboard/GetPhysicianByRegion',
-            type: 'POST',
-            data: { regionid: regionid },
-            success: function (data) {
-                console.log(data);
-                var physiciandropdown = $('.drawphysician');
-                physiciandropdown.empty();
-                physiciandropdown.append($('<option>', {
-                    hidden: "hidden",
-                    value: "invalid",
-                    text: "Select Physician"
-                }))
-                if (data.length == 0) {
-                    physiciandropdown.append($('<option>', {
-                        value: "invalid",
-                        disabled: "disabled",
-                        text: "No Physician in this area",
-                        style: "color : red"
-                    }))
-                }
-                else {
-                    $.each(data, function (index, phy) {
-                        physiciandropdown.append($('<option>', {
-                            value: phy.physicianid,
-                            text: phy.firstname + " " + phy.lastname
-                        }))
-                    });
-                }
-            }
-        });
-    }
-
-    $('.drawbyregiondropdown').on('change', function () {
-        var regionid = $(this).val();
-        getphysician(regionid)
-    });
-
-    $(document).ready(function () {
-        $('#startTime, #endTime').on('change', function () {
-            var startTime = $('#startTime').val();
-            var endTime = $('#endTime').val();
-
-            if (startTime && endTime) {
-                if (startTime > endTime) {
-                    alert('End time cannot be earlier than start time');
-                    $('#endTime').val('');
-                }
-            }
-        });
-    });
-    repeatdrop(!$('#repeatonoff').prop('checked'));
-    $('#repeatonoff').on('change', function () {
-        repeatdrop(!$('#repeatonoff').prop('checked'));
-    });
-    function repeatdrop(bool){
-        $('.drawrepeat').prop('disabled' , bool);
-    }
-
-
-
-</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js" asp-append-version="true"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" asp-append-version="true"></script>
+<script src="~/js/Createshiftpopup.js" asp-append-version="true"></script>
 
 
 <style>

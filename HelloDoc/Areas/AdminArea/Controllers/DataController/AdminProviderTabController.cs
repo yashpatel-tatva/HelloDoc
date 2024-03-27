@@ -3,6 +3,7 @@ using DataAccess.ServiceRepository;
 using DataAccess.ServiceRepository.IServiceRepository;
 using DataModels.AdminSideViewModels;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections;
 
 namespace HelloDoc.Areas.AdminArea.Controllers.DataController
 {
@@ -250,6 +251,68 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             var physicianid = _providerMenu.AddAccount(physicianAccountViewModel);
             return RedirectToAction("AdminTabsLayout", "Home");
         }
+
+
+        [Area("AdminArea")]
+        [HttpPost]
+        public IActionResult CreateNewShift([FromBody] CreateShiftViewModel model)
+        {
+            Shift shift = new Shift();
+            shift.Physicianid = model.physician;
+            shift.Startdate = DateOnly.Parse(model.shiftdate);
+            BitArray bitArray = new BitArray(1);
+            bitArray[0] = model.repeatonoff;
+            shift.Isrepeat = bitArray;
+            if (model.repeatdays.Count() > 0)
+            {
+                var weekdays = "";
+                for (var i = 0; i < model.repeatdays.Count(); i++)
+                {
+                    weekdays = weekdays + model.repeatdays[i];
+                }
+                shift.Weekdays = weekdays;
+            }
+            shift.Repeatupto = model.repeattimes;
+            shift.Createddate = DateTime.Now;
+            shift.Createdby = _admin.GetFirstOrDefault(x => x.Adminid == _admin.GetSessionAdminId()).Aspnetuserid;
+            _db.Shifts.Add(shift);
+            _db.SaveChanges();
+
+            var startTimeParts = model.starttime.Split(':');
+            var endTimeParts = model.endtime.Split(':');
+            var startTime = new TimeSpan(int.Parse(startTimeParts[0]), int.Parse(startTimeParts[1]), 0);
+            var endTime = new TimeSpan(int.Parse(endTimeParts[0]), int.Parse(endTimeParts[1]), 0);
+
+            var currentDate = shift.Startdate;
+            for (int i = 0; i < model.repeattimes * 7; i++)
+            {
+                var currentDayOfWeek = currentDate.DayOfWeek.ToString();
+                if (model.repeatdays.Contains(currentDayOfWeek))
+                {
+                    Shiftdetail shiftdetail = new Shiftdetail();
+                    shiftdetail.Shiftid = shift.Shiftid;
+                    shiftdetail.Shiftdate = currentDate;
+                    shiftdetail.Starttime = new DateTime(currentDate.Year, currentDate.Month, currentDate.Day, startTime.Hours, startTime.Minutes, 0);
+                    shiftdetail.Endtime = new DateTime(currentDate.Year, currentDate.Month, currentDate.Day, endTime.Hours, endTime.Minutes, 0);
+                    shiftdetail.Status = 1;
+                    BitArray forfalse = new BitArray(1);
+                    forfalse[0] = false;
+                    shiftdetail.Isdeleted = forfalse;
+                    _db.Shiftdetails.Add(shiftdetail);
+                    _db.SaveChanges();
+                    Shiftdetailregion shiftdetailregion = new Shiftdetailregion();
+                    shiftdetailregion.Shiftdetailid = shiftdetail.Shiftdetailid;
+                    shiftdetailregion.Regionid = model.region;
+                    _db.Shiftdetailregions.Add(shiftdetailregion);
+                    _db.SaveChanges();
+                }
+                currentDate = currentDate.AddDays(1);
+            }
+
+
+            return View();
+        }
+
 
 
         /// <summary>
