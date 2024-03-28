@@ -1,4 +1,95 @@
 ﻿@{
     Layout = "_SchedulerLayout";
 }
-<h3>Day</h3>
+
+
+
+@*<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th, td {
+        border: 1px solid #dee2e6;
+        padding: 8px;
+        text-align: left;
+    }
+</style>
+<div>
+    <table class="w-100 border-1">
+        <thead style="background: rgb(145 145 145)">
+            <tr>
+                <th style="width : 28%">STAFF</th>
+                <th style="width : 3%">12A</th>
+                <th style="width : 3%">1A</th>
+                <th style="width : 3%">2A</th>
+                <th style="width : 3%">3A</th>
+                <th style="width : 3%">4A</th>
+                <th style="width : 3%">5A</th>
+                <th style="width : 3%">6A</th>
+                <th style="width : 3%">7A</th>
+                <th style="width : 3%">8A</th>
+                <th style="width : 3%">9A</th>
+                <th style="width : 3%">10A</th>
+                <th style="width : 3%">11A</th>
+                <th style="width : 3%">12P</th>
+                <th style="width : 3%">1P</th>
+                <th style="width : 3%">2P</th>
+                <th style="width : 3%">3P</th>
+                <th style="width : 3%">4P</th>
+                <th style="width : 3%">5P</th>
+                <th style="width : 3%">6P</th>
+                <th style="width : 3%">7P</th>
+                <th style="width : 3%">8P</th>
+                <th style="width : 3%">9P</th>
+                <th style="width : 3%">10P</th>
+                <th style="width : 3%">11P</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.physicianDatas)
+            {
+                <tr>
+                    <td>
+                        <img src="@item.Photo" width="10%">
+                        @item.Physicianname
+                    </td>
+                    <td id="12A_@item.Physicianname" class="time physician_@item.Physicianname"></td>
+                    <td id="1A_@item.Physicianname" class="time physician_@item.Physicianname"></td>
+                    <td id="2A_@item.Physicianname" class="time physician_@item.Physicianname"></td>
+                    <td id="3A_@item.Physicianname" class="time physician_@item.Physicianname"></td>
+                    <td id="4A_@item.Physicianname" class="time physician_@item.Physicianname"></td>
+                    <td id="5A_@item.Physicianname" class="time physician_@item.Physicianname"></td>
+                    <td id="6A_@item.Physicianname" class="time physician_@item.Physicianname"></td>
+                    <td id="7A_@item.Physicianname" class="time physician_@item.Physicianname"></td>
+                    <td id="8A_@item.Physicianname" class="time physician_@item.Physicianname"></td>
+                    <td id="9A_@item.Physicianname" class="time physician_@item.Physicianname"></td>
+                    <td id="10A_@item.Physicianname" class="time physician_@item.Physicianname"></td>
+                    <td id="11A_@item.Physicianname" class="time physician_@item.Physicianname"></td>
+                    <td id="12P_@item.Physicianname" class="time physician_@item.Physicianname"></td>
+                    <td id="1P_@item.Physicianname" class="time physician_@item.Physicianname"></td>
+                    <td id="2P_@item.Physicianname" class="time physician_@item.Physicianname"></td>
+                    <td id="3P_@item.Physicianname" class="time physician_@item.Physicianname"></td>
+                    <td id="4P_@item.Physicianname" class="time physician_@item.Physicianname"></td>
+                    <td id="5P_@item.Physicianname" class="time physician_@item.Physicianname"></td>
+                    <td id="6P_@item.Physicianname" class="time physician_@item.Physicianname"></td>
+                    <td id="7P_@item.Physicianname" class="time physician_@item.Physicianname"></td>
+                    <td id="8P_@item.Physicianname" class="time physician_@item.Physicianname"></td>
+                    <td id="9P_@item.Physicianname" class="time physician_@item.Physicianname"></td>
+                    <td id="10P_@item.Physicianname" class="time physician_@item.Physicianname"></td>
+                    <td id="11P_@item.Physicianname" class="time physician_@item.Physicianname"></td>
+                    @foreach (var shift in Model.Shifts.Where(s => s.Physicianid == item.Physicianid))
+                    {
+                        @if (shift.StartTime.Hour >= 8 && shift.EndTime.Hour <= 20)  
+                        {
+                            <td class="time physician_@item.Physicianname">
+                                @shift.StartTime.ToString("hh:mm tt") - @shift.EndTime.ToString("hh:mm tt")
+                            </td>
+                        }
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>*@

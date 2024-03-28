@@ -30,6 +30,8 @@ builder.Services.AddScoped<IPhysicianRepository, PhysicianRepository>();
 builder.Services.AddScoped<IRoleMenuRepository, RoleMenuRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IMenuRepository, MenuRepository>();
+builder.Services.AddScoped<IShiftDetailRepository, ShiftDetailRepository>();
+builder.Services.AddScoped<IShiftRepository, ShiftRepository>();
 
 
 builder.Services.AddScoped<IAllRequestDataRepository, AllRequestDataRepository>();

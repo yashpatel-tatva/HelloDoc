@@ -1,8 +1,27 @@
 ﻿#pending:checked + label .pendinground {
     border: 3px solid #9e758c
 }
+
 #approved:checked + label .approveround {
     border: 3px solid #7da882
 }
 
+.colorblue {
+    background-color: blue;
+}
 
+.color98AFC7 {
+    background-color: #98AFC7;
+}
+
+.color99c68e {
+    background-color: #99c68e;
+}
+
+.colorC2B280 {
+    background-color: #C2B280;
+}
+
+.color3090C7 {
+    background-color: #3090C7;
+}
