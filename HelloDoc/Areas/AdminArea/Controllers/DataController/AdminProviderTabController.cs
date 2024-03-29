@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Syncfusion.EJ2.Layouts;
 using System;
 using System.Collections;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace HelloDoc.Areas.AdminArea.Controllers.DataController
 {
@@ -318,6 +319,10 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
 
                     }
                 }
+                else
+                {
+                    IsValid = true;
+                }
                 if (IsValid)
                 {
                     Shiftdetail shiftdetail = new Shiftdetail();
@@ -400,8 +405,8 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             {
                 TempData["Message"] = "Some Shifts  can not be created due to overlaping of time ";
             }
-
-            return RedirectToAction("AdminTabsLayout", "Home");
+            var datetoshow = new DateTime(shift.Startdate.Year, shift.Startdate.Month, shift.Startdate.Day);
+            return RedirectToAction("DayWiseData", new { datetoshow });
         }
 
 
@@ -499,7 +504,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
 
         [Area("AdminArea")]
         //[HttpPost]
-        public IActionResult DayWiseData(DateTime currentDate)
+        public IActionResult DayWiseData(DateTime datetoshow)
         {
             SchedulingDataViewModel schedulingDataViewModel = new SchedulingDataViewModel();
             List<PhysicianData> physicianDatas = new List<PhysicianData>();
@@ -511,7 +516,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             schedulingDataViewModel.physicianDatas = physicianDatas;
 
             List<ShiftData> shiftDatas = new List<ShiftData>();
-            DateOnly currentday = DateOnly.FromDateTime(currentDate);
+            DateOnly currentday = DateOnly.FromDateTime(datetoshow);
             var shiftdetail = _shiftDetail.GetAll().Where(x => x.Isdeleted[0] == false).Where(x => x.Shiftdate == currentday);
             foreach (var item in shiftdetail)
             {
@@ -567,9 +572,9 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         public IActionResult DeleteShift(int shiftdetailid)
         {
             var date = _shiftDetail.GetFirstOrDefault(x=>x.Shiftdetailid==shiftdetailid).Shiftdate;
-            var currentDate = new DateTime(date.Year, date.Month, date.Day);
-            //_shiftDetail.DeleteThisShift(shiftdetailid);
-            return RedirectToAction("DayWiseData", new { currentDate });
+            var datetoshow = new DateTime(date.Year, date.Month, date.Day);
+            _shiftDetail.DeleteThisShift(shiftdetailid);
+            return RedirectToAction("DayWiseData", new { datetoshow });
         }
 
 

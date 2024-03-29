@@ -6,7 +6,7 @@
         <div class="modal-content">
             <div class="modal-header bg-info">
                 <h5 class="modal-title text-white">View Shift</h5>
-                <button type="button" class="btn" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="btn closeModel" data-dismiss="modal" aria-label="Close">
                     <i class="fa-solid fa-xmark text-white"></i>
                 </button>
             </div>
@@ -114,6 +114,14 @@
             type : 'POST' ,
             success : function(response){
                 $('#timewisedata').html(response);
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "Shift Deleted",
+                    showConfirmButton: false,
+                    timer: 1000
+                });
+                $('.closeModel').trigger('click');
             }
         });
     });

@@ -170,8 +170,8 @@ $('#Createconfirmbutton').on('click', function () {
             contentType: 'application/json',
             data: JSON.stringify(model),
             success: function (response) {
-                $('#nav-tabContent').html(response);
-                $('.modal-backdrop').remove(); 
+                $('#timewisedata').html(response);
+                $('#CreateShiftCancelbutton').trigger('click');
             },
             error: function (error) {
                 console.error(error);
