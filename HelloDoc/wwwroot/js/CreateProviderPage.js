@@ -72,3 +72,7 @@ $('#CreateAccountBtn').on('click', function () {
 
     $(this).closest('form').submit();
 });
+
+$('.modal-dialog').draggable({
+    handle: ".modal-header"
+});

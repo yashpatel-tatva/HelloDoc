@@ -5,6 +5,9 @@ using DataModels.AdminSideViewModels;
 using FluentAssertions.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
+using Syncfusion.EJ2.Layouts;
+using System;
 using System.Collections;
 
 namespace HelloDoc.Areas.AdminArea.Controllers.DataController
@@ -258,7 +261,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             return RedirectToAction("AdminTabsLayout", "Home");
         }
 
-        
+
 
         [Area("AdminArea")]
         [HttpPost]
@@ -285,43 +288,43 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             _db.Shifts.Add(shift);
             _db.SaveChanges();
 
+            var currentDate = shift.Startdate;
             var startTimeParts = model.starttime.Split(':');
             var endTimeParts = model.endtime.Split(':');
             var startTime = new TimeSpan(int.Parse(startTimeParts[0]), int.Parse(startTimeParts[1]), 0);
             var endTime = new TimeSpan(int.Parse(endTimeParts[0]), int.Parse(endTimeParts[1]), 0);
+            var StartTimewithdate = new DateTime(currentDate.Year, currentDate.Month, currentDate.Day, startTime.Hours, startTime.Minutes, 0);
+            var EndTimewithdate = new DateTime(currentDate.Year, currentDate.Month, currentDate.Day, endTime.Hours, endTime.Minutes, 0);
+            var shownmsg = true;
 
-            var currentDate = shift.Startdate;
-            if (shift.Weekdays == "")
+
+
+            if (shift.Weekdays == null)
             {
-                Shiftdetail shiftdetail = new Shiftdetail();
-                shiftdetail.Shiftid = shift.Shiftid;
-                shiftdetail.Shiftdate = currentDate;
-                shiftdetail.Starttime = new DateTime(currentDate.Year, currentDate.Month, currentDate.Day, startTime.Hours, startTime.Minutes, 0);
-                shiftdetail.Endtime = new DateTime(currentDate.Year, currentDate.Month, currentDate.Day, endTime.Hours, endTime.Minutes, 0);
-                shiftdetail.Status = 1;
-                shiftdetail.Regionid = model.region;
-                BitArray forfalse = new BitArray(1);
-                forfalse[0] = false;
-                shiftdetail.Isdeleted = forfalse;
-                _db.Shiftdetails.Add(shiftdetail);
-                _db.SaveChanges();
-                Shiftdetailregion shiftdetailregion = new Shiftdetailregion();
-                shiftdetailregion.Shiftdetailid = shiftdetail.Shiftdetailid;
-                shiftdetailregion.Regionid = model.region;
-                shiftdetailregion.Isdeleted = forfalse;
-                _db.Shiftdetailregions.Add(shiftdetailregion);
-                _db.SaveChanges();
-            }
-            for (int i = 0; i < model.repeattimes * 7; i++)
-            {
-                var currentDayOfWeek = ((int)currentDate.DayOfWeek).ToString();
-                if (model.repeatdays.Contains(currentDayOfWeek))
+                bool IsValid = false;
+                var shiftdetailexistdata = _db.Shiftdetails.Include(x => x.Shift).Where(x => x.Shift.Physicianid == model.physician);
+                if (shiftdetailexistdata != null)
+                {
+                    foreach (var item in shiftdetailexistdata)
+                    {
+                        if ((item.Starttime > StartTimewithdate && item.Starttime > EndTimewithdate) || (item.Endtime < StartTimewithdate && item.Endtime < EndTimewithdate))
+                        {
+                            IsValid = true;
+                        }
+                        else
+                        {
+                            shownmsg = false;
+                        }
+
+                    }
+                }
+                if (IsValid)
                 {
                     Shiftdetail shiftdetail = new Shiftdetail();
                     shiftdetail.Shiftid = shift.Shiftid;
                     shiftdetail.Shiftdate = currentDate;
-                    shiftdetail.Starttime = new DateTime(currentDate.Year, currentDate.Month, currentDate.Day, startTime.Hours, startTime.Minutes, 0);
-                    shiftdetail.Endtime = new DateTime(currentDate.Year, currentDate.Month, currentDate.Day, endTime.Hours, endTime.Minutes, 0);
+                    shiftdetail.Starttime = StartTimewithdate;
+                    shiftdetail.Endtime = EndTimewithdate;
                     shiftdetail.Status = 1;
                     shiftdetail.Regionid = model.region;
                     BitArray forfalse = new BitArray(1);
@@ -335,10 +338,69 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
                     shiftdetailregion.Isdeleted = forfalse;
                     _db.Shiftdetailregions.Add(shiftdetailregion);
                     _db.SaveChanges();
+                    TempData["Message"] = "Shift Created for : " + _physician.GetFirstOrDefault(x => x.Physicianid == shift.Physicianid).Firstname;
+
+                }
+            }
+            for (int i = 0; i < model.repeattimes * 7; i++)
+            {
+                var IsValid = false;
+                StartTimewithdate = new DateTime(currentDate.Year, currentDate.Month, currentDate.Day, startTime.Hours, startTime.Minutes, 0);
+                EndTimewithdate = new DateTime(currentDate.Year, currentDate.Month, currentDate.Day, endTime.Hours, endTime.Minutes, 0);
+                var shiftdetailexistdata = _db.Shiftdetails.Include(x => x.Shift).Where(x => x.Shift.Physicianid == model.physician).FirstOrDefault(x => x.Shiftdate == currentDate);
+                if (shiftdetailexistdata != null)
+                {
+                    if ((shiftdetailexistdata.Starttime > StartTimewithdate && shiftdetailexistdata.Starttime > EndTimewithdate) || (shiftdetailexistdata.Endtime < StartTimewithdate && shiftdetailexistdata.Endtime < EndTimewithdate))
+                    {
+                        IsValid = true;
+                    }
+                    else
+                    {
+                        shownmsg = false;
+                        currentDate = currentDate.AddDays(1);
+                        continue;
+                    }
+                }
+                else
+                {
+                    IsValid = true;
+                }
+                if (IsValid)
+                {
+                    var currentDayOfWeek = ((int)currentDate.DayOfWeek).ToString();
+                    if (model.repeatdays.Contains(currentDayOfWeek))
+                    {
+                        Shiftdetail shiftdetail = new Shiftdetail();
+                        shiftdetail.Shiftid = shift.Shiftid;
+                        shiftdetail.Shiftdate = currentDate;
+                        shiftdetail.Starttime = StartTimewithdate;
+                        shiftdetail.Endtime = EndTimewithdate;
+                        shiftdetail.Status = 1;
+                        shiftdetail.Regionid = model.region;
+                        BitArray forfalse = new BitArray(1);
+                        forfalse[0] = false;
+                        shiftdetail.Isdeleted = forfalse;
+                        _db.Shiftdetails.Add(shiftdetail);
+                        _db.SaveChanges();
+                        Shiftdetailregion shiftdetailregion = new Shiftdetailregion();
+                        shiftdetailregion.Shiftdetailid = shiftdetail.Shiftdetailid;
+                        shiftdetailregion.Regionid = model.region;
+                        shiftdetailregion.Isdeleted = forfalse;
+                        _db.Shiftdetailregions.Add(shiftdetailregion);
+                        _db.SaveChanges();
+                    }
                 }
                 currentDate = currentDate.AddDays(1);
             }
-            TempData["Message"] = "Shift Created for : " + _physician.GetFirstOrDefault(x => x.Physicianid == shift.Physicianid).Firstname;
+            if (shownmsg)
+            {
+                TempData["Message"] = "Shift Created for : " + _physician.GetFirstOrDefault(x => x.Physicianid == shift.Physicianid).Firstname;
+            }
+            else
+            {
+                TempData["Message"] = "Some Shifts  can not be created due to overlaping of time ";
+            }
+
             return RedirectToAction("AdminTabsLayout", "Home");
         }
 
@@ -387,7 +449,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
 
             foreach (var item in phy)
             {
-                physicianDatas.Add(new PhysicianData { Physicianid = item.Physicianid, Physicianname = item.Firstname + " " + item.Lastname, Photo = item.Photo , color = regioncolormap((int)item.Regionid) });
+                physicianDatas.Add(new PhysicianData { Physicianid = item.Physicianid, Physicianname = item.Firstname + " " + item.Lastname, Photo = item.Photo /*, color = regioncolormap((int)item.Regionid)*/ });
             }
 
             List<ShiftData> shiftDatas = new List<ShiftData>();
@@ -436,41 +498,40 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         //}       
 
         [Area("AdminArea")]
-        [HttpPost]
+        //[HttpPost]
         public IActionResult DayWiseData(DateTime currentDate)
         {
-            //SchedulingDataViewModel schedulingDataViewModel = new SchedulingDataViewModel();
-            //List<PhysicianData> physicianDatas = new List<PhysicianData>();
-            //var phy = _physician.GetAll().Where(x => x.Isdeleted[0] == false);
-            //foreach (var item in phy)
-            //{
-            //    physicianDatas.Add(new PhysicianData { Physicianid = item.Physicianid, Physicianname = item.Firstname + " " + item.Lastname , Photo = item.Photo});
-            //}
-            //schedulingDataViewModel.physicianDatas = physicianDatas;
+            SchedulingDataViewModel schedulingDataViewModel = new SchedulingDataViewModel();
+            List<PhysicianData> physicianDatas = new List<PhysicianData>();
+            var phy = _physician.GetAll().Where(x => x.Isdeleted[0] == false);
+            foreach (var item in phy)
+            {
+                physicianDatas.Add(new PhysicianData { Physicianid = item.Physicianid, Physicianname = item.Firstname + " " + item.Lastname, Photo = item.Photo });
+            }
+            schedulingDataViewModel.physicianDatas = physicianDatas;
 
-            //List<ShiftData> shiftDatas = new List<ShiftData>();
-            //DateOnly currentday = DateOnly.FromDateTime(currentDate);
-            //var shiftdetail = _shiftDetail.GetAll().Where(x => x.Isdeleted[0] == false).Where(x => x.Shiftdate == currentday);
-            //foreach (var item in shiftdetail)
-            //{
-            //    shiftDatas.Add(new ShiftData
-            //    {
-            //        ShiftId = item.Shiftdetailid,
-            //        Subject = item.Status.ToString(),
-            //        Location = item.Regionid.ToString(),
-            //        Description = "Hii",
-            //        StartTime = item.Starttime,
-            //        EndTime = item.Endtime,
-            //        Physicianid = _shift.GetFirstOrDefault(x => x.Shiftid == item.Shiftid).Physicianid,
+            List<ShiftData> shiftDatas = new List<ShiftData>();
+            DateOnly currentday = DateOnly.FromDateTime(currentDate);
+            var shiftdetail = _shiftDetail.GetAll().Where(x => x.Isdeleted[0] == false).Where(x => x.Shiftdate == currentday);
+            foreach (var item in shiftdetail)
+            {
+                shiftDatas.Add(new ShiftData
+                {
+                    ShiftId = item.Shiftdetailid,
+                    Location =item.Regionid.ToString(),
+                    Description = "Hii",
+                    StartTime = item.Starttime,
+                    EndTime = item.Endtime,
+                    Physicianid = _shift.GetFirstOrDefault(x => x.Shiftid == item.Shiftid).Physicianid,
+                    Status = _shiftDetail.GetFirstOrDefault(x=>x.Shiftdetailid == item.Shiftdetailid).Status ,
+                });
+            }
+            schedulingDataViewModel.Shifts = shiftDatas;
 
-            //    });
-            //}
-            //schedulingDataViewModel.Shifts = shiftDatas;
+            string[] resources = new string[] { "MeetingRoom" };
+            ViewBag.ResourceNames = resources;
 
-            //string[] resources = new string[] { "MeetingRoom" };
-            //ViewBag.ResourceNames = resources;
-
-            return PartialView("_Daywisedata");
+            return PartialView("_Daywisedata", schedulingDataViewModel);
         }
         [Area("AdminArea")]
         [HttpPost]
@@ -483,6 +544,32 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         public IActionResult MonthWiseData(DateTime currentDate)
         {
             return PartialView("_Monthwisedata");
+        }
+
+
+        [Area("AdminArea")]
+        [HttpPost]
+        public IActionResult ViewShiftPopUp(int ShiftDetailId)
+        {
+            var shiftdetail = _db.Shiftdetails.Include(x=>x.Shift).Include(x=>x.Shiftdetailregions).FirstOrDefault(x=>x.Shiftdetailid == ShiftDetailId);
+            ShiftData model = new ShiftData();
+            model.ShiftId = ShiftDetailId;
+            model.Physicianid = shiftdetail.Shift.Physicianid;
+            model.Location = shiftdetail.Regionid.ToString();
+            model.Shiftdate = shiftdetail.Shiftdate;
+            model.StartTime = shiftdetail.Starttime;
+            model.EndTime = shiftdetail.Endtime;
+            return PartialView("_ViewShiftPopUp"  , model);
+        }
+        
+        [Area("AdminArea")]
+        [HttpPost]
+        public IActionResult DeleteShift(int shiftdetailid)
+        {
+            var date = _shiftDetail.GetFirstOrDefault(x=>x.Shiftdetailid==shiftdetailid).Shiftdate;
+            var currentDate = new DateTime(date.Year, date.Month, date.Day);
+            //_shiftDetail.DeleteThisShift(shiftdetailid);
+            return RedirectToAction("DayWiseData", new { currentDate });
         }
 
 

@@ -171,6 +171,7 @@ $('#Createconfirmbutton').on('click', function () {
             data: JSON.stringify(model),
             success: function (response) {
                 $('#nav-tabContent').html(response);
+                $('.modal-backdrop').remove(); 
             },
             error: function (error) {
                 console.error(error);

@@ -76,7 +76,8 @@ namespace DataAccess.Repository
             var menus = _db.Rolemenus.Include(x => x.Menu).Where(x => x.Roleid == roleid).ToList();
             var selectedmenu = menus.Select(x => x.Menu).ToList();
             var allMenus = _db.Menus.ToList();
-            return allMenus.Except(selectedmenu).ToList();
+            var result = allMenus.Except(selectedmenu).ToList();
+            return result;
         }
     }
 }

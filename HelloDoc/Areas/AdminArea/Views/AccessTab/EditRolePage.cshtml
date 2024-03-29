@@ -61,7 +61,7 @@
     function menus(accounttype, roleid) {
         $.ajax({
             url: '/AdminArea/AccessTab/GetSelectedMenusByRoleId',
-            data: { accounttype: @Model.accounttype, roleid: @Model.roleid },
+            data: { accounttype: accounttype, roleid: @Model.roleid },
             type: 'GET',
             success: function (data) {
                 console.log(data);
@@ -73,7 +73,7 @@
         });
         $.ajax({
             url: '/AdminArea/AccessTab/GetRemainingMenusByRole',
-            data: { accounttype: @Model.accounttype, roleid: @Model.roleid },
+            data: { accounttype: accounttype, roleid: @Model.roleid },
             type: 'GET',
             success: function (data) {
                 console.log(data);

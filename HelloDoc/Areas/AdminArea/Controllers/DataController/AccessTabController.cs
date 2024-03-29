@@ -50,13 +50,23 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         [HttpGet]
         public List<Menu> GetSelectedMenusByRoleId(int accounttype, int roleid)
         {
-            return _role.GetMenusByRole(roleid).Where(x => x.Accounttype == accounttype).ToList();
+            var result = _role.GetMenusByRole(roleid).ToList();
+            if(accounttype != 0)
+            {
+                result = result.Where(x => x.Accounttype == accounttype).ToList();
+            }
+            return result;
         }
         [Area("AdminArea")]
         [HttpGet]
         public List<Menu> GetRemainingMenusByRole(int accounttype, int roleid)
         {
-            return _role.GetRemainingMenusByRole(roleid).Where(x => x.Accounttype == accounttype).ToList();
+            var result = _role.GetRemainingMenusByRole(roleid).ToList();
+            if(accounttype != 0)
+            {
+                result = result.Where(x=>x.Accounttype == accounttype).ToList();
+            }
+            return result;
         }
 
         [Area("AdminArea")]
