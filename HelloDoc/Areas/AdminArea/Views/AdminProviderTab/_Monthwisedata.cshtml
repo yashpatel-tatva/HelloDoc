@@ -46,47 +46,73 @@
         </thead>
         <tbody>
             @*<tr>
-                <td colspan=@days></td>
-                @for (int day= 1; day <= daysInMonth; day++)
+            <td colspan=@days></td>
+            @for (int day= 1; day <= daysInMonth; day++)
+            {
+                <td  style=" background : #efabd2;text-align : center">@day</td>
+                if ((day + (int)firstday.DayOfWeek) % 7 == 0)
                 {
-                    <td  style=" background : #efabd2;text-align : center">@day</td>
-                    if ((day + (int)firstday.DayOfWeek) % 7 == 0)
-                    {
-                        @:</tr><tr>
-                    }
+                    @:</tr><tr>
                 }
-            </tr>*@
+            }
+        </tr>*@
             @{
                 int day = 1;
+                int flag = 1;
             }
-            @while (day <= daysInMonth-7)
+            @while (day <= daysInMonth - 7)
             {
-                @if(day == 1)
+                @if (flag == 1)
                 {
                     <tr>
                         <td colspan="@days"></td>
                         @for (int curr = 1; curr <= 7 - days; curr++)
                         {
-                            <td  style=" background : #efabd2;text-align : center">@day</td>
+                            <td style=" background : #efabd2;text-align : center">@day</td>
+                            day = curr;
+                        }
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td colspan="@days"></td>
+                        @for (int curr = 1; curr <= 7 - days; curr++)
+                        {
+                            <td></td>
                             day = curr;
                         }
                     </tr>
+                    flag = 2;
                 }
                 else
                 {
                     <tr>
-                        @for(int curr = 1; curr <= 7; curr++)
+                        @for (int curr = 1; curr <= 7; curr++)
                         {
-                            <td  style=" background : #efabd2;text-align : center">@day</td>
+                            <td style=" background : #efabd2;text-align : center">@day</td>
                             day++;
                         }
+                    </tr>
+                    <tr>
+                        @for (int curr = 1; curr <= 7; curr++)
+                        {
+                            <td></td>
+                            day++;
+                        }
+                        <td></td>
                     </tr>
                 }
             }
             <tr>
-               @while (day <= daysInMonth)
+                @while (day <= daysInMonth)
                 {
                     <td style=" background : #efabd2;text-align : center">@day</td>
+                    day++;
+                }
+            </tr>
+            <tr>
+                @while (day <= daysInMonth)
+                {
+                    <td></td>
                     day++;
                 }
             </tr>

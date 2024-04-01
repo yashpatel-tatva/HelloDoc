@@ -146,6 +146,7 @@
             var str1 = "#" + endhr + "_" + phy;
             $(str).attr('colspan', diff);
             for (var i = starthr + 1; i < endhr; i++) {
+                console.log(i);
                 var tdtosdelete = "#" + i + "_" + phy;
                 $(tdtosdelete).remove();
             }
