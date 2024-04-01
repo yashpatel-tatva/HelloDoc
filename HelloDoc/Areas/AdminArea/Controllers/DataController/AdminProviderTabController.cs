@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Syncfusion.EJ2.Layouts;
 using System;
 using System.Collections;
+using System.Drawing;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace HelloDoc.Areas.AdminArea.Controllers.DataController
@@ -303,8 +304,8 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             if (shift.Weekdays == null)
             {
                 bool IsValid = false;
-                var shiftdetailexistdata = _db.Shiftdetails.Include(x => x.Shift).Where(x => x.Shift.Physicianid == model.physician);
-                if (shiftdetailexistdata != null)
+                var shiftdetailexistdata = _db.Shiftdetails.Include(x => x.Shift).Where(x => x.Shift.Physicianid == model.physician).ToList();
+                if (shiftdetailexistdata.Count() != 0)
                 {
                     foreach (var item in shiftdetailexistdata)
                     {
@@ -352,18 +353,21 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
                 var IsValid = false;
                 StartTimewithdate = new DateTime(currentDate.Year, currentDate.Month, currentDate.Day, startTime.Hours, startTime.Minutes, 0);
                 EndTimewithdate = new DateTime(currentDate.Year, currentDate.Month, currentDate.Day, endTime.Hours, endTime.Minutes, 0);
-                var shiftdetailexistdata = _db.Shiftdetails.Include(x => x.Shift).Where(x => x.Shift.Physicianid == model.physician).FirstOrDefault(x => x.Shiftdate == currentDate);
-                if (shiftdetailexistdata != null)
+                var shiftdetailexistdata = _db.Shiftdetails.Include(x => x.Shift).Where(x => x.Shift.Physicianid == model.physician).Where(x => x.Shiftdate == currentDate);
+                if (shiftdetailexistdata.Count() != 0)
                 {
-                    if ((shiftdetailexistdata.Starttime > StartTimewithdate && shiftdetailexistdata.Starttime > EndTimewithdate) || (shiftdetailexistdata.Endtime < StartTimewithdate && shiftdetailexistdata.Endtime < EndTimewithdate))
+                    foreach (var s in shiftdetailexistdata)
                     {
-                        IsValid = true;
-                    }
-                    else
-                    {
-                        shownmsg = false;
-                        currentDate = currentDate.AddDays(1);
-                        continue;
+                        if ((s.Starttime > StartTimewithdate && s.Starttime > EndTimewithdate) || (s.Endtime < StartTimewithdate && s.Endtime < EndTimewithdate))
+                        {
+                            IsValid = true;
+                        }
+                        else
+                        {
+                            shownmsg = false;
+                            currentDate = currentDate.AddDays(1);
+                            continue;
+                        }
                     }
                 }
                 else
@@ -406,7 +410,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
                 TempData["Message"] = "Some Shifts  can not be created due to overlaping of time ";
             }
             var datetoshow = new DateTime(shift.Startdate.Year, shift.Startdate.Month, shift.Startdate.Day);
-            return RedirectToAction("DayWiseData", new { datetoshow });
+            return RedirectToAction(model.format, new { datetoshow });
         }
 
 
@@ -440,54 +444,9 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         }
 
         [Area("AdminArea")]
-        [HttpPost]
-        public IActionResult GetSchedulerData(int regionid)
+        public IActionResult CreateShiftPopUp(string format)
         {
-            SchedulingDataViewModel schedulingDataViewModel = new SchedulingDataViewModel();
-            List<PhysicianData> physicianDatas = new List<PhysicianData>();
-            var phy = _physician.GetAll().Where(x => x.Isdeleted[0] == false);
-            var shiftdetail = _shiftDetail.GetAll().Where(x => x.Isdeleted[0] == false);
-            if (regionid != 0)
-            {
-                shiftdetail = shiftdetail.Where(x => x.Regionid == regionid);
-            }
-
-            foreach (var item in phy)
-            {
-                physicianDatas.Add(new PhysicianData { Physicianid = item.Physicianid, Physicianname = item.Firstname + " " + item.Lastname, Photo = item.Photo /*, color = regioncolormap((int)item.Regionid)*/ });
-            }
-
-            List<ShiftData> shiftDatas = new List<ShiftData>();
-            //DateOnly currentday = DateOnly.FromDateTime(currentDate);
-            //.Where(x => x.Shiftdate == currentday);
-            foreach (var item in shiftdetail)
-            {
-                shiftDatas.Add(new ShiftData
-                {
-                    ShiftId = item.Shiftdetailid,
-                    Location = _db.Regions.FirstOrDefault(x => x.Regionid == item.Regionid).Name,
-                    Description = "Hii",
-                    StartTime = item.Starttime,
-                    EndTime = item.Endtime,
-                    Physicianid = _shift.GetFirstOrDefault(x => x.Shiftid == item.Shiftid).Physicianid,
-                    cssClass = regioncolormap((int)item.Regionid)
-                });
-
-            }
-
-            schedulingDataViewModel.physicianDatas = physicianDatas;
-            schedulingDataViewModel.Shifts = shiftDatas;
-
-            string[] resources = new string[] { "MeetingRoom" };
-            ViewBag.ResourceNames = resources;
-            return PartialView("_ScheduleData", schedulingDataViewModel);
-        }
-
-
-        [Area("AdminArea")]
-        public IActionResult CreateShiftPopUp()
-        {
-            return PartialView("_CreateShiftPopUp");
+            return PartialView("_CreateShiftPopUp", new { format });
         }
 
         //[Area("AdminArea")]
@@ -504,7 +463,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
 
         [Area("AdminArea")]
         //[HttpPost]
-        public IActionResult DayWiseData(DateTime datetoshow)
+        public IActionResult DayWiseData(DateTime datetoshow, int region, int status)
         {
             SchedulingDataViewModel schedulingDataViewModel = new SchedulingDataViewModel();
             List<PhysicianData> physicianDatas = new List<PhysicianData>();
@@ -518,17 +477,25 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             List<ShiftData> shiftDatas = new List<ShiftData>();
             DateOnly currentday = DateOnly.FromDateTime(datetoshow);
             var shiftdetail = _shiftDetail.GetAll().Where(x => x.Isdeleted[0] == false).Where(x => x.Shiftdate == currentday);
+            if (region != 0)
+            {
+                shiftdetail = shiftdetail.Where(x => x.Regionid == region);
+            }
+            if (status != 0)
+            {
+                shiftdetail = shiftdetail.Where(x => x.Status == status);
+            }
             foreach (var item in shiftdetail)
             {
                 shiftDatas.Add(new ShiftData
                 {
                     ShiftId = item.Shiftdetailid,
-                    Location =item.Regionid.ToString(),
+                    Location = item.Regionid.ToString(),
                     Description = "Hii",
                     StartTime = item.Starttime,
                     EndTime = item.Endtime,
                     Physicianid = _shift.GetFirstOrDefault(x => x.Shiftid == item.Shiftid).Physicianid,
-                    Status = _shiftDetail.GetFirstOrDefault(x=>x.Shiftdetailid == item.Shiftdetailid).Status ,
+                    Status = _shiftDetail.GetFirstOrDefault(x => x.Shiftdetailid == item.Shiftdetailid).Status,
                 });
             }
             schedulingDataViewModel.Shifts = shiftDatas;
@@ -539,24 +506,123 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             return PartialView("_Daywisedata", schedulingDataViewModel);
         }
         [Area("AdminArea")]
-        [HttpPost]
-        public IActionResult WeekWiseData(DateTime currentDate)
+        //[HttpPost]
+        public IActionResult WeekWiseData(DateTime datetoshow, int region, int status)
         {
-            return PartialView("_Weekwisedata");
+            SchedulingDataViewModel schedulingDataViewModel = new SchedulingDataViewModel();
+            List<PhysicianData> physicianDatas = new List<PhysicianData>();
+            var phy = _physician.GetAll().Where(x => x.Isdeleted[0] == false);
+            foreach (var item in phy)
+            {
+                physicianDatas.Add(new PhysicianData { Physicianid = item.Physicianid, Physicianname = item.Firstname + " " + item.Lastname, Photo = item.Photo });
+            }
+            schedulingDataViewModel.physicianDatas = physicianDatas;
+
+            List<ShiftData> shiftDatas = new List<ShiftData>();
+            DateOnly currentday = DateOnly.FromDateTime(datetoshow);
+            int daysFromSunday = (int)currentday.DayOfWeek;
+            int daysUntilSaturday = ((int)DayOfWeek.Saturday - (int)currentday.DayOfWeek + 7) % 7;
+
+            DateOnly sunday = currentday.AddDays(-daysFromSunday);
+            DateOnly saturday = currentday.AddDays(daysUntilSaturday);
+
+            var shiftdetail = _shiftDetail.GetAll()
+                .Where(x => x.Isdeleted[0] == false)
+                .Where(x => x.Shiftdate >= sunday && x.Shiftdate <= saturday);
+
+
+            if (region != 0)
+            {
+                shiftdetail = shiftdetail.Where(x => x.Regionid == region);
+            }
+            if (status != 0)
+            {
+                shiftdetail = shiftdetail.Where(x => x.Status == status);
+            }
+            foreach (var item in shiftdetail)
+            {
+                shiftDatas.Add(new ShiftData
+                {
+                    ShiftId = item.Shiftdetailid,
+                    Location = item.Regionid.ToString(),
+                    Description = "Hii",
+                    StartTime = item.Starttime,
+                    EndTime = item.Endtime,
+                    Physicianid = _shift.GetFirstOrDefault(x => x.Shiftid == item.Shiftid).Physicianid,
+                    Status = _shiftDetail.GetFirstOrDefault(x => x.Shiftdetailid == item.Shiftdetailid).Status,
+                });
+            }
+            schedulingDataViewModel.Shifts = shiftDatas.OrderBy(x => x.StartTime).ToList();
+            List<int> weekdate = new List<int>();
+            var firstday = sunday;
+            for (int i = 0; i < 7; i++)
+            {
+                weekdate.Add(firstday.Day);
+                firstday = firstday.AddDays(1);
+            }
+            schedulingDataViewModel.WeekDates = weekdate;
+            string[] resources = new string[] { "MeetingRoom" };
+            ViewBag.ResourceNames = resources;
+
+            return PartialView("_Weekwisedata", schedulingDataViewModel);
         }
         [Area("AdminArea")]
         [HttpPost]
-        public IActionResult MonthWiseData(DateTime currentDate)
+        public IActionResult MonthWiseData(DateTime datetoshow, int region, int status)
         {
-            return PartialView("_Monthwisedata");
+            SchedulingDataViewModel schedulingDataViewModel = new SchedulingDataViewModel();
+            List<PhysicianData> physicianDatas = new List<PhysicianData>();
+            var phy = _physician.GetAll().Where(x => x.Isdeleted[0] == false);
+            foreach (var item in phy)
+            {
+                physicianDatas.Add(new PhysicianData { Physicianid = item.Physicianid, Physicianname = item.Firstname + " " + item.Lastname, Photo = item.Photo });
+            }
+            schedulingDataViewModel.physicianDatas = physicianDatas;
+
+            List<ShiftData> shiftDatas = new List<ShiftData>();
+            DateOnly currentday = DateOnly.FromDateTime(datetoshow);
+
+            DateOnly firstDayOfMonth = new DateOnly(currentday.Year, currentday.Month, 1);
+            DateOnly lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
+
+            var shiftdetail = _shiftDetail.GetAll()
+                .Where(x => x.Isdeleted[0] == false)
+                .Where(x => x.Shiftdate >= firstDayOfMonth && x.Shiftdate <= lastDayOfMonth);
+
+
+
+            if (region != 0)
+            {
+                shiftdetail = shiftdetail.Where(x => x.Regionid == region);
+            }
+            if (status != 0)
+            {
+                shiftdetail = shiftdetail.Where(x => x.Status == status);
+            }
+            foreach (var item in shiftdetail)
+            {
+                shiftDatas.Add(new ShiftData
+                {
+                    ShiftId = item.Shiftdetailid,
+                    Location = item.Regionid.ToString(),
+                    Description = "Hii",
+                    StartTime = item.Starttime,
+                    EndTime = item.Endtime,
+                    Physicianid = _shift.GetFirstOrDefault(x => x.Shiftid == item.Shiftid).Physicianid,
+                    Status = _shiftDetail.GetFirstOrDefault(x => x.Shiftdetailid == item.Shiftdetailid).Status,
+                });
+            }
+            schedulingDataViewModel.Shifts = shiftDatas.OrderBy(x => x.StartTime).ToList();
+            schedulingDataViewModel.Monthdate = firstDayOfMonth; 
+            return PartialView("_Monthwisedata", schedulingDataViewModel);
         }
 
 
         [Area("AdminArea")]
         [HttpPost]
-        public IActionResult ViewShiftPopUp(int ShiftDetailId)
+        public IActionResult ViewShiftPopUp(int ShiftDetailId, string format)
         {
-            var shiftdetail = _db.Shiftdetails.Include(x=>x.Shift).Include(x=>x.Shiftdetailregions).FirstOrDefault(x=>x.Shiftdetailid == ShiftDetailId);
+            var shiftdetail = _db.Shiftdetails.Include(x => x.Shift).Include(x => x.Shiftdetailregions).FirstOrDefault(x => x.Shiftdetailid == ShiftDetailId);
             ShiftData model = new ShiftData();
             model.ShiftId = ShiftDetailId;
             model.Physicianid = shiftdetail.Shift.Physicianid;
@@ -564,17 +630,28 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             model.Shiftdate = shiftdetail.Shiftdate;
             model.StartTime = shiftdetail.Starttime;
             model.EndTime = shiftdetail.Endtime;
-            return PartialView("_ViewShiftPopUp"  , model);
+            model.format = format;
+            return PartialView("_ViewShiftPopUp", model);
         }
-        
+
         [Area("AdminArea")]
         [HttpPost]
-        public IActionResult DeleteShift(int shiftdetailid)
+        public IActionResult DeleteShift(int shiftdetailid, string format)
         {
-            var date = _shiftDetail.GetFirstOrDefault(x=>x.Shiftdetailid==shiftdetailid).Shiftdate;
+            var date = _shiftDetail.GetFirstOrDefault(x => x.Shiftdetailid == shiftdetailid).Shiftdate;
             var datetoshow = new DateTime(date.Year, date.Month, date.Day);
             _shiftDetail.DeleteThisShift(shiftdetailid);
-            return RedirectToAction("DayWiseData", new { datetoshow });
+            return RedirectToAction(format, new { datetoshow });
+        }
+
+        [Area("AdminArea")]
+        [HttpPost]
+        public IActionResult RetuenShift(int shiftdetailid, string format)
+        {
+            var date = _shiftDetail.GetFirstOrDefault(x => x.Shiftdetailid == shiftdetailid).Shiftdate;
+            var datetoshow = new DateTime(date.Year, date.Month, date.Day);
+            _shiftDetail.ReturnThisShift(shiftdetailid);
+            return RedirectToAction(format, new { datetoshow });
         }
 
 

@@ -15,7 +15,8 @@
 
 
 
-
+var status = 0;
+var region = 0;
 
 
 
@@ -36,8 +37,11 @@ $.ajax({
 });
 
 $('#createnewshift').on('click', function () {
+    var format = $('input[name="showby"]:checked').attr('id');
+    console.log(format);
     $.ajax({
         url: '/AdminArea/AdminProviderTab/CreateShiftPopUp',
+        data: {format},
         success: function (result) {
             $('#PopUps').html(result);
             var my = new bootstrap.Modal(document.getElementById('ModalToOpen'));
@@ -45,29 +49,30 @@ $('#createnewshift').on('click', function () {
         },
     });
 });
-function getfromregion(regionid) {
-    $.ajax({
-        url: '/AdminArea/AdminProviderTab/GetSchedulerData',
-        data: { regionid: regionid },
-        type: 'POST',
-        success: function (response) {
-            $('#SchedulerData').html(response);
-        }
-    });
-}
-getfromregion($('.drawbyregiondropdown').val());
+
 $('.drawbyregiondropdown').on('change', function () {
-    getfromregion($('.drawbyregiondropdown').val());
+    region = $('.drawbyregiondropdown').val();
+    GetData(showby, currentDate, region, status);
 });
 
+$('input[name="shiftstatus"]').on('click', function () {
+    if (status == $(this).val()) {
+        status = 0;
+        $(this).prop('checked' , false);
+    }
+    else {
+        status = $(this).val();
+    }
+    GetData(showby, currentDate, region, status);
+});
 
 var currentDate = new Date();
 var showby = $('input[name="showby"]:checked').attr('id');
-GetData(showby, currentDate);
+GetData(showby, currentDate, region, status);
 
 $('input[name="showby"]').on('change', function () {
     showby = $('input[name="showby"]:checked').attr('id');
-    GetData(showby, currentDate);
+    GetData(showby, currentDate, region, status);
 })
 function updateText() {
     var textElement = document.getElementById('timesheet');
@@ -94,7 +99,7 @@ $('#previousbtn').on('click', function () {
     } else if (showby == "MonthWiseData") {
         currentDate.setMonth(currentDate.getMonth() - 1);
     }
-    GetData(showby, currentDate);
+    GetData(showby, currentDate, region, status);
 });
 $('#nextbtn').on('click', function () {
     if (showby == "DayWiseData") {
@@ -104,19 +109,18 @@ $('#nextbtn').on('click', function () {
     } else if (showby == "MonthWiseData") {
         currentDate.setMonth(currentDate.getMonth() + 1);
     }
-    GetData(showby, currentDate);
+    GetData(showby, currentDate, region, status);
 });
 
 
 $('#selectday').on('change', function () {
     var selectedDate = new Date($('#selectday').val());
     currentDate = selectedDate;
-    console.log(currentDate);
-    GetData(showby, currentDate);
+    GetData(showby, currentDate, region, status);
 });
 
 
-function GetData(showby, currentDate) {
+function GetData(showby, currentDate, region, status) {
     if (showby == "DayWiseData") {
         $('#selectday').attr('type', 'date');
     } else if (showby == "WeekWiseData") {
@@ -126,7 +130,7 @@ function GetData(showby, currentDate) {
     }
     $.ajax({
         url: '/AdminArea/AdminProviderTab/' + showby,
-        data: { currentDate: currentDate.toISOString() },
+        data: { datetoshow: currentDate.toISOString(), region: region, status: status },
         type: 'POST',
         success: function (response) {
             updateText();
@@ -135,7 +139,7 @@ function GetData(showby, currentDate) {
     });
 }
 
-        ///////////
+///////////
 
 $('.events').on('click', function () {
     console.log($(this).data('id'));

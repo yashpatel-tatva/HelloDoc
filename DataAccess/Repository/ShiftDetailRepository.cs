@@ -17,12 +17,30 @@ namespace DataAccess.Repository
 
         public void DeleteThisShift(int shiftdetailid)
         {
-            var shift = GetFirstOrDefault(x=>x.Shiftdetailid == shiftdetailid);
+            var shift = GetFirstOrDefault(x => x.Shiftdetailid == shiftdetailid);
             if (shift != null)
             {
                 BitArray fortrue = new BitArray(1);
                 fortrue[0] = true;
                 shift.Isdeleted = fortrue;
+                _db.Update(shift);
+                _db.SaveChanges();
+            }
+        }
+
+        public void ReturnThisShift(int shiftdetailid)
+        {
+            var shift = GetFirstOrDefault(x => x.Shiftdetailid == shiftdetailid);
+            if (shift != null)
+            {
+                if (shift.Status == 1)
+                {
+                    shift.Status = 2;
+                }
+                else if (shift.Status == 2)
+                {
+                    shift.Status = 1;
+                }
                 _db.Update(shift);
                 _db.SaveChanges();
             }

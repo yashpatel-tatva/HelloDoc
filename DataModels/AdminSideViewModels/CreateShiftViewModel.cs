@@ -16,5 +16,6 @@ namespace DataModels.AdminSideViewModels
         public bool repeatonoff {get ; set ; }
         public List<string> repeatdays {get ; set ; }
         public int repeattimes { get; set; }
+        public string format { get ; set ; }
     }
 }

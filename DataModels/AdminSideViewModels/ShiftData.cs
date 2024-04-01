@@ -10,7 +10,7 @@
         public DateTime EndTime { get; set; }
         public int Physicianid { get; set; }
         public string cssClass { get; set; }
-
+        public string format { get; set; }
         public int Status { get; set; }
 
     }

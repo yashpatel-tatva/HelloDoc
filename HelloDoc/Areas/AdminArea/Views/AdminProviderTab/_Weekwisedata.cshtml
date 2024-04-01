@@ -1,4 +1,97 @@
 ﻿@{
     Layout = "_SchedulerLayout";
 }
-<h3>Week</h3>
+
+@using DataModels.AdminSideViewModels
+@model SchedulingDataViewModel
+
+
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th, td {
+        border: 1px solid #dee2e6;
+        padding: 8px;
+        text-align: left;
+    }
+
+    .events {
+        padding: 6px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        font-size : small;
+        margin : 1px
+    }
+</style>
+<div>
+    <table class="w-100 border-1">
+        <thead style="background: rgb(145 145 145) ; color : white !important ; text-align : center">
+            <tr>
+                <th style="width : 23%; text-align : center">STAFF</th>
+                <th style="width : 11%; text-align : center">SUN @Model.WeekDates[0]</th>
+                <th style="width : 11%; text-align : center">MON @Model.WeekDates[1]</th>
+                <th style="width : 11%; text-align : center">TUE @Model.WeekDates[2]</th>
+                <th style="width : 11%; text-align : center">WED @Model.WeekDates[3]</th>
+                <th style="width : 11%; text-align : center">THU @Model.WeekDates[4]</th>
+                <th style="width : 11%; text-align : center">FRI @Model.WeekDates[5]</th>
+                <th style="width : 11%; text-align : center">SAT @Model.WeekDates[6]</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th style="width : 23% ; text-align : center">Coverage</th>
+                <th style="width : 11% ; background : #efabd2; text-align : center">0/24</th>
+                <th style="width : 11% ; background : #efabd2; text-align : center">0/24</th>
+                <th style="width : 11% ; background : #efabd2; text-align : center">0/24</th>
+                <th style="width : 11% ; background : #efabd2; text-align : center">0/24</th>
+                <th style="width : 11% ; background : #efabd2; text-align : center">0/24</th>
+                <th style="width : 11% ; background : #efabd2; text-align : center">0/24</th>
+                <th style="width : 11% ; background : #efabd2; text-align : center">0/24</th>
+            </tr>
+            @foreach (var item in Model.physicianDatas)
+            {
+                <tr>
+                    <td>
+                        <img src="@item.Photo" width="10%">
+                        @item.Physicianname
+                    </td>
+                    <td id="@Model.WeekDates[0]_@item.Physicianid" class="time weekphysician_@item.Physicianid"></td>
+                    <td id="@Model.WeekDates[1]_@item.Physicianid" class="time weekphysician_@item.Physicianid"></td>
+                    <td id="@Model.WeekDates[2]_@item.Physicianid" class="time weekphysician_@item.Physicianid"></td>
+                    <td id="@Model.WeekDates[3]_@item.Physicianid" class="time weekphysician_@item.Physicianid"></td>
+                    <td id="@Model.WeekDates[4]_@item.Physicianid" class="time weekphysician_@item.Physicianid"></td>
+                    <td id="@Model.WeekDates[5]_@item.Physicianid" class="time weekphysician_@item.Physicianid"></td>
+                    <td id="@Model.WeekDates[6]_@item.Physicianid" class="time weekphysician_@item.Physicianid"></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+@foreach (var item in Model.physicianDatas)
+{
+    @foreach (var shift in Model.Shifts.Where(s => s.Physicianid == item.Physicianid))
+    {
+        <script>
+            var shiftdate = @shift.StartTime.ToString("dd");
+            var timeslot = shiftdate + "_" + @shift.Physicianid;
+            var color = "";
+            if (@shift.Status == 1) {
+                color = "#efabd2";
+            }
+            if (@shift.Status == 2) {
+                color = "#a5cea4";
+            }
+            $('#' + timeslot).css("padding", "0px")
+            $('#' + timeslot).append('<div class="events" id="event_@shift.ShiftId" data-id="@shift.ShiftId" data-url="WeekWiseData">@shift.StartTime.ToString("hh:mm tt") - @shift.EndTime.ToString("hh:mm tt")</div>');
+            $('#event_@shift.ShiftId').css("background-color", color);
+        </script>
+    }
+
+}
+
+<script src="~/js/Events.js" asp-append-version="true"></script>

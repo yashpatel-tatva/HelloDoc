@@ -17,12 +17,20 @@
         padding: 8px;
         text-align: left;
     }
+    .events{
+        padding: 6px;
+        display : flex ;
+        justify-content : center ;
+        align-items : center ;
+        height : 100%;
+        text-wrap : nowrap;
+    }
 </style>
 <div>
     <table class="w-100 border-1">
         <thead style="background: rgb(145 145 145) ; color : white !important">
             <tr>
-                <th style="width : 28%">STAFF</th>
+                <th style="width : 28%; text-align : center">STAFF</th>
                 <th style="width : 3%">12A</th>
                 <th style="width : 3%">1A</th>
                 <th style="width : 3%">2A</th>
@@ -51,7 +59,7 @@
         </thead>
         <tbody>
             <tr>
-                <th style="width : 28%">Coverage</th>
+                <th style="width : 28%; text-align : center">Coverage</th>
                 <th style="width : 3% ; background : #efabd2"></th>
                 <th style="width : 3% ; background : #efabd2"></th>
                 <th style="width : 3% ; background : #efabd2"></th>
@@ -129,26 +137,42 @@
             var starthr = @shift.StartTime.ToString("HH");
             var endhr = @shift.EndTime.ToString("HH");
             var diff = (parseInt(endhr) - parseInt(starthr))
-            if(@shift.EndTime.Minute > 0 ){
-                diff = diff + 1 ;
+            if (@shift.EndTime.Minute > 0) {
+                diff = diff + 1;
+                endhr = endhr + 1;
             }
             var phy = @item.Physicianid;
-            var str = "#"+starthr+"_"+phy;
-            var str1 = "#"+endhr+"_"+phy;
-            $(str).attr('colspan' , diff);
-            for(var i=starthr+1 ; i<endhr ; i++){
-                var tdtosdelete =  "#"+i+"_"+phy;
+            var str = "#" + starthr + "_" + phy;
+            var str1 = "#" + endhr + "_" + phy;
+            $(str).attr('colspan', diff);
+            for (var i = starthr + 1; i < endhr; i++) {
+                var tdtosdelete = "#" + i + "_" + phy;
                 $(tdtosdelete).remove();
             }
             var color = "";
-            if(@shift.Status == 1){
+            if (@shift.Status == 1) {
                 color = "#efabd2";
             }
-            if(@shift.Status == 2){
+            if (@shift.Status == 2) {
                 color = "#a5cea4";
             }
-            $(str).html('<div class="events" data-id="@shift.ShiftId">@shift.StartTime.ToString("hh:mm tt") - @shift.EndTime.ToString("hh:mm tt")</div>');
-            $(str).css("background-color", color); 
+            var pl = 0;
+            var pr = 0;
+            if (@shift.StartTime.Minute > 0) {
+                pl = (10 * @shift.StartTime.Minute);
+                pl = pl / 6 ;
+                pl = pl / diff ;
+            }
+            if (@shift.EndTime.Minute > 0) {
+                pr = (10 *(60 - @shift.EndTime.Minute));
+                pr = pr / 6;
+                pr = pr / diff;
+            }
+            $(str).css("padding" , "0px")
+            $(str).html('<div class="events" id="event_@shift.ShiftId" data-id="@shift.ShiftId" data-url="DayWiseData">@shift.StartTime.ToString("hh:mm tt") - @shift.EndTime.ToString("hh:mm tt")</div>');
+            $('#event_@shift.ShiftId').css("background-color", color);
+            $('#event_@shift.ShiftId').css("margin-left", pl + "%");
+            $('#event_@shift.ShiftId').css("margin-right", pr + "%");
         </script>
     }
 }

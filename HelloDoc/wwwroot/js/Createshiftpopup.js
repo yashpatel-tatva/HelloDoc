@@ -121,6 +121,7 @@ $('#Createconfirmbutton').on('click', function () {
     var endtime = $('#endTime').val();
     var repeatonoff = $('#repeatonoff').prop('checked');
     var repeatdays = [];
+    var format = $('#format').val();
     $('input[name="repeatdays"]:checked').each(function () {
         repeatdays.push($(this).val());
     });
@@ -161,7 +162,8 @@ $('#Createconfirmbutton').on('click', function () {
             endtime : endtime,
             repeatonoff : repeatonoff,
             repeatdays : repeatdays,
-            repeattimes : repeattimes
+            repeattimes: repeattimes,
+            format : format
         }
         console.log(model);
         $.ajax({

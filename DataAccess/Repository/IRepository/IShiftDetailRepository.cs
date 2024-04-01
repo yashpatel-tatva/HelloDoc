@@ -10,5 +10,6 @@ namespace DataAccess.Repository.IRepository
     public interface IShiftDetailRepository : IRepository<Shiftdetail>
     {
         void DeleteThisShift(int shiftdetailid);
+        void ReturnThisShift(int shiftdetailid);
     }
 }

@@ -104,13 +104,14 @@
         });
     });
 
-
+    var format = "@Model.format";
+    console.log(format);
 
     $('#ViewShiftDeleteBtn').on('click' , function(){
         var shiftdetailid = $(this).data('id');
         $.ajax({
             url: '/AdminArea/AdminProviderTab/DeleteShift' ,
-            data : {shiftdetailid} ,
+            data : {shiftdetailid , format} ,
             type : 'POST' ,
             success : function(response){
                 $('#timewisedata').html(response);
@@ -118,6 +119,26 @@
                     position: "top-end",
                     icon: "success",
                     title: "Shift Deleted",
+                    showConfirmButton: false,
+                    timer: 1000
+                });
+                $('.closeModel').trigger('click');
+            }
+        });
+    });
+    
+    $('#ViewShiftReturnBtn').on('click', function () {
+        var shiftdetailid = $(this).data('id');
+        $.ajax({
+            url: '/AdminArea/AdminProviderTab/RetuenShift' ,
+            data : {shiftdetailid , format} ,
+            type : 'POST' ,
+            success : function(response){
+                $('#timewisedata').html(response);
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "Shift Returned",
                     showConfirmButton: false,
                     timer: 1000
                 });

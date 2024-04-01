@@ -9,6 +9,7 @@
             </div>
             <div class="modal-body">
                 <form method="Post">
+                    <input type="hidden" value="@Model.format" id="format"/>
                     <div class="did-floating-label-content my-3 form-group d-flex align-items-center rounded">
                         <select class="form-select form-select-lg fs-6 form-control drawbyregiondrop did-floating-select" onclick="this.setAttribute('value', this.value);" onchange="this.setAttribute('value', this.value);" value="" aria-label=".form-select-lg example">
                             <option value=""></option>
