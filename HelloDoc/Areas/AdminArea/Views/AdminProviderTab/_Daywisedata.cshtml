@@ -17,13 +17,14 @@
         padding: 8px;
         text-align: left;
     }
-    .events{
+
+    .events {
         padding: 6px;
-        display : flex ;
-        justify-content : center ;
-        align-items : center ;
-        height : 100%;
-        text-wrap : nowrap;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        font-size: small;
     }
 </style>
 <div>
@@ -112,7 +113,7 @@
                     <td id="17_@item.Physicianid" class="time physician_@item.Physicianid"></td>
                     <td id="18_@item.Physicianid" class="time physician_@item.Physicianid"></td>
                     <td id="19_@item.Physicianid" class="time physician_@item.Physicianid"></td>
-                    <td id="10_@item.Physicianid" class="time physician_@item.Physicianid"></td>
+                    <td id="20_@item.Physicianid" class="time physician_@item.Physicianid"></td>
                     <td id="21_@item.Physicianid" class="time physician_@item.Physicianid"></td>
                     <td id="22_@item.Physicianid" class="time physician_@item.Physicianid"></td>
                     <td id="23_@item.Physicianid" class="time physician_@item.Physicianid"></td>
@@ -146,8 +147,8 @@
             var str1 = "#" + endhr + "_" + phy;
             $(str).attr('colspan', diff);
             for (var i = starthr + 1; i < endhr; i++) {
-                console.log(i);
                 var tdtosdelete = "#" + i + "_" + phy;
+                console.log(tdtosdelete);
                 $(tdtosdelete).remove();
             }
             var color = "";
@@ -161,15 +162,15 @@
             var pr = 0;
             if (@shift.StartTime.Minute > 0) {
                 pl = (10 * @shift.StartTime.Minute);
-                pl = pl / 6 ;
-                pl = pl / diff ;
+                pl = pl / 6;
+                pl = pl / diff;
             }
             if (@shift.EndTime.Minute > 0) {
-                pr = (10 *(60 - @shift.EndTime.Minute));
+                pr = (10 * (60 - @shift.EndTime.Minute));
                 pr = pr / 6;
                 pr = pr / diff;
             }
-            $(str).css("padding" , "0px")
+            $(str).css("padding", "0px")
             $(str).html('<div class="events" id="event_@shift.ShiftId" data-id="@shift.ShiftId" data-url="DayWiseData">@shift.StartTime.ToString("hh:mm tt") - @shift.EndTime.ToString("hh:mm tt")</div>');
             $('#event_@shift.ShiftId').css("background-color", color);
             $('#event_@shift.ShiftId').css("margin-left", pl + "%");

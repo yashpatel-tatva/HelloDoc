@@ -27,15 +27,26 @@
     }
 </style>
 @{
-    var firstday = Model.Monthdate;
-    var days = (int)firstday.DayOfWeek;
-    int daysInMonth = DateTime.DaysInMonth(firstday.Year, firstday.Month);
+    var firstdate = Model.Monthdate;
+    var daysleft = (int)firstdate.DayOfWeek;
+    int daysInMonth = DateTime.DaysInMonth(firstdate.Year, firstdate.Month);
+    var firstDay = new DateTime(firstdate.Year, firstdate.Month, 1).DayOfWeek;
+    int x = 5;
+    if (firstDay.ToString() == "Saturday")
+    {
+        x = 6;
+    }
+    if (daysInMonth == 28 && firstDay.ToString() == "Sunday")
+    {
+        x = 4;
+    }
+    var date = 1;
 }
 <div>
     <table class="w-100 border-1">
         <thead style="background: rgb(145 145 145) ; color : white !important ; text-align : center">
             <tr>
-                <th style="width : 14.28%; text-align : center">SUN</th>  
+                <th style="width : 14.28%; text-align : center">SUN</th>
                 <th style="width : 14.28%; text-align : center">MON</th>
                 <th style="width : 14.28%; text-align : center">TUE</th>
                 <th style="width : 14.28%; text-align : center">WED</th>
@@ -49,42 +60,76 @@
             <td colspan=@days></td>
             @for (int day= 1; day <= daysInMonth; day++)
             {
-                <td  style=" background : #efabd2;text-align : center">@day</td>
-                if ((day + (int)firstday.DayOfWeek) % 7 == 0)
-                {
-                    @:</tr><tr>
-                }
+            <td  style=" background : #efabd2;text-align : center">@day</td>
+            if ((day + (int)firstdate.DayOfWeek) % 7 == 0)
+            {
+            @:</tr><tr>
             }
-        </tr>*@
+            }
+            </tr>*@
             @{
                 int day = 1;
                 int flag = 1;
+                int tempt = day;
             }
             @while (day <= daysInMonth - 7)
             {
                 @if (flag == 1)
                 {
                     <tr>
-                        <td colspan="@days"></td>
-                        @for (int curr = 1; curr <= 7 - days; curr++)
+                        @if (daysleft != 0)
+                        {
+                            <td colspan="@daysleft"></td>
+                        }
+                        @for (int curr = 1; curr <= 7 - daysleft; curr++)
                         {
                             <td style=" background : #efabd2;text-align : center">@day</td>
-                            day = curr;
+                            day++;
                         }
-                        <td></td>
                     </tr>
+                    tempt = 1;
                     <tr>
-                        <td colspan="@days"></td>
-                        @for (int curr = 1; curr <= 7 - days; curr++)
+                        @if (daysleft != 0)
                         {
-                            <td></td>
-                            day = curr;
+                            <td colspan="@daysleft"></td>
+                        }
+                        @for (int curr = 1; curr <= 7 - daysleft; curr++)
+                        {
+                            <td id="loadprevdate_@tempt"></td>
+                            tempt++;
                         }
                     </tr>
+                    tempt = 1;
+                    <tr>
+                        @if (daysleft != 0)
+                        {
+                            <td colspan="@daysleft"></td>
+                        }
+                        @for (int curr = 1; curr <= 7 - daysleft; curr++)
+                        {
+                            <td id="date_@tempt"></td>
+                            tempt++;
+                        }
+                    </tr>
+                    tempt = 1;
+                    <tr>
+                        @if (daysleft != 0)
+                        {
+                            <td colspan="@daysleft"></td>
+                        }
+                        @for (int curr = 1; curr <= 7 - daysleft; curr++)
+                        {
+                            <td id="loadnextdate_@tempt"></td>
+                            tempt++;
+                        }
+                    </tr>
+
                     flag = 2;
                 }
                 else
                 {
+                    tempt = day;
+                    var tempt2 = tempt;
                     <tr>
                         @for (int curr = 1; curr <= 7; curr++)
                         {
@@ -95,12 +140,30 @@
                     <tr>
                         @for (int curr = 1; curr <= 7; curr++)
                         {
-                            <td></td>
-                            day++;
+                            <td id="loadprevdate_@tempt"></td>
+                            tempt++;
                         }
-                        <td></td>
+                    </tr>
+                    tempt = tempt2;
+                    <tr>
+                        @for (int curr = 1; curr <= 7; curr++)
+                        {
+                            <td id="date_@tempt"></td>
+                            tempt++;
+                        }
+                    </tr>
+                    tempt = tempt2;
+                    <tr>
+                        @for (int curr = 1; curr <= 7; curr++)
+                        {
+                            <td id="loadnextdate_@tempt"></td>
+                            tempt++;
+                        }
                     </tr>
                 }
+            }
+            @{
+                tempt = day;
             }
             <tr>
                 @while (day <= daysInMonth)
@@ -109,13 +172,54 @@
                     day++;
                 }
             </tr>
+            @{
+                var tempt1 = tempt;
+            }
             <tr>
-                @while (day <= daysInMonth)
+                @while (tempt1 <= daysInMonth)
                 {
-                    <td></td>
-                    day++;
+                    <td id="date_@tempt1"></td>
+                    tempt1++;
+                }
+            </tr>
+            @{
+                tempt1 = tempt;
+            }
+            <tr>
+                @while (tempt1 <= daysInMonth)
+                {
+                    <td id="date_@tempt1"></td>
+                    tempt1++;
+                }
+            </tr>
+            @{
+                tempt1 = tempt;
+            }
+            <tr>
+                @while (tempt1 <= daysInMonth)
+                {
+                    <td id="date_@tempt1"></td>
+                    tempt1++;
                 }
             </tr>
         </tbody>
     </table>
 </div>
+@foreach (var shift in Model.Shifts)
+{
+    <script>
+        var shiftdate = @shift.StartTime.ToString("dd");
+        var timeslot = "date_" + shiftdate;
+        var color = "";
+        if (@shift.Status == 1) {
+            color = "#efabd2";
+        }
+        if (@shift.Status == 2) {
+            color = "#a5cea4";
+        }
+        $('#' + timeslot).css("padding", "0px")
+        $('#' + timeslot).append('<div class="events" id="event_@shift.ShiftId" data-id="@shift.ShiftId" data-url="MonthWiseData">@shift.StartTime.ToString("hh:mm tt") - @shift.EndTime.ToString("hh:mm tt")</div>');
+        $('#event_@shift.ShiftId').css("background-color", color);
+    </script>
+}
+<script src="~/js/Events.js" asp-append-version="true"></script>
