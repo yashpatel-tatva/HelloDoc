@@ -141,6 +141,13 @@ function GetData(showby, currentDate, region, status) {
 
 ///////////
 
-$('.events').on('click', function () {
-    console.log($(this).data('id'));
+$('#provideroncallbtn').on('click', function () {
+    $.ajax({
+        url: '/AdminArea/AdminProviderTab/ProviderOnCall',
+        data: { datetoshow: currentDate.toISOString(), region: region, showby: showby } ,
+        type : 'POST',
+        success: function (response) {
+            $('#nav-tabContent').html(response);
+        }
+    });
 })

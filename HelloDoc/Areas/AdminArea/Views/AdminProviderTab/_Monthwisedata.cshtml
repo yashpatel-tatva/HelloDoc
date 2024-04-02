@@ -26,23 +26,7 @@
         margin: 1px
     }
 </style>
-@{
-    var firstdate = Model.Monthdate;
-    var daysleft = (int)firstdate.DayOfWeek;
-    int daysInMonth = DateTime.DaysInMonth(firstdate.Year, firstdate.Month);
-    var firstDay = new DateTime(firstdate.Year, firstdate.Month, 1).DayOfWeek;
-    int x = 5;
-    if (firstDay.ToString() == "Saturday")
-    {
-        x = 6;
-    }
-    if (daysInMonth == 28 && firstDay.ToString() == "Sunday")
-    {
-        x = 4;
-    }
-    var date = 1;
-}
-<div>
+<div class="table-responsive bg-light shadow" id="content">
     <table class="w-100 border-1">
         <thead style="background: rgb(145 145 145) ; color : white !important ; text-align : center">
             <tr>
@@ -56,18 +40,10 @@
             </tr>
         </thead>
         <tbody>
-            @*<tr>
-            <td colspan=@days></td>
-            @for (int day= 1; day <= daysInMonth; day++)
-            {
-            <td  style=" background : #efabd2;text-align : center">@day</td>
-            if ((day + (int)firstdate.DayOfWeek) % 7 == 0)
-            {
-            @:</tr><tr>
-            }
-            }
-            </tr>*@
             @{
+                var firstdate = Model.firstMonthdate;
+                var daysleft = (int)firstdate.DayOfWeek;
+                int daysInMonth = DateTime.DaysInMonth(firstdate.Year, firstdate.Month);
                 int day = 1;
                 int flag = 1;
                 int tempt = day;
@@ -83,7 +59,7 @@
                         }
                         @for (int curr = 1; curr <= 7 - daysleft; curr++)
                         {
-                            <td style=" background : #efabd2;text-align : center">@day</td>
+                            <td style=" background : #efabd2;text-align : center ; color:white">@day</td>
                             day++;
                         }
                     </tr>
@@ -95,7 +71,7 @@
                         }
                         @for (int curr = 1; curr <= 7 - daysleft; curr++)
                         {
-                            <td id="loadprevdate_@tempt"></td>
+                            <td id="1_@tempt"><div style="min-height:5px"></div></td>
                             tempt++;
                         }
                     </tr>
@@ -107,7 +83,7 @@
                         }
                         @for (int curr = 1; curr <= 7 - daysleft; curr++)
                         {
-                            <td id="date_@tempt"></td>
+                            <td id="2_@tempt"></td>
                             tempt++;
                         }
                     </tr>
@@ -119,7 +95,7 @@
                         }
                         @for (int curr = 1; curr <= 7 - daysleft; curr++)
                         {
-                            <td id="loadnextdate_@tempt"></td>
+                            <td id="3_@tempt"><div style="min-height:25px" class="LoadMore" id="next_@tempt"></div></td>
                             tempt++;
                         }
                     </tr>
@@ -133,14 +109,14 @@
                     <tr>
                         @for (int curr = 1; curr <= 7; curr++)
                         {
-                            <td style=" background : #efabd2;text-align : center">@day</td>
+                            <td style=" background : #efabd2;text-align : center ; color:white">@day</td>
                             day++;
                         }
                     </tr>
                     <tr>
                         @for (int curr = 1; curr <= 7; curr++)
                         {
-                            <td id="loadprevdate_@tempt"></td>
+                            <td id="1_@tempt"><div style="min-height:5px"></div></td>
                             tempt++;
                         }
                     </tr>
@@ -148,7 +124,7 @@
                     <tr>
                         @for (int curr = 1; curr <= 7; curr++)
                         {
-                            <td id="date_@tempt"></td>
+                            <td id="2_@tempt"></td>
                             tempt++;
                         }
                     </tr>
@@ -156,7 +132,7 @@
                     <tr>
                         @for (int curr = 1; curr <= 7; curr++)
                         {
-                            <td id="loadnextdate_@tempt"></td>
+                            <td id="3_@tempt"><div style="min-height:25px" class="LoadMore" id="next_@tempt"></div></td>
                             tempt++;
                         }
                     </tr>
@@ -168,7 +144,7 @@
             <tr>
                 @while (day <= daysInMonth)
                 {
-                    <td style=" background : #efabd2;text-align : center">@day</td>
+                    <td style=" background : #efabd2;text-align : center ; color:white">@day</td>
                     day++;
                 }
             </tr>
@@ -178,7 +154,7 @@
             <tr>
                 @while (tempt1 <= daysInMonth)
                 {
-                    <td id="date_@tempt1"></td>
+                    <td id="1_@tempt1"><div style="min-height:5px"></div></td>
                     tempt1++;
                 }
             </tr>
@@ -188,7 +164,7 @@
             <tr>
                 @while (tempt1 <= daysInMonth)
                 {
-                    <td id="date_@tempt1"></td>
+                    <td id="2_@tempt1"></td>
                     tempt1++;
                 }
             </tr>
@@ -198,7 +174,7 @@
             <tr>
                 @while (tempt1 <= daysInMonth)
                 {
-                    <td id="date_@tempt1"></td>
+                    <td id="3_@tempt1"><div style="min-height:25px" class="LoadMore" id="next_@tempt"></div></td>
                     tempt1++;
                 }
             </tr>
@@ -209,17 +185,54 @@
 {
     <script>
         var shiftdate = @shift.StartTime.ToString("dd");
-        var timeslot = "date_" + shiftdate;
+        var timeslot = "2_" + shiftdate;
         var color = "";
         if (@shift.Status == 1) {
-            color = "#efabd2";
+            color = "#ffd4ed";
         }
         if (@shift.Status == 2) {
-            color = "#a5cea4";
+            color = "#cee9cd";
         }
         $('#' + timeslot).css("padding", "0px")
-        $('#' + timeslot).append('<div class="events" id="event_@shift.ShiftId" data-id="@shift.ShiftId" data-url="MonthWiseData">@shift.StartTime.ToString("hh:mm tt") - @shift.EndTime.ToString("hh:mm tt")</div>');
+        $('#' + timeslot).append('<div class="events  text-dark" id="event_@shift.ShiftId" data-id="@shift.ShiftId" data-url="MonthWiseData"> @Model.physicianDatas.FirstOrDefault(x=>x.Physicianid==shift.Physicianid).Physicianname <br> @shift.StartTime.ToString("hh:mm tt") - @shift.EndTime.ToString("hh:mm tt")</div>');
         $('#event_@shift.ShiftId').css("background-color", color);
     </script>
 }
+@*
+<script>
+    var next = 1;
+    var dateObj = new Date("@firstdate.Year", "@firstdate.Month", 1);
+    var region = $('.drawbyregiondropdown').val();
+    var status = $('input[name="shiftstatus"]:checked').val();
+    $('.LoadMore').on('click', function () {
+        var str = $(this).attr('id');
+        var parse = str.split('_');
+        var date = parse[1];
+        var year = "@firstdate.Year";
+        var month = "@firstdate.Month";
+        dateObj = new Date(year, month - 1, date);
+        console.log(dateObj);
+        loadshiftdata(dateObj, next);
+    });
+
+
+    loadshiftdata(dateObj, 0);
+
+    function loadshiftdata(date, next) {
+        console.log(next)
+        console.log(dateObj)
+        console.log(region)
+        console.log(status)
+        //$.ajax({
+        //    url: '/AdminArea/AdminProviderTab/GetNextShiftsOfDate',
+        //    date: { date: date, next: next },
+        //    type: 'POST',
+        //    success: function (data) {
+        //        $.each(data, function (index, shift) {
+
+        //        });
+        //    },
+        //});
+    }
+</script>*@
 <script src="~/js/Events.js" asp-append-version="true"></script>

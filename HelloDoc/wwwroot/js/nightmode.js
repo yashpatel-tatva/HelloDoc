@@ -16,7 +16,7 @@ function changetheme() {
         imgmode.classList.replace("fa-sun", "fa-moon")
         imgmode.style.color = "rgb(0, 184, 230)"
         btn.style.borderColor = "#0dcaf0";
-        if (document.querySelector('body').style.backgroundColor === "rgb(247, 247, 247)") {
+        if (document.querySelector('body').style.backgroundColor === "rgb(240, 240, 240)") {
             document.querySelector('body').style.backgroundColor = "black";
         }
         try {
@@ -44,7 +44,7 @@ function changetheme() {
         sessionStorage.setItem('flag', flag);
         flag = 0;
         if (document.querySelector('body').style.backgroundColor === "black") {
-            document.querySelector('body').style.backgroundColor = "rgb(247, 247, 247)";
+            document.querySelector('body').style.backgroundColor = "rgb(240, 240, 240)";
         }
         try {
             document.getElementById("bg").style.backgroundColor = "transparent";

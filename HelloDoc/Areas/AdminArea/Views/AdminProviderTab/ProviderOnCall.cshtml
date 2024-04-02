@@ -1,0 +1,31 @@
+﻿@{
+    Layout = "_SchedulerLayout";
+}
+<div class="container">
+    <div class="d-flex justify-content-between">
+        <div class="h3 subinfotext fw-bold">MDs On Call </div>
+    </div>
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <select class="form-select  mb-0 fs-6 form-control drawbyregiondropdown">
+                <option value="0">All Region</option>
+            </select>
+        </div>
+        <div class="d-flex gap-2">
+            <button class="p-2px-3mx-2 text-white bg-info rounded border-info d-flex align-items-center" id="calenderviewbtn">
+                <span>Calender View</span>
+            </button>
+            <button class="p-2px-3mx-2 text-white bg-info rounded border-info d-flex align-items-center">
+                <span>Shifts For Review</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+<script src="~/js/ProviderOnCall.js" asp-append-version="true"></script>

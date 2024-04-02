@@ -21,30 +21,32 @@
                     </select>
                     <span class="selectedselectspan">Physician</span>
                 </div>
-                <div class="form-group d-flex align-items-center rounded my-3">
-                    @{
-                        string today = DateTime.Today.ToString("yyyy-MM-dd");
-                        string shiftdatafromdb = Model.Shiftdate.ToString("yyyy-MM-dd");
-                    }
-                    <input type="date" class="form-control" placeholder="" min=@today id="shiftdate" value=@shiftdatafromdb asp-for="Shiftdate" disabled><span>Shift Date</span>
-                </div>
-                <div class="d-flex row my-3">
-                    <div class="col-xl-6 col-md-6 col-sm-12">
-                        <div class="form-group d-flex align-items-center rounded">
-                            <input id="startTime" type="time" class="form-control" placeholder="" asp-for="StartTime" disabled><span>Start</span>
+                <form>
+                    <div class="form-group d-flex align-items-center rounded my-3">
+                        @{
+                            string today = DateTime.Today.ToString("yyyy-MM-dd");
+                            string shiftdatafromdb = Model.Shiftdate.ToString("yyyy-MM-dd");
+                        }
+                        <input type="date" class="form-control timeedit" placeholder="" min=@today id="shiftdate" value=@shiftdatafromdb asp-for="Shiftdate" disabled><span>Shift Date</span>
+                    </div>
+                    <div class="d-flex row my-3">
+                        <div class="col-xl-6 col-md-6 col-sm-12">
+                            <div class="form-group d-flex align-items-center rounded">
+                                <input id="startTime" type="time" class="form-control timeedit" placeholder="" asp-for="StartTime" disabled><span>Start</span>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-md-6 col-sm-12">
+                            <div class="form-group d-flex align-items-center rounded">
+                                <input id="endTime" type="time" class="form-control timeedit" placeholder="" asp-for="EndTime" disabled><span>end</span>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-xl-6 col-md-6 col-sm-12">
-                        <div class="form-group d-flex align-items-center rounded">
-                            <input id="endTime" type="time" class="form-control" placeholder="" asp-for="EndTime" disabled><span>end</span>
-                        </div>
+                    <div class="d-flex my-3 justify-content-end gap-2 shiftfunction">
+                        <button type="button" id="ViewShiftReturnBtn" class="p-2 px-3 text-white bg-info rounded border-info  mx-1 shadow-none" data-id="@Model.ShiftId">Return</button>
+                        <button type="button" id="ViewShiftEdit_SaveBtn" class="p-2 px-3 text-white bg-info rounded border-info  mx-1 shadow-none" data-id="@Model.ShiftId">Edit</button>
+                        <button type="button" id="ViewShiftDeleteBtn" class="p-2 px-3 text-white bg-danger rounded border-danger  mx-1 shadow-none" data-id="@Model.ShiftId">Delete</button>
                     </div>
-                </div>
-                <div class="d-flex my-3 justify-content-end gap-2">
-                    <button type="button" id="ViewShiftReturnBtn" class="p-2 px-3 text-white bg-info rounded border-info  mx-1 shadow-none" data-id="@Model.ShiftId">Return</button>
-                    <button type="button" id="ViewShiftEdit_SaveBtn" class="p-2 px-3 text-white bg-info rounded border-info  mx-1 shadow-none" data-id="@Model.ShiftId">Edit</button>
-                    <button type="button" id="ViewShiftDeleteBtn" class="p-2 px-3 text-white bg-danger rounded border-danger  mx-1 shadow-none" data-id="@Model.ShiftId">Delete</button>
-                </div>
+                </form>
             </div>
         </div>
     </div>
@@ -107,13 +109,13 @@
     var format = "@Model.format";
     console.log(format);
 
-    $('#ViewShiftDeleteBtn').on('click' , function(){
+    $('#ViewShiftDeleteBtn').on('click', function () {
         var shiftdetailid = $(this).data('id');
         $.ajax({
-            url: '/AdminArea/AdminProviderTab/DeleteShift' ,
-            data : {shiftdetailid , format} ,
-            type : 'POST' ,
-            success : function(response){
+            url: '/AdminArea/AdminProviderTab/DeleteShift',
+            data: { shiftdetailid, format },
+            type: 'POST',
+            success: function (response) {
                 $('#timewisedata').html(response);
                 Swal.fire({
                     position: "top-end",
@@ -126,14 +128,14 @@
             }
         });
     });
-    
+
     $('#ViewShiftReturnBtn').on('click', function () {
         var shiftdetailid = $(this).data('id');
         $.ajax({
-            url: '/AdminArea/AdminProviderTab/RetuenShift' ,
-            data : {shiftdetailid , format} ,
-            type : 'POST' ,
-            success : function(response){
+            url: '/AdminArea/AdminProviderTab/RetuenShift',
+            data: { shiftdetailid, format },
+            type: 'POST',
+            success: function (response) {
                 $('#timewisedata').html(response);
                 Swal.fire({
                     position: "top-end",
@@ -147,8 +149,75 @@
         });
     });
 
+    $('#startTime, #endTime').on('change', function () {
+        var startTime = $('#startTime').val();
+        var endTime = $('#endTime').val();
 
+        if (startTime && endTime) {
+            if (startTime > endTime) {
+                Swal.fire('End time cannot be earlier than start time');
+                $('#endTime').val('');
+            }
+            var parts1 = startTime.split(':');
+            var parts2 = endTime.split(':')
+            var st = (parseInt(parts1[0]) * 60) + parseInt(parts1[1]);
+            var et = (parseInt(parts2[0]) * 60) + parseInt(parts2[1]);
+            if ((et - st) < 120) {
+                Swal.fire('Shift must be atleast 2 hrs Long');
+                $('#endTime').val('');
+            }
+        }
+    });
 
+    $('#ViewShiftEdit_SaveBtn').on('click', function () {
+        if ($(this).text() == "Edit") {
+            $(this).text("Save");
+            $('.timeedit').removeAttr("disabled");
+            $(this).after('<button type="reset" class="p-2 px-3 rounded btn border-info text-info shadow-none" id="shifteditcancel"> Cancel </button>');
+        }
+        else {
+            var shiftdetailid = $(this).data('id');
+            var shiftdate = $('#shiftdate').val();
+            var startTime = $('#startTime').val();
+            var endTime = $('#endTime').val();
+            console.log(shiftdetailid);
+            console.log(shiftdate);
+            console.log(startTime);
+            console.log(endTime);
+            $.ajax({
+                url: '/AdminArea/AdminProviderTab/EditShift',
+                data: { shiftdetailid, shiftdate , startTime , endTime , format },
+                type: 'POST',
+                success: function (response) {
+                    $('#timewisedata').html(response);
+                    Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: "Shift Edited",
+                        showConfirmButton: false,
+                        timer: 1000
+                    });
+                    $('.closeModel').trigger('click');
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: jqXHR.responseText,
+                        showConfirmButton: false,
+                        timer: 1000
+                    });
+                    $('.closeModel').trigger('click');
+                }
+            });
+        }
+    });
+  
 
+    $(document).on('click', '#shifteditcancel', function () {
+        $('.timeedit').prop('disabled', true);
+        $('#ViewShiftEdit_SaveBtn').text("Edit");
+        $(this).css('display', 'none');
+    });
 
 </script>

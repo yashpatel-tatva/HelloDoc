@@ -27,7 +27,7 @@
         font-size: small;
     }
 </style>
-<div>
+<div class="table-responsive bg-light shadow" id="content">
     <table class="w-100 border-1">
         <thead style="background: rgb(145 145 145) ; color : white !important">
             <tr>
@@ -153,10 +153,10 @@
             }
             var color = "";
             if (@shift.Status == 1) {
-                color = "#efabd2";
+                color = "#ffd4ed";
             }
             if (@shift.Status == 2) {
-                color = "#a5cea4";
+                color = "#cee9cd";
             }
             var pl = 0;
             var pr = 0;
@@ -171,7 +171,7 @@
                 pr = pr / diff;
             }
             $(str).css("padding", "0px")
-            $(str).html('<div class="events" id="event_@shift.ShiftId" data-id="@shift.ShiftId" data-url="DayWiseData">@shift.StartTime.ToString("hh:mm tt") - @shift.EndTime.ToString("hh:mm tt")</div>');
+            $(str).html('<div class="events  text-dark" id="event_@shift.ShiftId" data-id="@shift.ShiftId" data-url="DayWiseData">@shift.StartTime.ToString("hh:mm tt") - @shift.EndTime.ToString("hh:mm tt")</div>');
             $('#event_@shift.ShiftId').css("background-color", color);
             $('#event_@shift.ShiftId').css("margin-left", pl + "%");
             $('#event_@shift.ShiftId').css("margin-right", pr + "%");
