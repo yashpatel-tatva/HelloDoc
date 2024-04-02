@@ -1,6 +1,8 @@
 ﻿@{
     Layout = "_SchedulerLayout";
 }
+@using DataModels.AdminSideViewModels
+@model ProviderOnCallViewModel
 <div class="container">
     <div class="d-flex justify-content-between">
         <div class="h3 subinfotext fw-bold">MDs On Call </div>
@@ -20,9 +22,60 @@
             </button>
         </div>
     </div>
+    <div class="bg-light rounded m-3 shadow" id="content">
+        <div class="p-3">
+            <div class="h5 fw-bold">MD's On Call</div>
+            <div class="d-flex row">
+                @foreach (var item in Model.physicianDatas.Where(x => x.OnCall == true))
+                {
+                    <div class="d-flex gap-3 col-xl-4 col-md-6 col-sm-12 col-12">
+                        <img src="@item.Photo" width="80px">
+                        @if(item.Photo == null)
+                        {
+                            <img src="@item.Photo" width="80px">
+                        }
+                        <span>@item.Physicianname</span>
+                    </div>
+                }
+            </div>
+            <div class="h5 fw-bold">Physician Off Duty</div>
+            <div class="d-flex gap-3 row">
+                @foreach (var item in Model.physicianDatas.Where(x => x.OnCall == false))
+                {
+                    <div class="d-flex col-xl-4 col-md-6 col-sm-12 col-12">
+                        <img src="@item.Photo" width="80px">
+                        <span>@item.Physicianname</span>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
 </div>
 
 
+@{
+    string shiftdatafromdb = Model.datetoshow.ToString("yyyy-MM-dd");
+}
+<input type="date" id="shiftdate" value=@shiftdatafromdb hidden>
+<input type="text" id="showby" value=@Model.showby hidden />
+
+
+
+<script>
+    $.ajax({
+        url: '/AdminArea/Dashboard/GetRegion',
+        success: function (data) {
+            var drawbyregiondropdown = $('.drawbyregiondropdown');
+            $.each(data, function (index, regions) {
+                drawbyregiondropdown.append($('<option>', {
+                    value: regions.regionid,
+                    text: regions.name
+                }))
+            });
+            $('.drawbyregiondropdown').val(@Model.region);
+        }
+    });
+</script>
 
 
 

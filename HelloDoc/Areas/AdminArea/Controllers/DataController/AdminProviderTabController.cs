@@ -599,22 +599,20 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         [HttpPost]
         public IActionResult ProviderOnCall(DateTime datetoshow, int region, string showby)
         {
-            List<PhysicianData> OnCall = new List<PhysicianData>();
-            List<PhysicianData> OffDuty = new List<PhysicianData>();
+            ProviderOnCallViewModel model = new ProviderOnCallViewModel();
+            List<PhysicianData> physicianDatas = new List<PhysicianData>();
             List<int> OnCallIds = new List<int>();
             List<int> OffDutyIds = new List<int>();
-            
-            //var physician = _db.Physicianregions.Include(x => x.Physician).ToList();
-            //if (region != 0)
-            //{
-            //    physician = _db.Physicianregions.Include(x => x.Physician).Where(x => x.Regionid == region).ToList();
-            //}
-            if(showby == "DayWiseData")
+            if (showby == "DayWiseData")
             {
-                var shifts = _shiftDetail.GetAll().Where(x => x.Shiftdate == DateOnly.FromDateTime(datetoshow)).Select(x=>x.Shiftid).ToList();
-                foreach(var shift in shifts)
+                var shifts = _shiftDetail.GetAll().Where(x => x.Isdeleted[0] == false).Where(x => x.Shiftdate == DateOnly.FromDateTime(datetoshow)).Select(x => x.Shiftid).ToList();
+                foreach (var shift in shifts)
                 {
-                    OnCallIds.Add(_shift.GetFirstOrDefault(x=>x.Shiftid==shift).Physicianid);
+                    var physicianId = _shift.GetFirstOrDefault(x => x.Shiftid == shift).Physicianid;
+                    if (!OnCallIds.Contains(physicianId))
+                    {
+                        OnCallIds.Add(physicianId);
+                    }
                 }
 
             }
@@ -622,15 +620,84 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             {
                 int daysFromSunday = (int)datetoshow.DayOfWeek;
                 int daysUntilSaturday = ((int)DayOfWeek.Saturday - (int)datetoshow.DayOfWeek + 7) % 7;
-                DateTime sunday = datetoshow.AddDays(-daysFromSunday);
-                DateTime saturday = datetoshow.AddDays(daysUntilSaturday);
-                var shifts =  _shiftDetail.GetAll().Where(x => x.Shiftdate == DateOnly.FromDateTime(datetoshow)).Select(x => x.Shiftid).ToList();
+                DateOnly sunday = DateOnly.FromDateTime(datetoshow.AddDays(-daysFromSunday));
+                DateOnly saturday = DateOnly.FromDateTime(datetoshow.AddDays(daysUntilSaturday));
+                var shifts = _shiftDetail.GetAll()
+                .Where(x => x.Isdeleted[0] == false)
+                .Where(x => x.Shiftdate >= sunday && x.Shiftdate <= saturday).Select(x => x.Shiftid).ToList();
+                foreach (var shift in shifts)
+                {
+                    var physicianId = _shift.GetFirstOrDefault(x => x.Shiftid == shift).Physicianid;
+                    if (!OnCallIds.Contains(physicianId))
+                    {
+                        OnCallIds.Add(physicianId);
+                    }
+                }
             }
             else
             {
-
+                DateOnly currentday = DateOnly.FromDateTime(datetoshow);
+                DateOnly firstDayOfMonth = new DateOnly(currentday.Year, currentday.Month, 1);
+                DateOnly lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
+                var shifts = _shiftDetail.GetAll()
+                    .Where(x => x.Isdeleted[0] == false)
+                    .Where(x => x.Shiftdate >= firstDayOfMonth && x.Shiftdate <= lastDayOfMonth).Select(x => x.Shiftid).ToList();
+                foreach (var shift in shifts)
+                {
+                    var physicianId = _shift.GetFirstOrDefault(x => x.Shiftid == shift).Physicianid;
+                    if (!OnCallIds.Contains(physicianId))
+                    {
+                        OnCallIds.Add(physicianId);
+                    }
+                }
             }
-            return View();
+            var allphyids = _physician.GetAll().Select(x => x.Physicianid).ToList();
+            OffDutyIds = allphyids.Except(OnCallIds).ToList();
+            foreach (var phyid in OnCallIds)
+            {
+                var phy = _physician.GetFirstOrDefault(x=>x.Physicianid == phyid);
+                PhysicianData physicianData = new PhysicianData
+                {
+                    Physicianid = phy.Physicianid,
+                    Physicianname = phy.Firstname + " " + phy.Lastname,
+                    Photo = phy.Photo,
+                    OnCall = true 
+                };
+                physicianDatas.Add(physicianData);
+            }
+            foreach (var phyid in OffDutyIds)
+            {
+                var phy = _physician.GetFirstOrDefault(x=>x.Physicianid == phyid);
+                PhysicianData physicianData = new PhysicianData
+                {
+                    Physicianid = phy.Physicianid,
+                    Physicianname = phy.Firstname + " " + phy.Lastname,
+                    Photo = phy.Photo,
+                    OnCall = false 
+                };
+                physicianDatas.Add(physicianData);
+            }
+            var filtered = new List<PhysicianData>();
+            if (region != 0)
+            {
+                foreach (var phy in physicianDatas)
+                {
+                    var regionphy = _db.Physicianregions.Where(x => x.Physicianid == phy.Physicianid).Select(x => x.Regionid);
+                    if (regionphy.Contains(region))
+                    {
+                        filtered.Add(phy);
+                    }
+                }
+            }
+            else
+            {
+                filtered = physicianDatas;
+            }
+            model.showby = showby;
+            model.datetoshow = datetoshow;
+            model.region = region;
+            model.physicianDatas = filtered;
+            return View(model);
         }
 
 

@@ -6,6 +6,6 @@
         public string Physicianname { get; set; }
         public string Photo { get; set; }
         public string color { get; set; }
-
+        public bool OnCall { get; set; }
     }
 }

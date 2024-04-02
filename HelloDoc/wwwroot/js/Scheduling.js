@@ -1,23 +1,31 @@
-﻿//$.ajax({
-//    url: '/AdminArea/AdminProviderTab/SetAllPhysican',
-//    success: function () { }
-//});
+﻿
+debugger
+// Try to get data from localStorage, if not found then set the default values
+var status = localStorage.getItem('status') || 0;
+var region = localStorage.getItem('region') || 0;
+var currentDate = localStorage.getItem('currentDate') ? new Date(localStorage.getItem('currentDate')) : new Date();
+var showby = localStorage.getItem('showby') || $('input[name="showby"]:checked').attr('id');
 
+// Store the default values in localStorage if they were not found
+if (!localStorage.getItem('status')) localStorage.setItem('status', status);
+if (!localStorage.getItem('region')) localStorage.setItem('region', region);
+if (!localStorage.getItem('currentDate')) localStorage.setItem('currentDate', currentDate);
+if (!localStorage.getItem('showby')) localStorage.setItem('showby', showby);
 
+if (status != 0) {
+    if (status == 1) {
+        $('#pending').prop('checked', true);
+    }
+    if (status == 2) {
+        $('#approved').prop('checked', true);
+    }
+}
 
+if (localStorage.getItem('showby')) {
+    $('#' + localStorage.getItem('showby')).prop('checked', true);
+}
 
-
-
-
-
-
-
-
-
-
-var status = 0;
-var region = 0;
-
+GetData(showby, currentDate, region, status);
 
 
 
@@ -33,6 +41,7 @@ $.ajax({
                 text: regions.name
             }))
         });
+        $('.drawbyregiondropdown').val(localStorage.getItem('region') || 0);
     }
 });
 
@@ -65,10 +74,6 @@ $('input[name="shiftstatus"]').on('click', function () {
     }
     GetData(showby, currentDate, region, status);
 });
-
-var currentDate = new Date();
-var showby = $('input[name="showby"]:checked').attr('id');
-GetData(showby, currentDate, region, status);
 
 $('input[name="showby"]').on('change', function () {
     showby = $('input[name="showby"]:checked').attr('id');
@@ -128,6 +133,10 @@ function GetData(showby, currentDate, region, status) {
     } else if (showby == "MonthWiseData") {
         $('#selectday').attr('type', 'month');
     }
+    localStorage.setItem('status', status);
+    localStorage.setItem('region', region);
+    localStorage.setItem('currentDate', currentDate);
+    localStorage.setItem('showby', showby);
     $.ajax({
         url: '/AdminArea/AdminProviderTab/' + showby,
         data: { datetoshow: currentDate.toISOString(), region: region, status: status },
