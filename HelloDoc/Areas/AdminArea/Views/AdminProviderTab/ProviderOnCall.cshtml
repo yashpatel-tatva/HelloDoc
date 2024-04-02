@@ -17,7 +17,7 @@
             <button class="p-2px-3mx-2 text-white bg-info rounded border-info d-flex align-items-center" id="calenderviewbtn">
                 <span>Calender View</span>
             </button>
-            <button class="p-2px-3mx-2 text-white bg-info rounded border-info d-flex align-items-center">
+            <button class="p-2px-3mx-2 text-white bg-info rounded border-info d-flex align-items-center" id="agendaview">
                 <span>Shifts For Review</span>
             </button>
         </div>
@@ -28,23 +28,33 @@
             <div class="d-flex row">
                 @foreach (var item in Model.physicianDatas.Where(x => x.OnCall == true))
                 {
-                    <div class="d-flex gap-3 col-xl-4 col-md-6 col-sm-12 col-12">
-                        <img src="@item.Photo" width="80px">
-                        @if(item.Photo == null)
+                    <div role="button" class="d-flex py-2 align-items-center gap-3 col-xl-4 col-md-6 col-sm-12 col-12">
+                        @if (item.Photo == null || item.Photo == "")
                         {
-                            <img src="@item.Photo" width="80px">
+                            <img src="~/res/OIP.png" width="80px" class="physiciandetail" data-id="phy_@item.Physicianid">
                         }
-                        <span>@item.Physicianname</span>
+                        else
+                        {
+                            <img src="@item.Photo" width="80px" height="80px" class="physiciandetail" data-id="phy_@item.Physicianid">
+                        }
+                        <span class="physiciandetail" data-id="phy_@item.Physicianid">@item.Physicianname</span>
                     </div>
                 }
             </div>
             <div class="h5 fw-bold">Physician Off Duty</div>
-            <div class="d-flex gap-3 row">
+            <div class="d-flex row">
                 @foreach (var item in Model.physicianDatas.Where(x => x.OnCall == false))
                 {
-                    <div class="d-flex col-xl-4 col-md-6 col-sm-12 col-12">
-                        <img src="@item.Photo" width="80px">
-                        <span>@item.Physicianname</span>
+                    <div role="button" class="d-flex py-2 align-items-center gap-3 col-xl-4 col-md-6 col-sm-12 col-12">
+                        @if (item.Photo == null || item.Photo == "")
+                        {
+                            <img src="~/res/OIP.png" width="80px" class="physiciandetail" data-id="phy_@item.Physicianid">
+                        }
+                        else
+                        {
+                            <img src="@item.Photo" width="80px" height="80px" class="physiciandetail" data-id="phy_@item.Physicianid">
+                        }
+                        <span class="physiciandetail" data-id="phy_@item.Physicianid">@item.Physicianname</span>
                     </div>
                 }
             </div>

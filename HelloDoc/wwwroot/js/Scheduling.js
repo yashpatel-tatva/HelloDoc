@@ -1,6 +1,4 @@
-﻿
-debugger
-// Try to get data from localStorage, if not found then set the default values
+﻿// Try to get data from localStorage, if not found then set the default values
 var status = localStorage.getItem('status') || 0;
 var region = localStorage.getItem('region') || 0;
 var currentDate = localStorage.getItem('currentDate') ? new Date(localStorage.getItem('currentDate')) : new Date();
@@ -160,3 +158,12 @@ $('#provideroncallbtn').on('click', function () {
         }
     });
 })
+
+$('#agendaview').on('click', function () {
+    $.ajax({
+        url: '/AdminArea/AdminProviderTab/ShiftsAgenda',
+        success: function (response) {
+            $('#nav-tabContent').html(response);
+        }
+    });
+});

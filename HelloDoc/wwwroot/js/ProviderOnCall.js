@@ -21,3 +21,17 @@ $('.drawbyregiondropdown').on('change', function () {
         }
     });
 });
+
+$('.physiciandetail').on('click', function () {
+    var str = $(this).data('id');
+    var parse = str.split("_");
+    var physicianid = parse[1];
+    $.ajax({
+        url: '/AdminArea/AdminProviderTab/EditProviderPage',
+        type: 'POST',
+        data: { physicianid: physicianid },
+        success: function (result) {
+            $('#nav-tabContent').html(result);
+        }
+    });
+});

@@ -594,6 +594,10 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             return BadRequest("There is already a shift exist");
         }
 
+        /// <summary>
+        /// provideroncall
+        /// </summary>
+        /// <returns></returns>
 
         [Area("AdminArea")]
         [HttpPost]
@@ -700,6 +704,12 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             return View(model);
         }
 
+        [Area("AdminArea")]
+        //[HttpPost]
+        public IActionResult ShiftsAgenda()
+        {
+            return View();
+        }
 
         /// <summary>
         /// Invoicing
