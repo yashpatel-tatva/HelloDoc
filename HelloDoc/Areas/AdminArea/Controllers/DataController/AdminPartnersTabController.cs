@@ -42,8 +42,11 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
                 {
                     foreach (var item in model.healthprofessionals)
                     {
-                        string fullstring = item.Vendorname + item.Faxnumber + item.City + item.State + item.Zip + item.Phonenumber + item.Email + item.Businesscontact;
+                        var prof = model.healthprofessionaltypes.First(x => x.Healthprofessionalid == item.Profession).Professionname;
+                        string fullstring = item.Vendorname + item.Faxnumber + item.City + item.State + item.Zip + item.Phonenumber + item.Email + item.Businesscontact +prof;
                         fullstring = fullstring.Replace(" ", "");
+                        fullstring = fullstring.ToLower();
+                        search = search.ToLower();
                         if (fullstring.Contains(search))
                         {
                             healthprofessionals.Add(item);

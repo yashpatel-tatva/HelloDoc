@@ -48,6 +48,8 @@ namespace DataAccess.ServiceRepository
                         }
                         string fullstring = firstname+lastname+email+address+cphone+remail+rphone+physician+phyemail+dob;
                         fullstring = fullstring.Replace(" ", "");
+                        fullstring = fullstring.ToLower();
+                        search = search.ToLower();  
                         if (fullstring.Contains(search))
                         {
                             requests.Add(item);
