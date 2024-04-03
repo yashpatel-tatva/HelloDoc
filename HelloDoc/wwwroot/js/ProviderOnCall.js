@@ -35,3 +35,15 @@ $('.physiciandetail').on('click', function () {
         }
     });
 });
+
+
+$('#agendaview').on('click', function () {
+    $.ajax({
+        url: '/AdminArea/AdminProviderTab/ShiftsAgenda',
+        data: { datetoshow: currentDate.toISOString(), region: region, showby: showby },
+        type: 'POST',
+        success: function (response) {
+            $('#nav-tabContent').html(response);
+        }
+    });
+});

@@ -1,6 +1,7 @@
 ﻿using DataAccess.Repository.IRepository;
 using DataAccess.ServiceRepository.IServiceRepository;
 using HelloDoc;
+using System.Globalization;
 
 namespace DataAccess.ServiceRepository
 {
@@ -8,10 +9,12 @@ namespace DataAccess.ServiceRepository
     {
         private readonly IRequestRepository _request;
         private readonly IAllRequestDataRepository _allRequestDataRepository;
-        public PaginationRepository(IRequestRepository requestRepository, IAllRequestDataRepository allRequestDataRepository)
+        private readonly IPhysicianRepository _physician;
+        public PaginationRepository(IRequestRepository requestRepository, IAllRequestDataRepository allRequestDataRepository , IPhysicianRepository physicianRepository)
         {
             _request = requestRepository;
             _allRequestDataRepository = allRequestDataRepository;
+            _physician = physicianRepository;
         }
         public List<Request> requests(string state, int currentpage, int pagesize, int requesttype, string search, int region)
         {
@@ -20,9 +23,38 @@ namespace DataAccess.ServiceRepository
             {
                 request = request.Where(x => x.Requesttypeid == requesttype).ToList();
             }
-            if (search != null || search == "" || search == "")
+            if (search != null)
             {
-                request = request.Where(a => a.User.Firstname.ToLower().Contains(search.ToLower())).ToList();
+                search = search.Replace(" ", "");
+                List<Request> requests = new List<Request>();
+                if (search != null || search != "")
+                {
+                    foreach (var item in request)
+                    {
+                        string firstname = item.User.Firstname;
+                        string lastname = item.User.Lastname;
+                        string email = item.Requestclients.First().Email;
+                        string address = item.Requestclients.First().Address;
+                        string cphone = item.Requestclients.First().Phonenumber;
+                        string rphone = item.Phonenumber;
+                        string remail = item.Email;
+                        string physician = "";
+                        string phyemail = "";
+                        string dob = item.User.Intdate.ToString()+"-"+ DateTime.ParseExact(item.User.Strmonth, "MMMM", CultureInfo.InvariantCulture).Month.ToString() + "_"+item.User.Intyear.ToString();
+                        if (item.Physicianid != null)
+                        {
+                            physician = _physician.GetFirstOrDefault(x => x.Physicianid == item.Physicianid).Firstname+_physician.GetFirstOrDefault(x => x.Physicianid == item.Physicianid).Lastname;
+                            phyemail = _physician.GetFirstOrDefault(x => x.Physicianid == item.Physicianid).Email;
+                        }
+                        string fullstring = firstname+lastname+email+address+cphone+remail+rphone+physician+phyemail+dob;
+                        fullstring = fullstring.Replace(" ", "");
+                        if (fullstring.Contains(search))
+                        {
+                            requests.Add(item);
+                        }
+                    }
+                    request = requests;
+                }
             }
             if (region != 0 || region == null)
             {

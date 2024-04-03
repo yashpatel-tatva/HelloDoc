@@ -1,0 +1,32 @@
+﻿@{
+    Layout = null;
+}
+@using DataModels.AdminSideViewModels
+@model SchedulingDataViewModel
+
+<table class="table table-hover  rounded">
+    <thead class="thead-dark bg-body-secondary viewuploadtablehead">
+        <tr style="--bs-table-bg: #ebebeb; color : black">
+            <th style="width : 7% ; text-align : center; vertical-align : central"><input type="checkbox" name="selectall" /></th>
+            <th style="width : 24.75%" class="text-dark">Staff</th>
+            <th style="width : 23.8%" class="text-dark">Day</th>
+            <th style="width : 28.85%" class="text-dark">Time</th>
+            <th style="width : 15.6%" class="text-dark">Region</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var shift in Model.Shifts)
+        {
+            <tr>
+                <td style="width : 7% ; text-align : center; vertical-align : central"><input type="checkbox" name="selectedshift" data-id="@shift.ShiftId" /></td>
+                <td style="width : 24.75%">@Model.physicianDatas.FirstOrDefault(x=>x.Physicianid==shift.Physicianid).Physicianname</td>
+                <td style="width : 23.8%">@shift.Shiftdate.ToString("MMM dd , yyyy")</td>
+                <td style="width : 28.85%">@shift.StartTime.ToString("hh:mm tt") - @shift.EndTime.ToString("hh:mm tt")</td>
+                <td style="width : 15.6%" data-id="@shift.Location">@shift.Regionname</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script src="~/js/_RequestShifts.js" asp-append-version="true">
+</script>

@@ -479,18 +479,8 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             SchedulingDataViewModel schedulingDataViewModel = new SchedulingDataViewModel();
             schedulingDataViewModel.physicianDatas = _scheduling.GetPhysicianData();
             int daysFromSunday = (int)datetoshow.DayOfWeek;
-            int daysUntilSaturday = ((int)DayOfWeek.Saturday - (int)datetoshow.DayOfWeek + 7) % 7;
             DateTime sunday = datetoshow.AddDays(-daysFromSunday);
-            DateTime saturday = datetoshow.AddDays(daysUntilSaturday);
-            List<ShiftData> shifts = new List<ShiftData>();
-            for (DateTime day = sunday; day <= saturday; day = day.AddDays(1))
-            {
-                List<ShiftData> shiftDatas = _scheduling.ShifsOfDate(day, region, status, 0);
-                foreach (var s in shiftDatas)
-                {
-                    shifts.Add(s);
-                }
-            }
+            var shifts = _scheduling.ShifsOfWeek(datetoshow, region, status, 0);
             schedulingDataViewModel.Shifts = shifts;
             List<int> weekdate = new List<int>();
             var firstday = sunday;
@@ -511,15 +501,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             schedulingDataViewModel.physicianDatas = _scheduling.GetPhysicianData();
             DateTime firstDayOfMonth = new DateTime(datetoshow.Year, datetoshow.Month, 1);
             DateTime lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
-            List<ShiftData> shifts = new List<ShiftData>();
-            for (DateTime day = firstDayOfMonth; day <= lastDayOfMonth; day = day.AddDays(1))
-            {
-                List<ShiftData> shiftDatas = _scheduling.ShifsOfDate(day, region, status, 0);
-                foreach (var s in shiftDatas)
-                {
-                    shifts.Add(s);
-                }
-            }
+            var shifts = _scheduling.ShifsOfMonth(datetoshow, region, status, 0);
             schedulingDataViewModel.Shifts = shifts;
             schedulingDataViewModel.firstMonthdate = DateOnly.FromDateTime(firstDayOfMonth);
             schedulingDataViewModel.lastMonthdate = DateOnly.FromDateTime(lastDayOfMonth);
@@ -557,7 +539,8 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         {
             var date = _shiftDetail.GetFirstOrDefault(x => x.Shiftdetailid == shiftdetailid).Shiftdate;
             var datetoshow = new DateTime(date.Year, date.Month, date.Day);
-            _shiftDetail.DeleteThisShift(shiftdetailid);
+            var modifiedby = _admin.GetFirstOrDefault(x => x.Adminid == _admin.GetSessionAdminId()).Aspnetuserid;
+            _shiftDetail.DeleteThisShift(shiftdetailid, modifiedby);
             return RedirectToAction(format, new { datetoshow });
         }
 
@@ -567,7 +550,8 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         {
             var date = _shiftDetail.GetFirstOrDefault(x => x.Shiftdetailid == shiftdetailid).Shiftdate;
             var datetoshow = new DateTime(date.Year, date.Month, date.Day);
-            _shiftDetail.ReturnThisShift(shiftdetailid);
+            var modifiedby = _admin.GetFirstOrDefault(x => x.Adminid == _admin.GetSessionAdminId()).Aspnetuserid;
+            _shiftDetail.ReturnThisShift(shiftdetailid, modifiedby);
             return RedirectToAction(format, new { datetoshow });
         }
 
@@ -609,10 +593,11 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             List<int> OffDutyIds = new List<int>();
             if (showby == "DayWiseData")
             {
-                var shifts = _shiftDetail.GetAll().Where(x => x.Isdeleted[0] == false).Where(x => x.Shiftdate == DateOnly.FromDateTime(datetoshow)).Select(x => x.Shiftid).ToList();
+                var shifts = _scheduling.ShifsOfDate(datetoshow, region, 0, 0).Select(x => x.ShiftId).ToList();
                 foreach (var shift in shifts)
                 {
-                    var physicianId = _shift.GetFirstOrDefault(x => x.Shiftid == shift).Physicianid;
+                    var shiftid = _shiftDetail.GetFirstOrDefault(x => x.Shiftdetailid == shift).Shiftid;
+                    var physicianId = _shift.GetFirstOrDefault(x => x.Shiftid == shiftid).Physicianid;
                     if (!OnCallIds.Contains(physicianId))
                     {
                         OnCallIds.Add(physicianId);
@@ -622,16 +607,11 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             }
             else if (showby == "WeekWiseData")
             {
-                int daysFromSunday = (int)datetoshow.DayOfWeek;
-                int daysUntilSaturday = ((int)DayOfWeek.Saturday - (int)datetoshow.DayOfWeek + 7) % 7;
-                DateOnly sunday = DateOnly.FromDateTime(datetoshow.AddDays(-daysFromSunday));
-                DateOnly saturday = DateOnly.FromDateTime(datetoshow.AddDays(daysUntilSaturday));
-                var shifts = _shiftDetail.GetAll()
-                .Where(x => x.Isdeleted[0] == false)
-                .Where(x => x.Shiftdate >= sunday && x.Shiftdate <= saturday).Select(x => x.Shiftid).ToList();
+                var shifts = _scheduling.ShifsOfWeek(datetoshow, region, 0, 0).Select(x => x.ShiftId).ToList();
                 foreach (var shift in shifts)
                 {
-                    var physicianId = _shift.GetFirstOrDefault(x => x.Shiftid == shift).Physicianid;
+                    var shiftid = _shiftDetail.GetFirstOrDefault(x => x.Shiftdetailid == shift).Shiftid;
+                    var physicianId = _shift.GetFirstOrDefault(x => x.Shiftid == shiftid).Physicianid;
                     if (!OnCallIds.Contains(physicianId))
                     {
                         OnCallIds.Add(physicianId);
@@ -640,15 +620,11 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             }
             else
             {
-                DateOnly currentday = DateOnly.FromDateTime(datetoshow);
-                DateOnly firstDayOfMonth = new DateOnly(currentday.Year, currentday.Month, 1);
-                DateOnly lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
-                var shifts = _shiftDetail.GetAll()
-                    .Where(x => x.Isdeleted[0] == false)
-                    .Where(x => x.Shiftdate >= firstDayOfMonth && x.Shiftdate <= lastDayOfMonth).Select(x => x.Shiftid).ToList();
+                var shifts = _scheduling.ShifsOfMonth(datetoshow, region, 0, 0).Select(x => x.ShiftId).ToList();
                 foreach (var shift in shifts)
                 {
-                    var physicianId = _shift.GetFirstOrDefault(x => x.Shiftid == shift).Physicianid;
+                    var shiftid = _shiftDetail.GetFirstOrDefault(x => x.Shiftdetailid == shift).Shiftid;
+                    var physicianId = _shift.GetFirstOrDefault(x => x.Shiftid == shiftid).Physicianid;
                     if (!OnCallIds.Contains(physicianId))
                     {
                         OnCallIds.Add(physicianId);
@@ -659,25 +635,25 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             OffDutyIds = allphyids.Except(OnCallIds).ToList();
             foreach (var phyid in OnCallIds)
             {
-                var phy = _physician.GetFirstOrDefault(x=>x.Physicianid == phyid);
+                var phy = _physician.GetFirstOrDefault(x => x.Physicianid == phyid);
                 PhysicianData physicianData = new PhysicianData
                 {
                     Physicianid = phy.Physicianid,
                     Physicianname = phy.Firstname + " " + phy.Lastname,
                     Photo = phy.Photo,
-                    OnCall = true 
+                    OnCall = true
                 };
                 physicianDatas.Add(physicianData);
             }
             foreach (var phyid in OffDutyIds)
             {
-                var phy = _physician.GetFirstOrDefault(x=>x.Physicianid == phyid);
+                var phy = _physician.GetFirstOrDefault(x => x.Physicianid == phyid);
                 PhysicianData physicianData = new PhysicianData
                 {
                     Physicianid = phy.Physicianid,
                     Physicianname = phy.Firstname + " " + phy.Lastname,
                     Photo = phy.Photo,
-                    OnCall = false 
+                    OnCall = false
                 };
                 physicianDatas.Add(physicianData);
             }
@@ -705,10 +681,87 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         }
 
         [Area("AdminArea")]
-        //[HttpPost]
-        public IActionResult ShiftsAgenda()
+        [HttpPost]
+        public IActionResult ShiftsAgenda(DateTime datetoshow, int region, string showby)
         {
-            return View();
+            return View(new { datetoshow, region, showby });
+        }
+
+        [Area("AdminArea")]
+        //[HttpPost]
+        public IActionResult ShiftDataForAgenda(DateTime datetoshow, int region, string showby, int currentpage)
+        {
+            SchedulingDataViewModel model = new SchedulingDataViewModel();
+            if (showby == "DayWiseData")
+            {
+                model.Shifts = _scheduling.ShifsOfDate(datetoshow, region, 1, currentpage);
+            }
+            else if (showby == "WeekWiseData")
+            {
+                model.Shifts = _scheduling.ShifsOfWeek(datetoshow, region, 1, currentpage);
+            }
+            else
+            {
+                model.Shifts = _scheduling.ShifsOfMonth(datetoshow, region, 1, currentpage);
+            }
+            List<PhysicianData> physicianDatas = new List<PhysicianData>();
+            foreach (var s in model.Shifts)
+            {
+                var phy = _physician.GetFirstOrDefault(x => x.Physicianid == s.Physicianid);
+                PhysicianData physician = new PhysicianData
+                {
+                    Physicianid = phy.Physicianid,
+                    Physicianname = phy.Firstname + " " + phy.Lastname,
+                    Photo = phy.Photo,
+                    OnCall = true,
+                };
+                physicianDatas.Add(physician);
+
+            }
+            model.physicianDatas = physicianDatas;
+            return PartialView("_RequestedShifts", model);
+        }
+
+        [Area("AdminArea")]
+        [HttpPost]
+        public int ShiftCountbyFilter(DateTime datetoshow, int region, string showby)
+        {
+            SchedulingDataViewModel model = new SchedulingDataViewModel();
+            if (showby == "DayWiseData")
+            {
+                model.Shifts = _scheduling.ShifsOfDate(datetoshow, region, 1, 0);
+            }
+            else if (showby == "WeekWiseData")
+            {
+                model.Shifts = _scheduling.ShifsOfWeek(datetoshow, region, 1, 0);
+            }
+            else
+            {
+                model.Shifts = _scheduling.ShifsOfMonth(datetoshow, region, 1, 0);
+            }
+            return model.Shifts.Count();
+        }
+
+        [Area("AdminArea")]
+        [HttpPost]
+        public void DeleteSelecetdShifts(List<int> shiftdetailsid)
+        {
+            var modifiedby = _admin.GetFirstOrDefault(x => x.Adminid == _admin.GetSessionAdminId()).Aspnetuserid;
+            foreach (var shiift in shiftdetailsid)
+            {
+                _shiftDetail.DeleteThisShift(shiift, modifiedby);
+            }
+        }
+
+        [Area("AdminArea")]
+        [HttpPost]
+        public void ApproveSelecetdShifts(List<int> shiftdetailsid)
+        {
+            var modifiedby = _admin.GetFirstOrDefault(x => x.Adminid == _admin.GetSessionAdminId()).Aspnetuserid;
+            foreach (var shiift in shiftdetailsid)
+            {
+                _shiftDetail.ReturnThisShift(shiift, modifiedby);
+            }
         }
 
         /// <summary>

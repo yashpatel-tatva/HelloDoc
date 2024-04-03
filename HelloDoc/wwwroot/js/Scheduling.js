@@ -48,7 +48,7 @@ $('#createnewshift').on('click', function () {
     console.log(format);
     $.ajax({
         url: '/AdminArea/AdminProviderTab/CreateShiftPopUp',
-        data: {format},
+        data: { format },
         success: function (result) {
             $('#PopUps').html(result);
             var my = new bootstrap.Modal(document.getElementById('ModalToOpen'));
@@ -65,7 +65,7 @@ $('.drawbyregiondropdown').on('change', function () {
 $('input[name="shiftstatus"]').on('click', function () {
     if (status == $(this).val()) {
         status = 0;
-        $(this).prop('checked' , false);
+        $(this).prop('checked', false);
     }
     else {
         status = $(this).val();
@@ -151,8 +151,8 @@ function GetData(showby, currentDate, region, status) {
 $('#provideroncallbtn').on('click', function () {
     $.ajax({
         url: '/AdminArea/AdminProviderTab/ProviderOnCall',
-        data: { datetoshow: currentDate.toISOString(), region: region, showby: showby } ,
-        type : 'POST',
+        data: { datetoshow: currentDate.toISOString(), region: region, showby: showby },
+        type: 'POST',
         success: function (response) {
             $('#nav-tabContent').html(response);
         }
@@ -162,6 +162,8 @@ $('#provideroncallbtn').on('click', function () {
 $('#agendaview').on('click', function () {
     $.ajax({
         url: '/AdminArea/AdminProviderTab/ShiftsAgenda',
+        data: { datetoshow: currentDate.toISOString(), region: region, showby: showby },
+        type : 'POST',
         success: function (response) {
             $('#nav-tabContent').html(response);
         }

@@ -18,7 +18,7 @@ namespace DataAccess.Repository
             _shift = shift;
         }
 
-        public void DeleteThisShift(int shiftdetailid)
+        public void DeleteThisShift(int shiftdetailid, string modifiedby)
         {
             var shift = GetFirstOrDefault(x => x.Shiftdetailid == shiftdetailid);
             if (shift != null)
@@ -26,6 +26,8 @@ namespace DataAccess.Repository
                 BitArray fortrue = new BitArray(1);
                 fortrue[0] = true;
                 shift.Isdeleted = fortrue;
+                shift.Modifiedby = modifiedby;
+                shift.Modifieddate = DateTime.Now;
                 _db.Update(shift);
                 _db.SaveChanges();
             }
@@ -80,7 +82,7 @@ namespace DataAccess.Repository
             }
         }
 
-        public void ReturnThisShift(int shiftdetailid)
+        public void ReturnThisShift(int shiftdetailid, string modifiedby)
         {
             var shift = GetFirstOrDefault(x => x.Shiftdetailid == shiftdetailid);
             if (shift != null)
@@ -93,6 +95,8 @@ namespace DataAccess.Repository
                 {
                     shift.Status = 1;
                 }
+                shift.Modifiedby = modifiedby;
+                shift.Modifieddate = DateTime.Now;
                 _db.Update(shift);
                 _db.SaveChanges();
             }

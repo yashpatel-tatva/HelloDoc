@@ -1,0 +1,39 @@
+﻿@{
+    Layout = null;
+}
+@using DataModels.AdminSideViewModels
+@model VendorsListViewModel
+<table class="w-100 table table-hover" id="vendortable">
+    <thead style="background-color: rgb(235, 235, 235) ; color: black !important ; font :normal!important">
+        <tr>
+            <th style="width : 15% !important">Profession</th>
+            <th style="width : 15% !important">Buisness Name</th>
+            <th style="width : 15% !important">Email</th>
+            <th style="width : 15% !important">Fax Number</th>
+            <th style="width : 15% !important">Phone Number</th>
+            <th style="width : 15% !important">Buisness Contact</th>
+            <th style="width : 10% !important">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var professional in Model.healthprofessionals)
+        {
+            <tr>
+                <td>@Model.healthprofessionaltypes.FirstOrDefault(x=>x.Healthprofessionalid == professional.Profession).Professionname</td>
+                <td>@professional.Vendorname</td>
+                <td>@professional.Email</td>
+                <td>@professional.Faxnumber</td>
+                <td>@professional.Phonenumber</td>
+                <td>@professional.Businesscontact</td>
+                <td class="d-flex gap-2">
+                    <button type="button" class="btn border-info text-info shadow-none roleeditbtn" data-id="@professional.Vendorid">
+                        <span>Edit</span>
+                    </button>
+                    <button type="button" class="btn border-info text-info shadow-none roledeletebtn" data-id="@professional.Vendorid">
+                        <span>Delete</span>
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

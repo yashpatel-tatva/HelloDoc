@@ -6,7 +6,7 @@
                 url = 'AdminArea/Dashboard/Dashboard';
                 break;
             case '#nav-ProviderLocation':
-                url = 'AdminArea/Dashboard/Status_Pending';
+                url = 'AdminArea/ProviderLocation/ProviderLocation';
                 break;
             case '#nav-Profile':
                 url = 'AdminArea/AdminProfile/AdminProfile';
@@ -21,7 +21,7 @@
                 url = 'AdminArea/AdminProviderTab/Invoicing';
                 break;
             case '#nav-Partners':
-                url = 'AdminArea/Dashboard/Status_Toclose';
+                url = 'AdminArea/AdminPartnersTab/Vendors';
                 break;
             case '#nav-Access':
                 url = 'AdminArea/AccessTab/AccessPage';

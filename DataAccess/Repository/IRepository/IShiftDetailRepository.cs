@@ -9,8 +9,8 @@ namespace DataAccess.Repository.IRepository
 {
     public interface IShiftDetailRepository : IRepository<Shiftdetail>
     {
-        void DeleteThisShift(int shiftdetailid);
+        void DeleteThisShift(int shiftdetailid, string modifiedby);
         bool EditShiftDetail(int shiftdetailid, DateOnly currentDate, DateTime startTimewithdate, DateTime endTimewithdate, string modifiedby);
-        void ReturnThisShift(int shiftdetailid);
+        void ReturnThisShift(int shiftdetailid, string modifiedby);
     }
 }
