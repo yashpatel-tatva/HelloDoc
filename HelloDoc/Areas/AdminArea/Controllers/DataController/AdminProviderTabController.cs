@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using System.Collections;
+using System.Drawing;
 
 namespace HelloDoc.Areas.AdminArea.Controllers.DataController
 {
@@ -530,29 +531,29 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
 
         [Area("AdminArea")]
         [HttpPost]
-        public IActionResult DeleteShift(int shiftdetailid, string format)
+        public IActionResult DeleteShift(int shiftdetailid, string format, int status, int region)
         {
             var date = _shiftDetail.GetFirstOrDefault(x => x.Shiftdetailid == shiftdetailid).Shiftdate;
             var datetoshow = new DateTime(date.Year, date.Month, date.Day);
             var modifiedby = _admin.GetFirstOrDefault(x => x.Adminid == _admin.GetSessionAdminId()).Aspnetuserid;
             _shiftDetail.DeleteThisShift(shiftdetailid, modifiedby);
-            return RedirectToAction(format, new { datetoshow });
+            return RedirectToAction(format, new { datetoshow, region, status });
         }
 
         [Area("AdminArea")]
         [HttpPost]
-        public IActionResult RetuenShift(int shiftdetailid, string format)
+        public IActionResult RetuenShift(int shiftdetailid, string format, int status, int region)
         {
             var date = _shiftDetail.GetFirstOrDefault(x => x.Shiftdetailid == shiftdetailid).Shiftdate;
             var datetoshow = new DateTime(date.Year, date.Month, date.Day);
             var modifiedby = _admin.GetFirstOrDefault(x => x.Adminid == _admin.GetSessionAdminId()).Aspnetuserid;
             _shiftDetail.ReturnThisShift(shiftdetailid, modifiedby);
-            return RedirectToAction(format, new { datetoshow });
+            return RedirectToAction(format, new { datetoshow , region , status });
         }
 
         [Area("AdminArea")]
         [HttpPost]
-        public IActionResult EditShift(int shiftdetailid, string shiftdate, string starttime, string endtime, string format)
+        public IActionResult EditShift(int shiftdetailid, string shiftdate, string starttime, string endtime, string format, int status, int region)
         {
             var shiftdetail = _shiftDetail.GetFirstOrDefault(x => x.Shiftdetailid == shiftdetailid);
             var date = shiftdetail.Shiftdate;
@@ -568,7 +569,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             var edited = _shiftDetail.EditShiftDetail(shiftdetailid, currentDate, StartTimewithdate, EndTimewithdate, modifiedby);
             if (edited)
             {
-                return RedirectToAction(format, new { datetoshow });
+                return RedirectToAction(format, new { datetoshow, region, status });
             }
             return BadRequest("There is already a shift exist");
         }

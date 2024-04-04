@@ -187,6 +187,22 @@ namespace DataAccess.ServiceRepository
             physician.Regionid = model.RegionID;
             physician.Zip = model.Zip;
             physician.Altphone = model.BusinessPhone;
+
+            Random rand = new Random();
+            double minLat = 24.396308;
+            double maxLat = 49.384358;
+            double minLon = -125.000000;
+            double maxLon = -66.934570;
+            double latitude = minLat + (rand.NextDouble() * (maxLat - minLat));
+            double longitude = minLon + (rand.NextDouble() * (maxLon - minLon));
+            Physicianlocation physicianlocation = new Physicianlocation();
+            physicianlocation.Physicianid = physician.Physicianid;
+            physicianlocation.Latitude = (decimal?)latitude;
+            physicianlocation.Longitude = (decimal?)longitude;
+            physicianlocation.Createddate = DateTime.Now;
+            physicianlocation.Physicianname = physician.Firstname + " " + physician.Lastname;
+            physicianlocation.Address = physician.Address1 + " " + physician.City + " " + physician.Zip;
+            _db.Physicianlocations.Add( physicianlocation );
             _db.Update(physician);
             _db.SaveChanges();
         }
@@ -427,6 +443,21 @@ namespace DataAccess.ServiceRepository
             physicirole.Roleid = "2";
             _db.Aspnetuserroles.Add(physicirole);
             _db.SaveChanges();
+            Random rand = new Random();
+            double minLat = 24.396308;
+            double maxLat = 49.384358;
+            double minLon = -125.000000;
+            double maxLon = -66.934570;
+            double latitude = minLat + (rand.NextDouble() * (maxLat - minLat));
+            double longitude = minLon + (rand.NextDouble() * (maxLon - minLon));
+            Physicianlocation physicianlocation = new Physicianlocation();
+            physicianlocation.Physicianid = physician.Physicianid;
+            physicianlocation.Latitude = (decimal?)latitude;
+            physicianlocation.Longitude = (decimal?)longitude;
+            physicianlocation.Createddate = DateTime.Now;
+            physicianlocation.Physicianname = physician.Firstname + " " + physician.Lastname;
+            physicianlocation.Address = physician.Address1 + " " + physician.City + " " + physician.Zip;
+            _db.Physicianlocations.Add(physicianlocation);
             return physician.Physicianid;
         }
     }

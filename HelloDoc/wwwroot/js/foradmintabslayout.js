@@ -26,11 +26,14 @@
             case '#nav-Access':
                 url = 'AdminArea/AccessTab/AccessPage';
                 break;
+            case '#nav-createadmin':
+                url = 'AdminArea/AdminProfile/CreateAdmin';
+                break;
             case '#nav-Records':
                 url = 'AdminArea/Dashboard/Status_Unpaid';
                 break;
             default:
-                url = 'AdminArea/Home/AdminTabsLayout';
+                url = 'AdminArea/Dashboard/Dashboard';
         }
 
         $.ajax({

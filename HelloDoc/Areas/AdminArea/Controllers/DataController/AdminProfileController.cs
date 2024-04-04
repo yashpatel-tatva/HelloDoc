@@ -47,5 +47,11 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             _admin.EditBillingDetails(_admin.GetSessionAdminId(), viewModel);
             return RedirectToAction("AdminTabsLayout", "Home");
         }
+        [Area("AdminArea")]
+        public IActionResult CreateAdmin()
+        {
+            return View();
+        }
+
     }
 }

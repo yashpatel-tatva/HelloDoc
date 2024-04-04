@@ -2,6 +2,17 @@
     Layout = null;
 }
 
+
+<style>
+    #map {
+        height: 600px;
+    }
+
+    .mapcontainer {
+        border: 20px solid white;
+    }
+</style>
+
 <div class="container">
     <div class="d-flex justify-content-between">
         <div class="h3 fw-bold">Provider Location</div>
@@ -14,5 +25,9 @@
             </a>
         </div>
     </div>
-
+    <div class="mapcontainer rounded-4">
+        <div id="map"></div>
+    </div>
 </div>
+
+<script src="~/js/ProviderLocation.js" asp-append-version="true"></script>

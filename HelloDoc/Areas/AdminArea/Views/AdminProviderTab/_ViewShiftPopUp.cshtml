@@ -108,12 +108,14 @@
 
     var format = "@Model.format";
     console.log(format);
+    var status = localStorage.getItem('status') || 0;
+    var region = localStorage.getItem('region') || 0;
 
     $('#ViewShiftDeleteBtn').on('click', function () {
         var shiftdetailid = $(this).data('id');
         $.ajax({
             url: '/AdminArea/AdminProviderTab/DeleteShift',
-            data: { shiftdetailid, format },
+            data: { shiftdetailid, format , status , region},
             type: 'POST',
             success: function (response) {
                 $('#timewisedata').html(response);
@@ -133,7 +135,7 @@
         var shiftdetailid = $(this).data('id');
         $.ajax({
             url: '/AdminArea/AdminProviderTab/RetuenShift',
-            data: { shiftdetailid, format },
+            data: { shiftdetailid, format, status, region },
             type: 'POST',
             success: function (response) {
                 $('#timewisedata').html(response);
@@ -186,7 +188,7 @@
             console.log(endTime);
             $.ajax({
                 url: '/AdminArea/AdminProviderTab/EditShift',
-                data: { shiftdetailid, shiftdate , startTime , endTime , format },
+                data: { shiftdetailid, shiftdate, startTime, endTime, format, region, status },
                 type: 'POST',
                 success: function (response) {
                     $('#timewisedata').html(response);
