@@ -1,0 +1,159 @@
+﻿@{
+    Layout = null;
+}
+@using DataModels.AdminSideViewModels
+@model VendorDetailViewModel
+
+<div class="container">
+    <div class="d-flex justify-content-between">
+        <div class="h3 fw-bold">
+            @if (Model == null)
+            {
+                @:Add
+            }
+            else
+            {
+                @:Update
+            }
+            Business
+        </div>
+    </div>
+    <div>
+        <form asp-action="CreateOrEditVendor" asp-controller="AdminPartnersTab" asp-area="AdminArea" method="post">
+            <div class="bg-light rounded my-3 shadow" id="content">
+                <div class="p-4">
+                    <div class="h5 fw-bold">Submit Information</div>
+                    <div class="d-flex row">
+                        <input type="hidden" asp-for="id" />
+                        <div class="py-3 col-xl-6 col-md-6 col-sm-12">
+                            <div class="form-group d-flex align-items-center rounded">
+                                <input type="text" class="form-control" placeholder="" asp-for="Name"><span>Business Name</span>
+                            </div>
+                            <span class="text-danger spanofvalid" asp-validation-for="Name"></span>
+                        </div>
+                        <div class="py-3 col-xl-6 col-md-6 col-sm-12">
+                            <div class="form-group d-flex align-items-center rounded">
+                                @if (Model != null)
+                                {
+                                    <input type="hidden" value="@Model.Profession" id="profession" />
+                                    <select class="form-select professions" asp-for="Profession">
+                                    </select>
+                                }
+                                else
+                                {
+                                    <input type="hidden" value="Invalid" id="profession" />
+                                    <select class="form-select professions" asp-for="Profession">
+                                        <option value="Invalid">Select Profession</option>
+                                    </select>
+                                }
+                                <span class="selectedselectspan">Profession</span>
+                            </div>
+                            <span class="text-danger spanofvalid" asp-validation-for="Profession"></span>
+                        </div>
+                        <div class="py-3 col-xl-6 col-md-6 col-sm-12">
+                            <div class="form-group d-flex align-items-center rounded">
+                                <input type="text" class="form-control" placeholder="" asp-for="FaxNumber"><span>Fax Number</span>
+                            </div>
+                            <span class="text-danger spanofvalid" asp-validation-for="FaxNumber"></span>
+                        </div>
+                        <div class="py-3 col-xl-6 col-md-6 col-sm-12">
+                            <div class="telephone rounded">
+                                <div class="input-group d-flex align-items-center rounded ">
+                                    <input type="tel" class="form-control" asp-for="PhoneNumber">
+                                </div>
+                            </div>
+                            <span class="text-danger spanofvalid" asp-validation-for="PhoneNumber"></span>
+                        </div>
+                        <div class="py-3 col-xl-6 col-md-6 col-sm-12">
+                            <div class="form-group d-flex align-items-center rounded">
+                                <input type="email" class="form-control" placeholder="" asp-for="Email"><span>Email</span>
+                            </div>
+                            <span class="text-danger spanofvalid" asp-validation-for="Email"></span>
+                        </div>
+                        <div class="py-3 col-xl-6 col-md-6 col-sm-12">
+                            <div class="form-group d-flex align-items-center rounded">
+                                <input type="text" class="form-control" placeholder="" asp-for="BusinessContact"><span>Business Contact</span>
+                            </div>
+                            <span class="text-danger spanofvalid" asp-validation-for="BusinessContact"></span>
+                        </div>
+                        <div class="py-3 col-xl-6 col-md-6 col-sm-12">
+                            <div class="form-group d-flex align-items-center rounded">
+                                <input type="text" class="form-control" placeholder="" asp-for="Street"><span>Street</span>
+                            </div>
+                            <span class="text-danger spanofvalid" asp-validation-for="Street"></span>
+                        </div>
+                        <div class="py-3 col-xl-6 col-md-6 col-sm-12">
+                            <div class="form-group d-flex align-items-center rounded">
+                                <input type="text" class="form-control" placeholder="" asp-for="City"><span>City</span>
+                            </div>
+                            <span class="text-danger spanofvalid" asp-validation-for="City"></span>
+                        </div>
+                        <div class="py-3 col-xl-6 col-md-6 col-sm-12">
+                            <div class="form-group d-flex align-items-center rounded">
+                                <input type="text" class="form-control" placeholder="" asp-for="State"><span>State</span>
+                            </div>
+                            <span class="text-danger spanofvalid" asp-validation-for="State"></span>
+                        </div>
+                        <div class="py-3 col-xl-6 col-md-6 col-sm-12">
+                            <div class="form-group d-flex align-items-center rounded">
+                                <input type="text" class="form-control" placeholder="" asp-for="Zip"><span>Zip</span>
+                            </div>
+                            <span class="text-danger spanofvalid" asp-validation-for="Zip"></span>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end gap-3 mt-4">
+                        <button type="submit" class="btn btn-info shadow-none text-white py-2">
+                            Submit
+                        </button>
+                        <button class="btn btn-outline-info shadow-none py-2" onclick="location.reload();">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    $('input[type="tel"]').each(function () {
+        var iti = window.intlTelInput(this, {
+            nationalMode: false,
+            utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"
+        });
+        $(this).on('blur', function () {
+            var fullNumber = iti.getNumber();
+            var countryCode = iti.getSelectedCountryData().dialCode;
+            if (fullNumber.startsWith("+" + countryCode + "+" + countryCode)) {
+                fullNumber = fullNumber.replace("+" + countryCode + "+", "+");
+            }
+            console.log(fullNumber);
+            $(this).val(fullNumber);
+        });
+    });
+
+    $.ajax({
+        url: '/AdminArea/AdminPartnersTab/GetProfessionalTypes',
+        success: function (data) {
+            var professions = $('.professions');
+            $.each(data, function (index, p) {
+                professions.append($('<option>', {
+                    value: p.healthprofessionalid,
+                    text: p.professionname
+                }))
+            })
+            $('.professions').val($('#profession').val())
+        }
+    })
+
+    $('.spanofvalid').bind("DOMSubtreeModified", function () {
+        if ($(this).text().trim() !== '') {
+            $(this).parents('.py-3').addClass('error');
+        } else {
+            $(this).parents('.py-3').removeClass('error');
+        }
+    });
+
+
+</script>
+<link rel="stylesheet" href="~/css/error.css" asp-append-version="true" />

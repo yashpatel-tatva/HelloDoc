@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using DataAccess.Repository.IRepository;
 using HelloDoc;
 
@@ -19,6 +20,13 @@ namespace DataAccess.Repository
 			_db.Healthprofessionals.Update(hp);
 			_db.SaveChanges();
         }
+
+        public List<Healthprofessional> GetVendorsToShow()
+        {
+			BitArray forfalse = new BitArray(1);
+			forfalse[0] = false;
+            var hp = _db.Healthprofessionals.Where(x=>x.Isdeleted == forfalse).ToList();
+			return hp;       }
     }
 }		
 

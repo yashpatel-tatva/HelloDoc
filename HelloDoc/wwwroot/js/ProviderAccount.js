@@ -367,7 +367,6 @@ $('#DeleteAccount').on('click', function () {
                     $('#nav-tabContent').html(response);
                 }
             });
-
         }
     });
 });

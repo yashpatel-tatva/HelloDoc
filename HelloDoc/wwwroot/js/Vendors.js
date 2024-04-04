@@ -31,6 +31,4 @@ $('#searchInput').on('keyup', function () {
     var search = $(this).val();
     getdata(search, $('.professions').val());
 })
-
-
-        
+  

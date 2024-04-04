@@ -1,0 +1,11 @@
+﻿.error  .form-group  ,
+.error .telephone{
+    border: 1px solid red;
+    background: #ffefef;
+}
+.error input:focus + span,
+.error input:not(:placeholder-shown) + span,
+.error textarea:focus + span,
+.error textarea:not(:placeholder-shown) + span{
+    color : red;
+}
