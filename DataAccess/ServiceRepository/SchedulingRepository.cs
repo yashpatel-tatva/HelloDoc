@@ -2,11 +2,6 @@
 using DataAccess.ServiceRepository.IServiceRepository;
 using DataModels.AdminSideViewModels;
 using HelloDoc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.ServiceRepository
 {
@@ -17,7 +12,7 @@ namespace DataAccess.ServiceRepository
         private readonly IShiftRepository _shift;
         private readonly HelloDocDbContext _db;
 
-        public SchedulingRepository(IPhysicianRepository physician, IShiftDetailRepository shiftDetail, IShiftRepository shift , HelloDocDbContext helloDocDbContext)
+        public SchedulingRepository(IPhysicianRepository physician, IShiftDetailRepository shiftDetail, IShiftRepository shift, HelloDocDbContext helloDocDbContext)
         {
             _physician = physician;
             _shiftDetail = shiftDetail;
@@ -36,7 +31,7 @@ namespace DataAccess.ServiceRepository
             return physicianDatas;
         }
 
-        public List<ShiftData>ShifsOfDate(DateTime datetoshow, int region, int status, int next)
+        public List<ShiftData> ShifsOfDate(DateTime datetoshow, int region, int status, int next)
         {
             List<ShiftData> shiftDatas = new List<ShiftData>();
             DateOnly currentday = DateOnly.FromDateTime(datetoshow);
@@ -58,16 +53,16 @@ namespace DataAccess.ServiceRepository
                     Location = item.Regionid.ToString(),
                     Shiftdate = item.Shiftdate,
                     Description = "Hii",
-                    Regionname = _db.Regions.FirstOrDefault(x=>x.Regionid==item.Regionid).Name,
+                    Regionname = _db.Regions.FirstOrDefault(x => x.Regionid == item.Regionid).Name,
                     StartTime = item.Starttime,
                     EndTime = item.Endtime,
                     Physicianid = _shift.GetFirstOrDefault(x => x.Shiftid == item.Shiftid).Physicianid,
                     Status = _shiftDetail.GetFirstOrDefault(x => x.Shiftdetailid == item.Shiftdetailid).Status,
                 });
             }
-            if(next != 0)
+            if (next != 0)
             {
-                shiftDatas = shiftDatas.Skip((next-1)*10).Take(10).ToList();
+                shiftDatas = shiftDatas.Skip((next - 1) * 10).Take(10).ToList();
             }
             return shiftDatas;
         }
@@ -87,7 +82,7 @@ namespace DataAccess.ServiceRepository
                     shifts.Add(s);
                 }
             }
-            shifts =shifts.OrderBy(x=>x.StartTime).ToList();
+            shifts = shifts.OrderBy(x => x.StartTime).ToList();
             if (next != 0)
             {
                 var skips = (next - 1) * 10;
@@ -109,7 +104,7 @@ namespace DataAccess.ServiceRepository
                     shifts.Add(s);
                 }
             }
-            shifts = shifts.OrderBy(x=>x.StartTime).ToList();   
+            shifts = shifts.OrderBy(x => x.StartTime).ToList();
             if (next != 0)
             {
                 var skips = (next - 1) * 10;

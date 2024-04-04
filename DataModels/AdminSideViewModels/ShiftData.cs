@@ -2,7 +2,7 @@
 {
     public class ShiftData
     {
-        public int ShiftId { get; set; }    
+        public int ShiftId { get; set; }
         public string Location { get; set; }
         public string Regionname { get; set; }
         public string Description { get; set; }

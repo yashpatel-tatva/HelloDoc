@@ -10,7 +10,7 @@ namespace DataAccess.ServiceRepository
         private readonly IRequestRepository _request;
         private readonly IAllRequestDataRepository _allRequestDataRepository;
         private readonly IPhysicianRepository _physician;
-        public PaginationRepository(IRequestRepository requestRepository, IAllRequestDataRepository allRequestDataRepository , IPhysicianRepository physicianRepository)
+        public PaginationRepository(IRequestRepository requestRepository, IAllRequestDataRepository allRequestDataRepository, IPhysicianRepository physicianRepository)
         {
             _request = requestRepository;
             _allRequestDataRepository = allRequestDataRepository;
@@ -40,16 +40,16 @@ namespace DataAccess.ServiceRepository
                         string remail = item.Email;
                         string physician = "";
                         string phyemail = "";
-                        string dob = item.User.Intdate.ToString()+"-"+ DateTime.ParseExact(item.User.Strmonth, "MMMM", CultureInfo.InvariantCulture).Month.ToString() + "_"+item.User.Intyear.ToString();
+                        string dob = item.User.Intdate.ToString() + "-" + DateTime.ParseExact(item.User.Strmonth, "MMMM", CultureInfo.InvariantCulture).Month.ToString() + "_" + item.User.Intyear.ToString();
                         if (item.Physicianid != null)
                         {
-                            physician = _physician.GetFirstOrDefault(x => x.Physicianid == item.Physicianid).Firstname+_physician.GetFirstOrDefault(x => x.Physicianid == item.Physicianid).Lastname;
+                            physician = _physician.GetFirstOrDefault(x => x.Physicianid == item.Physicianid).Firstname + _physician.GetFirstOrDefault(x => x.Physicianid == item.Physicianid).Lastname;
                             phyemail = _physician.GetFirstOrDefault(x => x.Physicianid == item.Physicianid).Email;
                         }
-                        string fullstring = firstname+lastname+email+address+cphone+remail+rphone+physician+phyemail+dob;
+                        string fullstring = firstname + lastname + email + address + cphone + remail + rphone + physician + phyemail + dob;
                         fullstring = fullstring.Replace(" ", "");
                         fullstring = fullstring.ToLower();
-                        search = search.ToLower();  
+                        search = search.ToLower();
                         if (fullstring.Contains(search))
                         {
                             requests.Add(item);

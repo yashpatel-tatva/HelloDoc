@@ -51,7 +51,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         public List<Menu> GetSelectedMenusByRoleId(int accounttype, int roleid)
         {
             var result = _role.GetMenusByRole(roleid).ToList();
-            if(accounttype != 0)
+            if (accounttype != 0)
             {
                 result = result.Where(x => x.Accounttype == accounttype).ToList();
             }
@@ -62,9 +62,9 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         public List<Menu> GetRemainingMenusByRole(int accounttype, int roleid)
         {
             var result = _role.GetRemainingMenusByRole(roleid).ToList();
-            if(accounttype != 0)
+            if (accounttype != 0)
             {
-                result = result.Where(x=>x.Accounttype == accounttype).ToList();
+                result = result.Where(x => x.Accounttype == accounttype).ToList();
             }
             return result;
         }
