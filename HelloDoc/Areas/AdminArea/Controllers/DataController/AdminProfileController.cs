@@ -11,11 +11,13 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         private readonly IAdminRepository _admin;
         private readonly HelloDocDbContext _dbContext;
         private readonly IAspNetUserRepository _userRepository;
-        public AdminProfileController(IAdminRepository admin, IAspNetUserRepository asp, HelloDocDbContext helloDocDbContext)
+        private readonly IRoleRepository _role;
+        public AdminProfileController(IAdminRepository admin, IAspNetUserRepository asp, HelloDocDbContext helloDocDbContext, IRoleRepository role)
         {
             _admin = admin;
             _dbContext = helloDocDbContext;
             _userRepository = asp;
+            _role = role;
         }
         [Area("AdminArea")]
         public IActionResult AdminProfile()
@@ -50,7 +52,20 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         [Area("AdminArea")]
         public IActionResult CreateAdmin()
         {
-            return View();
+            AdminProfileViewModel model = new AdminProfileViewModel();
+            model.State = _dbContext.Regions.ToList();
+            model.roles = _role.GetAllRolesToSelect().Where(x => x.Accounttype == 1 || x.Accounttype == 0).ToList();
+            return View(model);
+        }
+
+        [Area("AdminArea")]
+        [HttpPost]
+        public IActionResult CreateThisAdmin(AdminProfileViewModel model)
+        {
+            model.selectedregion = Request.Form["selectedregion"].ToList();
+            _admin.CreateAdmin(model);
+            TempData["Message"] = "Admin Created";
+            return RedirectToAction("AdminTabsLayout", "Home");
         }
 
     }

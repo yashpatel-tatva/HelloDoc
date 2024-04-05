@@ -2,6 +2,7 @@
 using DataAccess.ServiceRepository;
 using DataAccess.ServiceRepository.IServiceRepository;
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace HelloDoc.Areas.AdminArea.Controllers
 {
@@ -11,13 +12,15 @@ namespace HelloDoc.Areas.AdminArea.Controllers
         private readonly ISendEmailRepository _sendEmail;
         private readonly IAspNetUserRepository _userRepository;
         private readonly HelloDocDbContext _db;
+        private readonly IJwtRepository _jwtRepository;
 
-        public HomeController(IAdminRepository admin, ISendEmailRepository sendEmailRepository, IAspNetUserRepository aspNetUserRepository, HelloDocDbContext helloDocDbContext)
+        public HomeController(IAdminRepository admin, ISendEmailRepository sendEmailRepository, IAspNetUserRepository aspNetUserRepository, HelloDocDbContext helloDocDbContext, IJwtRepository jwtRepository)
         {
             _admin = admin;
             _sendEmail = sendEmailRepository;
             _userRepository = aspNetUserRepository;
             _db = helloDocDbContext;
+            _jwtRepository = jwtRepository;
         }
 
         public IActionResult Index()
@@ -34,6 +37,20 @@ namespace HelloDoc.Areas.AdminArea.Controllers
         {
             Aspnetuser aspnetuser = new Aspnetuser();
             aspnetuser.Email = email;
+            var jwt = HttpContext.Request.Cookies["jwt"];
+            if(jwt != null)
+            {
+                if(_jwtRepository.ValidateToken(jwt , out JwtSecurityToken jwttoken))
+                {
+                    var aspnetuserid = jwttoken.Claims.FirstOrDefault(x => x.Type == "AspNetId");
+                    var roleClaim = jwttoken.Claims.FirstOrDefault(x => x.Type == "Role");
+                    var aspnetuserforlog = _userRepository.GetFirstOrDefault(x => x.Id == aspnetuserid.Value);
+                    if(roleClaim.Value == "Admin")
+                    {
+                        return RedirectToAction("Login", "CredentialAdmin",aspnetuserforlog);
+                    }
+                }
+            }
             return View(aspnetuser);
         }
 

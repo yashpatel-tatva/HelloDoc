@@ -71,6 +71,11 @@ body {
     color: #0dcaf0;
     font-weight : 600;
 }
+.records-dropdown button.active {
+    background-color: #dffaff;
+    color: #0dcaf0;
+    font-weight: 600;
+}
 
 
 @media only screen and (max-width:540px) {

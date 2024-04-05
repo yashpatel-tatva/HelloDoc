@@ -83,7 +83,7 @@
                         }
                         @for (int curr = 1; curr <= 7 - daysleft; curr++)
                         {
-                            <td id="2_@tempt"></td>
+                            <td id="2_@tempt" style="vertical-align : top"></td>
                             tempt++;
                         }
                     </tr>
@@ -95,7 +95,7 @@
                         }
                         @for (int curr = 1; curr <= 7 - daysleft; curr++)
                         {
-                            <td id="3_@tempt"><div style="min-height:25px" class="LoadMore" id="next_@tempt"></div></td>
+                            <td id="3_@tempt"><div style="min-height:25px ;opacity:0.75" class="d-flex justify-content-center rounded-3 LoadMore d-none bg-info" id="next_@tempt">Load More</div></td>
                             tempt++;
                         }
                     </tr>
@@ -124,7 +124,7 @@
                     <tr>
                         @for (int curr = 1; curr <= 7; curr++)
                         {
-                            <td id="2_@tempt"></td>
+                            <td id="2_@tempt" style="vertical-align : top"></td>
                             tempt++;
                         }
                     </tr>
@@ -132,7 +132,7 @@
                     <tr>
                         @for (int curr = 1; curr <= 7; curr++)
                         {
-                            <td id="3_@tempt"><div style="min-height:25px" class="LoadMore" id="next_@tempt"></div></td>
+                            <td id="3_@tempt"><div style="min-height:25px ;opacity:0.75" class="d-flex justify-content-center rounded-3 LoadMore d-none bg-info" id="next_@tempt">Load More</div></td>
                             tempt++;
                         }
                     </tr>
@@ -164,7 +164,7 @@
             <tr>
                 @while (tempt1 <= daysInMonth)
                 {
-                    <td id="2_@tempt1"></td>
+                    <td id="2_@tempt1" style="vertical-align : top"></td>
                     tempt1++;
                 }
             </tr>
@@ -174,14 +174,14 @@
             <tr>
                 @while (tempt1 <= daysInMonth)
                 {
-                    <td id="3_@tempt1"><div style="min-height:25px" class="LoadMore" id="next_@tempt"></div></td>
+                    <td id="3_@tempt1"><div style="min-height:25px ;opacity:0.75" class="d-flex justify-content-center rounded-3 LoadMore d-none bg-info" id="next_@tempt">Load More</div></td>
                     tempt1++;
                 }
             </tr>
         </tbody>
     </table>
 </div>
-@foreach (var shift in Model.Shifts)
+@*@foreach (var shift in Model.Shifts)
 {
     <script>
         var shiftdate = @shift.StartTime.ToString("dd");
@@ -197,7 +197,109 @@
         $('#' + timeslot).append('<div class="events  text-dark" id="event_@shift.ShiftId" data-id="@shift.ShiftId" data-url="MonthWiseData"> @Model.physicianDatas.FirstOrDefault(x=>x.Physicianid==shift.Physicianid).Physicianname <br> @shift.StartTime.ToString("hh:mm tt") - @shift.EndTime.ToString("hh:mm tt")</div>');
         $('#event_@shift.ShiftId').css("background-color", color);
     </script>
+}*@
+
+@for (var date = Model.firstMonthdate; date <= Model.lastMonthdate; date = date.AddDays(1))
+{
+    <script>
+        var date = "@date.ToString("MM dd yyyy")";
+        var datetoshow = new Date(date);
+        var timezoneOffset = datetoshow.getTimezoneOffset();
+        datetoshow.setMinutes(datetoshow.getMinutes() - timezoneOffset);
+        datetoshow = datetoshow.toISOString();
+        var status = localStorage.getItem('status') || 0;
+        var region = localStorage.getItem('region') || 0;
+        var pagesize = 3;
+        var next = 1;
+        var d = @date.Day;
+        var timeslot = "2_" + d;
+        var shifts = [];
+        getdata(datetoshow, 1, timeslot);
+        function getdata(datetoshow, next, timeslot) {
+            $.ajax({
+                url: '/AdminArea/AdminProviderTab/DateWiseData',
+                data: { datetoshow, region, status, next, pagesize },
+                type: 'POST',
+                async: false,
+                success: function (data) {
+                    shifts = data.shifts;
+                }
+            });
+            var showby = "DayWiseData";
+            var status = 0;
+            var totalcount;
+            $.ajax({
+                url: '/AdminArea/AdminProviderTab/ShiftCountbyFilter',
+                data: { datetoshow, region, showby, status },
+                type: 'POST',
+                async: false,
+                success: function (data) {
+                    totalcount = data;
+                }
+            }); if (totalcount > 3) {
+                $('#next_' + d).removeClass('d-none');
+            }
+
+            $.each(shifts, function (index, shift) {
+                var startTime = new Date(shift.startTime);
+                var endTime = new Date(shift.endTime);
+                var time = formater(startTime, endTime)
+                var color = "";
+                if (shift.status == 1) {
+                    color = "#ffd4ed";
+                }
+                if (shift.status == 2) {
+                    color = "#cee9cd";
+                }
+                $('#' + timeslot).css("padding", "0px")
+                $('#' + timeslot).append('<div class="events  text-dark" id="event_' + shift.shiftId + '" data-id="' + shift.shiftId + '" data-url="MonthWiseData">' + shift.physicianname + '<br>' + time + '</div>');
+                $('#event_' + shift.shiftId).css("background-color", color);
+            });
+        }
+
+
+        function formater(startTime, endTime) {
+            var startHours = startTime.getHours();
+            var startMinutes = startTime.getMinutes();
+            var endHours = endTime.getHours();
+            var endMinutes = endTime.getMinutes();
+            var startPeriod = startHours < 12 ? 'AM' : 'PM';
+            var endPeriod = endHours < 12 ? 'AM' : 'PM';
+            startHours = startHours % 12 || 12; // convert 0 to 12
+            endHours = endHours % 12 || 12; // convert 0 to 12
+            startMinutes = startMinutes < 10 ? '0' + startMinutes : startMinutes;
+            endMinutes = endMinutes < 10 ? '0' + endMinutes : endMinutes;
+
+            var formattedstartTime = startHours + ':' + startMinutes + ' ' + startPeriod;
+            var formattedendTime = endHours + ':' + endMinutes + ' ' + endPeriod;
+            var time = formattedstartTime + ' - ' + formattedendTime
+            return time;
+        }
+    </script>
 }
+<script>
+    $('.LoadMore').on('click', function () {
+        var id = $(this).attr('id');
+        var parse = id.split('_');
+        var dateparse = date.split(' ')
+        var stringdate = dateparse[0] + ' ' + parse[1] + ' ' + dateparse[2];
+        var datetoshow = new Date(stringdate);
+        var timezoneOffset = datetoshow.getTimezoneOffset();
+        datetoshow.setMinutes(datetoshow.getMinutes() - timezoneOffset);
+        datetoshow = datetoshow.toISOString();
+        var timeslot = "2_" + parse[1];
+        if ($(this).text() == "Load More") {
+            $(this).text("Less");
+            getdata(datetoshow, 0, timeslot);
+        }
+        else {
+            $(this).text("Load More");
+            $('#' + timeslot).html('');
+            getdata(datetoshow, 1, timeslot);
+        }
+    });
+</script>
+
 @*
 <script>
     var next = 1;

@@ -3,6 +3,7 @@ using DataModels.AdminSideViewModels;
 using HelloDoc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using System.Collections;
 
 namespace DataAccess.Repository
 {
@@ -127,6 +128,49 @@ namespace DataAccess.Repository
             admin.Zip = viewModel.Zip;
             admin.Regionid = viewModel.Region;
             _db.Admins.Update(admin);
+            _db.SaveChanges();
+        }
+
+        public void CreateAdmin(AdminProfileViewModel model)
+        {
+            BitArray forfalse = new BitArray(1);
+            forfalse[0] = false;
+            Aspnetuser aspnetuser = new Aspnetuser();
+            aspnetuser.Id = Guid.NewGuid().ToString();
+            aspnetuser.Username = model.Username;
+            aspnetuser.Passwordhash = model.Password;
+            aspnetuser.Createddate = DateTime.Now;
+            aspnetuser.Email = model.Email;
+            aspnetuser.Phonenumber = model.Mobile;
+            _db.Aspnetusers.Add(aspnetuser);
+            Admin admin = new Admin();
+            admin.Aspnetuserid = aspnetuser.Id;
+            admin.Firstname = model.FirstName;
+            admin.Lastname = model.LastName;
+            admin.Email = model.Email;
+            admin.Mobile = model.Mobile;
+            admin.Address1 = model.Address1;
+            admin.Address2 = model.Address2;
+            admin.Zip = model.Zip;
+            admin.Regionid = model.Region;
+            admin.Altphone = model.BillMobile;
+            admin.Createddate = DateTime.Now;
+            admin.Createdby = GetFirstOrDefault(x => x.Adminid == GetSessionAdminId()).Aspnetuserid;
+            admin.Status = 1;
+            admin.Isdeleted = forfalse;
+            admin.Roleid = int.Parse(model.Role);
+            _db.Admins.Add(admin);
+            _db.SaveChanges();
+            foreach(var r in model.selectedregion)
+            {
+                Adminregion adminregion = new Adminregion();
+                adminregion.Adminid = admin.Adminid;
+                adminregion.Regionid = int.Parse(r);
+                _db.Adminregions.Add(adminregion);
+            }
+            Aspnetuserrole aspnetuserrole = new Aspnetuserrole();
+            aspnetuserrole.Userid = aspnetuser.Id; aspnetuserrole.Roleid = "1";
+            _db.Aspnetuserroles.Add(aspnetuserrole);
             _db.SaveChanges();
         }
     }

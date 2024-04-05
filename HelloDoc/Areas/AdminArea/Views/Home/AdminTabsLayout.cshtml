@@ -11,21 +11,32 @@
             <button class="nav-link maintabs me-3" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Dashboard</button>
             <button class="nav-link maintabs me-3" data-bs-toggle="tab" data-bs-target="#nav-ProviderLocation" type="button" role="tab" aria-controls="nav-ProviderLocation" aria-selected="false">Provider Location</button>
             <button class="nav-link maintabs me-3" data-bs-toggle="tab" data-bs-target="#nav-Profile" type="button" role="tab" aria-controls="nav-Profile" aria-selected="false">My Profile</button>
-            <button class="nav-link me-3 dropdown ms-2" type="button" data-bs-toggle="dropdown" role="tab" aria-expanded="false">
+            <button class="nav-link me-3 dropdown pd ms-2" type="button" data-bs-toggle="dropdown" role="tab" aria-expanded="false">
                 Providers
             </button>
             <div class="dropdown-menu dropdown-menu-right provider-dropdown">
-                <button type="button" class="dropdown-item maintabs text-center" data-bs-target="#providers">Provider</button>
-                <button type="button" class="dropdown-item maintabs text-center" data-bs-target="#scheduling">Scheduling</button>
-                <button type="button" class="dropdown-item maintabs text-center" data-bs-target="#invoicing">Invoicing</button>
+                <button type="button" class="dropdown-item pdi maintabs text-center" data-bs-target="#providers">Provider</button>
+                <button type="button" class="dropdown-item pdi maintabs text-center" data-bs-target="#scheduling">Scheduling</button>
+                <button type="button" class="dropdown-item pdi maintabs text-center" data-bs-target="#invoicing">Invoicing</button>
             </div>
             <button class="nav-link maintabs me-3" data-bs-toggle="tab" data-bs-target="#nav-Partners" type="button" role="tab" aria-controls="nav-Partners" aria-selected="false">Partners</button>
             <button class="nav-link maintabs me-3" data-bs-toggle="tab" data-bs-target="#nav-Access" type="button" role="tab" aria-controls="nav-Access" aria-selected="false">Access</button>
             <button class="nav-link maintabs me-3" data-bs-toggle="tab" data-bs-target="#nav-createadmin" type="button" role="tab" aria-controls="nav-createadmin" aria-selected="false">Create Admin</button>
-            <button class="nav-link maintabs me-3" data-bs-toggle="tab" data-bs-target="#nav-Records" type="button" role="tab" aria-controls="nav-Records" aria-selected="false">Records</button>
+            <button class="nav-link me-3 dropdown rd ms-2" type="button" data-bs-toggle="dropdown" role="tab" aria-expanded="false">
+                Records
+            </button>
+            <div class="dropdown-menu dropdown-menu-right records-dropdown">
+                <button type="button" class="dropdown-item rdi maintabs text-center" data-bs-target="#patient-history">Patient history</button>
+                <button type="button" class="dropdown-item rdi maintabs text-center" data-bs-target="#patient-records">Patient records</button>
+                <button type="button" class="dropdown-item rdi maintabs text-center" data-bs-target="#search-records">Search records</button>
+                <button type="button" class="dropdown-item rdi maintabs text-center" data-bs-target="#email-logs">Email logs</button>
+                <button type="button" class="dropdown-item rdi maintabs text-center" data-bs-target="#sms-logs">SMS logs</button>
+                <button type="button" class="dropdown-item rdi maintabs text-center" data-bs-target="#block-history">Block history</button>
+            </div>
         </div>
     </div>
 </nav>
+
 <div class="position-relative">
     <div class="offcanvas offcanvas-start position-absolute" data-bs-scroll="false" style="width:65%" tabindex="-1" id="layoutnav" aria-labelledby="offcanvasWithBackdropLabel">
         <span class="p-2 "> <span class="small">Welcome , </span><b>@username</b></span>

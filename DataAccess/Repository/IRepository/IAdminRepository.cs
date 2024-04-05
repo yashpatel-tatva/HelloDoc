@@ -11,5 +11,6 @@ namespace DataAccess.Repository.IRepository
         AdminProfileViewModel GetAdminProfile(int id);
         void Edit(int adminid, AdminProfileViewModel viewModel);
         void EditBillingDetails(int adminid, AdminProfileViewModel viewModel);
+        void CreateAdmin(AdminProfileViewModel model);
     }
 }

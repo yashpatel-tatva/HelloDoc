@@ -1,4 +1,211 @@
 ﻿@{
     Layout = null;
 }
-<h3>Create Admin</h3>
+@using DataModels.AdminSideViewModels
+@model AdminProfileViewModel
+<div class="container">
+    <div class="d-flex justify-content-between mx-3">
+        <div class="h3 subinfotext fw-bold">Create Admin Account</div>
+        <div>
+            <a asp-action="AdminTabsLayout" asp-controller="Home">
+                <button type="button" class="d-flex babtn rounded align-item-center p-1 px-2">
+                    <div><img src="~/res/back.png" width="15px" height="10px"></div>
+                    <div><span>Back</span></div>
+                </button>
+            </a>
+        </div>
+    </div>
+    <form asp-action="CreateThisAdmin" asp-controller="AdminProfile" method="post" enctype="multipart/form-data">
+        <div class="bg-light rounded m-3 shadow" id="content">
+            <div class="p-3">
+                <div class="h5 fw-bold">Account Information</div>
+                <div class="d-flex row">
+                    <div class="py-2 col-xl-4 col-md-4 col-sm-12">
+                        <div class="form-group d-flex align-items-center rounded">
+                            <input type="text" class="form-control" placeholder="" asp-for="Username" id="usernamefield" readonly><span>Username</span>
+                        </div>
+                        <span asp-validation-for="Username"></span>
+                    </div>
+                    <div class="py-2 col-xl-4 col-md-4 col-sm-12">
+                        <div class="form-group d-flex align-items-center rounded">
+                            <input type="text" class="form-control" placeholder="" asp-for="Password" id="password"><span>Password</span>
+                        </div>
+                        <span class="text-danger spanofvalid" asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="py-2 col-xl-4 col-md-4 col-sm-12">
+                        <div class="form-group d-flex align-items-center rounded">
+                            <select class="form-select shadow-none" id="roles" asp-for="Role">
+                                <option value="InValid">Select Role</option>
+                                @foreach (var role in Model.roles)
+                                {
+                                    <option value="@role.Roleid">@role.Name</option>
+                                }
+                            </select>
+                            <span class="selectedselectspan">Role</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="h5 mt-5 fw-bold">Administrator Information</div>
+                <div class="row d-flex">
+                    <div class="py-2 col-xl-6 col-md-6 col-sm-12">
+                        <div class="form-group d-flex align-items-center rounded">
+                            <input type="text" class="form-control personalinfordit" placeholder="" id="editfirstname" asp-for="FirstName"><span>First Name</span>
+                        </div>
+                        <span class="text-danger spanofvalid" asp-validation-for="FirstName"></span>
+                    </div>
+                    <div class="py-2 col-xl-6 col-md-6 col-sm-12">
+                        <div class="form-group d-flex align-items-center rounded">
+                            <input type="text" class="form-control personalinfordit" placeholder="" id="editlastname" asp-for="LastName"><span>Last Name</span>
+                        </div>
+                        <span class="text-danger spanofvalid" asp-validation-for="LastName"></span>
+                    </div>
+                    <div class="py-2 col-xl-6 col-md-6 col-sm-12">
+                        <div class="form-group d-flex align-items-center rounded">
+                            <input type="email" class="form-control personalinfordit" placeholder="" id="editemail" asp-for="Email"><span>Email</span>
+                        </div>
+                        <span class="text-danger spanofvalid" asp-validation-for="Email"></span>
+                    </div>
+                    <div class="py-2 col-xl-6 col-md-6 col-sm-12">
+                        <div class="form-group d-flex align-items-center rounded">
+                            <input type="email" class="form-control personalinfordit" placeholder="" id="editemail" asp-for="ConfirmEmail"><span>Confirm Email</span>
+                        </div>
+                        <span class="text-danger spanofvalid" asp-validation-for="ConfirmEmail"></span>
+                    </div>
+                    <div class="py-2 col-xl-6 col-md-6 col-sm-12">
+                        <div class="telephone rounded">
+                            <div class="input-group d-flex align-items-center rounded ">
+                                <input type="tel" class="form-control  personalinfordit" id="personalinforditphone" asp-for="Mobile">
+                            </div>
+                        </div>
+                        <span class="text-danger spanofvalid" asp-validation-for="Mobile"></span>
+                    </div>
+                    <div class="py-2 col-xl-6 col-md-6 col-sm-12 d-flex justify-content-between align-items-center flex-wrap">
+                        @foreach (var item in Model.State)
+                        {
+                            <div class="form-check form-check-inline ">
+                                <input type="checkbox" name="selectedregion" class="form-check-input" id="region_@item.Regionid" value="@item.Regionid" />
+                                <label for="region_@item.Regionid">@item.Name</label>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="h5 mt-5 fw-bold">Mailing&Billing Information</div>
+                <div class="row d-flex">
+                    <div class="py-2 col-xl-6 col-md-6 col-sm-12">
+                        <div class="form-group d-flex align-items-center rounded">
+                            <input type="text" class="form-control addressedit" id="addresseditAddress1" placeholder="" asp-for="Address1"><span>Address1</span>
+                        </div>
+                        <span class="text-danger spanofvalid" asp-validation-for="Address1"></span>
+                    </div>
+                    <div class="py-2 col-xl-6 col-md-6 col-sm-12">
+                        <div class="form-group d-flex align-items-center rounded">
+                            <input type="text" class="form-control addressedit" id="addresseditAddress2" placeholder="" asp-for="Address2"><span>Address2</span>
+                        </div>
+                        <span class="text-danger spanofvalid" asp-validation-for="Address2"></span>
+                    </div>
+                    <div class="py-2 col-xl-6 col-md-6 col-sm-12">
+                        <div class="form-group d-flex align-items-center rounded">
+                            <input type="text" class="form-control addressedit" id="addresseditCity" placeholder="" asp-for="City"><span>City</span>
+                        </div>
+                        <span class="text-danger spanofvalid" asp-validation-for="City"></span>
+                    </div>
+                    <div class="py-2 col-xl-6 col-md-6 col-sm-12">
+                        <div class="form-group d-flex align-items-center rounded">
+                            <select class="form-select addressedit" id="state" asp-for="Region">
+                                <option value="InValid">Select State</option>
+                                @foreach (var item in Model.State)
+                                {
+                                    <option value="@item.Regionid">@item.Name</option>
+                                }
+                            </select>
+                            <span class="selectedselectspan">State</span>
+                        </div>
+                    </div>
+                    <div class="py-2 col-xl-6 col-md-6 col-sm-12">
+                        <div class="form-group d-flex align-items-center rounded">
+                            <input type="text" class="form-control addressedit" id="addresseditZip" placeholder="" asp-for="Zip"><span>Zip</span>
+                        </div>
+                        <span class="text-danger spanofvalid " asp-validation-for="Zip"></span>
+                    </div>
+                    <div class="py-2 col-xl-6 col-md-6 col-sm-12">
+                        <div class="telephone rounded">
+                            <div class="input-group d-flex align-items-center rounded ">
+                                <input type="tel" class="form-control  addressedit" id="addresseditBillMobile" asp-for="BillMobile">
+                            </div>
+                        </div>
+                        <span class="text-danger spanofvalid" asp-validation-for="BillMobile"></span>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end mt-4">
+                    <button type="button" id="CreateAccountBtn" class="p-1 px-2 text-white bg-success rounded border-success d-flex align-items-center h-100">
+                        <span class="d-none d-lg-block ps-2">Create Account</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<style>
+    .form-check-input:disabled {
+        opacity: 1;
+    }
+</style>
+<script>
+    $('input[type="tel"]').each(function () {
+        var iti = window.intlTelInput(this, {
+            nationalMode: false,
+            utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"
+        });
+        $(this).on('blur', function () {
+            var fullNumber = iti.getNumber();
+            var countryCode = iti.getSelectedCountryData().dialCode;
+            if (fullNumber.startsWith("+" + countryCode + "+" + countryCode)) {
+                fullNumber = fullNumber.replace("+" + countryCode + "+", "+");
+            }
+            console.log(fullNumber);
+            $(this).val(fullNumber);
+        });
+    });
+    $('.spanofvalid').bind("DOMSubtreeModified", function () {
+        if ($(this).text().trim() !== '') {
+            $(this).parents('.py-2').addClass('error');
+        } else {
+            $(this).parents('.py-2').removeClass('error');
+        }
+    });
+
+    $('#CreateAccountBtn').on('click', function () {
+        var error = "";
+        if ($('#roles').val() == "InValid") {
+            error = error + "Select Roles || " ;
+        }
+         if ($('input[name="selectedregion"]:checked').length === 0) {
+            error = error + "Select Region || ";
+        }
+         if ($('#state').val() == "InValid") {
+            error = error + "Select State";
+        }
+
+        if (error != "") {
+            Swal.fire(error);
+        }
+        else {
+            $(this).closest('form').submit();
+        }
+
+    })
+    function usernamefill() {
+        $('#usernamefield').val($('#editlastname').val() + "." + $('#editfirstname').val());
+    }
+
+    $('#editfirstname').on('input', function () {
+        usernamefill();
+    });
+    $('#editlastname').on('input', function () {
+        usernamefill();
+    })
+
+</script>
+<link rel="stylesheet" href="~/css/error.css" asp-append-version="true" />

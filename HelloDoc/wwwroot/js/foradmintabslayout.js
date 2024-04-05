@@ -29,9 +29,25 @@
             case '#nav-createadmin':
                 url = 'AdminArea/AdminProfile/CreateAdmin';
                 break;
-            case '#nav-Records':
-                url = 'AdminArea/Dashboard/Status_Unpaid';
+            case '#patient-history':
+                url = 'AdminArea/AdminRecordsTab/PatientHistory';
                 break;
+            case '#patient-records':
+                url = 'AdminArea/AdminRecordsTab/PatientRecords';
+                break;
+            case '#search-records':
+                url = 'AdminArea/AdminRecordsTab/SearchRecords';
+                break;
+            case '#email-logs':
+                url = 'AdminArea/AdminRecordsTab/EmailLogs';
+                break;
+            case '#sms-logs':
+                url = 'AdminArea/AdminRecordsTab/SmsLogs';
+                break;
+            case '#block-history':
+                url = 'AdminArea/AdminRecordsTab/BlockHistory';
+                break;
+
             default:
                 url = 'AdminArea/Dashboard/Dashboard';
         }
@@ -45,6 +61,32 @@
                 console.error(error);
             }
         });
+        $('.pdi').on('click', function () {
+            if ($(this).hasClass('active')) {
+                $('.pd').addClass('active');
+            } else {
+                $('.pd').removeClass('active');
+            }
+        });
+
+        if ($('.pdi').hasClass('active')) {
+            $('.pd').addClass('active');
+        } else {
+            $('.pd').removeClass('active');
+        }
+        $('.rdi').on('click', function () {
+            if ($(this).hasClass('active')) {
+                $('.rd').addClass('active');
+            } else {
+                $('.rd').removeClass('active');
+            }
+        });
+
+        if ($('.rdi').hasClass('active')) {
+            $('.rd').addClass('active');
+        } else {
+            $('.rd').removeClass('active');
+        }
     }
     function handleTabTriggers() {
         var target = localStorage.getItem('target');
@@ -81,21 +123,30 @@
     });
 
     handleTabTriggers();
-    $('.dropdown-item').on('click', function () {
+    $('.pdi').on('click', function () {
         if ($(this).hasClass('active')) {
-            $('.dropdown').addClass('active');
+            $('.pd').addClass('active');
         } else {
-            $('.dropdown').removeClass('active');
+            $('.pd').removeClass('active');
         }
     });
 
-    if ($('.dropdown-item').hasClass('active')) {
-        $('.dropdown').addClass('active');
+    if ($('.pdi').hasClass('active')) {
+        $('.pd').addClass('active');
     } else {
-        $('.dropdown').removeClass('active');
+        $('.pd').removeClass('active');
     }
+    $('.rdi').on('click', function () {
+        if ($(this).hasClass('active')) {
+            $('.rd').addClass('active');
+        } else {
+            $('.rd').removeClass('active');
+        }
+    });
 
-    //$(window).resize(function () {
-    //    handleTabTriggers();
-    //});
+    if ($('.rdi').hasClass('active')) {
+        $('.rd').addClass('active');
+    } else {
+        $('.rd').removeClass('active');
+    }
 });

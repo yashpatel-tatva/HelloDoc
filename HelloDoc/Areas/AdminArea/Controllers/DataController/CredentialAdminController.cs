@@ -26,10 +26,20 @@ namespace HelloDoc.Areas.AdminArea.DataController
         }
 
         [Area("AdminArea")]
-        [HttpPost]
+        //[HttpPost]
         public async Task<IActionResult> Login(Aspnetuser user)
         {
+            var alluser = _aspnetuser.GetAll().Where(x=>x.Email==user.Email).Select(x=>x.Id);
             var correct = _aspnetuser.GetFirstOrDefault(x => x.Email == user.Email);
+            foreach(var u in alluser)
+            {
+                var Roleid = _context.Aspnetuserroles.FirstOrDefault(x => x.Userid == u).Roleid;
+                if(Roleid == "1")
+                {
+                    correct = _aspnetuser.GetFirstOrDefault(x => x.Id == u);
+                }
+
+            }
             if (correct != null)
             {
                 LoggedInPersonViewModel loggedInPersonViewModel = new LoggedInPersonViewModel();

@@ -1,4 +1,5 @@
 ﻿using DataAccess.Repository.IRepository;
+using DataAccess.Repository.IRepository;
 using DataAccess.ServiceRepository;
 using DataAccess.ServiceRepository.IServiceRepository;
 using DataModels.AdminSideViewModels;
@@ -241,7 +242,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         {
             PhysicianAccountViewModel physicianAccountViewModel = new PhysicianAccountViewModel();
             physicianAccountViewModel.regions = _db.Regions.ToList();
-            physicianAccountViewModel.roles = _role.GetAllRolesToSelect();
+            physicianAccountViewModel.roles = _role.GetAllRolesToSelect().Where(x=>x.Accounttype == 2 || x.Accounttype == 0).ToList();
             return View(physicianAccountViewModel);
         }
 
@@ -466,6 +467,15 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             schedulingDataViewModel.physicianDatas = _scheduling.GetPhysicianData();
             schedulingDataViewModel.Shifts = _scheduling.ShifsOfDate(datetoshow, region, status, 0);
             return PartialView("_Daywisedata", schedulingDataViewModel);
+        }
+        
+        [Area("AdminArea")]
+        [HttpPost]
+        public SchedulingDataViewModel DateWiseData(DateTime datetoshow, int region, int status , int next , int pagesize)
+        {
+            SchedulingDataViewModel schedulingDataViewModel = new SchedulingDataViewModel();
+            schedulingDataViewModel.Shifts = _scheduling.ShifsOfDateforMonth(datetoshow, region, status, next , pagesize);
+            return schedulingDataViewModel;
         }
 
 
@@ -720,20 +730,20 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
 
         [Area("AdminArea")]
         [HttpPost]
-        public int ShiftCountbyFilter(DateTime datetoshow, int region, string showby)
+        public int ShiftCountbyFilter(DateTime datetoshow, int region, string showby , int status)
         {
             SchedulingDataViewModel model = new SchedulingDataViewModel();
             if (showby == "DayWiseData")
             {
-                model.Shifts = _scheduling.ShifsOfDate(datetoshow, region, 1, 0);
+                model.Shifts = _scheduling.ShifsOfDate(datetoshow, region, status, 0);
             }
             else if (showby == "WeekWiseData")
             {
-                model.Shifts = _scheduling.ShifsOfWeek(datetoshow, region, 1, 0);
+                model.Shifts = _scheduling.ShifsOfWeek(datetoshow, region, status, 0);
             }
             else
             {
-                model.Shifts = _scheduling.ShifsOfMonth(datetoshow, region, 1, 0);
+                model.Shifts = _scheduling.ShifsOfMonth(datetoshow, region, status, 0);
             }
             return model.Shifts.Count();
         }

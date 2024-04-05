@@ -8,5 +8,6 @@ namespace DataAccess.ServiceRepository.IServiceRepository
         List<ShiftData> ShifsOfDate(DateTime datetoshow, int region, int status, int next);
         List<ShiftData> ShifsOfWeek(DateTime datetoshow, int region, int status, int next);
         List<ShiftData> ShifsOfMonth(DateTime datetoshow, int region, int status, int next);
+        List<ShiftData> ShifsOfDateforMonth(DateTime datetoshow, int region, int status, int next, int pagesize);
     }
 }
