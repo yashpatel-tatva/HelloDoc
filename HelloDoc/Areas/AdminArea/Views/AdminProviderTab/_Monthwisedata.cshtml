@@ -209,13 +209,14 @@
         datetoshow = datetoshow.toISOString();
         var status = localStorage.getItem('status') || 0;
         var region = localStorage.getItem('region') || 0;
+        console.log(status);
         var pagesize = 3;
         var next = 1;
         var d = @date.Day;
         var timeslot = "2_" + d;
         var shifts = [];
-        getdata(datetoshow, 1, timeslot);
-        function getdata(datetoshow, next, timeslot) {
+        getdata(datetoshow, 1, timeslot , status);
+        function getdata(datetoshow, next, timeslot , status) {
             $.ajax({
                 url: '/AdminArea/AdminProviderTab/DateWiseData',
                 data: { datetoshow, region, status, next, pagesize },
@@ -226,7 +227,6 @@
                 }
             });
             var showby = "DayWiseData";
-            var status = 0;
             var totalcount;
             $.ajax({
                 url: '/AdminArea/AdminProviderTab/ShiftCountbyFilter',
@@ -290,12 +290,12 @@
         var timeslot = "2_" + parse[1];
         if ($(this).text() == "Load More") {
             $(this).text("Less");
-            getdata(datetoshow, 0, timeslot);
+            getdata(datetoshow, 0, timeslot , status);
         }
         else {
             $(this).text("Load More");
             $('#' + timeslot).html('');
-            getdata(datetoshow, 1, timeslot);
+            getdata(datetoshow, 1, timeslot , status);
         }
     });
 </script>

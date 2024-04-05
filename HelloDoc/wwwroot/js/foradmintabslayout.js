@@ -29,9 +29,6 @@
             case '#nav-createadmin':
                 url = 'AdminArea/AdminProfile/CreateAdmin';
                 break;
-            case '#patient-history':
-                url = 'AdminArea/AdminRecordsTab/PatientHistory';
-                break;
             case '#patient-records':
                 url = 'AdminArea/AdminRecordsTab/PatientRecords';
                 break;

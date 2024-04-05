@@ -33,6 +33,7 @@ namespace DataAccess.ServiceRepository
             emaillog.Emailtemplate = message;
             if (_admin.GetSessionAdminId() != -1)
             {
+                emaillog.Roleid = 1;
                 emaillog.Adminid = _admin.GetSessionAdminId();
             }
             _context.Emaillogs.Add(emaillog);
