@@ -28,3 +28,8 @@ function getdata(role, rname, email, createddate, sentdate) {
 }
 
 getdata(0, "ya", "ya",  "ya", "ya");
+
+$('#selectrole').on('change', function () {
+    role = $(this).val();
+    getdata(role, "ya", "ya", "ya", "ya")
+});

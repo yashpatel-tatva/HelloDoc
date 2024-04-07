@@ -39,7 +39,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
 
         [Area("AdminArea")]
         [HttpPost]
-        public IActionResult EmailLogsdata(int role , string rname , string email , string createddate , string senddate)
+        public IActionResult EmailLogsdata(int role, string rname, string email, string createddate, string senddate)
         {
             rname = rname.Replace("ya", "");
             email = email.Replace("ya", "");
@@ -48,11 +48,11 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
 
             List<EmailSMSLogsViewModel> model = new List<EmailSMSLogsViewModel>();
             var emaillogs = _db.Emaillogs.ToList();
-            if(role != 0)
+            if (role != 0)
             {
                 emaillogs = emaillogs.Where(x => x.Roleid == role).ToList();
             }
-            if(email != null)
+            if (email != null)
             {
                 emaillogs = emaillogs.Where(x => x.Emailid.Contains(email)).ToList();
             }
@@ -64,10 +64,10 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             //{
             //    emaillogs = emaillogs.Where(x => x.Sentdate == senddate).ToList();
             //}
-            foreach(var log in emaillogs)
+            foreach (var log in emaillogs)
             {
                 EmailSMSLogsViewModel em = new EmailSMSLogsViewModel();
-                if(log.Requestid != null)
+                if (log.Requestid != null)
                 {
                     em.Recipient = _db.Requestclients.FirstOrDefault(x => x.Requestid == log.Requestid).Firstname +
                         " " + _db.Requestclients.FirstOrDefault(x => x.Requestid == log.Requestid).Lastname;
@@ -77,20 +77,23 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
                     em.Recipient = log.Emailid.Split('@')[0];
                 }
                 em.Action = log.Subjectname;
-                em.RoleName = _db.Aspnetroles.FirstOrDefault(x => x.Id == role.ToString()).Name;
+                if (role != 0)
+                {
+                    em.RoleName = _db.Aspnetroles.FirstOrDefault(x => x.Id == role.ToString()).Name;
+                }
                 em.Email = log.Emailid;
                 em.CreatedDate = log.Createdate;
                 em.SentDate = (DateTime)log.Sentdate;
                 em.Sent = log.Isemailsent[0];
                 em.Senttries = (int)log.Senttries;
-                if(log.Confirmationnumber != null)
+                if (log.Confirmationnumber != null)
                 {
                     em.ConfirmationNo = log.Confirmationnumber;
                 }
                 model.Add(em);
             }
 
-            return PartialView("_EmailLogs" , model);
+            return PartialView("_EmailLogs", model);
         }
 
 
