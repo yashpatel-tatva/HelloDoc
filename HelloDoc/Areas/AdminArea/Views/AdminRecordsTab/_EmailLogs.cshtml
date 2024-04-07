@@ -1,7 +1,8 @@
 ﻿@{
     Layout = null;
 }
-
+@using DataModels.AdminSideViewModels
+@model List<EmailSMSLogsViewModel>
 <table class="table table-hover" style="vertical-align : middle">
     <thead style="background-color: rgb(235, 235, 235) ; color: black !important ; font :normal!important">
         <tr>
@@ -17,6 +18,19 @@
         </tr>
     </thead>
     <tbody>
-
+        @foreach(var i in Model)
+{
+                <tr>
+                    <td>@i.Recipient</td>
+                    <td>@i.Action</td>
+                    <td>@i.RoleName</td>
+                    <td>@i.Email</td>
+                    <td>@i.CreatedDate</td>
+                    <td>@i.SentDate</td>
+                    <td>@i.Sent</td>
+                    <td>@i.Senttries</td>
+                    <td>@i.ConfirmationNo</td>
+                </tr>
+}
     </tbody>
 </table>

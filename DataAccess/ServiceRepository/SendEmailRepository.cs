@@ -1,6 +1,7 @@
 ﻿using DataAccess.Repository.IRepository;
 using DataAccess.ServiceRepository.IServiceRepository;
 using HelloDoc;
+using System.Collections;
 using System.Net;
 using System.Net.Mail;
 
@@ -36,6 +37,10 @@ namespace DataAccess.ServiceRepository
                 emaillog.Roleid = 1;
                 emaillog.Adminid = _admin.GetSessionAdminId();
             }
+            BitArray fortrue = new BitArray(1);
+            fortrue[0] = true;
+            emaillog.Isemailsent = fortrue;
+            emaillog.Senttries = 1;
             _context.Emaillogs.Add(emaillog);
             _context.SaveChanges();
             return client.SendMailAsync(new MailMessage(from: mail, to: email, subject, message));

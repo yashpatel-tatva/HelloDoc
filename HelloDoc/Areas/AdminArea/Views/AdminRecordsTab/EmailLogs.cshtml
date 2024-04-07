@@ -11,32 +11,32 @@
                 <div class="d-flex row">
                     <div class="col-xl-2 col-md-4 col-sm-12 col-12">
                         <div class="form-group d-flex align-items-center rounded">
-                            <select class="form-select ">
+                            <select class="form-select " id="selectrole">
                                 <option value="0">All</option>
-                                <option value="0">Admin</option>
-                                <option value="0">Physician</option>
+                                <option value="1">Admin</option>
+                                <option value="2">Physician</option>
                             </select>
                             <span class="selectedselectspan">Search by role</span>
                         </div>
                     </div>
                     <div class="col-xl-2 col-md-4 col-sm-12 col-12">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="text" class="form-control" placeholder="" id=""><span>Receiver Name</span>
+                            <input type="text" class="form-control" placeholder="" id="rname"><span>Receiver Name</span>
                         </div>
                     </div>
                     <div class="col-xl-2 col-md-4 col-sm-12 col-12">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="text" class="form-control" placeholder="" id=""><span>Email Id</span>
+                            <input type="text" class="form-control" placeholder="" id="emailid"><span>Email Id</span>
                         </div>
                     </div>
                     <div class="col-xl-2 col-md-4 col-sm-12 col-12">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="text" onfocus="(this.type='date')" onblur="(this.type='text')" placeholder=""><span>Created Date</span>
+                            <input type="text" id="createddate" onfocus="(this.type='date')" onblur="(this.type='text')" placeholder=""><span>Created Date</span>
                         </div>
                     </div>
                     <div class="col-xl-2 col-md-4 col-sm-12 col-12">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="text" onfocus="(this.type='date')" onblur="(this.type='text')" placeholder=""><span>Sent Date</span>
+                            <input type="text" id="sentdate" onfocus="(this.type='date')" onblur="(this.type='text')" placeholder=""><span>Sent Date</span>
                         </div>
                     </div>
                     <div class="d-flex align-items-center col-xl-2 col-md-4 col-sm-12 col-12 justify-content-end gap-3">
@@ -53,6 +53,4 @@
         </div>
     </div>
 </div>
-<script>
-
-</script>
+<script src="~/js/EmailLogs.js" asp-append-version="true"></script>
