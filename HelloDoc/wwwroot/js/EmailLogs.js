@@ -56,6 +56,20 @@ $('#submitdate').on('click', function () {
     getdata(role, rname, email, createddate, sentdate, currentpage, pagesize, order);
 })
 
+$('#resetbtn').on('click', function () {
+    $('#selectrole').val(0);
+    $('#rname').val("");
+    $('#emailid').val("");
+    $('#createddate').val("");
+    $('#sentdate').val("");
+    role = $('#selectrole').val();
+    rname = $('#rname').val();
+    email = $('#emailid').val();
+    createddate = $('#createddate').val();
+    sentdate = $('#sentdate').val();
+    getdata(role, rname, email, createddate, sentdate, currentpage, pagesize, order);
+});
+
 $('#changeorder').on('click', function () {
     console.log("clicked")
     order = 2;
