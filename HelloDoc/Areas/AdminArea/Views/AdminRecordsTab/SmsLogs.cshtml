@@ -1,4 +1,70 @@
 ﻿@{
     Layout = null;
 }
-<h3>SmsLogs(Twillio</h3>
+<div class="container-fluid">
+    <div class="d-flex justify-content-between">
+        <div class="h3 fw-bold">SMS Logs (Twillio)</div>
+    </div>
+    <div>
+        <div class="bg-light rounded my-3 shadow" id="content">
+            <div class="">
+                <div class="d-flex row p-3">
+                    <div class="col-xl-2 col-md-4 col-sm-12 col-12">
+                        <div class="form-group d-flex align-items-center rounded">
+                            <select class="form-select " id="selectrole">
+                                <option value="0">All</option>
+                                <option value="1">Admin</option>
+                                <option value="2">Physician</option>
+                            </select>
+                            <span class="selectedselectspan">Search by role</span>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-md-4 col-sm-12 col-12">
+                        <div class="form-group d-flex align-items-center rounded">
+                            <input type="text" class="form-control" placeholder="" id="rname"><span>Receiver Name</span>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-md-4 col-sm-12 col-12">
+                        <div class="form-group d-flex align-items-center rounded">
+                            <input type="text" class="form-control" placeholder="" id="mobile"><span>Mobile Number</span>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-md-4 col-sm-12 col-12">
+                        <div class="form-group d-flex align-items-center rounded">
+                            <input type="text" id="createddate" onfocus="(this.type='date')" onblur="(this.type='text')" placeholder=""><span>Created Date</span>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-md-4 col-sm-12 col-12">
+                        <div class="form-group d-flex align-items-center rounded">
+                            <input type="text" id="sentdate" onfocus="(this.type='date')" onblur="(this.type='text')" placeholder=""><span>Sent Date</span>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center col-xl-2 col-md-4 col-sm-12 col-12 justify-content-end gap-3">
+                        <button type="button" id="submitdate" class="btn btn-info shadow-none text-white py-2">
+                            Submit
+                        </button>
+                        <button type="reset" class="btn btn-outline-info shadow-none py-2">
+                            Clear
+                        </button>
+                    </div>
+                </div>
+                <div class="table-responsive mb-4" id="_records"></div>
+                <div class="d-flex align-items-center justify-content-between p-3 pagination_div">
+                    <div class="info_div">
+                        <span id="fromthisshift"></span>
+                        <span>-</span>
+                        <span id="tothisshift"></span>
+                        <span>out of</span>
+                        <span id="totalcountofshift"></span>
+                    </div>
+                    <div class="d-flex align-items-center info_div">
+                        <div class="paginate_Previousbutton text-info"><i class="bi bi-chevron-left"></i></i></div>
+                        <div class="dataTables_paginate d-flex"></div>
+                        <div class="paginate_Nextbutton text-info"><i class="bi bi-chevron-right"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/js/SMSlogs.js" asp-append-version="true"></script>

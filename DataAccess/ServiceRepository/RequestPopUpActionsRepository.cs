@@ -113,6 +113,11 @@ namespace DataAccess.ServiceRepository
             requeststatuslog.Createddate = DateTime.Now;
             _requeststatus.Add(requeststatuslog);
             _requeststatus.Save();
+            Requestclosed requestclosed = new Requestclosed();
+            requestclosed.Requestid = requestid;
+            requestclosed.Requeststatuslogid = requeststatuslog.Requeststatuslogid;
+            _db.Requestcloseds.Add(requestclosed);
+            _db.SaveChanges();
         }
     }
 }

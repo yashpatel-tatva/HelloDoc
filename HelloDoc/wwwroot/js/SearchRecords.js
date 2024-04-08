@@ -1,19 +1,23 @@
-﻿var role = $('#selectrole').val();
-var rname = $('#rname').val();
-var email = $('#emailid').val();
-var createddate = $('#createddate').val();
-var sentdate = $('#sentdate').val();
+﻿var selectstatus = "all";
+var patientname;
+var selecttype= 0;
+var fromdate;
+var todate;
+var providername;
+var emailid;
+var mobile;
 
 var pagesize = 5;
 var currentpage = 1;
 var order = true;
 var buttoncount;
 
-function getdata(role, rname, email, createddate, sentdate, currentpage, pagesize , order) {
-    filterDatawithoutpagination(role, rname, email, createddate, sentdate);
+
+function getdata(selectstatus, patientname, selecttype, fromdate, todate, providername, emailid, mobile, currentpage, pagesize, order) {
+    filterDatawithoutpagination(selectstatus, patientname, selecttype, fromdate, todate, providername, emailid, mobile)
     $.ajax({
-        url: '/AdminArea/AdminRecordsTab/EmailLogsdata',
-        data: { role: role, rname: rname, email: email, createddate: createddate, senddate: sentdate, currentpage: currentpage, pagesize: pagesize, order: order },
+        url: '/AdminArea/AdminRecordsTab/SearchRecordsdata',
+        data: { selectstatus: selectstatus, patientname: patientname, selecttype: selecttype, fromdate: fromdate, todate: todate, providername: providername, emailid: emailid, mobile: mobile, currentpage: currentpage, pagesize: pagesize, order: order },
         type: 'POST',
         success: function (response) {
             $('#_records').html(response);
@@ -29,62 +33,48 @@ function getdata(role, rname, email, createddate, sentdate, currentpage, pagesiz
     });
 }
 
-getdata(0, "", "", "", "", 1, pagesize , order);
 
-$('#selectrole').on('change', function () {
-    role = $(this).val();
-    currentpage = 1;
-    getdata(role, rname, email, createddate, sentdate, currentpage, pagesize, order);
-});
 
-$('#emailid').on('input', function () {
-    email = $(this).val();
-    currentpage = 1;
-    getdata(role, rname, email, createddate, sentdate, currentpage, pagesize, order);
-})
+getdata("all", "", 0, "", "", "", "", "", 1, pagesize, order);
 
-$('#rname').on('input', function () {
-    rname = $(this).val();
-    currentpage = 1;
-    getdata(role, rname, email, createddate, sentdate, currentpage, pagesize, order);
-})
 
 $('#submitdate').on('click', function () {
-    createddate = $('#createddate').val(); 
-    sentdate = $('#sentdate').val();
+    selectstatus = $('#selectstatus').val();
+    patientname = $('#patientname').val();
+    selecttype = $('#selecttype').val();
+    fromdate = $('#fromdate').val();
+    todate = $('#todate').val();
+    providername = $('#providername').val();
+    emailid = $('#emailid').val();
+    mobile = $('#mobile').val();
     currentpage = 1;
-    getdata(role, rname, email, createddate, sentdate, currentpage, pagesize, order);
+    getdata(selectstatus, patientname, selecttype, fromdate, todate, providername, emailid, mobile, currentpage, pagesize, order);
 })
-
-$('#changeorder').on('click', function () {
-    console.log("clicked")
-    order = 2;
-    currentpage = 1;
-    getdata(role, rname, email, createddate, sentdate, currentpage, pagesize, order);
-})
-
+$('#clearbtn').on('click', function () {
+    getdata("all", "", 0, "", "", "", "", "", 1, pagesize, order);
+});
 $('.dataTables_paginate').on('click', '.paginate_button', function () {
     currentpage = $(this).data('id');
-    getdata(role, rname, email, createddate, sentdate, currentpage, pagesize, order);
+    getdata(selectstatus, patientname, selecttype, fromdate, todate, providername, emailid, mobile, currentpage, pagesize, order);
 });
 $('.paginate_Previousbutton').on('click', function () {
     if (currentpage != 1) {
         currentpage = currentpage - 1;
-        getdata(role, rname, email, createddate, sentdate, currentpage, pagesize, order);
+        getdata(selectstatus, patientname, selecttype, fromdate, todate, providername, emailid, mobile, currentpage, pagesize, order);
     }
 });
 $('.paginate_Nextbutton').on('click', function () {
     if (buttoncount != currentpage) {
         currentpage = currentpage + 1;
-        getdata(role, rname, email, createddate, sentdate, currentpage, pagesize, order);
+        getdata(selectstatus, patientname, selecttype, fromdate, todate, providername, emailid, mobile, currentpage, pagesize, order);
     }
 });
 
-function filterDatawithoutpagination(role, rname, email, createddate, sentdate) {
+function filterDatawithoutpagination(selectstatus, patientname, selecttype, fromdate, todate, providername, emailid, mobile) {
     $.ajax({
-        url: 'AdminArea/AdminRecordsTab/EmailContbyFilter',
+        url: 'AdminArea/AdminRecordsTab/SearchRecordsCount',
         type: 'POST',
-        data: { role: role, rname: rname, email: email, createddate: createddate, senddate: sentdate },
+        data: { selectstatus: selectstatus, patientname: patientname, selecttype: selecttype, fromdate: fromdate, todate: todate, providername: providername, emailid: emailid, mobile: mobile },
         success: function (data) {
             printbuttons(data);
             $('.paginate_button').removeClass("current");

@@ -1,90 +1,76 @@
 ﻿var role = $('#selectrole').val();
 var rname = $('#rname').val();
-var email = $('#emailid').val();
+var mobile = $('#mobile').val();
 var createddate = $('#createddate').val();
 var sentdate = $('#sentdate').val();
 
-var pagesize = 5;
+var pagesize = 10;
 var currentpage = 1;
-var order = true;
 var buttoncount;
 
-function getdata(role, rname, email, createddate, sentdate, currentpage, pagesize , order) {
-    filterDatawithoutpagination(role, rname, email, createddate, sentdate);
+function getdata(role, rname, mobile, createddate, sentdate, currentpage, pagesize) {
+    filterDatawithoutpagination(role, rname, mobile, createddate, sentdate);
     $.ajax({
-        url: '/AdminArea/AdminRecordsTab/EmailLogsdata',
-        data: { role: role, rname: rname, email: email, createddate: createddate, senddate: sentdate, currentpage: currentpage, pagesize: pagesize, order: order },
+        url: '/AdminArea/AdminRecordsTab/SMSLogsdata',
+        data: { role: role, rname: rname, mobile: mobile, createddate: createddate, senddate: sentdate, currentpage: currentpage, pagesize: pagesize },
         type: 'POST',
         success: function (response) {
             $('#_records').html(response);
-            if (order) {
-                $('.bi').addClass("bi-arrow-up")
-                $('.bi').removeClass("bi-arrow-down")
-            }
-            else {
-                $('.bi').addClass("bi-arrow-down")
-                $('.bi').removeClass("bi-arrow-up")
-            }
         }
     });
 }
 
-getdata(0, "", "", "", "", 1, pagesize , order);
+getdata(0, "", "", "", "", 1, pagesize);
 
 $('#selectrole').on('change', function () {
     role = $(this).val();
     currentpage = 1;
-    getdata(role, rname, email, createddate, sentdate, currentpage, pagesize, order);
+    getdata(role, rname, mobile, createddate, sentdate, currentpage, pagesize);
 });
 
-$('#emailid').on('input', function () {
-    email = $(this).val();
+$('#mobile').on('input', function () {
+    mobile = $(this).val();
     currentpage = 1;
-    getdata(role, rname, email, createddate, sentdate, currentpage, pagesize, order);
+    getdata(role, rname, mobile, createddate, sentdate, currentpage, pagesize);
 })
 
 $('#rname').on('input', function () {
     rname = $(this).val();
     currentpage = 1;
-    getdata(role, rname, email, createddate, sentdate, currentpage, pagesize, order);
+    getdata(role, rname, mobile, createddate, sentdate, currentpage, pagesize);
 })
 
 $('#submitdate').on('click', function () {
     createddate = $('#createddate').val(); 
     sentdate = $('#sentdate').val();
     currentpage = 1;
-    getdata(role, rname, email, createddate, sentdate, currentpage, pagesize, order);
+    getdata(role, rname, mobile, createddate, sentdate, currentpage, pagesize);
 })
 
-$('#changeorder').on('click', function () {
-    console.log("clicked")
-    order = 2;
-    currentpage = 1;
-    getdata(role, rname, email, createddate, sentdate, currentpage, pagesize, order);
-})
+
 
 $('.dataTables_paginate').on('click', '.paginate_button', function () {
     currentpage = $(this).data('id');
-    getdata(role, rname, email, createddate, sentdate, currentpage, pagesize, order);
+    getdata(role, rname, mobile, createddate, sentdate, currentpage, pagesize);
 });
 $('.paginate_Previousbutton').on('click', function () {
     if (currentpage != 1) {
         currentpage = currentpage - 1;
-        getdata(role, rname, email, createddate, sentdate, currentpage, pagesize, order);
+        getdata(role, rname, mobile, createddate, sentdate, currentpage, pagesize);
     }
 });
 $('.paginate_Nextbutton').on('click', function () {
     if (buttoncount != currentpage) {
         currentpage = currentpage + 1;
-        getdata(role, rname, email, createddate, sentdate, currentpage, pagesize, order);
+        getdata(role, rname, mobile, createddate, sentdate, currentpage, pagesize);
     }
 });
 
-function filterDatawithoutpagination(role, rname, email, createddate, sentdate) {
+function filterDatawithoutpagination(role, rname, mobile, createddate, sentdate) {
     $.ajax({
-        url: 'AdminArea/AdminRecordsTab/EmailContbyFilter',
+        url: 'AdminArea/AdminRecordsTab/SMSContbyFilter',
         type: 'POST',
-        data: { role: role, rname: rname, email: email, createddate: createddate, senddate: sentdate },
+        data: { role: role, rname: rname, mobile: mobile, createddate: createddate, senddate: sentdate },
         success: function (data) {
             printbuttons(data);
             $('.paginate_button').removeClass("current");

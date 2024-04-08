@@ -9,8 +9,8 @@
             <th style="width : 10% !important">Recipient</th>
             <th style="width : 10% !important">Action</th>
             <th style="width :8% !important">Role Name</th>
-            <th style="width : 18% !important">Email Id</th>
-            <th style="width : 15% !important" id="changeorder">Created Date  <i class="bi bi-arrow-up"></i></th>
+            <th style="width : 18% !important">Mobile Number</th>
+            <th style="width : 15% !important">Created Date</th>
             <th style="width : 10% !important">Sent Date</th>
             <th style="width : 5% !important">Sent</th>
             <th style="width : 7% !important">Sent Tries</th>
@@ -24,7 +24,7 @@
                 <td>@i.Recipient</td>
                 <td>@i.Action</td>
                 <td>@i.RoleName</td>
-                <td>@i.Email</td>
+                <td>@i.Mobile</td>
                 <td>@i.CreatedDate.ToString("MMM dd, yyyy hh:mm tt")</td>
                 <td>@i.SentDate.ToString("MMM dd, yyyy")</td>
                 @if (i.Sent)
@@ -45,12 +45,3 @@
         }
     </tbody>
 </table>
-
-<script>
-
-    $('#changeorder').on('click', function () {
-        order = !order;
-        currentpage = 1;
-        getdata(role, rname, email, createddate, sentdate, currentpage, pagesize, order);
-    })
-</script>

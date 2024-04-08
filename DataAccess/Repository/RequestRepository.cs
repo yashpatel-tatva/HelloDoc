@@ -77,7 +77,7 @@ namespace DataAccess.Repository
             }
             else if (state == "all")
             {
-                return GetAll().ToList();
+                return _db.Requests.Include(r => r.User).Include(r => r.Requestclients).Include(r => r.Physician).Include(r => r.User.Region).Include(r => r.Requeststatuslogs).Include(x => x.Requestcloseds).Include(x=>x.Requesttype).ToList(); ;
             }
             else
             {
@@ -87,7 +87,7 @@ namespace DataAccess.Repository
 
         public List<Request> GetRequestsbyStatus(int status)
         {
-            return _db.Requests.Include(r => r.User).Include(r => r.Requestclients).Include(r => r.Physician).Include(r => r.User.Region).Include(r => r.Requeststatuslogs).Where(r => r.Status == status).ToList();
+            return _db.Requests.Include(r => r.User).Include(r => r.Requestclients).Include(r => r.Physician).Include(r => r.User.Region).Include(r => r.Requeststatuslogs).Include(x=>x.Requesttype).Include(x=>x.Requestcloseds).Where(r => r.Status == status).ToList();
         }
 
         public string GetstatebyStatus(int status)

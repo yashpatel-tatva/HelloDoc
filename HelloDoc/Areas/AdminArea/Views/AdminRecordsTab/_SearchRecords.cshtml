@@ -1,0 +1,67 @@
+﻿@{
+    Layout = null;
+}
+@using DataModels.AdminSideViewModels
+@model List<SearchRecodsViewModel>
+<table class="w-100  table-hover table small" style="vertical-align : middle">
+    <thead style="background-color: rgb(235, 235, 235)!important ; color: black !important ; font :normal!important">
+        <tr style="--bs-table-bg: #ebebeb; color : black">
+            <th>Patient Name</th>
+            <th>Requestor</th>
+            <th>Date Of Service</th>
+            <th id="changeorder">Close Case Date    <i class="bi bi-arrow-up"></i></th>
+            <th>Email</th>
+            <th>Phone Number</th>
+            <th>Address</th>
+            <th>Zip</th>
+            <th>Request Status</th>
+            <th>Physician</th>
+            <th>Physician Note</th>
+            <th>Cancelled By Provider Note</th>
+            <th>Admin Note</th>
+            <th>Patent Note</th>
+            <th>Delete Permanently</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var i in Model)
+        {
+            <tr>
+                <td>@i.PatientName</td>
+                <td>@i.Requestor</td>
+                <td>@i.DateofService.ToString("MMM dd,yyyy")</td>
+                @if (i.CloseCaseDate != null)
+                {
+                    <td>@i.CloseCaseDate.Value.ToString("MMM dd,yyyy")</td>
+                }
+                else
+                {
+                    <td>-</td>
+                }
+                <td>@i.Email</td>
+                <td>@i.Mobile</td>
+                <td>@i.Address</td>
+                <td>@i.Zip</td>
+                <td>@i.Status</td>
+                <td>@i.Phyicianname</td>
+                <td>@i.PhysicianNote</td>
+                <td>@i.CancelledByPhyNote</td>
+                <td>@i.AdminNote</td>
+                <td>@i.PatientNote</td>
+                <td>
+                    <button type="reset" data-id="@i.Requestid" class="btn btn-outline-info shadow-none py-2 deleteperma">
+                        Delete
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    $('#changeorder').on('click', function () {
+        order = !order;
+        currentpage = 1;
+        getdata(selectstatus, patientname, selecttype, fromdate, todate, providername, emailid, mobile, currentpage, pagesize, order);
+    })
+</script>

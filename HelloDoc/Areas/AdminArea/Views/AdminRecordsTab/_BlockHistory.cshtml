@@ -1,0 +1,72 @@
+﻿@{
+    Layout = null;
+}
+@using DataModels.AdminSideViewModels
+@model List<BlockHistoryVIewModel>
+<table class="w-100  table-hover table" style="vertical-align : middle">
+    <thead style="background-color: rgb(235, 235, 235)!important ; color: black !important ; font :normal!important">
+        <tr style="--bs-table-bg: #ebebeb; color : black">
+            <th style="width : 17% !important">Patient Name</th>
+            <th style="width : 18% !important">Phone Number</th>
+            <th style="width : 22% !important">Email</th>
+            <th style="width : 16% !important" id="changeorder">Creaated Date   <i class="bi bi-arrow-up"></i></th>
+            <th style="width : 7% !important">Notes</th>
+            <th style="width : 9% !important">Is Active</th>
+            <th style="width : 11% !important">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var i in Model)
+        {
+            <tr>
+                <td>@i.Name</td>
+                <td>@i.Mobile</td>
+                <td>@i.Email</td>
+                <td>@i.CreatedDate.ToString("MMM dd, yyyy hh:mm tt")</td>
+                <td>@i.Notes</td>
+                @if (i.IsActive)
+                {
+                    <td>
+                        Yes
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        No
+                    </td>
+                }
+                <td>
+                    <button type="reset" data-id="@i.Blockid" class="btn btn-outline-info shadow-none py-2 unblock">
+                        Unblock
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script>
+    $('#changeorder').on('click', function () {
+        order = !order;
+        currentpage = 1;
+        getdata(pname, email, createddate, mobile, currentpage, pagesize, order);
+    })
+    $('.unblock').on('click', function () {
+        var id = $(this).data('id');
+        $.ajax({
+            url: '/AdminArea/AdminRecordsTab/UnblockCase',
+            data: { id: id },
+            type: 'POST' ,
+            success:function(){
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "Case Unblocked",
+                    showConfirmButton: false,
+                    timer: 1000
+                });
+                getdata(pname, email, createddate, mobile, currentpage, pagesize, order);
+            }
+        });
+    });
+</script>

@@ -1,4 +1,100 @@
 ﻿@{
     Layout = null;
 }
-<h3>SearchRecords</h3>
+<div class="container-fluid">
+    <div class="d-flex justify-content-between">
+        <div class="h3 fw-bold">Search Records</div>
+    </div>
+    <div>
+        <div class="bg-light rounded my-3 shadow" id="content">
+            <div class="">
+                <form>
+                    <div class="d-flex row p-3">
+                        <div class="py-2 col-xl-3 col-md-6 col-sm-12 col-12">
+                            <div class="form-group d-flex align-items-center rounded">
+                                <select class="form-select " id="selectstatus">
+                                    <option value="all">All</option>
+                                    <option value="New">New</option>
+                                    <option value="Pending">Pending</option>
+                                    <option value="Active">Active</option>
+                                    <option value="Conclude">Conclude</option>
+                                    <option value="Toclose">Toclose</option>
+                                    <option value="Unpaid">Unpaid</option>
+                                </select>
+                                <span class="selectedselectspan">Select Request Status</span>
+                            </div>
+                        </div>
+                        <div class="py-2 col-xl-3 col-md-6 col-sm-12 col-12">
+                            <div class="form-group d-flex align-items-center rounded">
+                                <input type="text" class="form-control" placeholder="" id="patientname"><span>Patient Name</span>
+                            </div>
+                        </div>
+                        <div class="py-2 col-xl-3 col-md-6 col-sm-12 col-12">
+                            <div class="form-group d-flex align-items-center rounded">
+                                <select class="form-select " id="selecttype">
+                                    <option value="0">All</option>
+                                    <option value="1">Patient</option>
+                                    <option value="2">Family/Friend</option>
+                                    <option value="3">Concierge</option>
+                                    <option value="4">Buisness Partner</option>
+                                    <option value="5">VIP</option>
+                                </select>
+                                <span class="selectedselectspan">Select Request Status</span>
+                            </div>
+                        </div>
+                        <div class="py-2 col-xl-3 col-md-6 col-sm-12 col-12">
+                            <div class="form-group d-flex align-items-center rounded">
+                                <input type="text" id="fromdate" onfocus="(this.type='date')" onblur="(this.type='text')" placeholder=""><span>From Date Of Service</span>
+                            </div>
+                        </div>
+                        <div class="py-2 col-xl-3 col-md-6 col-sm-12 col-12">
+                            <div class="form-group d-flex align-items-center rounded">
+                                <input type="text" id="todate" onfocus="(this.type='date')" onblur="(this.type='text')" placeholder=""><span>To Date Of Service</span>
+                            </div>
+                        </div>
+                        <div class="py-2 col-xl-3 col-md-6 col-sm-12 col-12">
+                            <div class="form-group d-flex align-items-center rounded">
+                                <input type="text" class="form-control" placeholder="" id="providername"><span>Provider Name</span>
+                            </div>
+                        </div>
+                        <div class="py-2 col-xl-3 col-md-6 col-sm-12 col-12">
+                            <div class="form-group d-flex align-items-center rounded">
+                                <input type="text" class="form-control" placeholder="" id="emailid"><span>Email Id</span>
+                            </div>
+                        </div>
+                        <div class="py-2 col-xl-3 col-md-6 col-sm-12 col-12">
+                            <div class="form-group d-flex align-items-center rounded">
+                                <input type="text" class="form-control" placeholder="" id="mobile"><span>Mobile</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex p-3 gap-3 justify-content-end">
+                        <button type="reset" id="clearbtn" class="btn btn-outline-info shadow-none py-2">
+                            Clear
+                        </button>
+                        <button type="button" id="submitdate" class="btn btn-info shadow-none text-white py-2">
+                            Search
+                        </button>
+                    </div>
+                </form>
+                <div class="table-responsive mb-4" id="_records"></div>
+                <div class="d-flex align-items-center justify-content-between p-3 pagination_div">
+                    <div class="info_div">
+                        <span id="fromthisshift"></span>
+                        <span>-</span>
+                        <span id="tothisshift"></span>
+                        <span>out of</span>
+                        <span id="totalcountofshift"></span>
+                    </div>
+                    <div class="d-flex align-items-center info_div">
+                        <div class="paginate_Previousbutton text-info"><i class="bi bi-chevron-left"></i></i></div>
+                        <div class="dataTables_paginate d-flex"></div>
+                        <div class="paginate_Nextbutton text-info"><i class="bi bi-chevron-right"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/SearchRecords.js" asp-append-version="true"></script>

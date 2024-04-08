@@ -1,19 +1,18 @@
-﻿var role = $('#selectrole').val();
-var rname = $('#rname').val();
+﻿var pname = $('#pname').val();
 var email = $('#emailid').val();
 var createddate = $('#createddate').val();
-var sentdate = $('#sentdate').val();
+var mobile = $('#mobile').val();
 
 var pagesize = 5;
 var currentpage = 1;
 var order = true;
 var buttoncount;
 
-function getdata(role, rname, email, createddate, sentdate, currentpage, pagesize , order) {
-    filterDatawithoutpagination(role, rname, email, createddate, sentdate);
+function getdata(pname, email, createddate, mobile , currentpage, pagesize , order) {
+    filterDatawithoutpagination(pname, email, createddate, mobile) 
     $.ajax({
-        url: '/AdminArea/AdminRecordsTab/EmailLogsdata',
-        data: { role: role, rname: rname, email: email, createddate: createddate, senddate: sentdate, currentpage: currentpage, pagesize: pagesize, order: order },
+        url: '/AdminArea/AdminRecordsTab/BlockHistorydata',
+        data: { pname: pname, email: email, createddate: createddate, mobile: mobile, currentpage: currentpage, pagesize: pagesize, order: order },
         type: 'POST',
         success: function (response) {
             $('#_records').html(response);
@@ -29,62 +28,42 @@ function getdata(role, rname, email, createddate, sentdate, currentpage, pagesiz
     });
 }
 
-getdata(0, "", "", "", "", 1, pagesize , order);
+getdata("", "", "", "", 1, pagesize , order);
 
-$('#selectrole').on('change', function () {
-    role = $(this).val();
-    currentpage = 1;
-    getdata(role, rname, email, createddate, sentdate, currentpage, pagesize, order);
-});
-
-$('#emailid').on('input', function () {
-    email = $(this).val();
-    currentpage = 1;
-    getdata(role, rname, email, createddate, sentdate, currentpage, pagesize, order);
-})
-
-$('#rname').on('input', function () {
-    rname = $(this).val();
-    currentpage = 1;
-    getdata(role, rname, email, createddate, sentdate, currentpage, pagesize, order);
-})
 
 $('#submitdate').on('click', function () {
     createddate = $('#createddate').val(); 
-    sentdate = $('#sentdate').val();
+    email = $('#emailid').val();
+    pname = $('#pname').val();
+    mobile = $('#mobile').val();
     currentpage = 1;
-    getdata(role, rname, email, createddate, sentdate, currentpage, pagesize, order);
+    getdata(pname, email, createddate, mobile , currentpage, pagesize , order);
 })
-
-$('#changeorder').on('click', function () {
-    console.log("clicked")
-    order = 2;
-    currentpage = 1;
-    getdata(role, rname, email, createddate, sentdate, currentpage, pagesize, order);
-})
-
+$('#clearbtn').on('click', function () {
+    getdata("", "", "", "", 1, pagesize, order);
+});
 $('.dataTables_paginate').on('click', '.paginate_button', function () {
     currentpage = $(this).data('id');
-    getdata(role, rname, email, createddate, sentdate, currentpage, pagesize, order);
+    getdata(pname, email, createddate, mobile , currentpage, pagesize , order);
 });
 $('.paginate_Previousbutton').on('click', function () {
     if (currentpage != 1) {
         currentpage = currentpage - 1;
-        getdata(role, rname, email, createddate, sentdate, currentpage, pagesize, order);
+        getdata(pname, email, createddate, mobile , currentpage, pagesize , order);
     }
 });
 $('.paginate_Nextbutton').on('click', function () {
     if (buttoncount != currentpage) {
         currentpage = currentpage + 1;
-        getdata(role, rname, email, createddate, sentdate, currentpage, pagesize, order);
+        getdata(pname, email, createddate, mobile , currentpage, pagesize , order);
     }
 });
 
-function filterDatawithoutpagination(role, rname, email, createddate, sentdate) {
+function filterDatawithoutpagination(pname, email, createddate, mobile) {
     $.ajax({
-        url: 'AdminArea/AdminRecordsTab/EmailContbyFilter',
+        url: 'AdminArea/AdminRecordsTab/BlockHistorydataCount',
         type: 'POST',
-        data: { role: role, rname: rname, email: email, createddate: createddate, senddate: sentdate },
+        data: { pname: pname, email: email, createddate: createddate, mobile: mobile },
         success: function (data) {
             printbuttons(data);
             $('.paginate_button').removeClass("current");
