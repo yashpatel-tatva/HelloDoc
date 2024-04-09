@@ -4,6 +4,7 @@ using HelloDoc;
 using Microsoft.EntityFrameworkCore;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
+using System.Collections;
 
 namespace DataAccess.Repository
 {
@@ -81,7 +82,18 @@ namespace DataAccess.Repository
             }
             else if (state == "all")
             {
-                return _db.Requests.Include(r => r.User).Include(r => r.Requestclients).Include(r => r.Physician).Include(r => r.User.Region).Include(r => r.Requeststatuslogs).Include(x => x.Requestcloseds).Include(x => x.Requesttype).ToList(); ;
+                return _db.Requests
+                    .Include(r => r.User)
+                    .Include(r => r.Requestclients)
+                    .Include(r => r.Physician)
+                    .Include(r => r.User.Region)
+                    .Include(r => r.Requeststatuslogs)
+                    .Include(x => x.Requestcloseds)
+                    .Include(x => x.Requesttype)
+                    .Include(x => x.Requestwisefiles)
+                    .AsEnumerable()
+                    .Where(x => x.Isdeleted == null || x.Isdeleted[0] == false)
+                    .ToList();
             }
             else
             {
@@ -91,7 +103,18 @@ namespace DataAccess.Repository
 
         public List<Request> GetRequestsbyStatus(int status)
         {
-            return _db.Requests.Include(r => r.User).Include(r => r.Requestclients).Include(r => r.Physician).Include(r => r.User.Region).Include(r => r.Requeststatuslogs).Include(x => x.Requesttype).Include(x => x.Requestcloseds).Where(r => r.Status == status).ToList();
+            var request = _db.Requests
+                .Include(r => r.User)
+                .Include(r => r.Requestclients)
+                .Include(r => r.Physician)
+                .Include(r => r.User.Region)
+                .Include(r => r.Requeststatuslogs)
+                .Include(x => x.Requesttype)
+                .Include(x => x.Requestwisefiles)
+                .Include(x => x.Requestcloseds).ToList();
+            request = request.Where(x => x.Isdeleted == null || x.Isdeleted[0] == false).ToList();
+            request = request.Where(x => x.Status == status).ToList();
+            return request;
         }
 
         public string GetstatebyStatus(int status)
@@ -217,11 +240,11 @@ namespace DataAccess.Repository
                     search.Phyicianname = "-";
                 }
                 var PhysicianNote = item.Requeststatuslogs.Where(x => x.Physicianid != null).LastOrDefault();
-                search.PhysicianNote = PhysicianNote != null ? PhysicianNote.Notes : "_";
+                search.PhysicianNote = PhysicianNote != null ? PhysicianNote.Notes : "-";
                 var notelog = item.Requeststatuslogs.Where(x => x.Physicianid != null).LastOrDefault();
                 search.CancelledByPhyNote = notelog != null ? notelog.Notes : "-";
                 var AdminNote = item.Requeststatuslogs.Where(x => x.Adminid != null).LastOrDefault();
-                search.AdminNote = AdminNote != null ? AdminNote.Notes : "_";
+                search.AdminNote = AdminNote != null ? AdminNote.Notes : "-";
                 search.PatientNote = item.Requestclients.Last().Notes;
                 models.Add(search);
             }
@@ -305,8 +328,15 @@ namespace DataAccess.Repository
                     row.CreateCell(1).SetCellValue(model[i].Requestid);
                     row.CreateCell(2).SetCellValue(model[i].Requestor);
                     row.CreateCell(3).SetCellValue(model[i].PatientName);
-                    row.CreateCell(4).SetCellValue(model[i].DateofService);
-                    row.CreateCell(5).SetCellValue((DateTime)model[i].CloseCaseDate);
+                    row.CreateCell(4).SetCellValue(model[i].DateofService.ToString("MMM dd,yyyy"));
+                    if (model[i].CloseCaseDate != null)
+                    {
+                        row.CreateCell(5).SetCellValue(model[i].CloseCaseDate.Value.ToString("MMM dd,yyyy"));
+                    }
+                    else
+                    {
+                        row.CreateCell(5).SetCellValue("-");
+                    }
                     row.CreateCell(6).SetCellValue(model[i].Email);
                     row.CreateCell(7).SetCellValue(model[i].Mobile);
                     row.CreateCell(8).SetCellValue(model[i].Address);
@@ -325,6 +355,16 @@ namespace DataAccess.Repository
                     return content;
                 }
             }
+        }
+
+        public void DeleteThisRequest(int requestid)
+        {
+            var request = GetFirstOrDefault(x => x.Requestid == requestid);
+            BitArray fortrue = new BitArray(1);
+            fortrue[0] = true;
+            request.Isdeleted = fortrue;
+            Update(request);
+            Save();
         }
     }
 }

@@ -54,7 +54,7 @@
         public string PatientMobile { get; set; }
         public string PatientEmail { get; set; }
         public string Region { get; set; }
-        public string BuisnessName { get; set; }
+        public string BusinessName { get; set; }
         public string Room { get; set; }
         public short Status { get; set; }
         public string pageredirectto { get; set; }

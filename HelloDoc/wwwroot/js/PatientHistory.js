@@ -1,89 +1,68 @@
-﻿var selectstatus = "all";
-var patientname;
-var selecttype = 0;
-var fromdate;
-var todate;
-var providername;
+﻿var firstname;
+var lastname;
 var emailid;
 var mobile;
 
 var pagesize = 5;
 var currentpage = 1;
-var order = true;
 var buttoncount;
 
 
-function getdata(selectstatus, patientname, selecttype, fromdate, todate, providername, emailid, mobile, currentpage, pagesize, order) {
-    filterDatawithoutpagination(selectstatus, patientname, selecttype, fromdate, todate, providername, emailid, mobile)
+function getdata(firstname, lastname, emailid, mobile, currentpage, pagesize) {
+    filterDatawithoutpagination(firstname, lastname, emailid, mobile)
     $.ajax({
-        url: '/AdminArea/AdminRecordsTab/SearchRecordsdata',
-        data: { selectstatus: selectstatus, patientname: patientname, selecttype: selecttype, fromdate: fromdate, todate: todate, providername: providername, emailid: emailid, mobile: mobile, currentpage: currentpage, pagesize: pagesize, order: order },
+        url: '/AdminArea/AdminRecordsTab/PatientsData',
+        data: { firstname: firstname, lastname: lastname, emailid: emailid, mobile: mobile, currentpage: currentpage, pagesize: pagesize },
         type: 'POST',
         success: function (response) {
             $('#_records').html(response);
-            if (order) {
-                $('.bi').addClass("bi-arrow-up")
-                $('.bi').removeClass("bi-arrow-down")
-            }
-            else {
-                $('.bi').addClass("bi-arrow-down")
-                $('.bi').removeClass("bi-arrow-up")
-            }
         }
     });
 }
 
 
 
-getdata("all", "", 0, "", "", "", "", "", 1, pagesize, order);
+getdata("", "", "", "", 1, pagesize);
 
 
 $('#submitdate').on('click', function () {
-    selectstatus = $('#selectstatus').val();
-    patientname = $('#patientname').val();
-    selecttype = $('#selecttype').val();
-    fromdate = $('#fromdate').val();
-    todate = $('#todate').val();
-    providername = $('#providername').val();
+    firstname = $('#firstname').val();
+    lastname = $('#lastname').val();
     emailid = $('#emailid').val();
     mobile = $('#mobile').val();
     currentpage = 1;
-    getdata(selectstatus, patientname, selecttype, fromdate, todate, providername, emailid, mobile, currentpage, pagesize, order);
+    getdata(firstname, lastname, emailid, mobile, currentpage, pagesize);
 })
 $('#clearbtn').on('click', function () {
-    selectstatus = "all";
-    patientname = "";
-    selecttype = 0;
-    fromdate = "";
-    todate = "";
-    providername = "";
-    emailid ="";
+    firstname = "";
+    lastname = "";
+    emailid = "";
     mobile = "";
     currentpage = 1;
-    getdata(selectstatus, patientname, selecttype, fromdate, todate, providername, emailid, mobile, currentpage, pagesize, order);
+    getdata(firstname, lastname, emailid, mobile, currentpage, pagesize);
 });
 $('.dataTables_paginate').on('click', '.paginate_button', function () {
     currentpage = $(this).data('id');
-    getdata(selectstatus, patientname, selecttype, fromdate, todate, providername, emailid, mobile, currentpage, pagesize, order);
+    getdata(firstname, lastname, emailid, mobile, currentpage, pagesize);
 });
 $('.paginate_Previousbutton').on('click', function () {
     if (currentpage != 1) {
         currentpage = currentpage - 1;
-        getdata(selectstatus, patientname, selecttype, fromdate, todate, providername, emailid, mobile, currentpage, pagesize, order);
+        getdata(firstname, lastname, emailid, mobile, currentpage, pagesize);
     }
 });
 $('.paginate_Nextbutton').on('click', function () {
     if (buttoncount != currentpage) {
         currentpage = currentpage + 1;
-        getdata(selectstatus, patientname, selecttype, fromdate, todate, providername, emailid, mobile, currentpage, pagesize, order);
+        getdata(firstname, lastname, emailid, mobile, currentpage, pagesize);
     }
 });
 
-function filterDatawithoutpagination(selectstatus, patientname, selecttype, fromdate, todate, providername, emailid, mobile) {
+function filterDatawithoutpagination(firstname, lastname, emailid, mobile) {
     $.ajax({
-        url: 'AdminArea/AdminRecordsTab/SearchRecordsCount',
+        url: 'AdminArea/AdminRecordsTab/PatientDataCount',
         type: 'POST',
-        data: { selectstatus: selectstatus, patientname: patientname, selecttype: selecttype, fromdate: fromdate, todate: todate, providername: providername, emailid: emailid, mobile: mobile },
+        data: { firstname: firstname, lastname: lastname, emailid: emailid, mobile: mobile },
         success: function (data) {
             printbuttons(data);
             $('.paginate_button').removeClass("current");
@@ -94,6 +73,7 @@ function filterDatawithoutpagination(selectstatus, patientname, selecttype, from
 
 function printbuttons(data) {
     buttoncount = Math.ceil(data / pagesize);
+    
     $('.dataTables_paginate').html("");
     var btn = Math.min(5, buttoncount);
     var j = currentpage;
@@ -161,30 +141,3 @@ function printbuttons(data) {
 }
 
 
-$('#exportall').on('click', function () {
-    $.ajax({
-        url: '/AdminArea/AdminRecordsTab/SearchRecordsdatatoexcle',
-        data: { selectstatus: selectstatus, patientname: patientname, selecttype: selecttype, fromdate: fromdate, todate: todate, providername: providername, emailid: emailid, mobile: mobile, order: order },
-        type: 'POST',
-        success: function (base64String) {
-            var byteCharacters = atob(base64String);
-            var byteNumbers = new Array(byteCharacters.length);
-            for (var i = 0; i < byteCharacters.length; i++) {
-                byteNumbers[i] = byteCharacters.charCodeAt(i);
-            }
-            var byteArray = new Uint8Array(byteNumbers);
-            var blob = new Blob([byteArray], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-            var link = document.createElement('a');
-            link.href = window.URL.createObjectURL(blob);
-            var date = new Date();
-            var day = String(date.getDate()).padStart(2, '0');
-            var month = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
-            var year = date.getFullYear();
-            var hours = date.getHours();
-            var minutes = date.getMinutes();
-            var fileName = 'All_Records_' + day + '_' + month + '_' + year + '_' + hours + '_' + minutes + '.xlsx';
-            link.download = fileName;
-            link.click();
-        }
-    });
-});

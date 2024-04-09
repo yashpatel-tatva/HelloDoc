@@ -120,7 +120,7 @@ namespace DataAccess.ServiceRepository
             model.PatientMobile = request.Requestclients.FirstOrDefault(x => x.Requestid == id).Phonenumber;
             var regionid = request.Requestclients.FirstOrDefault(x => x.Requestid == id).Regionid;
             model.Region = _db.Regions.FirstOrDefault(x => x.Regionid == regionid).Name;
-            model.BuisnessName = request.Requestclients.FirstOrDefault(x => x.Requestid == id).Address;
+            model.BusinessName = request.Requestclients.FirstOrDefault(x => x.Requestid == id).Address;
             model.RequesttypeID = request.Requesttypeid;
             model.Notes = request.Requestclients.FirstOrDefault(x => x.Requestid == id).Notes;
             model.PatientDOB = new DateTime(Convert.ToInt32(user.Intyear), DateTime.ParseExact(user.Strmonth, "MMMM", CultureInfo.InvariantCulture).Month, Convert.ToInt32(user.Intdate));

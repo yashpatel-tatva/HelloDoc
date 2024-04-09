@@ -1,0 +1,49 @@
+﻿@{
+    Layout = null;
+}
+@using DataModels.AdminSideViewModels
+@model List<PatientHistryViewModel>
+<table class="w-100  table-hover table small" style="vertical-align : middle">
+    <thead style="background-color: rgb(235, 235, 235)!important ; color: black !important ; font :normal!important">
+        <tr style="--bs-table-bg: #ebebeb; color : black">
+            <th style="width : 13%;">First Name</th>
+            <th style="width : 13%;">Last Name</th>
+            <th style="width : 28%;">Email</th>
+            <th style="width : 16%;">Phone Number</th>
+            <th style="width : 25%;">Address</th>
+            <th style="width : 5%;">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.Firstname</td>
+                <td>@user.Lastname</td>
+                <td>@user.Email</td>
+                <td>@user.PhoneNumber</td>
+                <td>@user.Address</td>
+                <td>
+                    <button type="button" data-id="@user.UserId" class="btn btn-outline-info shadow-none py-2 explore">
+                        Expolore
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    $('.explore').on('click', function () {
+        var userid = $(this).data('id');
+        console.log(userid)
+        $.ajax({
+            url: '/AdminArea/AdminRecordsTab/PatientRecords',
+            data: { userid: userid },
+            type:'POST',
+            success: function (response) {
+                $('#nav-tabContent').html(response);
+            }
+        });
+    })
+</script>

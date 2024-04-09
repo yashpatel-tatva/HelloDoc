@@ -30,7 +30,7 @@
                 url = 'AdminArea/AdminProfile/CreateAdmin';
                 break;
             case '#patient-records':
-                url = 'AdminArea/AdminRecordsTab/PatientRecords';
+                url = 'AdminArea/AdminRecordsTab/PatientHistory';
                 break;
             case '#search-records':
                 url = 'AdminArea/AdminRecordsTab/SearchRecords';

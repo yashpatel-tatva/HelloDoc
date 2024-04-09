@@ -49,7 +49,7 @@
                 <td>@i.AdminNote</td>
                 <td>@i.PatientNote</td>
                 <td>
-                    <button type="reset" data-id="@i.Requestid" class="btn btn-outline-info shadow-none py-2 deleteperma">
+                    <button type="button" data-id="@i.Requestid" class="btn btn-outline-info shadow-none py-2 deleteperma">
                         Delete
                     </button>
                 </td>
@@ -63,5 +63,24 @@
         order = !order;
         currentpage = 1;
         getdata(selectstatus, patientname, selecttype, fromdate, todate, providername, emailid, mobile, currentpage, pagesize, order);
+    })
+    $('.deleteperma').on('click', function () {
+        var requestid = $(this).data('id');
+        console.log(requestid);
+        $.ajax({
+            url: '/AdminArea/AdminRecordsTab/DeleteRecord',
+            data: { requestid: requestid },
+            type: 'POST',
+            success: function () {
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "Record Deleted",
+                    showConfirmButton: false,
+                    timer: 1000
+                });
+                getdata(selectstatus, patientname, selecttype, fromdate, todate, providername, emailid, mobile, currentpage, pagesize, order);
+            }
+        });
     })
 </script>

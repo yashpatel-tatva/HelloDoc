@@ -1,4 +1,99 @@
 ﻿@{
     Layout = null;
 }
-<h3>PatientRecords</h3>
+@using DataModels.AdminSideViewModels
+@model List<PatientRecordViewModel>
+<div class="container-fluid">
+    <div class="d-flex justify-content-between">
+        <div class="h3 fw-bold">Patient History</div>
+    </div>
+    <div>
+        <div class="bg-light rounded my-3 shadow" id="content">
+            <div class="">
+                <div class=" mb-4">
+                    <table class="w-100  table-hover table small" style="vertical-align : middle">
+                        <thead style="background-color: rgb(235, 235, 235)!important ; color: black !important ; font :normal!important">
+                            <tr style="--bs-table-bg: #ebebeb; color : black">
+                                <th style="">Client/Member</th>
+                                <th style="">Created Date</th>
+                                <th style="">Confirmation</th>
+                                <th style="">Provider Name</th>
+                                <th style="">Conclude Date</th>
+                                <th style="">Status</th>
+                                <th style="">Final Report</th>
+                                <th style="">Ations</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var user in Model)
+                            {
+                                <tr>
+                                    <td>@user.RequestorName</td>
+                                    <td>@user.Createddate.ToString("MMM dd, yyyy")</td>
+                                    <td>@user.Confirmation</td>
+                                    <td>@user.Providername</td>
+                                    @if (user.Conculdedate == DateTime.MinValue)
+                                    {
+                                        <td>-</td>
+                                    }
+                                    else
+                                    {
+                                        <td>@user.Conculdedate.ToString("MMM dd, yyyy")</td>
+                                    }
+                                    <td>@user.Status</td>
+                                    <td>
+                                        @if (user.IsFinalReport)
+                                        {
+                                            <button type="button" data-id="@user.RequestId" class="btn btn-outline-info shadow-none py-2  report">
+                                                View
+                                            </button>
+                                        }
+                                        else
+                                        {
+                                            @:    -
+                                        }
+                                    </td>
+                                    <td>
+                                        <div class="dropstart ms-2">
+                                            <button class="btn btn-outline-info shadow-none py-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                Actions
+                                            </button>
+                                            <form data-id="@user.RequestId">
+                                                <ul class="dropdown-menu">
+                                                    <li><button type="button" class="dropdown-item gotoaction text-secondary" action="ViewCase">View case</button></li>
+                                                    <li><button type="button" class="dropdown-item @*gotoaction*@ text-secondary" action="Chat">Chat</button></li>
+                                                    <li><button type="button" class="dropdown-item gotoaction text-secondary" action="ViewUploads">@user.DocumentCount View Uploads</button></li>
+                                                </ul>
+                                            </form>
+
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('.gotoaction').click(function (e) {
+        e.preventDefault();
+        var action = $(this).attr('action');
+        var id = $(this).closest('form').data('id');
+        console.log(action , id)
+        $.ajax({
+            url: 'AdminArea/Dashboard/' + action,
+            type: 'GET',
+            data: { id: id },
+            success: function (result) {
+
+                $('#nav-tabContent').html(result);
+            },
+            error: function (xhr, status, error) {
+                console.error('Error: ' + error);
+            },
+        });
+    });
+</script>

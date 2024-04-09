@@ -84,7 +84,10 @@ function printbuttons(data) {
     $('.dataTables_paginate').html("");
     var btn = Math.min(5, buttoncount);
     var j = currentpage;
-    if (buttoncount <= 5) {
+    if (buttoncount == 0) {
+        $('.dataTables_paginate').html("No Records Found");
+    }
+    else if (buttoncount <= 5) {
         for (var i = 1; i <= btn; i++) {
             $('.dataTables_paginate').append('<div class="paginate_button" data-id="' + i + '">' + i + '</div > ');
         }

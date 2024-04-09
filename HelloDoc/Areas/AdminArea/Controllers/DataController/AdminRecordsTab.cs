@@ -4,6 +4,8 @@ using DataModels.AdminSideViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Localization;
 using NPOI.SS.Formula.Functions;
+using Org.BouncyCastle.Utilities.Encoders;
+using System.Buffers.Text;
 using System.Configuration.Provider;
 using System.Reflection;
 
@@ -27,11 +29,113 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         {
             return View();
         }
+        [Area("AdminArea")]
+        [HttpPost]
+        public IActionResult PatientsData(string firstname, string lastname, string emailid, string mobile, int currentpage, int pagesize)
+        {
+            List<PatientHistryViewModel> models = new List<PatientHistryViewModel>();
+            var users = _db.Users.Where(x => x.Isdeleted == null).ToList();
+            if (firstname != null)
+            {
+                firstname = firstname.Replace(" ", "").ToLower();
+                users = users.Where(x => x.Firstname.ToLower().Contains(firstname)).ToList();
+            }
+            if (lastname != null)
+            {
+                lastname = lastname.Replace(" ", "").ToLower();
+                users = users.Where(x => x.Lastname.ToLower().Contains(lastname)).ToList();
+            }
+            if (emailid != null)
+            {
+                emailid = emailid.Replace(" ", "").ToLower();
+                users = users.Where(x => x.Email.ToLower().Contains(emailid)).ToList();
+            }
+            if (mobile != null)
+            {
+                mobile = mobile.Replace(" ", "").ToLower();
+                users = users.Where(x => x.Mobile != null && x.Mobile.ToLower().Contains(mobile)).ToList();
+            }
+            users = users.Skip((currentpage - 1) * pagesize).Take(pagesize).ToList();
+            foreach (var item in users)
+            {
+                models.Add(new PatientHistryViewModel
+                {
+                    UserId = item.Userid,
+                    Firstname = item.Firstname,
+                    Lastname = item.Lastname,
+                    Email = item.Email,
+                    PhoneNumber = item.Mobile,
+                    Address = item.Street + " , " + item.City + " , " + item.State,
+
+                });
+            }
+            return PartialView("_PatientHistory", models);
+        }
 
         [Area("AdminArea")]
-        public IActionResult PatientRecords()
+        [HttpPost]
+        public int PatientDataCount(string firstname, string lastname, string emailid, string mobile)
         {
-            return View();
+            var users = _db.Users.Where(x => x.Isdeleted == null).ToList();
+            if (firstname != null)
+            {
+                firstname = firstname.Replace(" ", "").ToLower();
+                users = users.Where(x => x.Firstname.ToLower().Contains(firstname)).ToList();
+            }
+            if (lastname != null)
+            {
+                lastname = lastname.Replace(" ", "").ToLower();
+                users = users.Where(x => x.Lastname.ToLower().Contains(lastname)).ToList();
+            }
+            if (emailid != null)
+            {
+                emailid = emailid.Replace(" ", "").ToLower();
+                users = users.Where(x => x.Email.ToLower().Contains(emailid)).ToList();
+            }
+            if (mobile != null)
+            {
+                mobile = mobile.Replace(" ", "").ToLower();
+                users = users.Where(x => x.Mobile != null && x.Mobile.ToLower().Contains(mobile)).ToList();
+            }
+            return users.Count();
+        }
+
+
+        [Area("AdminArea")]
+        [HttpPost]
+        public IActionResult PatientRecords(int userid)
+        {
+            List<PatientRecordViewModel> records = new List<PatientRecordViewModel>();
+            var request = _request.GetRequestsbyState("all").Where(x => x.Userid == userid);
+            foreach (var record in request)
+            {
+                PatientRecordViewModel model = new PatientRecordViewModel();
+                model.RequestId = record.Requestid;
+                model.RequestorName = record.Firstname + ' ' + record.Lastname;
+                model.Createddate = record.Createddate;
+                model.Confirmation = record.Confirmationnumber;
+                if (record.Physicianid != null)
+                {
+                    model.Providername = record.Physician.Firstname + " " + record.Physician.Lastname;
+                }
+                if (record.Requeststatuslogs != null)
+                {
+                    if (record.Requeststatuslogs.Where(x => x.Status == 6).LastOrDefault() != null)
+                    {
+                        model.Conculdedate = record.Requeststatuslogs.Where(x => x.Status == 6).LastOrDefault().Createddate;
+                    }
+                }
+                if (record.Status == 1) model.Status = "New";
+                if (record.Status == 2) model.Status = "Pending";
+                if (record.Status == 4 || record.Status == 5) model.Status = "Active";
+                if (record.Status == 6) model.Status = "Conclude";
+                if (record.Status == 3 || record.Status == 7 || record.Status == 8) model.Status = "ToClose";
+                if (record.Status == 9) model.Status = "Unpaid";
+                model.IsFinalReport = false;
+                model.DocumentCount = record.Requestwisefiles.Count();
+                records.Add(model);
+            }
+            return View(records);
         }
 
         [Area("AdminArea")]
@@ -339,7 +443,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         public IActionResult SearchRecordsdata(string selectstatus, string patientname, int selecttype, string fromdate, string todate, string providername, string emailid, string mobile, int currentpage, int pagesize, bool order)
         {
             List<SearchRecodsViewModel> models = new List<SearchRecodsViewModel>();
-            models = _request.GetFilterdData(selectstatus , patientname , selecttype , fromdate , todate , providername , emailid , mobile , currentpage , pagesize , order);
+            models = _request.GetFilterdData(selectstatus, patientname, selecttype, fromdate, todate, providername, emailid, mobile, currentpage, pagesize, order);
             return PartialView("_SearchRecords", models);
         }
 
@@ -347,21 +451,26 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         [HttpPost]
         public int SearchRecordsCount(string selectstatus, string patientname, int selecttype, string fromdate, string todate, string providername, string emailid, string mobile)
         {
-            return _request.SearchRecordsCount( selectstatus , patientname , selecttype , fromdate , todate , providername , emailid , mobile);
+            return _request.SearchRecordsCount(selectstatus, patientname, selecttype, fromdate, todate, providername, emailid, mobile);
         }
 
         [Area("AdminArea")]
         [HttpPost]
-        public IActionResult SearchRecordsdatatoexcle(string selectstatus, string patientname, int selecttype, string fromdate, string todate, string providername, string emailid, string mobile, bool order)
+        public string SearchRecordsdatatoexcle(string selectstatus, string patientname, int selecttype, string fromdate, string todate, string providername, string emailid, string mobile, bool order)
         {
             List<SearchRecodsViewModel> models = new List<SearchRecodsViewModel>();
             var record = _request.GetFilterdDatatoexcle(selectstatus, patientname, selecttype, fromdate, todate, providername, emailid, mobile, order);
-            string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            var strDate = DateTime.Now.ToString("yyyyMMdd");
-            string filename = $"All Request_{strDate}.xlsx";
+            //string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            //var strDate = DateTime.Now.ToString("yyyyMMdd");
+            //string filename = $"All Request_{strDate}.xlsx";
 
-            return File(record, contentType, filename);
+            return Org.BouncyCastle.Utilities.Encoders.Base64.ToBase64String(record);
         }
-
+        [Area("AdminArea")]
+        [HttpPost]
+        public void DeleteRecord(int requestid)
+        {
+            _request.DeleteThisRequest(requestid);
+        }
     }
 }
