@@ -171,6 +171,12 @@ namespace DataAccess.ServiceRepository
             model.regions = _db.Regions.ToList();
             _db.Update(physician);
             _db.SaveChanges();
+            Aspnetuser aspnetuser = _userRepository.GetFirstOrDefault(x => x.Id == physician.Aspnetuserid);
+            aspnetuser.Email = physician.Email;
+            aspnetuser.Modifieddate = DateTime.Now;
+            aspnetuser.Phonenumber = physician.Mobile;
+            _db.Aspnetusers.Update(aspnetuser);
+            _db.SaveChanges();
         }
 
         public void EditProviderMailingInfo(PhysicianAccountViewModel model)
