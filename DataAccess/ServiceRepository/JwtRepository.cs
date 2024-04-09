@@ -1,4 +1,5 @@
 ﻿using DataAccess.ServiceRepository.IServiceRepository;
+using DataAccess.ServiceRepository.IServiceRepository;
 using DataModels.CommonViewModel;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -28,7 +29,7 @@ namespace DataAccess.ServiceRepository
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var expires = DateTime.UtcNow.AddMinutes(20);
+            var expires = DateTime.UtcNow.AddMinutes(200);
 
             var token = new JwtSecurityToken(
                 configuration["Jwt:Issuer"],

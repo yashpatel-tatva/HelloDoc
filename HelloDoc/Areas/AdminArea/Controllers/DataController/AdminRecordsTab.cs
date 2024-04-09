@@ -339,99 +339,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         public IActionResult SearchRecordsdata(string selectstatus, string patientname, int selecttype, string fromdate, string todate, string providername, string emailid, string mobile, int currentpage, int pagesize, bool order)
         {
             List<SearchRecodsViewModel> models = new List<SearchRecodsViewModel>();
-            var requests = _request.GetRequestsbyState(selectstatus);
-
-            if (patientname != null)
-            {
-                patientname = patientname.Replace(" ", ""); patientname = patientname.ToLower();
-                requests = requests.Where(x => (x.Requestclients.FirstOrDefault().Firstname + x.Requestclients.FirstOrDefault().Lastname).ToLower().Contains(patientname)).ToList();
-            }
-            if (selecttype != 0)
-            {
-                requests = requests.Where(x => x.Requesttypeid == selecttype).ToList();
-            }
-            if (fromdate != null)
-            {
-                DateTime FromDate = DateTime.Parse(fromdate);
-                requests = requests.Where(x => x.Createddate >= FromDate).ToList();
-            }
-            if (todate != null)
-            {
-                DateTime ToDate = DateTime.Parse(todate);
-                requests = requests.Where(x => x.Createddate <= ToDate).ToList();
-            }
-            if (providername != null)
-            {
-                providername = providername.Replace(" ", ""); providername = providername.ToLower();
-                requests = requests.Where(x => x.Physician != null).ToList();
-                requests = requests.Where(x => (x.Physician.Firstname + x.Physician.Lastname).ToLower().Contains(providername)).ToList();
-            }
-            if (emailid != null)
-            {
-                emailid = emailid.Replace(" ", ""); emailid = emailid.ToLower();
-                requests = requests.Where(x => x.Requestclients.FirstOrDefault().Email.ToLower().Contains(emailid)).ToList();
-            }
-            if (mobile != null)
-            {
-                mobile = mobile.Replace(" ", ""); mobile = mobile.ToLower();
-                requests = requests.Where(x => x.Requestclients.FirstOrDefault().Phonenumber != null).ToList();
-                requests = requests.Where(x => x.Requestclients.FirstOrDefault().Phonenumber.Contains(mobile)).ToList();
-            }
-
-
-            if (order)
-            {
-                requests = requests
-    .OrderBy(x => x.Requeststatuslogs.Any(z => z.Status == 9) ? x.Requeststatuslogs.Where(z => z.Status == 9).Min(log => log.Createddate) : DateTime.MinValue)
-    .ToList();
-
-            }
-            else
-            {
-                requests = requests
-    .OrderByDescending(x => x.Requeststatuslogs.Any(z => z.Status == 9) ? x.Requeststatuslogs.Where(z => z.Status == 9).Min(log => log.Createddate) : DateTime.MinValue)
-    .ToList();
-
-            }
-            requests = requests.Skip((currentpage - 1) * pagesize).Take(pagesize).ToList();
-
-            foreach (var item in requests)
-            {
-                SearchRecodsViewModel search = new SearchRecodsViewModel();
-                search.Requestid = item.Requestid;
-                search.PatientName = item.Requestclients.FirstOrDefault().Firstname + " " + item.Requestclients.FirstOrDefault().Lastname;
-                //search.Requestor = item.Firstname + " " + item.Lastname;
-                search.Requestor = item.Requesttype.Name;
-                search.DateofService = item.Createddate;
-                var lastLog = item.Requeststatuslogs.Where(x => x.Status == 9).LastOrDefault();
-                search.CloseCaseDate = lastLog != null ? lastLog.Createddate : null;
-                search.Email = item.Requestclients.FirstOrDefault().Email;
-                search.Mobile = item.Requestclients.FirstOrDefault().Phonenumber;
-                search.Address = item.Requestclients.FirstOrDefault().Address;
-                search.Zip = item.Requestclients.FirstOrDefault().Zipcode;
-                if (item.Status == 1) search.Status = "New";
-                if (item.Status == 2) search.Status = "Pending";
-                if (item.Status == 4 || item.Status == 5) search.Status = "Active";
-                if (item.Status == 6) search.Status = "Conclude";
-                if (item.Status == 3 || item.Status == 7 || item.Status == 8) search.Status = "ToClose";
-                if (item.Status == 9) search.Status = "Unpaid";
-                if (item.Physician != null)
-                {
-                    search.Phyicianname = item.Physician.Firstname + " " + item.Physician.Lastname;
-                }
-                else
-                {
-                    search.Phyicianname = "-";
-                }
-                var PhysicianNote = item.Requeststatuslogs.Where(x => x.Physicianid != null).LastOrDefault();
-                search.PhysicianNote = PhysicianNote != null ? PhysicianNote.Notes : "_";
-                var notelog = item.Requeststatuslogs.Where(x => x.Physicianid != null).LastOrDefault();
-                search.CancelledByPhyNote = notelog != null ? notelog.Notes : "-";
-                var AdminNote = item.Requeststatuslogs.Where(x => x.Adminid != null).LastOrDefault();
-                search.AdminNote = AdminNote != null ? AdminNote.Notes : "_";
-                search.PatientNote = item.Requestclients.Last().Notes;
-                models.Add(search);
-            }
+            models = _request.GetFilterdData(selectstatus , patientname , selecttype , fromdate , todate , providername , emailid , mobile , currentpage , pagesize , order);
             return PartialView("_SearchRecords", models);
         }
 
@@ -439,47 +347,21 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         [HttpPost]
         public int SearchRecordsCount(string selectstatus, string patientname, int selecttype, string fromdate, string todate, string providername, string emailid, string mobile)
         {
-            List<SearchRecodsViewModel> models = new List<SearchRecodsViewModel>();
-            var requests = _request.GetRequestsbyState(selectstatus);
-
-            if (patientname != null)
-            {
-                patientname = patientname.Replace(" ", ""); patientname = patientname.ToLower();
-                requests = requests.Where(x => (x.Requestclients.FirstOrDefault().Firstname + x.Requestclients.FirstOrDefault().Lastname).ToLower().Contains(patientname)).ToList();
-            }
-            if (selecttype != 0)
-            {
-                requests = requests.Where(x => x.Requesttypeid == selecttype).ToList();
-            }
-            if (fromdate != null)
-            {
-                DateTime FromDate = DateTime.Parse(fromdate);
-                requests = requests.Where(x => x.Createddate >= FromDate).ToList();
-            }
-            if (todate != null)
-            {
-                DateTime ToDate = DateTime.Parse(todate);
-                requests = requests.Where(x => x.Createddate <= ToDate).ToList();
-            }
-            if (providername != null)
-            {
-                providername = providername.Replace(" ", ""); providername = providername.ToLower();
-                requests = requests.Where(x => x.Physician != null).ToList();
-                requests = requests.Where(x => (x.Physician.Firstname + x.Physician.Lastname).ToLower().Contains(providername)).ToList();
-            }
-            if (emailid != null)
-            {
-                emailid = emailid.Replace(" ", ""); emailid = emailid.ToLower();
-                requests = requests.Where(x => x.Requestclients.FirstOrDefault().Email.ToLower().Contains(emailid)).ToList();
-            }
-            if (mobile != null)
-            {
-                mobile = mobile.Replace(" ", ""); mobile = mobile.ToLower();
-                requests = requests.Where(x => x.Requestclients.FirstOrDefault().Phonenumber != null).ToList();
-                requests = requests.Where(x => x.Requestclients.FirstOrDefault().Phonenumber.Contains(mobile)).ToList();
-            }
-
-            return requests.Count();
+            return _request.SearchRecordsCount( selectstatus , patientname , selecttype , fromdate , todate , providername , emailid , mobile);
         }
+
+        [Area("AdminArea")]
+        [HttpPost]
+        public IActionResult SearchRecordsdatatoexcle(string selectstatus, string patientname, int selecttype, string fromdate, string todate, string providername, string emailid, string mobile, bool order)
+        {
+            List<SearchRecodsViewModel> models = new List<SearchRecodsViewModel>();
+            var record = _request.GetFilterdDatatoexcle(selectstatus, patientname, selecttype, fromdate, todate, providername, emailid, mobile, order);
+            string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            var strDate = DateTime.Now.ToString("yyyyMMdd");
+            string filename = $"All Request_{strDate}.xlsx";
+
+            return File(record, contentType, filename);
+        }
+
     }
 }

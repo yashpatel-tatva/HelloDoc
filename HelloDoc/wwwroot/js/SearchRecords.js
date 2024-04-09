@@ -147,3 +147,15 @@ function printbuttons(data) {
     }
     $('#totalcountofshift').html(data);
 }
+
+
+//$('#exportall').on('click', function () {
+//    $.ajax({
+//        url: '/AdminArea/AdminRecordsTab/SearchRecordsdatatoexcle',
+//        data: { selectstatus: selectstatus, patientname: patientname, selecttype: selecttype, fromdate: fromdate, todate: todate, providername: providername, emailid: emailid, mobile: mobile, order: order },
+//        type: 'POST',
+//        success: function (response) {
+
+//        }
+//    });
+//});
