@@ -11,18 +11,20 @@ namespace HelloDoc.Areas.AdminArea.DataController
         private readonly IAspNetUserRepository _aspnetuser;
         private readonly IAdminRepository _admin;
         private readonly IJwtRepository _jwtRepository;
-
+        private readonly IPhysicianRepository _physician;
         public CredentialAdminController(
             HelloDocDbContext context,
             IAspNetUserRepository aspnetUserRepository,
             IAdminRepository adminRepository,
-            IJwtRepository jwtRepository
+            IJwtRepository jwtRepository,
+            IPhysicianRepository physician
             )
         {
             _context = context;
             _aspnetuser = aspnetUserRepository;
             _admin = adminRepository;
             _jwtRepository = jwtRepository;
+            _physician = physician;
         }
 
         [Area("AdminArea")]
@@ -30,15 +32,14 @@ namespace HelloDoc.Areas.AdminArea.DataController
         public async Task<IActionResult> Login(Aspnetuser user)
         {
             var alluser = _aspnetuser.GetAll().Where(x=>x.Email==user.Email).Select(x=>x.Id);
-            var correct = _aspnetuser.GetFirstOrDefault(x => x.Email == user.Email);
+            var correct = new Aspnetuser();
             foreach(var u in alluser)
             {
                 var Roleid = _context.Aspnetuserroles.FirstOrDefault(x => x.Userid == u).Roleid;
-                if(Roleid == "1")
+                if(Roleid == "1" || Roleid == "2")
                 {
                     correct = _aspnetuser.GetFirstOrDefault(x => x.Id == u);
                 }
-
             }
             if (correct != null)
             {
@@ -59,7 +60,8 @@ namespace HelloDoc.Areas.AdminArea.DataController
             if (correct != null)
             {
                 var admin = _admin.GetFirstOrDefault(u => u.Aspnetuserid == correct.Id);
-                if (admin != null)
+                var physician = _physician.GetFirstOrDefault(u => u.Aspnetuserid == correct.Id);
+                if (admin != null && physician == null)
                 {
                     if (_aspnetuser.checkpass(user))
                     {
@@ -75,9 +77,24 @@ namespace HelloDoc.Areas.AdminArea.DataController
                     }
 
                 }
+                else if(admin == null && physician != null)
+                {
+                    if (_aspnetuser.checkpass(user))
+                    {
+                        _physician.SetSession(physician);
+                        TempData["Message"] = "Welcome" + physician.Firstname + " " + physician.Lastname;
+                        return RedirectToAction("PhysicianTabsLayout", "Home");
+                    }
+                    else
+                    {
+                        TempData["WrongPass"] = "Enter Correct Password";
+                        TempData["Style"] = " border-danger";
+                        return RedirectToAction("AdminLogin", "Home");
+                    }
+                }
                 else
                 {
-                    TempData["WrongPass"] = "You're Not admin";
+                    TempData["WrongPass"] = "You're Not admin nor Provider";
                     TempData["Style"] = " border-danger";
                     return RedirectToAction("AdminLogin", "Home");
                 }

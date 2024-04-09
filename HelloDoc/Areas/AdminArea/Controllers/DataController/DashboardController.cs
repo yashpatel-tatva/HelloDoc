@@ -381,6 +381,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
         {
             var request = _requests.GetFirstOrDefault(x => x.Requestid == requestid);
             request.Status = 4;
+            request.Accepteddate = DateTime.Now;
             _requests.Update(request);
             _requests.Save();
             var reqstatus = new Requeststatuslog

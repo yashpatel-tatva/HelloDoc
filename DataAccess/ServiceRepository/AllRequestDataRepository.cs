@@ -52,7 +52,14 @@ namespace DataAccess.ServiceRepository
                 model.Region = item.User.Region.Name;
                 model.RequestId = item.Requestid;
                 model.status = _request.GetstatebyStatus(item.Status);
-
+                if(item.Accepteddate != null)
+                {
+                    model.IsAcceptedbyprovider = true;
+                }
+                else
+                {
+                    model.IsAcceptedbyprovider= false;
+                }
                 if (item.Status != 1)
                 {
                     if (item.Physician != null)

@@ -14,7 +14,7 @@
 
     th, td {
         border: 1px solid #dee2e6;
-        padding: 8px;
+        padding: 8px 0px;
         text-align: left;
     }
 
@@ -23,7 +23,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 100%;
+        /*height: 100%;*/
         font-size: small;
     }
 </style>
@@ -32,30 +32,30 @@
         <thead style="background: rgb(145 145 145) ; color : white !important">
             <tr>
                 <th style="width : 28%; text-align : center">STAFF</th>
-                <th style="width : 3%">12A</th>
-                <th style="width : 3%">1A</th>
-                <th style="width : 3%">2A</th>
-                <th style="width : 3%">3A</th>
-                <th style="width : 3%">4A</th>
-                <th style="width : 3%">5A</th>
-                <th style="width : 3%">6A</th>
-                <th style="width : 3%">7A</th>
-                <th style="width : 3%">8A</th>
-                <th style="width : 3%">9A</th>
-                <th style="width : 3%">10A</th>
-                <th style="width : 3%">11A</th>
-                <th style="width : 3%">12P</th>
-                <th style="width : 3%">1P</th>
-                <th style="width : 3%">2P</th>
-                <th style="width : 3%">3P</th>
-                <th style="width : 3%">4P</th>
-                <th style="width : 3%">5P</th>
-                <th style="width : 3%">6P</th>
-                <th style="width : 3%">7P</th>
-                <th style="width : 3%">8P</th>
-                <th style="width : 3%">9P</th>
-                <th style="width : 3%">10P</th>
-                <th style="width : 3%">11P</th>
+                <th style="width : 3%; text-align : center">12A</th>
+                <th style="width : 3%; text-align : center">1A</th>
+                <th style="width : 3%; text-align : center">2A</th>
+                <th style="width : 3%; text-align : center">3A</th>
+                <th style="width : 3%; text-align : center">4A</th>
+                <th style="width : 3%; text-align : center">5A</th>
+                <th style="width : 3%; text-align : center">6A</th>
+                <th style="width : 3%; text-align : center">7A</th>
+                <th style="width : 3%; text-align : center">8A</th>
+                <th style="width : 3%; text-align : center">9A</th>
+                <th style="width : 3%; text-align : center">10A</th>
+                <th style="width : 3%; text-align : center">11A</th>
+                <th style="width : 3%; text-align : center">12P</th>
+                <th style="width : 3%; text-align : center">1P</th>
+                <th style="width : 3%; text-align : center">2P</th>
+                <th style="width : 3%; text-align : center">3P</th>
+                <th style="width : 3%; text-align : center">4P</th>
+                <th style="width : 3%; text-align : center">5P</th>
+                <th style="width : 3%; text-align : center">6P</th>
+                <th style="width : 3%; text-align : center">7P</th>
+                <th style="width : 3%; text-align : center">8P</th>
+                <th style="width : 3%; text-align : center">9P</th>
+                <th style="width : 3%; text-align : center">10P</th>
+                <th style="width : 3%; text-align : center">11P</th>
             </tr>
         </thead>
         <tbody>
@@ -88,8 +88,8 @@
             </tr>
             @foreach (var item in Model.physicianDatas)
             {
-                <tr>
-                    <td>
+                <tr id="phy_@item.Physicianid" class="position-relative">
+                    <td style="padding :8px">
                         <img src="@item.Photo" width="10%">
                         @item.Physicianname
                     </td>
@@ -130,7 +130,7 @@
     </table>
 </div>
 
-@foreach (var item in Model.physicianDatas)
+@*@foreach (var item in Model.physicianDatas)
 {
     @foreach (var shift in Model.Shifts.Where(s => s.Physicianid == item.Physicianid))
     {
@@ -177,6 +177,48 @@
             $('#event_@shift.ShiftId').css("margin-right", pr + "%");
         </script>
     }
-}
+}*@
 
+
+@foreach (var item in Model.physicianDatas)
+{
+    @foreach (var shift in Model.Shifts.Where(s => s.Physicianid == item.Physicianid))
+    {
+        <script>
+            var starthr = @shift.StartTime.Hour;
+            var endhr = @shift.EndTime.Hour;
+            var startmin = @shift.StartTime.Minute;
+            var endmin = @shift.EndTime.Minute;
+
+            @*var left = 28 + (starthr) * 3 + (0.05) * startmin;
+            var end = (23 - endhr) * 3 + (60 - endmin) * (0.05);
+            console.log(left, end);*@
+
+            var totalmin = (endhr - starthr) * 60 - startmin + endmin;
+            var width = ((totalmin) / 60 ) * 3;
+            console.log(totalmin, width);
+
+            var phy = @item.Physicianid;
+            var slot = "#" + starthr + "_" + phy;
+            var color = "";
+            if (@shift.Status == 1) {
+                color = "#ffd4ed";
+            }
+            if (@shift.Status == 2) {
+                color = "#cee9cd";
+            }
+            $(slot).css("padding", "0px")
+            $(slot).append('<div class="events position-absolute text-dark" id="event_@shift.ShiftId" data-id="@shift.ShiftId" data-url="DayWiseData">@shift.StartTime.ToString("hh:mm tt") - @shift.EndTime.ToString("hh:mm tt")</div>');
+            $('#event_@shift.ShiftId').css("background-color", color);
+            $('#event_@shift.ShiftId').css("width", width + "%");
+            $('#event_@shift.ShiftId').css("top", "3px");
+            $('#event_@shift.ShiftId').css("bottom", "3px");
+            var pl = 0;
+            if (@shift.StartTime.Minute > 0) {
+                pl = (startmin) / 20 ;
+            }
+            $('#event_@shift.ShiftId').css("margin-left", pl + "%");
+        </script>
+    }
+}
 <script src="~/js/Events.js" asp-append-version="true"></script>

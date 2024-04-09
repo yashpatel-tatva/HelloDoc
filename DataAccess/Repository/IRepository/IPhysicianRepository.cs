@@ -6,5 +6,8 @@ namespace DataAccess.Repository.IRepository
     {
         List<Physician> getAll();
         List<Physician> getAllnotdeleted();
+        void SetSession(Physician physician);
+        void RemoveSession();
+        int GetSessionPhysicianId();
     }
 }

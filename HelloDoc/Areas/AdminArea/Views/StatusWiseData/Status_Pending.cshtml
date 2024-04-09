@@ -121,7 +121,10 @@
                                 <li><button type="button" class="dropdown-item gotoaction text-secondary" action="ViewNotes"><i class="fa-regular fa-rectangle-list me-2"></i>View Notes</button></li>
                                 <li><button type="button" class="dropdown-item gotopopup text-secondary" action="TransferCase"><i class="fa-solid fa-shuffle me-2"></i>Transfer</button></li>
                                 <li><button type="button" class="dropdown-item gotopopup text-secondary" action="ClearCase"><i class="fa-regular fa-circle-xmark me-2"></i>Clear case</button></li>
-                                <li><button type="button" class="dropdown-item gotopopup text-secondary" action="SendAgreenment"><i class="fa-solid fa-file-contract me-2"></i>Send Agrrenment</button></li>
+                                @if (item.IsAcceptedbyprovider)
+                                {
+                                    <li><button type="button" class="dropdown-item gotopopup text-secondary" action="SendAgreenment"><i class="fa-solid fa-file-contract me-2"></i>Send Agrrenment</button></li>
+                                }
                             </ul>
                         </form>
                     </div>

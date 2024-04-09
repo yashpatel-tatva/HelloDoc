@@ -35,5 +35,6 @@
             return By;
         }
         public string status { get; set; }
+        public bool IsAcceptedbyprovider { get; set; }
     }
 }

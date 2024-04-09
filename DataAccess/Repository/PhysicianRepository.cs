@@ -1,5 +1,6 @@
 ﻿using DataAccess.Repository.IRepository;
 using HelloDoc;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System.Collections;
 
@@ -7,9 +8,13 @@ namespace DataAccess.Repository
 {
     public class PhysicianRepository : Repository<Physician>, IPhysicianRepository
     {
-        public PhysicianRepository(HelloDocDbContext db) : base(db)
+        private readonly IHttpContextAccessor _httpsession;
+        private readonly IAspNetUserRepository _aspnetuser;
+        public PhysicianRepository(IHttpContextAccessor httpContextAccessor, IAspNetUserRepository aspNetUserRepository, HelloDocDbContext db) : base(db)
         {
             db = db;
+            _httpsession = httpContextAccessor;
+            _aspnetuser = aspNetUserRepository;
         }
 
         public List<Physician> getAll()
@@ -26,6 +31,33 @@ namespace DataAccess.Repository
             return physician;
         }
 
+        public int GetSessionPhysicianId()
+        {
+            try
+            {
+                var id = (int)_httpsession.HttpContext.Session.GetInt32("PhysicianId");
+                return id;
+            }
+            catch
+            {
+                return -1;
+            }
+        }
 
+        public void RemoveSession()
+        {
+            _httpsession.HttpContext.Session.Remove("PhysicianId");
+            _httpsession.HttpContext.Session.Remove("AspNetId");
+            _httpsession.HttpContext.Session.Remove("UserName");
+            _httpsession.HttpContext.Session.Remove("Role");
+        }
+
+        public void SetSession(Physician physician)
+        {
+            _httpsession.HttpContext.Session.SetInt32("PhysicianId", physician.Physicianid);
+            _httpsession.HttpContext.Session.SetString("AspNetId", physician.Aspnetuserid);
+            _httpsession.HttpContext.Session.SetString("UserName", physician.Firstname + " " + physician.Lastname);
+            _httpsession.HttpContext.Session.SetString("Role", "Physician");
+        }
     }
 }
