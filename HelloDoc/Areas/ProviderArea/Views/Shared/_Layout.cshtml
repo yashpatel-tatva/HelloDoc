@@ -1,0 +1,127 @@
+﻿@*@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor*@
+@{
+    var loggedinperson = Context.Request.Cookies["jwt"];
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - HelloDoc</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="~/css/nightmode.css" asp-append-version="true" />
+    <link rel="icon" href="@Url.Content("~/favicon.ico")" type="image/x-icon" />
+    <link rel="stylesheet" href="~/css/dashboard.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/accordian.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/AdminDashboard.css" asp-append-version="true" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js" asp-append-version="true"></script>
+    <script src="https://kit.fontawesome.com/3a611923b3.js" crossorigin="anonymous" asp-append-version="true"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" asp-append-version="true">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css" asp-append-version="true" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/HelloDoc.styles.css" asp-append-version="true" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <link rel="stylesheet" href="~/css/responsive.css" asp-append-version="true" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" asp-append-version="true"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" asp-append-version="true"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js" asp-append-version="true"></script>
+
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin=""></script>
+    <!-- Syncfusion ASP.NET Core controls styles -->
+    <link rel="stylesheet" href="https://cdn.syncfusion.com/ej2/25.1.35/fluent.css" />
+    <!-- Syncfusion ASP.NET Core controls scripts -->
+    <script src="https://cdn.syncfusion.com/ej2/25.1.35/dist/ej2.min.js"></script>
+</head>
+<body data-bs-theme="dark" style="background-color: rgb(240, 240, 240)">
+    <header>
+        <nav class="navbar navbar-light bg-light shadow rounded px-5size">
+            <div class="d-flex align-items-center">
+                <button class="bg-transparent border-0 text-info display-6 sidebaroffcanvasbtn" type="button" data-bs-toggle="offcanvas" data-bs-target="#layoutnav" aria-controls="layoutnav">
+                    <span class="mt-2"><i class="bi bi-layout-sidebar-inset"></i></span>
+                </button>
+                <a class="navbar-brand px " asp-controller="Home" asp-action="AdminLogin">
+                    <img src="~/res/Logo.png" width="auto" id="logo" alt="">
+                </a>
+            </div>
+            <div class="navdiv">
+                @if (!string.IsNullOrEmpty(loggedinperson))
+                {
+
+                    var username = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler().ReadJwtToken(loggedinperson).Claims.FirstOrDefault(x => x.Type == "UserName").Value;
+
+                    <span class="welcomespan">Welcome , @username</span>
+                    <a href="/AdminArea/CredentialAdmin/LogOut" class="text-decoration-none">
+                        <button style="background-color: transparent;" class="border-1 rounded text-info border-info p-2">
+                            <div class="logoutimg"><i class=" fa-solid fa-arrow-right-from-bracket "></i></div>
+                            <div class="logouttext"><span class="">Log Out</span></div>
+                        </button>
+                    </a>
+                }
+                <button style="background-color: transparent;" class="border-1 rounded p-2 border-info " id="btn1">
+                    <i class="fa-solid fa-sun fa-xl" id="imgmode"></i>
+                </button>
+            </div>
+        </nav>
+    </header>
+    @RenderBody()
+    <ejs-scripts></ejs-scripts>
+    <footer class="text-muted mt-5">
+        <div class="bg-dark d-flex justify-content-end py-2 mt-auto position-fixed bottom-0  w-100" id="bg">
+            <span class="fw-medium px-2  "><a href="#" class="text-secondary">Terms and Condition</a></span>
+            <span class="fw-medium px-2  "><a href="#" class="text-secondary"> | </a></span>
+            <span class="fw-medium px-2  "><a href="#" class="text-secondary">Privacy Policy</a></span>
+        </div>
+    </footer>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <script>
+        $(function () {
+            let $modal = $("#ModalToOpen");
+            $modal.draggable({
+                handle: ".modal-header",
+            });
+            $modal.resizable();
+        });
+    </script>
+
+    <script>
+        $('input[type="tel"]').each(function () {
+            var iti = window.intlTelInput(this, {
+                nationalMode: false,
+                utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"
+            });
+            $(this).on('blur', function () {
+                var fullNumber = iti.getNumber();
+                var countryCode = iti.getSelectedCountryData().dialCode;
+                if (fullNumber.startsWith("+" + countryCode + "+" + countryCode)) {
+                    fullNumber = fullNumber.replace("+" + countryCode + "+", "+");
+                }
+                console.log(fullNumber);
+                $(this).val(fullNumber);
+            });
+        });
+
+    </script>
+
+    <script src="~/js/requestform.js" asp-append-version="true"></script>
+    <script src="~/js/nightmode.js" asp-append-version="true"></script>
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+@await RenderSectionAsync("Scripts", required: false)
+
+</html>

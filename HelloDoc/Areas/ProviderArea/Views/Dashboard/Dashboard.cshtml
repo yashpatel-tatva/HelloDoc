@@ -1,0 +1,137 @@
+﻿@using DataModels.AdminSideViewModels;
+@model AdminDashboardViewModel;
+@{
+    Layout = null;
+}
+<nav>
+    <div class="nav nav-tabs" id="status-tab" role="tablist">
+        <div class="allstatus ">
+            <button type="button" class="w-100 nav-link dashboardtab position-relative" id="status-new" data-bs-toggle="tab" data-bs-target="#s_new" type="button" role="tab" aria-controls="s_new" aria-selected="true">
+                <div class="new rounded-4res">
+                    <div class="d-flex p-1">
+                        <div class="px-2 icons float-start  small"><i class="bi bi-plus-circle-dotted"></i></div><div class="small fw-bold">NEW</div>
+                    </div>
+                    @*<div class="fw-bolder fs-4 p-1 text-start">@Model.newrequest</div>*@
+                </div>
+                <div class="bottomarrow"></div>
+            </button>
+        </div>
+        <div class="allstatus">
+            <button class="nav-link dashboardtab position-relative w-100" id="status-pending" data-bs-toggle="tab" data-bs-target="#s_pending" type="button" role="tab" aria-controls="s_pending" aria-selected="false">
+                <div class="pending rounded-4res">
+                    <div class="d-flex p-1">
+                        <div class="px-2 icons float-start small"><i class="bi bi-plus-circle-dotted"></i></div><div class="small fw-bold">PENDING</div>
+                    </div>
+                    @*<div class="fw-bolder fs-4 p-1 text-start">@Model.pendingrequest</div>*@
+                </div>
+                <div class="bottomarrow"></div>
+            </button>
+        </div>
+        <div class="allstatus">
+            <button class="nav-link dashboardtab position-relative w-100" id="status-active" data-bs-toggle="tab" data-bs-target="#s_active" type="button" role="tab" aria-controls="s_active" aria-selected="false">
+                <div class="activecase rounded-4res">
+                    <div class="d-flex p-1">
+                        <div class="px-2 icons float-start small"><i class="bi bi-plus-circle-dotted"></i></div><div class="small fw-bold">ACTIVE</div>
+                    </div>
+                    @*<div class="fw-bolder fs-4 p-1 text-start">@Model.activerequest</div>*@
+                </div>
+                <div class="bottomarrow"></div>
+            </button>
+        </div>
+        <div class="allstatus">
+            <button class="nav-link dashboardtab position-relative w-100" id="status-conclude" data-bs-toggle="tab" data-bs-target="#s_conclude" type="button" role="tab" aria-controls="s_conclude" aria-selected="false">
+                <div class=" conclude rounded-4res">
+                    <div class="d-flex p-1">
+                        <div class="px-2 icons float-start small"><i class="bi bi-plus-circle-dotted"></i></div><div class="small fw-bold">CONCLUDE</div>
+                    </div>
+                    @*<div class="fw-bolder fs-4 p-1 text-start">@Model.concluderequest</div>*@
+                </div>
+                <div class="bottomarrow"></div>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<div class="tab-content">
+    <div class="d-flex mt-4 align-items-center justify-content-between">
+        <div class="h3size mb-0">Patients<small class="h6size px-2" style="color: #203F9A" id="status_text"></small></div>
+        <div class="d-flex">
+            <button class="p-2px-3mx-2 text-white bg-info rounded border-info d-flex align-items-center" id="sendlinkbtn">
+                <i class="fa-regular fa-paper-plane  "></i>
+                <span class="d-none d-lg-block ps-2">Send Link</span>
+            </button>
+            <button class="p-2px-3mx-2 text-white bg-info rounded border-info d-flex align-items-center" id="createrequestbtn">
+                <i class="fa-solid fa-file-pen "></i>
+                <span class="d-none d-lg-block ps-2">Create Request</span>
+            </button>
+        </div>
+    </div>
+    <div id="status-tabContent" class="bg-white rounded-4 mt-3">
+        <div class="rounded-4 bg-white">
+            <div class="displayflexorblockwithpad justify-content-between p-3 ">
+                <div class="d-flex gap-1 align-items-center searchandregiondropdown">
+                    <div><input type="search" placeholder="Search" id="my-search-input" class="form-control rounded" /></div>
+                </div>
+                <div class="d-flex align-Models-center">
+                    <div class="d-flex rounded d-flex align-items-center ">
+                        <input type="radio" name="requestby" id="0" class="btn-check" autocomplete="off" checked />
+                        <label class="displayflexorblock btn" for="0"><div><i class="fa-solid fa-circle d-block d-sm-none" style="color: #ffffff;"></i></div><span class="ps-2size">All</span></label>
+                    </div>
+                    <div class="d-flex rounded ">
+                        <input type="radio" name="requestby" id="1" class="btn-check" autocomplete="off" />
+                        <label class="displayflexorblock btn" for="1"><div><i class="fa-solid fa-circle" style="color: #66bb63;"></i></div><span class="ps-2size">Patient</span></label>
+                    </div>
+                    <div class="d-flex rounded ">
+                        <input type="radio" name="requestby" id="2" class="btn-check" autocomplete="off" />
+                        <label class="displayflexorblock btn" for="2"><div><i class="fa-solid fa-circle" style="color: #e59132;"></i></div><span class="ps-2size">Family/Friend</span></label>
+                    </div>
+                    <div class="d-flex rounded ">
+                        <input type="radio" name="requestby" id="3" class="btn-check" autocomplete="off" />
+                        <label class="displayflexorblock btn" for="3"><div><i class="fa-solid fa-circle" style="color: #d8697b;"></i></div><span class="ps-2size">Business</span></label>
+                    </div>
+                    <div class="d-flex rounded ">
+                        <input type="radio" name="requestby" id="4" class="btn-check" autocomplete="off" />
+                        <label class="displayflexorblock btn" for="4"><div><i class="fa-solid fa-circle" style="color: #077aba;"></i></div><span class="ps-2size">Concierge</span></label>
+                    </div>
+                    <div class="d-flex rounded ">
+                        <input type="radio" name="requestby" id="5" class="btn-check" autocomplete="off" />
+                        <label class="displayflexorblock btn" for="5"><div><i class="fa-solid fa-circle" style="color: #9042af;"></i></div><span class="ps-2size">Vip</span></label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive small" id="dashtables"></div>
+        <div class="d-flex align-items-center justify-content-between p-3 pagination_div">
+            <div class="info_div">
+                Show
+                <select id="pagesizedropdown">
+                    <option value="1">1</option>
+                    <option value="2">2 </option>
+                    <option value="3" selected>3</option>
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="20">25</option>
+                </select>
+                Entry
+            </div>
+            <div class="info_div">
+                <span id="fromthisrequest"></span>
+                <span>-</span>
+                <span id="tothisrequest"></span>
+                <span>out of</span>
+                <span id="totalcountofrequest"></span>
+            </div>
+            <div class="d-flex align-items-center info_div">
+                <div class="paginate_Previousbutton text-info"><i class="bi bi-chevron-left"></i></i></div>
+                <div class="dataTables_paginate d-flex"></div>
+                <div class="paginate_Nextbutton text-info"><i class="bi bi-chevron-right"></i></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+<script src="~/js/forpeoviderdash.js" asp-append-version="true"></script>

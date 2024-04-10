@@ -1,7 +1,9 @@
 ﻿using DataAccess.Repository.IRepository;
 using DataAccess.ServiceRepository;
 using DataAccess.ServiceRepository.IServiceRepository;
+using DataModels.CommonViewModel;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.IdentityModel.Tokens.Jwt;
 
 namespace HelloDoc.Areas.AdminArea.Controllers
@@ -13,14 +15,16 @@ namespace HelloDoc.Areas.AdminArea.Controllers
         private readonly IAspNetUserRepository _userRepository;
         private readonly HelloDocDbContext _db;
         private readonly IJwtRepository _jwtRepository;
+        private readonly IPhysicianRepository _physician;
 
-        public HomeController(IAdminRepository admin, ISendEmailRepository sendEmailRepository, IAspNetUserRepository aspNetUserRepository, HelloDocDbContext helloDocDbContext, IJwtRepository jwtRepository)
+        public HomeController(IAdminRepository admin, ISendEmailRepository sendEmailRepository, IAspNetUserRepository aspNetUserRepository, HelloDocDbContext helloDocDbContext, IJwtRepository jwtRepository , IPhysicianRepository physician)
         {
             _admin = admin;
             _sendEmail = sendEmailRepository;
             _userRepository = aspNetUserRepository;
             _db = helloDocDbContext;
             _jwtRepository = jwtRepository;
+            _physician = physician;
         }
 
         public IActionResult Index()
@@ -38,16 +42,16 @@ namespace HelloDoc.Areas.AdminArea.Controllers
             Aspnetuser aspnetuser = new Aspnetuser();
             aspnetuser.Email = email;
             var jwt = HttpContext.Request.Cookies["jwt"];
-            if(jwt != null)
+            if (jwt != null)
             {
-                if(_jwtRepository.ValidateToken(jwt , out JwtSecurityToken jwttoken))
+                if (_jwtRepository.ValidateToken(jwt, out JwtSecurityToken jwttoken))
                 {
                     var aspnetuserid = jwttoken.Claims.FirstOrDefault(x => x.Type == "AspNetId");
                     var roleClaim = jwttoken.Claims.FirstOrDefault(x => x.Type == "Role");
                     var aspnetuserforlog = _userRepository.GetFirstOrDefault(x => x.Id == aspnetuserid.Value);
-                    if(roleClaim.Value == "Admin")
+                    if (roleClaim.Value == "Admin")
                     {
-                        return RedirectToAction("Login", "CredentialAdmin",aspnetuserforlog);
+                        return RedirectToAction("Login", "CredentialAdmin", aspnetuserforlog);
                     }
                 }
             }
@@ -92,6 +96,70 @@ namespace HelloDoc.Areas.AdminArea.Controllers
             TempData["Message"] = "OTP has been sent. You can Login through it." + "\n" + "You can Reset password from your profile";
             return RedirectToAction("AdminLogin", new { email = aspnetuser.Email });
         }
+
+        [Area("AdminArea")]
+        public IActionResult SelectRole(string email, string password)
+        {
+            return View(new { email = email, password = password });
+        }
+
+        [Area("AdminArea")]
+        public IActionResult SelectedRole(string email, string password, string role)
+        {
+            var aspnetusers = _userRepository.GetAll().Where(x => x.Email == email && x.Passwordhash == password);
+            Admin admin = new Admin();
+            Physician physician = new Physician();
+            foreach (var user in aspnetusers)
+            {
+                var asp = _db.Aspnetuserroles.Where(x => x.Userid == user.Id && x.Roleid == role).FirstOrDefault();
+                if(asp != null)
+                {
+                    var aspid = asp.Userid.ToString();
+                if (role == "1")
+                {
+                    admin = _admin.GetFirstOrDefault(z => z.Aspnetuserid == aspid);
+                }
+                if(role == "2")
+                {
+                    physician  =_physician.GetFirstOrDefault(x=>x.Aspnetuserid== aspid);
+                }
+                }
+            }
+            if (role == "1")
+            {
+                _admin.SetSession(admin);
+                TempData["Message"] = "Welcome" + admin.Firstname + " " + admin.Lastname;
+                LoggedInPersonViewModel loggedInPersonViewModel = new LoggedInPersonViewModel();
+                loggedInPersonViewModel.AspnetId = admin.Aspnetuserid;
+                loggedInPersonViewModel.UserName = _userRepository.GetFirstOrDefault(x => x.Id == admin.Aspnetuserid).Username;
+                var Roleid = _db.Aspnetuserroles.FirstOrDefault(x => x.Userid == admin.Aspnetuserid).Roleid;
+                loggedInPersonViewModel.Role = _db.Aspnetroles.FirstOrDefault(x => x.Id == Roleid).Name;
+                var option = new CookieOptions
+                {
+                    Expires = DateTime.Now.AddHours(2)
+                };
+                Response.Cookies.Append("jwt", _jwtRepository.GenerateJwtToken(loggedInPersonViewModel), option);
+                return RedirectToAction("AdminTabsLayout", "Home");
+            }
+            if (role == "2")
+            {
+                _physician.SetSession(physician);
+                TempData["Message"] = "Welcome" + physician.Firstname + " " + physician.Lastname;
+                LoggedInPersonViewModel loggedInPersonViewModel = new LoggedInPersonViewModel();
+                loggedInPersonViewModel.AspnetId = physician.Aspnetuserid;
+                loggedInPersonViewModel.UserName = _userRepository.GetFirstOrDefault(x => x.Id == physician.Aspnetuserid).Username;
+                var Roleid = _db.Aspnetuserroles.FirstOrDefault(x => x.Userid == physician.Aspnetuserid).Roleid;
+                loggedInPersonViewModel.Role = _db.Aspnetroles.FirstOrDefault(x => x.Id == Roleid).Name;
+                var option = new CookieOptions
+                {
+                    Expires = DateTime.Now.AddHours(2)
+                };
+                Response.Cookies.Append("jwt", _jwtRepository.GenerateJwtToken(loggedInPersonViewModel), option);
+                return RedirectToAction("PhysicianTabsLayout", "Home" , new {area = "ProviderArea"});
+            }
+            return View(new { email = email, password = password });
+        }
+
 
         [Area("AdminArea")]
         [AuthorizationRepository("Admin")]

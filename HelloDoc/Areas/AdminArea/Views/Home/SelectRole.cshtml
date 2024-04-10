@@ -1,0 +1,14 @@
+﻿@{
+    Layout = "_Styles";
+}
+<div class="container m-auto min-vh-100 d-flex align-items-center flex-column justify-content-center gap-5">
+    <div class="d-flex justify-content-center">Select Role As</div>
+    <div class="d-flex justify-content-center">
+        <a href="/AdminArea/Home/SelectedRole?email=@Model.email&password=@Model.password&role=1">
+            <button class=" p-2 px-3 text-white bg-info rounded border-info  mx-2 px-3 role shadow-none" id="1">Admin</button>
+        </a>
+        <a href="/AdminArea/Home/SelectedRole?email=@Model.email&password=@Model.password&role=2">
+            <button class=" p-2 px-3 text-white bg-info rounded border-info  mx-2 px-3 role shadow-none" id="2">Physician</button>
+        </a>
+    </div>
+</div>

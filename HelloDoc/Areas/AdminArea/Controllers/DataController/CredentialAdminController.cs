@@ -1,4 +1,5 @@
-﻿using DataAccess.Repository.IRepository;
+﻿using DataAccess.Repository;
+using DataAccess.Repository.IRepository;
 using DataAccess.ServiceRepository.IServiceRepository;
 using DataModels.CommonViewModel;
 using Microsoft.AspNetCore.Mvc;
@@ -12,12 +13,14 @@ namespace HelloDoc.Areas.AdminArea.DataController
         private readonly IAdminRepository _admin;
         private readonly IJwtRepository _jwtRepository;
         private readonly IPhysicianRepository _physician;
+        private readonly IUserRepository _user;
         public CredentialAdminController(
             HelloDocDbContext context,
             IAspNetUserRepository aspnetUserRepository,
             IAdminRepository adminRepository,
             IJwtRepository jwtRepository,
-            IPhysicianRepository physician
+            IPhysicianRepository physician,
+            IUserRepository userRepository
             )
         {
             _context = context;
@@ -25,48 +28,59 @@ namespace HelloDoc.Areas.AdminArea.DataController
             _admin = adminRepository;
             _jwtRepository = jwtRepository;
             _physician = physician;
+            _user = userRepository;
         }
 
         [Area("AdminArea")]
         //[HttpPost]
         public async Task<IActionResult> Login(Aspnetuser user)
         {
-            var alluser = _aspnetuser.GetAll().Where(x=>x.Email==user.Email).Select(x=>x.Id);
+            var alluser = _aspnetuser.GetAll().Where(x => x.Email == user.Email && x.Passwordhash == user.Passwordhash).Select(x => x.Id);
+            var admin = new Admin();
+            var physician = new Physician();
+            var patient = new User();
             var correct = new Aspnetuser();
-            foreach(var u in alluser)
+            foreach (var u in alluser)
             {
                 var Roleid = _context.Aspnetuserroles.FirstOrDefault(x => x.Userid == u).Roleid;
-                if(Roleid == "1" || Roleid == "2")
+                if (Roleid == "1")
                 {
                     correct = _aspnetuser.GetFirstOrDefault(x => x.Id == u);
+                    admin = _admin.GetFirstOrDefault(u => u.Aspnetuserid == correct.Id);
+                }
+                if (Roleid == "2")
+                {
+                    correct = _aspnetuser.GetFirstOrDefault(c => c.Id == u);
+                    physician = _physician.GetFirstOrDefault(u => u.Aspnetuserid == correct.Id);
+                }
+                if (Roleid == "3")
+                {
+                    correct = _aspnetuser.GetFirstOrDefault(x => x.Id == u);
+                    patient = _user.GetFirstOrDefault(u => u.Aspnetuserid == correct.Id);
                 }
             }
             if (correct != null)
             {
-                LoggedInPersonViewModel loggedInPersonViewModel = new LoggedInPersonViewModel();
-                loggedInPersonViewModel.AspnetId = correct.Id;
-                loggedInPersonViewModel.UserName = correct.Username;
-                var Roleid = _context.Aspnetuserroles.FirstOrDefault(x => x.Userid == correct.Id).Roleid;
-                loggedInPersonViewModel.Role = _context.Aspnetroles.FirstOrDefault(x => x.Id == Roleid).Name;
-                //SessionUtilsRepository.SetLoggedInPerson(HttpContext.Session, loggedInPersonViewModel);
-                var option = new CookieOptions
+                if (admin != null && physician != null)
                 {
-                    Expires = DateTime.Now.AddHours(2)
-                };
-                Response.Cookies.Append("jwt", _jwtRepository.GenerateJwtToken(loggedInPersonViewModel), option);
-                //Response.Cookies.Append("jwt", _jwtRepository.GenerateJwtToken(loggedInPersonViewModel));
-            }
-
-            if (correct != null)
-            {
-                var admin = _admin.GetFirstOrDefault(u => u.Aspnetuserid == correct.Id);
-                var physician = _physician.GetFirstOrDefault(u => u.Aspnetuserid == correct.Id);
-                if (admin != null && physician == null)
+                    return RedirectToAction("SelectRole", "Home" , new { email =  user.Email , password =  user.Passwordhash });
+                }
+                else if (admin != null && physician == null)
                 {
                     if (_aspnetuser.checkpass(user))
                     {
                         _admin.SetSession(admin);
                         TempData["Message"] = "Welcome" + admin.Firstname + " " + admin.Lastname;
+                        LoggedInPersonViewModel loggedInPersonViewModel = new LoggedInPersonViewModel();
+                        loggedInPersonViewModel.AspnetId = admin.Aspnetuserid;
+                        loggedInPersonViewModel.UserName = _aspnetuser.GetFirstOrDefault(x => x.Id == admin.Aspnetuserid).Username;
+                        var Roleid = _context.Aspnetuserroles.FirstOrDefault(x => x.Userid == admin.Aspnetuserid).Roleid;
+                        loggedInPersonViewModel.Role = _context.Aspnetroles.FirstOrDefault(x => x.Id == Roleid).Name;
+                        var option = new CookieOptions
+                        {
+                            Expires = DateTime.Now.AddHours(2)
+                        };
+                        Response.Cookies.Append("jwt", _jwtRepository.GenerateJwtToken(loggedInPersonViewModel), option);
                         return RedirectToAction("AdminTabsLayout", "Home");
                     }
                     else
@@ -77,13 +91,23 @@ namespace HelloDoc.Areas.AdminArea.DataController
                     }
 
                 }
-                else if(admin == null && physician != null)
+                else if (admin == null && physician != null)
                 {
                     if (_aspnetuser.checkpass(user))
                     {
                         _physician.SetSession(physician);
                         TempData["Message"] = "Welcome" + physician.Firstname + " " + physician.Lastname;
-                        return RedirectToAction("PhysicianTabsLayout", "Home");
+                        LoggedInPersonViewModel loggedInPersonViewModel = new LoggedInPersonViewModel();
+                        loggedInPersonViewModel.AspnetId = physician.Aspnetuserid;
+                        loggedInPersonViewModel.UserName = _aspnetuser.GetFirstOrDefault(x => x.Id == physician.Aspnetuserid).Username;
+                        var Roleid = _context.Aspnetuserroles.FirstOrDefault(x => x.Userid == physician.Aspnetuserid).Roleid;
+                        loggedInPersonViewModel.Role = _context.Aspnetroles.FirstOrDefault(x => x.Id == Roleid).Name;
+                        var option = new CookieOptions
+                        {
+                            Expires = DateTime.Now.AddHours(2)
+                        };
+                        Response.Cookies.Append("jwt", _jwtRepository.GenerateJwtToken(loggedInPersonViewModel), option);
+                        return RedirectToAction("PhysicianTabsLayout", "Home", new { area = "ProviderArea" });
                     }
                     else
                     {
@@ -102,7 +126,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
             else
             {
                 TempData["Style"] = " border-danger";
-                TempData["WrongEmail"] = "Enter Correct Email";
+                TempData["WrongEmail"] = "Enter Correct Credential";
                 return RedirectToAction("AdminLogin", "Home");
             }
         }
