@@ -1,8 +1,8 @@
-﻿@using DataModels.AdminSideViewModels;
-@model AdminDashboardViewModel;
-@{
+﻿@{
     Layout = null;
 }
+@using DataModels.AdminSideViewModels;
+@model AdminDashboardViewModel;
 <nav>
     <div class="nav nav-tabs" id="status-tab" role="tablist">
         <div class="allstatus ">
@@ -11,7 +11,7 @@
                     <div class="d-flex p-1">
                         <div class="px-2 icons float-start  small"><i class="bi bi-plus-circle-dotted"></i></div><div class="small fw-bold">NEW</div>
                     </div>
-                    @*<div class="fw-bolder fs-4 p-1 text-start">@Model.newrequest</div>*@
+                    <div class="fw-bolder fs-4 p-1 text-start">@Model.newrequest</div>
                 </div>
                 <div class="bottomarrow"></div>
             </button>
@@ -22,7 +22,7 @@
                     <div class="d-flex p-1">
                         <div class="px-2 icons float-start small"><i class="bi bi-plus-circle-dotted"></i></div><div class="small fw-bold">PENDING</div>
                     </div>
-                    @*<div class="fw-bolder fs-4 p-1 text-start">@Model.pendingrequest</div>*@
+                    <div class="fw-bolder fs-4 p-1 text-start">@Model.pendingrequest</div>
                 </div>
                 <div class="bottomarrow"></div>
             </button>
@@ -33,7 +33,7 @@
                     <div class="d-flex p-1">
                         <div class="px-2 icons float-start small"><i class="bi bi-plus-circle-dotted"></i></div><div class="small fw-bold">ACTIVE</div>
                     </div>
-                    @*<div class="fw-bolder fs-4 p-1 text-start">@Model.activerequest</div>*@
+                    <div class="fw-bolder fs-4 p-1 text-start">@Model.activerequest</div>
                 </div>
                 <div class="bottomarrow"></div>
             </button>
@@ -44,7 +44,7 @@
                     <div class="d-flex p-1">
                         <div class="px-2 icons float-start small"><i class="bi bi-plus-circle-dotted"></i></div><div class="small fw-bold">CONCLUDE</div>
                     </div>
-                    @*<div class="fw-bolder fs-4 p-1 text-start">@Model.concluderequest</div>*@
+                    <div class="fw-bolder fs-4 p-1 text-start">@Model.concluderequest</div>
                 </div>
                 <div class="bottomarrow"></div>
             </button>
@@ -75,27 +75,27 @@
                 <div class="d-flex align-Models-center">
                     <div class="d-flex rounded d-flex align-items-center ">
                         <input type="radio" name="requestby" id="0" class="btn-check" autocomplete="off" checked />
-                        <label class="displayflexorblock btn" for="0"><div><i class="fa-solid fa-circle d-block d-sm-none" style="color: #ffffff;"></i></div><span class="ps-2size">All</span></label>
+                        <label class="displayflexorblock btn" for="0"><span><i class="fa-solid fa-circle d-block d-sm-none" style="color: #ffffff;"></i></span><span class="ps-2size">All</span></label>
                     </div>
                     <div class="d-flex rounded ">
                         <input type="radio" name="requestby" id="1" class="btn-check" autocomplete="off" />
-                        <label class="displayflexorblock btn" for="1"><div><i class="fa-solid fa-circle" style="color: #66bb63;"></i></div><span class="ps-2size">Patient</span></label>
+                        <label class="displayflexorblock btn" for="1"><span><i class="fa-solid fa-circle" style="color: #66bb63;"></i></span><span class="ps-2size">Patient</span></label>
                     </div>
                     <div class="d-flex rounded ">
                         <input type="radio" name="requestby" id="2" class="btn-check" autocomplete="off" />
-                        <label class="displayflexorblock btn" for="2"><div><i class="fa-solid fa-circle" style="color: #e59132;"></i></div><span class="ps-2size">Family/Friend</span></label>
+                        <label class="displayflexorblock btn" for="2"><span><i class="fa-solid fa-circle" style="color: #e59132;"></i></span><span class="ps-2size">Family/Friend</span></label>
                     </div>
                     <div class="d-flex rounded ">
                         <input type="radio" name="requestby" id="3" class="btn-check" autocomplete="off" />
-                        <label class="displayflexorblock btn" for="3"><div><i class="fa-solid fa-circle" style="color: #d8697b;"></i></div><span class="ps-2size">Business</span></label>
+                        <label class="displayflexorblock btn" for="3"><span><i class="fa-solid fa-circle" style="color: #d8697b;"></i></span><span class="ps-2size">Business</span></label>
                     </div>
                     <div class="d-flex rounded ">
                         <input type="radio" name="requestby" id="4" class="btn-check" autocomplete="off" />
-                        <label class="displayflexorblock btn" for="4"><div><i class="fa-solid fa-circle" style="color: #077aba;"></i></div><span class="ps-2size">Concierge</span></label>
+                        <label class="displayflexorblock btn" for="4"><span><i class="fa-solid fa-circle" style="color: #077aba;"></i></span><span class="ps-2size">Concierge</span></label>
                     </div>
                     <div class="d-flex rounded ">
                         <input type="radio" name="requestby" id="5" class="btn-check" autocomplete="off" />
-                        <label class="displayflexorblock btn" for="5"><div><i class="fa-solid fa-circle" style="color: #9042af;"></i></div><span class="ps-2size">Vip</span></label>
+                        <label class="displayflexorblock btn" for="5"><span><i class="fa-solid fa-circle" style="color: #9042af;"></i></span><span class="ps-2size">Vip</span></label>
                     </div>
                 </div>
             </div>

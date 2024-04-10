@@ -10,16 +10,11 @@
         <tr>
             <th class="d-none"></th>
             <th class="d-none"></th>
-            <th>Name</th>
-            <th>Date of Birth</th>
-            <th>Requestor</th>
-            <th>Physician Name</th>
-            <th>Date of Service</th>
-            <th>Phone</th>
-            <th>Address</th>
-            <th>Notes</th>
-            <th>Chat With</th>
-            <th>Action</th>
+            <th style="width : 20%">Name</th>
+            <th style="width : 20%">Phone</th>
+            <th style="width : 30%">Address</th>
+            <th style="width : 20%">Chat With</th>
+            <th style="width : 10%">Action</th>
         </tr>
     </thead>
     <tbody>
@@ -49,17 +44,13 @@
                 <td class="d-none">@item.RequestType</td>
                 <td class="d-none">@item.Region</td>
                 <td>@item.PatientName</td>
-                <td>@item.PatientDOB</td>
-                <td>@item.RequestorName</td>
-                <td>@item.PhysicainName</td>
-                <td>@item.RequestedDate</td>
                 @if (item.RequestType == 1)
                 {
                     @if (@item.PatientPhone != null)
                     {
                         <td>
                             <div class="">
-                                <div class="border border-1 border-white rounded  d-flex justify-content-around p-1" style="width : max-content !important ; margin-left:5px"><i class="bi bi-telephone"></i>  @item.PatientPhone</div>
+                                <div class="border border-1 border-white rounded  d-flex justify-content-around" style="width : max-content !important"><i class="bi bi-telephone"></i>  @item.PatientPhone</div>
                                 <div>(Patient)</div>
                             </div>
                         </td>
@@ -91,13 +82,12 @@
                     </td>
                 }
                 <td>@item.Address</td>
-                <td>@item.TransferNotes</td>
                 <td>
                     <div class="d-flex gap-2">
                         <a asp-route-id="@item.ProviderEmail" style="color : white ; " class="m-1">
                             <div class="border border-1 border-white rounded d-flex justify-content-around align-items-center p-1">
                                 <i class="fa-solid fa-user-doctor"></i>
-                                Provider
+                                Admin
                             </div>
                         </a>
                         <a asp-route-id="@item.PatientEmail" style="color : white ; " class="m-1">
@@ -117,14 +107,9 @@
                         <form data-id="@item.RequestId">
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li><button type="button" class="dropdown-item gotoaction text-secondary" action="ViewCase"><i class="bi bi-view-list me-2"></i>View case</button></li>
-                                <li><button type="button" class="dropdown-item gotoaction text-secondary" action="ViewUploads"><i class="bi bi-file-earmark-arrow-up-fill me-2"></i>View Uploads</button></li>
+                                <li><button type="button" class="dropdown-item gotoaction text-secondary" action="Viewuploads"><i class="bi bi-file-earmark-arrow-up-fill me-2"></i>View Uploads</button></li>
                                 <li><button type="button" class="dropdown-item gotoaction text-secondary" action="ViewNotes"><i class="fa-regular fa-rectangle-list me-2"></i>View Notes</button></li>
-                                <li><button type="button" class="dropdown-item gotoaction text-secondary" action="Orders"><i class="fa-solid fa-suitcase-medical me-2"></i>Orders</button></li>
-                                <li><button type="button" class="dropdown-item gotoaction text-secondary" action="DoctorNotes"><i class="fa-solid fa-book-medical me-2"></i>Doctor Notes</button></li>
-                                @if (item.statusnotstate == 5)
-                                {
-                                    <li><button type="button" class="dropdown-item gotoaction text-secondary" data-id="@item.statusnotstate" action="Encounter"><i class="fa-solid fa-bell-concierge me-2"></i>Encounter</button></li>
-                                }
+                                <li><button type="button" class="dropdown-item gotopopup text-secondary" action="TransferCase"><i class="fa-solid fa-shuffle me-2"></i>Transfer</button></li>
                             </ul>
                         </form>
                     </div>
@@ -211,49 +196,15 @@
                                         <div class="ps-1">@item.PatientPhone</div>
                                     </div>
                                     <div class="d-flex align-items-center py-1">
-                                        <div class="tdsmallicons"><i class="bi bi-telephone small"></i></div>
-                                        <div class="text-muted ps-1">Transfer Notes: </div>
-                                        <div class="ps-1">@item.TransferNotes</div>
-                                    </div>
-                                    <div class="d-flex align-items-center py-1">
-                                        <div class="tdsmallicons"><i class="bi bi-telephone small"></i></div>
-                                        <div class="text-muted ps-1">Date of service: </div>
-                                        <div class="ps-1">@item.RequestedDate</div>
-                                    </div>
-                                    <div class="d-flex align-items-center py-1">
-                                        <div class="tdsmallicons"><i class="bi bi-telephone small"></i></div>
-                                        <div class="text-muted ps-1">Physician: </div>
-                                        <div class="ps-1">@item.PhysicainName</div>
-                                    </div>
-                                    <div class="d-flex align-items-center py-1">
                                         <div class="tdsmallicons"><i class="bi bi-person-circle small"></i></div>
                                         <div class="text-muted ps-1">Requestor</div>
                                         <div class="ps-1">@item.RequestorName</div>
                                     </div>
                                     <div class="row  mt-4 d-flex flex-wrap">
-                                        <div class="col-6 pt-2"><button type="button" class="w-100 border-0 small rounded-pill px-3 py-1 text-white gotoaction" action="ViewNotes" style="background-color : green">View Notes</button></div>
-                                        <div class="col-6 pt-2"><button type="button" class="w-100 border-0 small rounded-pill px-3 py-1 text-white gotoaction" action="" style="background-color : darkolivegreen">Doctor Notes</button></div>
-                                        <div class="col-6 pt-2"><button type="button" class="w-100 border-0 small rounded-pill px-3 py-1 text-white gotoaction" action="" style="background-color : green">View Uploads</button></div>
-                                        <div class="col-6 pt-2"><button type="button" class="w-100 border-0 small rounded-pill px-3 py-1 text-white gotoaction" action="" style="background-color : green">Encounter</button></div>
-                                        <div class="col-6 pt-2"><button type="button" class="w-100 border-0 small rounded-pill px-3 py-1 text-white gotoaction" action="Orders" style="background-color : darkorange">Orders</button></div>
-                                        <div class="col-6 pt-2"><button type="button" class="w-100 border-0 small rounded-pill px-3 py-1 text-white gotoaction" action="" style="background-color : green">Email</button></div>
-                                    </div>
-                                    <div class="d-flex justify-content-end align-items-center mt-4">
-                                        <div class="">Chat With: </div>
-                                        <div class="d-flex justify-content-between">
-                                            <a asp-route-id="@item.ProviderEmail" style="color : white ; " class="m-1">
-                                                <div class="border border-1 border-info rounded d-flex text-info justify-content-around align-items-center p-1">
-                                                    <i class="fa-solid fa-user-doctor pe-2"></i>
-                                                    Provider
-                                                </div>
-                                            </a>
-                                            <a asp-route-id="@item.PatientEmail" style="color : white ; " class="m-1">
-                                                <div class="border border-1 border-info rounded d-flex text-info justify-content-around align-items-center p-1">
-                                                    <i class="fa-solid fa-user-doctor pe-2"></i>
-                                                    Patient
-                                                </div>
-                                            </a>
-                                        </div>
+                                        <div class="col-6 pt-2"><button type="button" class="w-100 small border-0 rounded-pill px-3 py-1 text-white gotoaction" action="ViewNotes" style="background-color : green">View Notes</button></div>
+                                        <div class="col-6 pt-2"><button type="button" class="w-100 small border-0 rounded-pill px-3 py-1 text-white gotopopup" action="TransferCase" style="background-color : #0dcaf0">Transfer</button></div>
+                                        <div class="col-6 pt-2"><button type="button" class="w-100 small border-0 rounded-pill px-3 py-1 text-white gotoaction" action="ViewUploads" style="background-color : green">View Uploads</button></div>
+                                        <div class="col-6 pt-2"><button type="button" class="w-100 small border-0 rounded-pill px-3 py-1 text-white gotoaction" action="" style="background-color : green">Email</button></div>
                                     </div>
                                 </div>
                             </div>
@@ -267,14 +218,7 @@
     </tbody>
 </table>
 
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+
 <script src="~/js/statuses.js" asp-append-version="true"></script>
-
-
-
-
-
-
-

@@ -18,5 +18,6 @@ namespace DataModels.AdminSideViewModels
         public DateTime PatientDOB { get; set; }
         public string PatientEmail { get; set; }
         public string PatientMobile { get; set; }
+        public string role { get; set; }
     }
 }

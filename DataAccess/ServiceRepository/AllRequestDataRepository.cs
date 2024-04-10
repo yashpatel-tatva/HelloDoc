@@ -52,6 +52,8 @@ namespace DataAccess.ServiceRepository
                 model.Region = item.User.Region.Name;
                 model.RequestId = item.Requestid;
                 model.status = _request.GetstatebyStatus(item.Status);
+                model.calltype = item.Calltype;
+                model.statusnotstate = item.Status;
                 if(item.Accepteddate != null)
                 {
                     model.IsAcceptedbyprovider = true;
@@ -132,6 +134,11 @@ namespace DataAccess.ServiceRepository
             model.Notes = request.Requestclients.FirstOrDefault(x => x.Requestid == id).Notes;
             model.PatientDOB = new DateTime(Convert.ToInt32(user.Intyear), DateTime.ParseExact(user.Strmonth, "MMMM", CultureInfo.InvariantCulture).Month, Convert.ToInt32(user.Intdate));
             model.Status = request.Status;
+            if(request.Accepteddate != null)
+            {
+                model.Isaccepted = true;
+            }
+            else { model.Isaccepted = false; }
             return model;
         }
 

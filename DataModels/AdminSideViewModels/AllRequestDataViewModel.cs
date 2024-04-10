@@ -3,6 +3,8 @@
     public class AllRequestDataViewModel
     {
         public int RequestId { get; set; }
+        public short? calltype { get; set; }
+        public short? statusnotstate { get; set; }
         public string PatientName { get; set; }
         public DateOnly PatientDOB { get; set; }
         public string RequestorName { get; set; }

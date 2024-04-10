@@ -36,10 +36,10 @@ namespace HelloDoc.Areas.AdminArea.DataController
         public async Task<IActionResult> Login(Aspnetuser user)
         {
             var alluser = _aspnetuser.GetAll().Where(x => x.Email == user.Email && x.Passwordhash == user.Passwordhash).Select(x => x.Id);
-            var admin = new Admin();
-            var physician = new Physician();
-            var patient = new User();
-            var correct = new Aspnetuser();
+            Admin admin = null;
+            Physician physician = null;
+            User patient =null;
+            Aspnetuser correct = null;
             foreach (var u in alluser)
             {
                 var Roleid = _context.Aspnetuserroles.FirstOrDefault(x => x.Userid == u).Roleid;

@@ -33,6 +33,7 @@ namespace DataAccess.ServiceRepository
 
         public static string Decrypt(string cipherText)
         {
+            cipherText = cipherText.Trim();
             byte[] cipherBytes = Convert.FromBase64String(cipherText);
 
             using (Aes aesAlg = Aes.Create())
@@ -59,30 +60,24 @@ namespace DataAccess.ServiceRepository
 
         private static byte[] GenerateRandomIV()
         {
-            using (Aes aesAlg = Aes.Create())
-            {
-                aesAlg.GenerateIV();
-                return aesAlg.IV;
-            }
-        }
-
-        private static string GenerateRandomKey(int keySizeInBits)
-        {
-            // Convert the key size to bytes
-            int keySizeInBytes = keySizeInBits / 8;
-
-            // Create a byte array to hold the random key
-            byte[] keyBytes = new byte[keySizeInBytes];
-
-            // Use a cryptographic random number generator to fill the byte array
             using (var rng = new RNGCryptoServiceProvider())
             {
-                rng.GetBytes(keyBytes);
+                var randomBytes = new byte[16];
+                rng.GetBytes(randomBytes);
+                return randomBytes;
             }
-
-            // Convert the byte array to a base64-encoded string for storage
-            return Convert.ToBase64String(keyBytes);
         }
 
+        private static string GenerateRandomKey(int size)
+        {
+            using (var rng = new RNGCryptoServiceProvider())
+            {
+                var randomBytes = new byte[size / 8];
+                rng.GetBytes(randomBytes);
+                return Convert.ToBase64String(randomBytes);
+            }
+        }
     }
+
+
 }

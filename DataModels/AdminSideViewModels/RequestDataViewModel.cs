@@ -58,5 +58,7 @@
         public string Room { get; set; }
         public short Status { get; set; }
         public string pageredirectto { get; set; }
+        public string role { get; set; }
+        public bool Isaccepted { get; set; }
     }
 }

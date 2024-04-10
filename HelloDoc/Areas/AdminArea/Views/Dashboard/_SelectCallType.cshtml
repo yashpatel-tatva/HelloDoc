@@ -1,0 +1,47 @@
+﻿@model Request
+<div class="modal fade rounded-3 shadow" id="ModalToOpen" tabindex="-1" role="dialog" aria-labelledby="SendAgreement" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Select Type of Care</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form>
+                <input type="hidden" id="Requestid" value="@Model.Requestid" />
+                <div class="modal-body d-flex justify-content-center">
+                    <div class="px-2">
+                        <input type="radio" class="btn-check" name="selectcalltype" id="success-outlined" autocomplete="off" value="1" checked>
+                        <label class="btn btn-outline-info" for="success-outlined">Housecall</label>
+                    </div>
+                    <div class="px-2">
+                        <input type="radio" class="btn-check" name="selectcalltype" id="danger-outlined" autocomplete="off" value="2">
+                        <label class="btn btn-outline-info" for="danger-outlined">Consult</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="confirmbtn" class="btn btn-info">Continue</button>
+                    <button type="button" class="btn btn-outline-info" data-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#confirmbtn').on('click', function () {
+        var id = $('#Requestid').val();
+        var calltype = "";
+        $('input[name="selectcalltype"]:checked').each(function () {
+            calltype = $(this).val();
+        });
+        console.log(id , calltype)
+        $.ajax({
+            url: '/AdminArea/Dashboard/CallTypeforRequest',
+            data : {id , calltype},
+            type : 'POST',
+            success : function(result){
+                $('#nav-tabContent').html(result);
+            },
+        });
+    });
+</script>

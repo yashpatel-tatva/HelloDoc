@@ -132,7 +132,7 @@ $('.paginate_Nextbutton').on('click', function () {
 
 function filterwithoutpagination(state, requesttype, search, region) {
     $.ajax({
-        url: 'AdminArea/StatuswiseData/CountbyFilter',
+        url: '/ProviderArea/Dashboard/CountbyFilter',
         type: 'POST',
         data: { state, requesttype, search, region },
         success: function (data) {
@@ -212,16 +212,16 @@ function printbuttons(data) {
     $('#totalcountofrequest').html(data);
 }
 function filter(state, currentpage, pagesize, requesttype, search, region) {
-    //filterwithoutpagination(state, requesttype, search, region);
-    //$.ajax({
-    //    url: 'AdminArea/StatusWiseData/StatuswiseData',
-    //    type: 'POST',
-    //    data: { state, currentpage, pagesize, requesttype, search, region },
-    //    success: function (response) {
-    //        $('#dashtables').html(response);
-    //    },
-    //    error: function (xhr, status, error) {
-    //        console.error(error);
-    //    }
-    //});
+    filterwithoutpagination(state, requesttype, search, region);
+    $.ajax({
+        url: '/ProviderArea/Dashboard/StatuswiseData',
+        type: 'POST',
+        data: { state, currentpage, pagesize, requesttype, search, region },
+        success: function (response) {
+            $('#dashtables').html(response);
+        },
+        error: function (xhr, status, error) {
+            console.error(error);
+        }
+    });
 }

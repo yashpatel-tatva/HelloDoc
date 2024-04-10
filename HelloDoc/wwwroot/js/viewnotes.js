@@ -10,7 +10,7 @@
 
 
     $.ajax({
-        url: 'AdminArea/Dashboard/SaveAdminNotes',
+        url: '/AdminArea/Dashboard/SaveAdminNotes',
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(model),

@@ -5,6 +5,7 @@ namespace DataModels.AdminSideViewModels
     public class AdminDashboardViewModel
     {
         public Admin admin { get; set; }
+        public Physician Physician { get; set; }
         public int newrequest { get; set; }
         public int pendingrequest { get; set; }
         public int activerequest { get; set; }

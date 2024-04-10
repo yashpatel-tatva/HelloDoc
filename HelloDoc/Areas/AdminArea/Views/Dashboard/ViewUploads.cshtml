@@ -9,7 +9,7 @@
         <div class="d-flex justify-content-between">
             <div class="h3 subinfotext fw-bold">Documents</div>
             <div>
-                <a asp-controller="Home" asp-action="AdminTabsLayout">
+                <a onclick="location.reload()">
                     <button class="d-flex babtn rounded align-item-center p-1 px-2">
                         <div><img src="~/res/back.png" width="15px" height="10px"></div>
                         <div><span>Back</span></div>
@@ -23,18 +23,21 @@
                 <div class=""><span class="text-info h4">@Model.patientname  </span><span class="h6">(@Model.confirmation)</span></div>
                 <div class="py-3"><span class="small">Check here to review and add files that you or the Client/Member has attached to the Request</span></div>
                 <div class="row d-flex">
-                    <div class="py-2 col-12 ">
-                        <div class="form-group rounded d-flex align-items-center justify-content-between uploadbtndiv">
-                            <div class="px-3 table-responsive">
-                                <input type="hidden" class="RequestsId" value="@Model.RequestsId" />
-                                <input type="file" id="actual-btn" asp-for="Upload" multiple hidden />
-                                <label role="button" for="actual-btn" id="file-chosen" class="choosenfile text-dark text-nowrap">No item selected</label>
+                    @if (Model.role == "Admin")
+                    {
+                        <div class="py-2 col-12 ">
+                            <div class="form-group rounded d-flex align-items-center justify-content-between uploadbtndiv">
+                                <div class="px-3 table-responsive">
+                                    <input type="hidden" class="RequestsId" value="@Model.RequestsId" />
+                                    <input type="file" id="actual-btn" asp-for="Upload" multiple hidden />
+                                    <label role="button" for="actual-btn" id="file-chosen" class="choosenfile text-dark text-nowrap">No item selected</label>
+                                </div>
+                                <button type="button" class="uploadbtn px-2 py-1 d-flex ms-1 border-0">
+                                    <label role="button" class="d-flex align-items-center"><i class="bi bi-cloud-arrow-up p-2"></i><div class="cnr">Upload</div></label>
+                                </button>
                             </div>
-                            <button type="button" class="uploadbtn px-2 py-1 d-flex ms-1 border-0">
-                                <label role="button" class="d-flex align-items-center"><i class="bi bi-cloud-arrow-up p-2"></i><div class="cnr">Upload</div></label>
-                            </button>
                         </div>
-                    </div>
+                    }
                 </div>
             </form>
             <form method="post" enctype="multipart/form-data">
@@ -46,14 +49,17 @@
                             <div class="plusimg"><i class="bi bi-cloud-arrow-down"></i></div>
                             <div class="cnr"><span>Download All</span></div>
                         </button>
-                        <button class="d-flex babtn rounded align-item-center p-1 px-2 deleteall" type="button">
-                            <div class="plusimg"><i class="bi bi-trash"></i></div>
-                            <div class="cnr"><span>Delete All</span></div>
-                        </button>
-                        <button class="d-flex babtn rounded align-item-center p-1 px-2 sendemail" type="button">
-                            <div class="plusimg"><i class="bi bi-envelope-plus"></i></div>
-                            <div class="cnr"><span>Send Email</span></div>
-                        </button>
+                        @if (Model.role == "Admin")
+                        {
+                            <button class="d-flex babtn rounded align-item-center p-1 px-2 deleteall" type="button">
+                                <div class="plusimg"><i class="bi bi-trash"></i></div>
+                                <div class="cnr"><span>Delete All</span></div>
+                            </button>
+                            <button class="d-flex babtn rounded align-item-center p-1 px-2 sendemail" type="button">
+                                <div class="plusimg"><i class="bi bi-envelope-plus"></i></div>
+                                <div class="cnr"><span>Send Email</span></div>
+                            </button>
+                        }
                     </div>
                 </div>
                 <div class="table-responsive">
@@ -123,19 +129,19 @@
         });
     });
 
-    //$('.viewfile').on('click', function () {
-    //    var id = $(this).val();
-    //    var requestid = $('#hiddenrequestid').val();
-    //    $.ajax({
-    //        type: 'POST',
-    //        url: 'AdminArea/Dashboard/ViewFile',
-    //        data: { id: id },
-    //        success: function (result) {
-    //            window.open('/Documents/' + requestid + "/" + result);
-    //        },
-    //        error: function (xhr, status, error) {
-    //            console.error('Error: ' + error);
-    //        },
-    //    });
-    //});
+            //$('.viewfile').on('click', function () {
+            //    var id = $(this).val();
+            //    var requestid = $('#hiddenrequestid').val();
+            //    $.ajax({
+            //        type: 'POST',
+            //        url: 'AdminArea/Dashboard/ViewFile',
+            //        data: { id: id },
+            //        success: function (result) {
+            //            window.open('/Documents/' + requestid + "/" + result);
+            //        },
+            //        error: function (xhr, status, error) {
+            //            console.error('Error: ' + error);
+            //        },
+            //    });
+            //});
 </script>

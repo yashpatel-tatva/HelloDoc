@@ -19,5 +19,6 @@ namespace DataAccess.Repository.IRepository
         int SearchRecordsCount(string selectstatus, string patientname, int selecttype, string fromdate, string todate, string providername, string emailid, string mobile);
         byte[] GetFilterdDatatoexcle(string selectstatus, string patientname, int selecttype, string fromdate, string todate, string providername, string emailid, string mobile, bool order);
         void DeleteThisRequest(int requestid);
+        int Countbystateforprovider(string state, int providerid);
     }
 }

@@ -44,7 +44,7 @@ $('.gotoaction').click(function (e) {
     var id = $(this).closest('form').data('id');
 
     $.ajax({
-        url: 'AdminArea/Dashboard/' + action,
+        url: '/AdminArea/Dashboard/' + action,
         type: 'GET',
         data: { id: id },
         success: function (result) {
@@ -63,10 +63,11 @@ $('.gotopopup').click(function (e) {
     var id = $(this).closest('form').data('id');
 
     $.ajax({
-        url: 'AdminArea/Dashboard/' + action,
+        url: '/AdminArea/Dashboard/' + action,
         type: 'GET',
         data: { id: id },
         success: function (result) {
+            debugger
             $('#PopUps').html(result);
             var my = new bootstrap.Modal(document.getElementById('ModalToOpen'));
             my.show();

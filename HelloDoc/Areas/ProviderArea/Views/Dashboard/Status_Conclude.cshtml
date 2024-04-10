@@ -12,12 +12,10 @@
             <th class="d-none"></th>
             <th>Name</th>
             <th>Date of Birth</th>
-            <th>Requestor</th>
             <th>Physician Name</th>
             <th>Date of Service</th>
             <th>Phone</th>
             <th>Address</th>
-            <th>Notes</th>
             <th>Chat With</th>
             <th>Action</th>
         </tr>
@@ -50,7 +48,6 @@
                 <td class="d-none">@item.Region</td>
                 <td>@item.PatientName</td>
                 <td>@item.PatientDOB</td>
-                <td>@item.RequestorName</td>
                 <td>@item.PhysicainName</td>
                 <td>@item.RequestedDate</td>
                 @if (item.RequestType == 1)
@@ -59,7 +56,7 @@
                     {
                         <td>
                             <div class="">
-                                <div class="border border-1 border-white rounded  d-flex justify-content-around p-1" style="width : max-content !important ; margin-left:5px"><i class="bi bi-telephone"></i>  @item.PatientPhone</div>
+                                <div class="border border-1 border-white rounded d-flex justify-content-around p-1" style="width : max-content !important ; margin-left:5px"><i class="bi bi-telephone"></i>  @item.PatientPhone</div>
                                 <div>(Patient)</div>
                             </div>
                         </td>
@@ -83,7 +80,7 @@
                         @if (@item.RequestorPhone != null)
                         {
                             <div>
-                                <div class="border border-1 border-white rounded  d-flex justify-content-around p-1" style="width : max-content !important ; margin-left:5px"><i class="bi bi-telephone"></i> @item.RequestorPhone </div>
+                                <div class="border border-1 border-white rounded d-flex justify-content-around p-1" style="width : max-content !important ; margin-left:5px"><i class="bi bi-telephone"></i> @item.RequestorPhone </div>
                                 <div>(@item.RequestTypeName(item.RequestType))</div>
                             </div>
                         }
@@ -91,7 +88,6 @@
                     </td>
                 }
                 <td>@item.Address</td>
-                <td>@item.TransferNotes</td>
                 <td>
                     <div class="d-flex gap-2">
                         <a asp-route-id="@item.ProviderEmail" style="color : white ; " class="m-1">
@@ -121,10 +117,7 @@
                                 <li><button type="button" class="dropdown-item gotoaction text-secondary" action="ViewNotes"><i class="fa-regular fa-rectangle-list me-2"></i>View Notes</button></li>
                                 <li><button type="button" class="dropdown-item gotoaction text-secondary" action="Orders"><i class="fa-solid fa-suitcase-medical me-2"></i>Orders</button></li>
                                 <li><button type="button" class="dropdown-item gotoaction text-secondary" action="DoctorNotes"><i class="fa-solid fa-book-medical me-2"></i>Doctor Notes</button></li>
-                                @if (item.statusnotstate == 5)
-                                {
-                                    <li><button type="button" class="dropdown-item gotoaction text-secondary" data-id="@item.statusnotstate" action="Encounter"><i class="fa-solid fa-bell-concierge me-2"></i>Encounter</button></li>
-                                }
+                                <li><button type="button" class="dropdown-item gotoaction text-secondary" action="Encounter"><i class="fa-solid fa-bell-concierge me-2"></i>Encounter</button></li>
                             </ul>
                         </form>
                     </div>
@@ -224,11 +217,6 @@
                                         <div class="tdsmallicons"><i class="bi bi-telephone small"></i></div>
                                         <div class="text-muted ps-1">Physician: </div>
                                         <div class="ps-1">@item.PhysicainName</div>
-                                    </div>
-                                    <div class="d-flex align-items-center py-1">
-                                        <div class="tdsmallicons"><i class="bi bi-person-circle small"></i></div>
-                                        <div class="text-muted ps-1">Requestor</div>
-                                        <div class="ps-1">@item.RequestorName</div>
                                     </div>
                                     <div class="row  mt-4 d-flex flex-wrap">
                                         <div class="col-6 pt-2"><button type="button" class="w-100 border-0 small rounded-pill px-3 py-1 text-white gotoaction" action="ViewNotes" style="background-color : green">View Notes</button></div>

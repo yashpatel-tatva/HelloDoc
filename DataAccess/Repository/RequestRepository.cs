@@ -366,5 +366,27 @@ namespace DataAccess.Repository
             Update(request);
             Save();
         }
+
+        public int Countbystateforprovider(string state, int providerid)
+        {
+            var count = 0;
+            if (state == "New")
+            {
+                count = GetRequestsbyState("Pending").Where(x=>(x.Physicianid == providerid &&x.Accepteddate == null)).Count();
+            }
+            if (state == "Pending")
+            {
+                count = GetRequestsbyState("Pending").Where(x=>(x.Physicianid == providerid && x.Accepteddate != null)).Count();
+            }
+            if(state == "Active")
+            {
+                count = GetRequestsbyState("Active").Where(x=>x.Physicianid == providerid).Count();
+            }
+            if(state == "Conclude")
+            {
+                count = GetRequestsbyState("Conclude").Where(x => x.Physicianid == providerid).Count();
+            }
+            return count;
+        }
     }
 }
