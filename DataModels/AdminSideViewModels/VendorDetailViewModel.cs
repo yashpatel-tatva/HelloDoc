@@ -16,7 +16,7 @@ namespace DataModels.AdminSideViewModels
         [RegularExpression(@"^\d{10}$", ErrorMessage = "Fax number must be 10 digits")]
         public string FaxNumber { get; set; }
 
-        [RegularExpression(@"^\+\d*$", ErrorMessage = "Phone number must start with + and contain only digits")]
+        [RegularExpression(@"^(\+\d{1,3}[- ]?)?\d{10}$", ErrorMessage = "Mobile number format is not valid")]
         public string PhoneNumber { get; set; }
 
         [EmailAddress(ErrorMessage = "Invalid Email Address")]

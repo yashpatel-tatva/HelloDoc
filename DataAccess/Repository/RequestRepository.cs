@@ -91,6 +91,7 @@ namespace DataAccess.Repository
                     .Include(x => x.Requestcloseds)
                     .Include(x => x.Requesttype)
                     .Include(x => x.Requestwisefiles)
+                    .Include(x => x.Encounters)
                     .AsEnumerable()
                     .Where(x => x.Isdeleted == null || x.Isdeleted[0] == false)
                     .ToList();
@@ -111,6 +112,7 @@ namespace DataAccess.Repository
                 .Include(r => r.Requeststatuslogs)
                 .Include(x => x.Requesttype)
                 .Include(x => x.Requestwisefiles)
+                .Include(x => x.Encounters)
                 .Include(x => x.Requestcloseds).ToList();
             request = request.Where(x => x.Isdeleted == null || x.Isdeleted[0] == false).ToList();
             request = request.Where(x => x.Status == status).ToList();
@@ -372,21 +374,36 @@ namespace DataAccess.Repository
             var count = 0;
             if (state == "New")
             {
-                count = GetRequestsbyState("Pending").Where(x=>(x.Physicianid == providerid &&x.Accepteddate == null)).Count();
+                count = GetRequestsbyState("Pending").Where(x => (x.Physicianid == providerid && x.Accepteddate == null)).Count();
             }
             if (state == "Pending")
             {
-                count = GetRequestsbyState("Pending").Where(x=>(x.Physicianid == providerid && x.Accepteddate != null)).Count();
+                count = GetRequestsbyState("Pending").Where(x => (x.Physicianid == providerid && x.Accepteddate != null)).Count();
             }
-            if(state == "Active")
+            if (state == "Active")
             {
-                count = GetRequestsbyState("Active").Where(x=>x.Physicianid == providerid).Count();
+                count = GetRequestsbyState("Active").Where(x => x.Physicianid == providerid).Count();
             }
-            if(state == "Conclude")
+            if (state == "Conclude")
             {
                 count = GetRequestsbyState("Conclude").Where(x => x.Physicianid == providerid).Count();
             }
             return count;
+        }
+
+        public Request GetById(int id)
+        {
+            var request = _db.Requests
+                .Include(r => r.User)
+                .Include(r => r.Requestclients)
+                .Include(r => r.Physician)
+                .Include(r => r.User.Region)
+                .Include(r => r.Requeststatuslogs)
+                .Include(x => x.Requesttype)
+                .Include(x => x.Requestwisefiles)
+                .Include(x => x.Encounters)
+                .Include(x => x.Requestcloseds).FirstOrDefault(x => x.Requestid == id);
+            return request;
         }
     }
 }

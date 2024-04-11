@@ -45,6 +45,7 @@ input[type = "radio"] {
     position: relative;
     /* border: 1px solid; */
     border: 1px solid darkgray;
+    overflow : hidden;
 }
 
 .selectedselectspan {
@@ -111,6 +112,10 @@ input[type = "radio"] {
     font-size: 1em;
     transition: 0.5s;
     color: darkgrey;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 90%;
 }
 
 

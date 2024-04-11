@@ -6,6 +6,9 @@ using HelloDoc.Areas.PatientArea.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
+using System.Collections;
+using System.Diagnostics.Metrics;
+using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO.Compression;
 using System.Security.Claims;
@@ -233,9 +236,9 @@ namespace HelloDoc.Areas.AdminArea.DataController
                     model.F_Email = admin.Email;
                     model.F_Phone = admin.Mobile;
                 }
-                if(role == "Physician")
+                if (role == "Physician")
                 {
-                    var physician =  _physician.GetFirstOrDefault(x=>x.Physicianid == _physician.GetSessionPhysicianId());
+                    var physician = _physician.GetFirstOrDefault(x => x.Physicianid == _physician.GetSessionPhysicianId());
                     model.F_FirstName = physician.Firstname;
                     model.F_LastName = physician.Lastname;
                     model.F_Email = physician.Email;
@@ -680,26 +683,213 @@ namespace HelloDoc.Areas.AdminArea.DataController
         [HttpGet]
         public IActionResult Encounter(int id)
         {
-            var request = _requests.GetFirstOrDefault(x=>x.Requestid== id); 
-            if(request.Status == 4)
+            var request = _requests.GetById(id);
+            var encounter = _db.Encounters.FirstOrDefault(x => x.RequestId == id);
+            BitArray fortrue = new BitArray(1);
+            fortrue[0] = true;
+            BitArray forfalse = new BitArray(1);
+            forfalse[0] = false;
+            if (request.Status == 4 || (request.Status == 5 && request.Calltype == 1))
             {
-                return PartialView("_SelectCallType" , request);
+                return PartialView("_SelectCallType", request);
             }
-            return View(request);
+            if (request.Status == 6 && encounter == null)
+            {
+                EncounterFormViewModel model = new EncounterFormViewModel();
+                model.Firstname = request.Requestclients.First().Firstname;
+                model.Lastname = request.Requestclients.First().Lastname;
+                model.DOB = new DateTime(Convert.ToInt32(request.User.Intyear), DateTime.ParseExact(request.User.Strmonth, "MMMM", CultureInfo.InvariantCulture).Month, Convert.ToInt32(request.User.Intdate)).ToString("yyyy-MM-dd");
+                model.Mobile = request.Requestclients.FirstOrDefault().Phonenumber;
+                model.Email = request.Requestclients.FirstOrDefault().Email;
+                model.Location = request.Requestclients.FirstOrDefault().Address;
+                model.isFinaled = !fortrue[0];
+                model.RequestId = request.Requestid;
+                return View(model);
+            }
+            else if (request.Status == 6 && encounter.IsFinalized[0] != true)
+            {
+                EncounterFormViewModel model = new EncounterFormViewModel();
+                model.RequestId = request.Requestid;
+                model.Firstname = request.Requestclients.First().Firstname;
+                model.Lastname = request.Requestclients.First().Lastname;
+                model.DOB = new DateTime(Convert.ToInt32(request.User.Intyear), DateTime.ParseExact(request.User.Strmonth, "MMMM", CultureInfo.InvariantCulture).Month, Convert.ToInt32(request.User.Intdate)).ToString("yyyy-MM-dd");
+                model.Mobile = request.Requestclients.FirstOrDefault().Phonenumber;
+                model.Email = request.Requestclients.FirstOrDefault().Email;
+                model.Location = request.Requestclients.FirstOrDefault().Address;
+                model.isFinaled = !fortrue[0];
+                model.HistoryOfIllness = encounter.HistoryIllness;
+                model.MedicalHistory = encounter.MedicalHistory;
+                model.Medication = encounter.Medications;
+                model.Allergies = encounter.Allergies;
+                model.Temp = encounter.Temp;
+                model.HR = encounter.Hr;
+                model.RR = encounter.Rr;
+                model.BPs = encounter.BpS;
+                model.BPd = encounter.BpD;
+                model.O2 = encounter.O2;
+                model.Pain = encounter.Pain;
+                model.Heent = encounter.Heent;
+                model.CV = encounter.Cv;
+                model.Chest = encounter.Chest;
+                model.ABD = encounter.Abd;
+                model.Extr = encounter.Extr;
+                model.Skin = encounter.Skin;
+                model.Neuro = encounter.Neuro;
+                model.Other = encounter.Other;
+                model.Diagnosis = encounter.Diagnosis;
+                model.TreatmentPlan = encounter.TreatmentPlan;
+                model.MedicationsDispended = encounter.MedicationDispensed;
+                model.Procedure = encounter.Procedures;
+                model.Followup = encounter.FollowUp;
+                return View(model);
+            }
+            else if (request.Status == 6 && encounter.IsFinalized != fortrue)
+            {
+                return PartialView("_DownLoadEncounter", request);
+            }
+            else
+            {
+                return PartialView("_SelectCallType", request);
+            }
         }
-        
+
         [Area("AdminArea")]
         [AuthorizationRepository("Admin,Physician")]
         [HttpPost]
-        public IActionResult CallTypeforRequest(int id , int calltype)
+        public IActionResult EncounterFormSubmit(EncounterFormViewModel model)
         {
-            var requestdetail = _requests.GetFirstOrDefault(x=>x.Requestid== id);
-            requestdetail.Status = 5;
-            requestdetail.Calltype = (short?)calltype;
-            _requests.Update(requestdetail);
+            BitArray fortrue = new BitArray(1);
+            fortrue[0] = true;
+            var request = _requests.GetById(model.RequestId);
+            var encounter = _db.Encounters.FirstOrDefault(x => x.RequestId == request.Requestid);
+            if(encounter == null)
+            {
+                encounter = new Encounter();
+            }
+            request.Requestclients.First().Firstname = model.Firstname;
+            request.Requestclients.First().Lastname = model.Lastname;
+            request.Requestclients.FirstOrDefault().Phonenumber = model.Mobile;
+            request.Requestclients.FirstOrDefault().Email = model.Email;
+            request.Requestclients.FirstOrDefault().Address = model.Location;
+            encounter.HistoryIllness = model.HistoryOfIllness;
+            encounter.MedicalHistory = model.MedicalHistory;
+            encounter.Medications = model.Medication;
+            encounter.Allergies = model.Allergies;
+            encounter.Temp = model.Temp;
+            encounter.Hr = model.HR;
+            encounter.Rr = model.RR;
+            encounter.BpS = model.BPs;
+            encounter.BpD = model.BPd;
+            encounter.O2 = model.O2;
+            encounter.Pain = model.Pain;
+            encounter.Heent = model.Heent;
+            encounter.Cv = model.CV;
+            encounter.Chest = model.Chest;
+            encounter.Abd = model.ABD;
+            encounter.Extr = model.Extr;
+            encounter.Skin = model.Skin;
+            encounter.Neuro = model.Neuro;
+            encounter.Other = model.Other;
+            encounter.Diagnosis = model.Diagnosis;
+            encounter.TreatmentPlan = model.TreatmentPlan;
+            encounter.MedicationDispensed = model.MedicationsDispended;
+            encounter.Procedures = model.Procedure;
+            encounter.FollowUp = model.Followup;
+            _db.Requests.Update(request);
+            if (encounter.RequestId == 0)
+            {
+                encounter.RequestId = request.Requestid;
+                encounter.Createddate = DateTime.Now;
+                encounter.Createdby = _physician.GetFirstOrDefault(x => x.Physicianid == _physician.GetSessionPhysicianId()).Aspnetuserid;
+                _db.Add(encounter);
+            }
+            else
+            {
+                _db.Encounters.Update(encounter);
+                encounter.Modifieddate = DateTime.Now;
+                encounter.Modifiedby = _physician.GetFirstOrDefault(x => x.Physicianid == _physician.GetSessionPhysicianId()).Aspnetuserid;
+            }
+            _db.SaveChanges();
+            return RedirectToAction("PhysicianTabsLayout", "Home", new { area = "ProviderArea" });
+        }
+
+        [Area("AdminArea")]
+        [AuthorizationRepository("Admin,Physician")]
+        [HttpPost]
+        public IActionResult CallTypeConsultforRequest(int id, int calltype)
+        {
+            var requestdetail = _requests.GetById(id);
+            if (calltype == 2)
+            {
+                requestdetail.Status = 6;
+                requestdetail.Calltype = (short?)calltype;
+                Requeststatuslog requeststatuslog = new Requeststatuslog();
+                requeststatuslog.Status = requestdetail.Status;
+                requeststatuslog.Requestid = requestdetail.Requestid;
+                requeststatuslog.Notes = "Provider chose for consultunt";
+                requeststatuslog.Createddate = DateTime.Now;
+                requeststatuslog.Physicianid = _physician.GetSessionPhysicianId();
+                _db.Requeststatuslogs.Add(requeststatuslog);
+                _requests.Update(requestdetail);
+                _requests.Save();
+            }
+            return RedirectToAction("Dashboard", "Dashboard", new { area = "ProviderArea" });
+        }
+
+        [Area("AdminArea")]
+        [AuthorizationRepository("Admin,Physician")]
+        [HttpPost]
+        public IActionResult FinalizeEncounter(int id)
+        {
+            BitArray fortrue = new BitArray(1);
+            fortrue[0] = true;
+            var encounter = _db.Encounters.FirstOrDefault(x=> x.RequestId == id);
+            encounter.IsFinalized = fortrue;
+            _db.Encounters.Update(encounter);
+            _db.SaveChanges();
+            return RedirectToAction("PhysicianTabsLayout", "Home", new { area = "ProviderArea" });
+        }
+
+        [Area("AdminArea")]
+        [AuthorizationRepository("Admin,Physician")]
+        [HttpPost]
+        public IActionResult OnHouseOpenEncounter(int id)
+        {
+            var request = _requests.GetById(id);
+            request.Status = 6;
+            _requests.Update(request);
+            Requeststatuslog requeststatuslog = new Requeststatuslog();
+            requeststatuslog.Status = request.Status;
+            requeststatuslog.Requestid = request.Requestid;
+            requeststatuslog.Notes = "Provider chose for consultunt";
+            requeststatuslog.Createddate = DateTime.Now;
+            requeststatuslog.Physicianid = _physician.GetSessionPhysicianId();
+            _db.Requeststatuslogs.Add(requeststatuslog);
             _requests.Save();
-            
-            return RedirectToAction("Dashboard" , "Dashboard" , new { area = "ProviderArea"});
+            return RedirectToAction("Encounter", new { id = id });
+        }
+
+        [Area("AdminArea")]
+        [AuthorizationRepository("Admin,Physician")]
+        [HttpPost]
+        public IActionResult CallTypeHousecallforRequest(int id, int calltype, string time)
+        {
+            var requestdetail = _requests.GetFirstOrDefault(x => x.Requestid == id);
+            if (calltype == 1)
+            {
+                requestdetail.Status = 5;
+                requestdetail.Calltype = (short?)calltype;
+                Requeststatuslog requeststatuslog = new Requeststatuslog();
+                requeststatuslog.Status = requestdetail.Status;
+                requeststatuslog.Requestid = requestdetail.Requestid;
+                requeststatuslog.Notes = "Provider chose for consultunt";
+                requeststatuslog.Createddate = DateTime.Now;
+                requeststatuslog.Physicianid = _physician.GetSessionPhysicianId();
+                _db.Requeststatuslogs.Add(requeststatuslog);
+                _requests.Update(requestdetail);
+                _requests.Save();
+            }
+            return RedirectToAction("Dashboard", "Dashboard", new { area = "ProviderArea" });
         }
 
     }

@@ -1,6 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace HelloDoc;
 
@@ -57,7 +60,7 @@ public partial class Request
     public string? Declinedby { get; set; }
 
     [Column("isurgentemailsent", TypeName = "bit(1)")]
-    public BitArray Isurgentemailsent { get; set; } = new BitArray(1);
+    public BitArray Isurgentemailsent { get; set; } = null!;
 
     [Column("lastwellnessdate", TypeName = "timestamp without time zone")]
     public DateTime? Lastwellnessdate { get; set; }
@@ -109,6 +112,9 @@ public partial class Request
 
     [InverseProperty("Request")]
     public virtual ICollection<Emaillog> Emaillogs { get; set; } = new List<Emaillog>();
+
+    [InverseProperty("Request")]
+    public virtual ICollection<Encounter> Encounters { get; set; } = new List<Encounter>();
 
     [InverseProperty("Request")]
     public virtual ICollection<Orderdetail> Orderdetails { get; set; } = new List<Orderdetail>();

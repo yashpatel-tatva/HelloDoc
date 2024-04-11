@@ -12,8 +12,6 @@
             <th class="d-none"></th>
             <th>Name</th>
             <th>Date of Birth</th>
-            <th>Physician Name</th>
-            <th>Date of Service</th>
             <th>Phone</th>
             <th>Address</th>
             <th>Chat With</th>
@@ -48,8 +46,6 @@
                 <td class="d-none">@item.Region</td>
                 <td>@item.PatientName</td>
                 <td>@item.PatientDOB</td>
-                <td>@item.PhysicainName</td>
-                <td>@item.RequestedDate</td>
                 @if (item.RequestType == 1)
                 {
                     @if (@item.PatientPhone != null)
@@ -93,7 +89,7 @@
                         <a asp-route-id="@item.ProviderEmail" style="color : white ; " class="m-1">
                             <div class="border border-1 border-white rounded d-flex justify-content-around align-items-center p-1">
                                 <i class="fa-solid fa-user-doctor"></i>
-                                Provider
+                                Admin
                             </div>
                         </a>
                         <a asp-route-id="@item.PatientEmail" style="color : white ; " class="m-1">
@@ -115,9 +111,14 @@
                                 <li><button type="button" class="dropdown-item gotoaction text-secondary" action="ViewCase"><i class="bi bi-view-list me-2"></i>View case</button></li>
                                 <li><button type="button" class="dropdown-item gotoaction text-secondary" action="ViewUploads"><i class="bi bi-file-earmark-arrow-up-fill me-2"></i>View Uploads</button></li>
                                 <li><button type="button" class="dropdown-item gotoaction text-secondary" action="ViewNotes"><i class="fa-regular fa-rectangle-list me-2"></i>View Notes</button></li>
-                                <li><button type="button" class="dropdown-item gotoaction text-secondary" action="Orders"><i class="fa-solid fa-suitcase-medical me-2"></i>Orders</button></li>
-                                <li><button type="button" class="dropdown-item gotoaction text-secondary" action="DoctorNotes"><i class="fa-solid fa-book-medical me-2"></i>Doctor Notes</button></li>
-                                <li><button type="button" class="dropdown-item gotoaction text-secondary" action="Encounter"><i class="fa-solid fa-bell-concierge me-2"></i>Encounter</button></li>
+                                @if (item.IsEncounterFinalied == true)
+                                {
+                                    <li><button type="button" class="dropdown-item gotopopup text-secondary" action="Encounter"><i class="fa-solid fa-bell-concierge me-2"></i>Encounter</button></li>
+                                }
+                                else
+                                {
+                                    <li><button type="button" class="dropdown-item gotoaction text-secondary" action="Encounter"><i class="fa-solid fa-bell-concierge me-2"></i>Encounter</button></li>
+                                }
                             </ul>
                         </form>
                     </div>
@@ -203,27 +204,17 @@
                                         <div class="text-muted ps-1">Patient: </div>
                                         <div class="ps-1">@item.PatientPhone</div>
                                     </div>
-                                    <div class="d-flex align-items-center py-1">
-                                        <div class="tdsmallicons"><i class="bi bi-telephone small"></i></div>
-                                        <div class="text-muted ps-1">Transfer Notes: </div>
-                                        <div class="ps-1">@item.TransferNotes</div>
-                                    </div>
-                                    <div class="d-flex align-items-center py-1">
-                                        <div class="tdsmallicons"><i class="bi bi-telephone small"></i></div>
-                                        <div class="text-muted ps-1">Date of service: </div>
-                                        <div class="ps-1">@item.RequestedDate</div>
-                                    </div>
-                                    <div class="d-flex align-items-center py-1">
-                                        <div class="tdsmallicons"><i class="bi bi-telephone small"></i></div>
-                                        <div class="text-muted ps-1">Physician: </div>
-                                        <div class="ps-1">@item.PhysicainName</div>
-                                    </div>
                                     <div class="row  mt-4 d-flex flex-wrap">
                                         <div class="col-6 pt-2"><button type="button" class="w-100 border-0 small rounded-pill px-3 py-1 text-white gotoaction" action="ViewNotes" style="background-color : green">View Notes</button></div>
-                                        <div class="col-6 pt-2"><button type="button" class="w-100 border-0 small rounded-pill px-3 py-1 text-white gotoaction" action="" style="background-color : darkolivegreen">Doctor Notes</button></div>
-                                        <div class="col-6 pt-2"><button type="button" class="w-100 border-0 small rounded-pill px-3 py-1 text-white gotoaction" action="" style="background-color : green">View Uploads</button></div>
-                                        <div class="col-6 pt-2"><button type="button" class="w-100 border-0 small rounded-pill px-3 py-1 text-white gotoaction" action="" style="background-color : green">Encounter</button></div>
-                                        <div class="col-6 pt-2"><button type="button" class="w-100 border-0 small rounded-pill px-3 py-1 text-white gotoaction" action="Orders" style="background-color : darkorange">Orders</button></div>
+                                        <div class="col-6 pt-2"><button type="button" class="w-100 border-0 small rounded-pill px-3 py-1 text-white gotoaction" action="ViewUploads" style="background-color : green">View Uploads</button></div>
+                                            @if (item.IsEncounterFinalied == true)
+                                            {
+                                            <div class="col-6 pt-2"><button type="button" class="w-100 border-0 small rounded-pill px-3 py-1 text-white gotopopup" action="Encounter" style="background-color : green">Encounter</button></div>
+                                            }
+                                            else
+                                            {
+                                            <div class="col-6 pt-2"><button type="button" class="w-100 border-0 small rounded-pill px-3 py-1 text-white gotoaction" action="Encounter" style="background-color : green">Encounter</button></div>
+                                            }
                                         <div class="col-6 pt-2"><button type="button" class="w-100 border-0 small rounded-pill px-3 py-1 text-white gotoaction" action="" style="background-color : green">Email</button></div>
                                     </div>
                                     <div class="d-flex justify-content-end align-items-center mt-4">

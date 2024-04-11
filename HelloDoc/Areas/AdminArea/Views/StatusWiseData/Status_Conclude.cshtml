@@ -117,7 +117,10 @@
                                 <li><button type="button" class="dropdown-item gotoaction text-secondary" action="ViewNotes"><i class="fa-regular fa-rectangle-list me-2"></i>View Notes</button></li>
                                 <li><button type="button" class="dropdown-item gotoaction text-secondary" action="Orders"><i class="fa-solid fa-suitcase-medical me-2"></i>Orders</button></li>
                                 <li><button type="button" class="dropdown-item gotoaction text-secondary" action="DoctorNotes"><i class="fa-solid fa-book-medical me-2"></i>Doctor Notes</button></li>
-                                <li><button type="button" class="dropdown-item gotoaction text-secondary" action="Encounter"><i class="fa-solid fa-bell-concierge me-2"></i>Encounter</button></li>
+                                @if (item.IsEncounterFinalied == true)
+                                {
+                                    <li><button type="button" class="dropdown-item gotopopup text-secondary" action="Encounter"><i class="fa-solid fa-bell-concierge me-2"></i>Encounter</button></li>
+                                }
                             </ul>
                         </form>
                     </div>
@@ -220,9 +223,11 @@
                                     </div>
                                     <div class="row  mt-4 d-flex flex-wrap">
                                         <div class="col-6 pt-2"><button type="button" class="w-100 border-0 small rounded-pill px-3 py-1 text-white gotoaction" action="ViewNotes" style="background-color : green">View Notes</button></div>
-                                        <div class="col-6 pt-2"><button type="button" class="w-100 border-0 small rounded-pill px-3 py-1 text-white gotoaction" action="" style="background-color : darkolivegreen">Doctor Notes</button></div>
-                                        <div class="col-6 pt-2"><button type="button" class="w-100 border-0 small rounded-pill px-3 py-1 text-white gotoaction" action="" style="background-color : green">View Uploads</button></div>
-                                        <div class="col-6 pt-2"><button type="button" class="w-100 border-0 small rounded-pill px-3 py-1 text-white gotoaction" action="" style="background-color : green">Encounter</button></div>
+                                        <div class="col-6 pt-2"><button type="button" class="w-100 border-0 small rounded-pill px-3 py-1 text-white gotoaction" action="ViewUploads" style="background-color : green">View Uploads</button></div>
+                                            @if (item.IsEncounterFinalied == true)
+                                            {
+                                            <div class="col-6 pt-2"><button type="button" class="w-100 border-0 small rounded-pill px-3 py-1 text-white gotopopup" action="Encounter" style="background-color : green">Encounter</button></div>
+                                            }
                                         <div class="col-6 pt-2"><button type="button" class="w-100 border-0 small rounded-pill px-3 py-1 text-white gotoaction" action="Orders" style="background-color : darkorange">Orders</button></div>
                                         <div class="col-6 pt-2"><button type="button" class="w-100 border-0 small rounded-pill px-3 py-1 text-white gotoaction" action="" style="background-color : green">Email</button></div>
                                     </div>

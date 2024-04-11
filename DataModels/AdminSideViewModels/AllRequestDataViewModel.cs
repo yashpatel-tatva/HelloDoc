@@ -38,5 +38,6 @@
         }
         public string status { get; set; }
         public bool IsAcceptedbyprovider { get; set; }
+        public bool IsEncounterFinalied { get; set; }
     }
 }

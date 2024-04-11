@@ -1,5 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace HelloDoc;
 
@@ -19,4 +22,8 @@ public partial class Rolemenu
     [ForeignKey("Menuid")]
     [InverseProperty("Rolemenus")]
     public virtual Menu Menu { get; set; } = null!;
+
+    [ForeignKey("Roleid")]
+    [InverseProperty("Rolemenus")]
+    public virtual Role Role { get; set; } = null!;
 }

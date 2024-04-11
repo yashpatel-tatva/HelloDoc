@@ -53,14 +53,18 @@ namespace DataAccess.ServiceRepository
                 model.RequestId = item.Requestid;
                 model.status = _request.GetstatebyStatus(item.Status);
                 model.calltype = item.Calltype;
+                if (item.Encounters.Count() != 0)
+                {
+                    model.IsEncounterFinalied = item.Encounters.FirstOrDefault().IsFinalized[0];
+                }
                 model.statusnotstate = item.Status;
-                if(item.Accepteddate != null)
+                if (item.Accepteddate != null)
                 {
                     model.IsAcceptedbyprovider = true;
                 }
                 else
                 {
-                    model.IsAcceptedbyprovider= false;
+                    model.IsAcceptedbyprovider = false;
                 }
                 if (item.Status != 1)
                 {
@@ -134,7 +138,7 @@ namespace DataAccess.ServiceRepository
             model.Notes = request.Requestclients.FirstOrDefault(x => x.Requestid == id).Notes;
             model.PatientDOB = new DateTime(Convert.ToInt32(user.Intyear), DateTime.ParseExact(user.Strmonth, "MMMM", CultureInfo.InvariantCulture).Month, Convert.ToInt32(user.Intdate));
             model.Status = request.Status;
-            if(request.Accepteddate != null)
+            if (request.Accepteddate != null)
             {
                 model.Isaccepted = true;
             }
