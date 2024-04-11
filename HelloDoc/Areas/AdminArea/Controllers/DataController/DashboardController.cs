@@ -9,11 +9,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using System.Collections;
-using System.Diagnostics.Metrics;
 using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO.Compression;
-using System.Security.Claims;
 
 namespace HelloDoc.Areas.AdminArea.DataController
 {

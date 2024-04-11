@@ -24,7 +24,6 @@
             type: 'GET',
             data: { id: @Model.requestid},
             success: function (result) {
-
                 $('#PopUps').html(result);
                 var my = new bootstrap.Modal(document.getElementById('ModalToOpen'));
                 my.show();

@@ -60,18 +60,18 @@
                     });
                     setTimeout(function () {
                         location.reload();
-
+                    });
                 },
-                error: function (xhr, status, error) {
-                    console.error('Error: ' + error);
-                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert(jqXHR.responseText);
+                }
             });
         }
     });
     
 </script>
-<script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js" ></script>
+<script>
 
     $(document).ready(function () {
         $('#ModalToOpen').draggable({
