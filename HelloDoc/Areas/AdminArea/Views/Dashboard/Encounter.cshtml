@@ -210,9 +210,12 @@
                         <span class="text-danger spanofvalid" asp-validation-for="Followup"></span>
                     </div>
                     <div class="d-grid gap-2 d-flex justify-content-center  justify-content-md-end mt-4 pt-4 mb-3">
-                        @if (!Model.isFinaled)
+                        @if (Model.role == "Admin" || (!Model.isFinaled))
                         {
                             <button type="button" class="p-2px-3mx-2 text-white bg-info rounded border-info" id="Savechanges">Save Changes</button>
+                        }
+                        @if (!Model.isFinaled)
+                        {
                             <button type="button" class="p-2px-3mx-2 text-white rounded" id="finalize" style="background-color : rebeccapurple ; border-color : rebeccapurple">Finalize</button>
                         }
                         <button type="button" class="btn btn-outline-info" onclick="location.reload()">Cancel</button>

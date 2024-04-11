@@ -3,6 +3,8 @@ using DataAccess.ServiceRepository;
 using DataAccess.ServiceRepository.IServiceRepository;
 using DataModels.AdminSideViewModels;
 using HelloDoc.Areas.PatientArea.ViewModels;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
@@ -685,6 +687,16 @@ namespace HelloDoc.Areas.AdminArea.DataController
         {
             var request = _requests.GetById(id);
             var encounter = _db.Encounters.FirstOrDefault(x => x.RequestId == id);
+            var jwtservice = HttpContext.RequestServices.GetService<IJwtRepository>();
+            var requestcookie = HttpContext.Request;
+            var token = requestcookie.Cookies["jwt"];
+            jwtservice.ValidateToken(token, out JwtSecurityToken jwttoken);
+            var roleClaim = jwttoken.Claims.FirstOrDefault(x => x.Type == "Role");
+            var role = "";
+            if (roleClaim != null)
+            {
+                role = roleClaim.Value;
+            }
             BitArray fortrue = new BitArray(1);
             fortrue[0] = true;
             BitArray forfalse = new BitArray(1);
@@ -741,11 +753,12 @@ namespace HelloDoc.Areas.AdminArea.DataController
                 model.MedicationsDispended = encounter.MedicationDispensed;
                 model.Procedure = encounter.Procedures;
                 model.Followup = encounter.FollowUp;
+                model.role = role;
                 return View(model);
             }
             else if (request.Status == 6 && encounter.IsFinalized != fortrue)
             {
-                return PartialView("_DownLoadEncounter", request);
+                return PartialView("_DownLoadEncounter", new { requestid = request.Requestid, role = role });
             }
             else
             {
@@ -762,7 +775,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
             fortrue[0] = true;
             var request = _requests.GetById(model.RequestId);
             var encounter = _db.Encounters.FirstOrDefault(x => x.RequestId == request.Requestid);
-            if(encounter == null)
+            if (encounter == null)
             {
                 encounter = new Encounter();
             }
@@ -810,7 +823,24 @@ namespace HelloDoc.Areas.AdminArea.DataController
                 encounter.Modifiedby = _physician.GetFirstOrDefault(x => x.Physicianid == _physician.GetSessionPhysicianId()).Aspnetuserid;
             }
             _db.SaveChanges();
-            return RedirectToAction("PhysicianTabsLayout", "Home", new { area = "ProviderArea" });
+            var jwtservice = HttpContext.RequestServices.GetService<IJwtRepository>();
+            var requestcookie = HttpContext.Request;
+            var token = requestcookie.Cookies["jwt"];
+            jwtservice.ValidateToken(token, out JwtSecurityToken jwttoken);
+            var roleClaim = jwttoken.Claims.FirstOrDefault(x => x.Type == "Role");
+            var role = "";
+            if (roleClaim != null)
+            {
+                role = roleClaim.Value;
+            }
+            if (role == "Admin")
+            {
+                return RedirectToAction("AdminTabsLayout", "Home", new { area = "AdminArea" });
+            }
+            else
+            {
+                return RedirectToAction("PhysicianTabsLayout", "Home", new { area = "ProviderArea" });
+            }
         }
 
         [Area("AdminArea")]
@@ -843,7 +873,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
         {
             BitArray fortrue = new BitArray(1);
             fortrue[0] = true;
-            var encounter = _db.Encounters.FirstOrDefault(x=> x.RequestId == id);
+            var encounter = _db.Encounters.FirstOrDefault(x => x.RequestId == id);
             encounter.IsFinalized = fortrue;
             _db.Encounters.Update(encounter);
             _db.SaveChanges();
@@ -891,6 +921,136 @@ namespace HelloDoc.Areas.AdminArea.DataController
             }
             return RedirectToAction("Dashboard", "Dashboard", new { area = "ProviderArea" });
         }
+        [Area("AdminArea")]
+        [AuthorizationRepository("Admin")]
+        [HttpPost]
+        public IActionResult EditEncounterAsAdmin(int id)
+        {
+            var request = _requests.GetById(id);
+            var encounter = _db.Encounters.FirstOrDefault(x => x.RequestId == request.Requestid);
+            EncounterFormViewModel model = new EncounterFormViewModel();
+            model.RequestId = request.Requestid;
+            model.Firstname = request.Requestclients.First().Firstname;
+            model.Lastname = request.Requestclients.First().Lastname;
+            model.DOB = new DateTime(Convert.ToInt32(request.User.Intyear), DateTime.ParseExact(request.User.Strmonth, "MMMM", CultureInfo.InvariantCulture).Month, Convert.ToInt32(request.User.Intdate)).ToString("yyyy-MM-dd");
+            model.Mobile = request.Requestclients.FirstOrDefault().Phonenumber;
+            model.Email = request.Requestclients.FirstOrDefault().Email;
+            model.Location = request.Requestclients.FirstOrDefault().Address;
+            model.HistoryOfIllness = encounter.HistoryIllness;
+            model.MedicalHistory = encounter.MedicalHistory;
+            model.Medication = encounter.Medications;
+            model.Allergies = encounter.Allergies;
+            model.Temp = encounter.Temp;
+            model.HR = encounter.Hr;
+            model.RR = encounter.Rr;
+            model.BPs = encounter.BpS;
+            model.BPd = encounter.BpD;
+            model.O2 = encounter.O2;
+            model.Pain = encounter.Pain;
+            model.Heent = encounter.Heent;
+            model.CV = encounter.Cv;
+            model.Chest = encounter.Chest;
+            model.ABD = encounter.Abd;
+            model.Extr = encounter.Extr;
+            model.Skin = encounter.Skin;
+            model.Neuro = encounter.Neuro;
+            model.Other = encounter.Other;
+            model.Diagnosis = encounter.Diagnosis;
+            model.TreatmentPlan = encounter.TreatmentPlan;
+            model.MedicationsDispended = encounter.MedicationDispensed;
+            model.Procedure = encounter.Procedures;
+            model.Followup = encounter.FollowUp;
+            model.isFinaled = encounter.IsFinalized[0];
+            model.role = "Admin";
+            return PartialView("Encounter", model);
+        }
+        [Area("AdminArea")]
+        [AuthorizationRepository("Admin,Physician")]
+        [HttpGet]
+        public IActionResult DownloadEncounterAsAdmin(int id)
+        {
+            var request = _requests.GetById(id);
+            var encounter = _db.Encounters.FirstOrDefault(x => x.RequestId == request.Requestid);
+            EncounterFormViewModel model = new EncounterFormViewModel();
+            model.RequestId = request.Requestid;
+            model.Firstname = request.Requestclients.First().Firstname;
+            model.Lastname = request.Requestclients.First().Lastname;
+            model.DOB = new DateTime(Convert.ToInt32(request.User.Intyear), DateTime.ParseExact(request.User.Strmonth, "MMMM", CultureInfo.InvariantCulture).Month, Convert.ToInt32(request.User.Intdate)).ToString("yyyy-MM-dd");
+            model.Mobile = request.Requestclients.FirstOrDefault().Phonenumber;
+            model.Email = request.Requestclients.FirstOrDefault().Email;
+            model.Location = request.Requestclients.FirstOrDefault().Address;
+            model.HistoryOfIllness = encounter.HistoryIllness;
+            model.MedicalHistory = encounter.MedicalHistory;
+            model.Medication = encounter.Medications;
+            model.Allergies = encounter.Allergies;
+            model.Temp = encounter.Temp;
+            model.HR = encounter.Hr;
+            model.RR = encounter.Rr;
+            model.BPs = encounter.BpS;
+            model.BPd = encounter.BpD;
+            model.O2 = encounter.O2;
+            model.Pain = encounter.Pain;
+            model.Heent = encounter.Heent;
+            model.CV = encounter.Cv;
+            model.Chest = encounter.Chest;
+            model.ABD = encounter.Abd;
+            model.Extr = encounter.Extr;
+            model.Skin = encounter.Skin;
+            model.Neuro = encounter.Neuro;
+            model.Other = encounter.Other;
+            model.Diagnosis = encounter.Diagnosis;
+            model.TreatmentPlan = encounter.TreatmentPlan;
+            model.MedicationsDispended = encounter.MedicationDispensed;
+            model.Procedure = encounter.Procedures;
+            model.Followup = encounter.FollowUp;
+            model.isFinaled = encounter.IsFinalized[0];
+            var pdf = new iTextSharp.text.Document();
+            using (var memoryStream = new MemoryStream())
+            {
+                var writer = PdfWriter.GetInstance(pdf, memoryStream);
+                pdf.Open();
 
+                // Add content to the PDF here. For example:
+                pdf.Add(new Paragraph($"First Name: {model.Firstname}"));
+                pdf.Add(new Paragraph($"Last Name: {model.Lastname}"));
+                pdf.Add(new Paragraph($"DOB: {model.DOB}"));
+                pdf.Add(new Paragraph($"Mobile: {model.Mobile}"));
+                pdf.Add(new Paragraph($"Email: {model.Email}"));
+                pdf.Add(new Paragraph($"Location: {model.Location}"));
+                pdf.Add(new Paragraph($"History Of Illness: {model.HistoryOfIllness}"));
+                pdf.Add(new Paragraph($"Medical History: {model.MedicalHistory}"));
+                pdf.Add(new Paragraph($"Medication: {model.Medication}"));
+                pdf.Add(new Paragraph($"Allergies: {model.Allergies}"));
+                pdf.Add(new Paragraph($"Temp: {model.Temp}"));
+                pdf.Add(new Paragraph($"HR: {model.HR}"));
+                pdf.Add(new Paragraph($"RR: {model.RR}"));
+                pdf.Add(new Paragraph($"BPs: {model.BPs}"));
+                pdf.Add(new Paragraph($"BPd: {model.BPd}"));
+                pdf.Add(new Paragraph($"O2: {model.O2}"));
+                pdf.Add(new Paragraph($"Pain: {model.Pain}"));
+                pdf.Add(new Paragraph($"Heent: {model.Heent}"));
+                pdf.Add(new Paragraph($"CV: {model.CV}"));
+                pdf.Add(new Paragraph($"Chest: {model.Chest}"));
+                pdf.Add(new Paragraph($"ABD: {model.ABD}"));
+                pdf.Add(new Paragraph($"Extr: {model.Extr}"));
+                pdf.Add(new Paragraph($"Skin: {model.Skin}"));
+                pdf.Add(new Paragraph($"Neuro: {model.Neuro}"));
+                pdf.Add(new Paragraph($"Other: {model.Other}"));
+                pdf.Add(new Paragraph($"Diagnosis: {model.Diagnosis}"));
+                pdf.Add(new Paragraph($"Treatment Plan: {model.TreatmentPlan}"));
+                pdf.Add(new Paragraph($"Medications Dispended: {model.MedicationsDispended}"));
+                pdf.Add(new Paragraph($"Procedure: {model.Procedure}"));
+                pdf.Add(new Paragraph($"Followup: {model.Followup}"));
+                pdf.Add(new Paragraph($"Is Finaled: {model.isFinaled}"));
+
+                pdf.Close();
+                writer.Close();
+
+                var bytes = memoryStream.ToArray();
+                var result = new FileContentResult(bytes, "application/pdf");
+                result.FileDownloadName = "Encounter_"+model.RequestId+".pdf";
+                return result;
+            }
+        }
     }
 }

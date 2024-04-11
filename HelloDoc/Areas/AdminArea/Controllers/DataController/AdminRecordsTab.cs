@@ -464,7 +464,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             //var strDate = DateTime.Now.ToString("yyyyMMdd");
             //string filename = $"All Request_{strDate}.xlsx";
 
-            return Org.BouncyCastle.Utilities.Encoders.Base64.ToBase64String(record);
+            return System.Convert.ToBase64String(record);
         }
         [Area("AdminArea")]
         [HttpPost]

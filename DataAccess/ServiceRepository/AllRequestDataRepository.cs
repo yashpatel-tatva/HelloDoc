@@ -57,6 +57,10 @@ namespace DataAccess.ServiceRepository
                 {
                     model.IsEncounterFinalied = item.Encounters.FirstOrDefault().IsFinalized[0];
                 }
+                else
+                {
+                    model.IsEncounterFinalied = false;
+                }
                 model.statusnotstate = item.Status;
                 if (item.Accepteddate != null)
                 {
