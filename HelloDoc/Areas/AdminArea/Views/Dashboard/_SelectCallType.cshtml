@@ -79,6 +79,7 @@
                 type: 'POST',
                 success: function (result) {
                     $('#nav-tabContent').html(result);
+                    $('#closemodel').trigger('click');
                 },
             });
         }
@@ -90,6 +91,7 @@
                 type: 'POST',
                 success: function (result) {
                     $('#nav-tabContent').html(result);
+                    $('#closemodel').trigger('click');
                 },
             });
         }

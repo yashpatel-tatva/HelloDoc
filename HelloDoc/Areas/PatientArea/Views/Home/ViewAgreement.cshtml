@@ -27,12 +27,11 @@
 
                 $('#PopUps').html(result);
                 var my = new bootstrap.Modal(document.getElementById('ModalToOpen'));
-                debugger;
                 my.show();
             },
-            error: function (xhr, status, error) {
-                console.error('Error: ' + error);
-            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR.responseText);
+            }
         });
     });
 
@@ -44,9 +43,9 @@
             success: function (result) {
                 window.open('/PatientArea/Dashboard/Dashboard')
             },
-            error: function (xhr, status, error) {
-                console.error('Error: ' + error);
-            },
+            error: function (jqXHR, textStatus, errorThrown) {
+               alert(jqXHR.responseText);
+            }
         });
     });
 

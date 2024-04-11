@@ -342,11 +342,14 @@ namespace HelloDoc.Areas.AdminArea.DataController
         }
 
         [Area("AdminArea")]
-        [AuthorizationRepository("Admin")]
         [HttpPost]
         public IActionResult CancelCase(int requestid, int casetag, string note)
         {
             _requestpopupaction.CancelCase(requestid, casetag, note);
+            if(_requests.GetById(requestid).Status == 4)
+            {
+                return BadRequest("Your case is now Active. you can not change . please contact provider");
+            }
             return RedirectToAction("AdminTabsLayout", "Home");
 
         }
@@ -457,9 +460,13 @@ namespace HelloDoc.Areas.AdminArea.DataController
 
         [Area("AdminArea")]
         [HttpPost]
-        public void PatientAgree(int requestid)
+        public IActionResult PatientAgree(int requestid)
         {
             var request = _requests.GetFirstOrDefault(x => x.Requestid == requestid);
+            if(request.Status == 3)
+            {
+                return BadRequest("You can't change. Please Contact CustomerCare Service");
+            }
             request.Status = 4;
             request.Accepteddate = DateTime.Now;
             _requests.Update(request);
@@ -472,6 +479,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
             };
             _db.Requeststatuslogs.Add(reqstatus);
             _db.SaveChanges();
+            return Ok();
         }
 
         [Area("AdminArea")]
