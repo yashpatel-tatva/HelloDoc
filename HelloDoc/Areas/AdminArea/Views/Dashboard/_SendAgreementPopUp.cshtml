@@ -74,7 +74,7 @@
             $("#patientemail").css("border-color", "red");
         } else {
             $.ajax({
-                url: 'AdminArea/Dashboard/SendAgreenment',
+                url: '/AdminArea/Dashboard/SendAgreenment',
                 type: 'POST',
                 data: { requestid: requestid, email: email, mobile: mobile },
                 success: function (result) {

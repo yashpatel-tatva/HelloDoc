@@ -95,6 +95,7 @@
                         </button>
                         <form data-id="@item.RequestId" value="@item.PatientName">
                             <ul class="dropdown-menu">
+                                <li><button type="button" class="dropdown-item text-secondary gotoproviderpopup" action="AcceptCase"><i class="bi bi-bookmark-check me-2"></i>Accept</button></li>
                                 <li><button type="button" class="dropdown-item gotoaction text-secondary" action="ViewCase"><i class="bi bi-view-list me-2"></i>View case</button></li>
                                 <li><button type="button" class="dropdown-item gotoaction text-secondary" action="ViewNotes"><i class="fa-solid fa-book-journal-whills me-2"></i>View Notes</button></li>
                             </ul>
@@ -193,6 +194,7 @@
                                         <div class="ps-1">@item.RequestorName</div>
                                     </div>
                                     <div class="row  mt-4 d-flex flex-wrap">
+                                        <div class="col-6 pt-2"><button type="button" class="w-100 border-0 rounded-pill px-3 py-1 small text-white gotoproviderpopup" action="AcceptCase" style="background-color : green">Accept</button></div>
                                         <div class="col-6 pt-2"><button type="button" class="w-100 border-0 rounded-pill px-3 py-1 small text-white gotoaction" action="ViewNotes" style="background-color : green">View Notes</button></div>
                                         <div class="col-6 pt-2"><button type="button" class="w-100 border-0 rounded-pill px-3 py-1 small text-white gotoaction" action="" style="background-color : green">Email</button></div>
                                     </div>

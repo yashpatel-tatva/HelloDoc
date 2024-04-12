@@ -60,6 +60,7 @@ var firstname;
 var lastname;
 var email;
 var mobile;
+var aspnetid = $('#aspnetid').val();
 $('#adminEdit_Save').on('click', function () {
     console.log($('#adminEdit_Save').text());
     if ($('#adminEdit_Save').text() == "Edit") {
@@ -100,7 +101,9 @@ $('#adminEdit_Save').on('click', function () {
                 $('#admineditmobile').css("border", "1px solid red");
                 return false;
             }
-
+            else {
+                return checkemail(aspnetid, email);
+            }
             return true;
         }
         if (validateForm()) {
@@ -153,3 +156,30 @@ $('#addresssaveandcancel').on('click', '#addresscancel', function () {
     $('#addressEdit_Save').text("Edit");
     $(this).css('display', 'none');
 });
+
+$('#admineditemail').on('blur', function () {
+    var email = $(this).val();
+    var id = $('#aspnetid').val();
+    checkemail(id, email);
+})
+
+function checkemail(id, email) {
+    var cansubmmit = false;
+    $.ajax({
+        url: '/AdminArea/AdminProfile/CheckEmailForAdmin',
+        data: { id, email },
+        type: 'POST',
+        async: false,
+        success: function (data) {
+            if (data) {
+                $('#admineditemail').val("");
+                Swal.fire("Email Already Exist!");
+                cansubmmit = !data;
+            }
+            else {
+                cansubmmit = !data;
+            }
+        }
+    });
+    return cansubmmit;
+}

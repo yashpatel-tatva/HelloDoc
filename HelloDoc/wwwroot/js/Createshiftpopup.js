@@ -13,7 +13,7 @@
 
 function getphysician(regionid) {
     $.ajax({
-        url: 'AdminArea/Dashboard/GetPhysicianByRegion',
+        url: '/AdminArea/Dashboard/GetPhysicianByRegion',
         type: 'POST',
         data: { regionid: regionid },
         success: function (data) {
@@ -167,7 +167,7 @@ $('#Createconfirmbutton').on('click', function () {
         }
         console.log(model);
         $.ajax({
-            url: 'AdminArea/AdminProviderTab/CreateNewShift',
+            url: '/AdminArea/AdminProviderTab/CreateNewShift',
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(model),

@@ -2,7 +2,7 @@
     var id = $(this).val();
     $.ajax({
         type: 'POST',
-        url: 'AdminArea/Dashboard/Delete',
+        url: '/AdminArea/Dashboard/Delete',
         data: { id: id },
         success: function (result) {
             Swal.fire({
@@ -39,7 +39,7 @@ $('.deleteall').on('click', function () {
         var id = $(this).val();
         $.ajax({
             type: 'POST',
-            url: 'AdminArea/Dashboard/Delete',
+            url: '/AdminArea/Dashboard/Delete',
             data: { id: id },
             success: function (result) {
                 Swal.fire({
@@ -80,7 +80,7 @@ $('.sendemail').on('click', function () {
         formData.append('RequestsId', $('.RequestsId').val());
 
         $.ajax({
-            url: 'AdminArea/Dashboard/SendMail',
+            url: '/AdminArea/Dashboard/SendMail',
             type: 'POST',
             data: formData,
             processData: false,
@@ -122,7 +122,7 @@ $('.viewfile').on('click', function () {
     var requestid = $('#hiddenrequestid').val();
     $.ajax({
         type: 'POST',
-        url: 'AdminArea/Dashboard/ViewFile',
+        url: '/AdminArea/Dashboard/ViewFile',
         data: { id: id },
         success: function (result) {
             window.open('/Documents/' + requestid + "/" + result);
@@ -157,7 +157,7 @@ $('#Edit_Save').on('click', function () {
 
         $.ajax({
             type: 'POST',
-            url: 'AdminArea/Dashboard/EditEmailPhone',
+            url: '/AdminArea/Dashboard/EditEmailPhone',
             contentType: 'application/json',
             data: JSON.stringify(model),
             success: function (response) {

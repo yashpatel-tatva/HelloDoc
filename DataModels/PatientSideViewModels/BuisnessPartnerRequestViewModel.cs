@@ -24,6 +24,7 @@ namespace HelloDoc.Areas.PatientArea.ViewModels
 
         public string PropertyName { get; set; }
 
+        [MaybeNull]
         public string CaseNumber { get; set; }
 
 

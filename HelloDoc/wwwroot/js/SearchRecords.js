@@ -81,7 +81,7 @@ $('.paginate_Nextbutton').on('click', function () {
 
 function filterDatawithoutpagination(selectstatus, patientname, selecttype, fromdate, todate, providername, emailid, mobile) {
     $.ajax({
-        url: 'AdminArea/AdminRecordsTab/SearchRecordsCount',
+        url: '/AdminArea/AdminRecordsTab/SearchRecordsCount',
         type: 'POST',
         data: { selectstatus: selectstatus, patientname: patientname, selecttype: selecttype, fromdate: fromdate, todate: todate, providername: providername, emailid: emailid, mobile: mobile },
         success: function (data) {

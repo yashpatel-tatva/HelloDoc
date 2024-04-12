@@ -8,10 +8,12 @@ namespace DataAccess.Repository
     public class RequestwisefileRepository : Repository<Requestwisefile>, IRequestwisefileRepository
     {
         private readonly IAdminRepository _admin;
+        private readonly IPhysicianRepository _physician;
 
-        public RequestwisefileRepository(HelloDocDbContext db, IAdminRepository adminRepository) : base(db)
+        public RequestwisefileRepository(HelloDocDbContext db, IAdminRepository adminRepository, IPhysicianRepository physician) : base(db)
         {
             _admin = adminRepository;
+            _physician = physician;
         }
 
         public void Add(int id, List<IFormFile> formFiles)
@@ -35,14 +37,19 @@ namespace DataAccess.Repository
                     file.CopyTo(fileStream);
                 }
 
-                Requestwisefile requestwisefile = new Requestwisefile()
+                Requestwisefile requestwisefile = new Requestwisefile();
+                requestwisefile.Requestid = id;
+                requestwisefile.Filename = filePath;
+                requestwisefile.Createddate = DateTime.Now;
+                requestwisefile.Adminid = _admin.GetSessionAdminId();
+                if (_admin.GetSessionAdminId() != -1)
                 {
-                    Requestid = id,
-                    Filename = filePath,
-                    Createddate = DateTime.Now,
-                    Adminid = _admin.GetSessionAdminId(),
-                };
-
+                    requestwisefile.Adminid = _admin.GetSessionAdminId();
+                }
+                if (_physician.GetSessionPhysicianId() != -1)
+                {
+                    requestwisefile.Physicianid = _physician.GetSessionPhysicianId();
+                }
                 _db.Requestwisefiles.Add(requestwisefile);
 
             }

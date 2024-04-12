@@ -36,7 +36,7 @@
             $(".blocknotes").css("border-color", "red");
         } else {
             $.ajax({
-                url: 'AdminArea/Dashboard/BlockCase',
+                url: '/AdminArea/Dashboard/BlockCase',
                 type: 'POST',
                 data: { requestid: requestid, note: note },
                 success: function (result) {

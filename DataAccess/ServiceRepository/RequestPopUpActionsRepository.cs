@@ -69,16 +69,22 @@ namespace DataAccess.ServiceRepository
             var request = _request.GetFirstOrDefault(x => x.Requestid == id);
             if (request.Casetag != null) { request.Casetag = request.Casetag + " , " + casetag; }
             else { request.Casetag = casetag.ToString(); }
-            request.Status = 3;
-            _request.Update(request);
-            _request.Save();
+
             Requeststatuslog requeststatuslog = new Requeststatuslog();
             requeststatuslog.Requestid = id;
-            if (_admin.GetSessionAdminId() != null)
+
+            if (_admin.GetSessionAdminId() != -1)
             {
-                requeststatuslog.Adminid = _admin.GetSessionAdminId();
+                request.Status = 3;
+                requeststatuslog.Status = 3;
+                _request.Update(request);
             }
-            requeststatuslog.Status = 3;
+            else
+            {
+                request.Status = 7;
+                requeststatuslog.Status = 7;
+                _request.Update(request);
+            }
             requeststatuslog.Notes = reason;
             requeststatuslog.Createddate = DateTime.Now;
             _requeststatus.Add(requeststatuslog);

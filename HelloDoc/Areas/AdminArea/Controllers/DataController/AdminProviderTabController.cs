@@ -602,7 +602,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
 
             DateTime dateTime = DateTime.Now;
 
-            var shifts = _scheduling.ShifsOfDate(dateTime, region, 0, 0).Where(x=>(x.StartTime <= dateTime && x.EndTime >= dateTime)).Select(x => x.ShiftId).ToList();
+            var shifts = _scheduling.ShifsOfDate(dateTime, region, 0, 0).Where(x => (x.StartTime <= dateTime && x.EndTime >= dateTime)).Select(x => x.ShiftId).ToList();
             foreach (var shift in shifts)
             {
                 var shiftid = _shiftDetail.GetFirstOrDefault(x => x.Shiftdetailid == shift).Shiftid;
@@ -762,8 +762,6 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             }
         }
 
-        [Area("AdminArea")]
-        [HttpPost]
         public void ApproveSelecetdShifts(List<int> shiftdetailsid)
         {
             var modifiedby = _admin.GetFirstOrDefault(x => x.Adminid == _admin.GetSessionAdminId()).Aspnetuserid;
@@ -779,6 +777,13 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         /// <returns></returns>
 
 
+        [Area("AdminArea")]
+        [HttpPost]
+        public bool CheckEmailForPhysician(int id, string email)
+        {
+            bool phy = _physician.CheckEmailExist(id, email);
+            return phy;
+        }
 
         [Area("AdminArea")]
         public IActionResult Invoicing()

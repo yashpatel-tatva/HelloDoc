@@ -17,12 +17,35 @@ namespace DataAccess.Repository
             _aspnetuser = aspNetUserRepository;
         }
 
+        public bool CheckEmailExist(int id, string email)
+        {
+            if (id == 0)
+            {
+                var phy = GetFirstOrDefault(x => x.Email == email);
+                if (phy != null)
+                {
+                    return true;
+                }
+                else { return false; }
+            }
+            else
+            {
+                var phys = getAll().Where(x => x.Physicianid != id);
+                phys = phys.Where(x=>x.Email == email);
+                if (phys.Count() != 0)
+                {
+                    return true;
+                }
+                else { return false; }
+            }
+        }
+
         public List<Physician> getAll()
         {
             var physician = Db.Physicians.Include(r => r.Physicianregions).Include(r => r.Physiciannotifications).Include(r => r.Physicianlocations).Include(r => r.Region).Include(r => r.Requests).Include(r => r.RequeststatuslogPhysicians).Include(r => r.RequeststatuslogTranstophysicians).Include(r => r.Requestwisefiles).ToList();
             return physician;
         }
-        
+
         public List<Physician> getAllnotdeleted()
         {
             BitArray forfalse = new BitArray(1);

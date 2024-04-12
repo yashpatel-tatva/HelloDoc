@@ -22,6 +22,7 @@ namespace HelloDoc.Areas.PatientArea.ViewModels
         [MaybeNull]
         public string HostelName { get; set; }
 
+        [MaybeNull]
         public string Symptoms { get; set; }
 
         [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Enter a valid")]

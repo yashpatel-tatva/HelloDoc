@@ -84,7 +84,7 @@
         var id = $(this).closest('form').data('id');
         console.log(action , id)
         $.ajax({
-            url: 'AdminArea/Dashboard/' + action,
+            url: '/AdminArea/Dashboard/' + action,
             type: 'GET',
             data: { id: id },
             success: function (result) {

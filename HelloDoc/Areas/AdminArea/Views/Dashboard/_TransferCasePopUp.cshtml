@@ -55,7 +55,7 @@
             $("#physiciandropdown").css("border-color", "red");
         } else {
             $.ajax({
-                url: 'AdminArea/Dashboard/AssignCase',
+                url: '/AdminArea/Dashboard/AssignCase',
                 type: 'POST',
                 data: { requestid: requestid, phyid: phyid, note: note },
                 success: function (result) {
@@ -82,7 +82,7 @@
         console.log(requestid);
         var regionid = $(this).val();
         $.ajax({
-            url: 'AdminArea/Dashboard/GetPhysician',
+            url: '/AdminArea/Dashboard/GetPhysician',
             type: 'POST',
             data: { regionid: regionid, requestid: requestid },
             success: function (data) {

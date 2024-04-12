@@ -11,10 +11,12 @@ namespace DataAccess.ServiceRepository
     {
         private readonly HelloDocDbContext _context;
         private readonly IAdminRepository _admin;
-        public SendEmailRepository(HelloDocDbContext helloDocDbContext, IAdminRepository adminRepository)
+        private readonly IPhysicianRepository _physician;
+        public SendEmailRepository(HelloDocDbContext helloDocDbContext, IAdminRepository adminRepository , IPhysicianRepository physicianRepository)
         {
             _context = helloDocDbContext;
             _admin = adminRepository;
+            _physician = physicianRepository;
         }
         public Task Sendemail(string email, string subject, string message)
         {
@@ -36,6 +38,12 @@ namespace DataAccess.ServiceRepository
             {
                 emaillog.Roleid = 1;
                 emaillog.Adminid = _admin.GetSessionAdminId();
+            }
+            if(_physician.GetSessionPhysicianId() != -1)
+            {
+
+                emaillog.Roleid = 2;
+                emaillog.Physicianid = _physician.GetSessionPhysicianId();
             }
             BitArray fortrue = new BitArray(1);
             fortrue[0] = true;

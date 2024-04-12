@@ -60,7 +60,7 @@ $('.paginate_Nextbutton').on('click', function () {
 
 function filterDatawithoutpagination(firstname, lastname, emailid, mobile) {
     $.ajax({
-        url: 'AdminArea/AdminRecordsTab/PatientDataCount',
+        url: '/AdminArea/AdminRecordsTab/PatientDataCount',
         type: 'POST',
         data: { firstname: firstname, lastname: lastname, emailid: emailid, mobile: mobile },
         success: function (data) {

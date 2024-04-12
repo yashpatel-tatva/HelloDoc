@@ -18,14 +18,14 @@
                             <input type="radio" class="btn-check" name="selectcalltype" id="danger-outlined" autocomplete="off" value="2">
                             <label class="btn btn-outline-info" for="danger-outlined">Consult</label>
                         </div>
-                        @if (Model.Calltype == 1)
+                       @* @if (Model.Calltype == 1)
                         {
                             <div class="px-2">
                                 <button type="button" id="openencounter" class="btn btn-info">Open Encounter</button>
                             </div>
-                        }
+                        }*@
                     </div>
-                    <div class="timedrop pt-3">
+                    @*<div class="timedrop pt-3">
                         <div class="form-group d-flex align-items-center rounded">
                             <select class="form-select " id="selecttime">
                                 <option value="0.5">After Half Hour</option>
@@ -43,7 +43,7 @@
                             </select>
                             <span class="selectedselectspan">Select Approximent Arrival Time</span>
                         </div>
-                    </div>
+                    </div>*@
                 </div>
                 <div class="modal-footer">
                     <button type="button" id="confirmbtn" class="btn btn-info">Continue</button>
@@ -55,15 +55,15 @@
 </div>
 
 <script>
-    $('.timedrop').hide();
-    $('input[name="selectcalltype"]').on('change', function () {
-        if ($('input[name="selectcalltype"]:checked').val() == 1) {
-            $('.timedrop').show();
-        }
-        else {
-            $('.timedrop').hide();
-        }
-    })
+    //$('.timedrop').hide();
+    //$('input[name="selectcalltype"]').on('change', function () {
+    //    if ($('input[name="selectcalltype"]:checked').val() == 1) {
+    //        $('.timedrop').show();
+    //    }
+    //    else {
+    //        $('.timedrop').hide();
+    //    }
+    //})
 
     $('#confirmbtn').on('click', function () {
         var id = $('#Requestid').val();
@@ -84,10 +84,9 @@
             });
         }
         else if (calltype == 1) {
-            var time = $('#selecttime').val();
             $.ajax({
                 url: '/AdminArea/Dashboard/CallTypeHousecallforRequest',
-                data: { id, calltype, time },
+                data: { id, calltype },
                 type: 'POST',
                 success: function (result) {
                     $('#nav-tabContent').html(result);
@@ -100,16 +99,16 @@
         }
     });
 
-    $('#openencounter').on('click', function () {
-        var id = $('#Requestid').val();
-        $.ajax({
-            url: '/AdminArea/Dashboard/OnHouseOpenEncounter',
-            data: { id },
-            type: 'POST',
-            success: function (result) {
-                $('#nav-tabContent').html(result);
-                $('#closemodel').trigger('click');
-            },
-        });
-    })
+    //$('#openencounter').on('click', function () {
+    //    var id = $('#Requestid').val();
+    //    $.ajax({
+    //        url: '/AdminArea/Dashboard/OnHouseOpenEncounter',
+    //        data: { id },
+    //        type: 'POST',
+    //        success: function (result) {
+    //            $('#nav-tabContent').html(result);
+    //            $('#closemodel').trigger('click');
+    //        },
+    //    });
+    //})
 </script>

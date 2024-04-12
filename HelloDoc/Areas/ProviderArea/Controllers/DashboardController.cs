@@ -3,6 +3,8 @@ using DataAccess.ServiceRepository;
 using DataAccess.ServiceRepository.IServiceRepository;
 using DataModels.AdminSideViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.EntityFrameworkCore;
 
 namespace HelloDoc.Areas.ProviderArea.Controllers
 {
@@ -16,8 +18,10 @@ namespace HelloDoc.Areas.ProviderArea.Controllers
         private readonly IAllRequestDataRepository _allrequestdata;
         private readonly IRequestStatusLogRepository _requeststatuslog;
         private readonly HelloDocDbContext _db;
+        private readonly IDocumentsRepository _documents;
 
-        public DashboardController(IAdminRepository admin, IRequestRepository request, IPhysicianRepository physicianRepository, IPaginationRepository paginationRepository, IAllRequestDataRepository allrequestdata, HelloDocDbContext db, IRequestStatusLogRepository requeststatuslog)
+
+        public DashboardController(IAdminRepository admin, IRequestRepository request, IPhysicianRepository physicianRepository, IPaginationRepository paginationRepository, IAllRequestDataRepository allrequestdata, HelloDocDbContext db, IRequestStatusLogRepository requeststatuslog, IDocumentsRepository documents)
         {
             _admin = admin;
             _request = request;
@@ -26,6 +30,7 @@ namespace HelloDoc.Areas.ProviderArea.Controllers
             _allrequestdata = allrequestdata;
             _db = db;
             _requeststatuslog = requeststatuslog;
+            _documents = documents;
         }
 
         [Area("ProviderArea")]
@@ -86,19 +91,19 @@ namespace HelloDoc.Areas.ProviderArea.Controllers
         [HttpPost]
         public IActionResult AcceptCase(int id)
         {
-            var request = _request.GetFirstOrDefault(x=>x.Requestid == id);
+            var request = _request.GetFirstOrDefault(x => x.Requestid == id);
             request.Accepteddate = DateTime.Now;
             _request.Update(request);
             _request.Save();
             return RedirectToAction("Dashboard");
         }
-        
+
         [Area("ProviderArea")]
         [HttpPost]
-        public IActionResult DeclineCase(int id , string note)
+        public IActionResult DeclineCase(int id, string note)
         {
-            var request = _request.GetFirstOrDefault(x=>x.Requestid == id);
-            request.Declinedby = _physician.GetFirstOrDefault(x=>x.Physicianid == _physician.GetSessionPhysicianId()).Aspnetuserid;
+            var request = _request.GetFirstOrDefault(x => x.Requestid == id);
+            request.Declinedby = _physician.GetFirstOrDefault(x => x.Physicianid == _physician.GetSessionPhysicianId()).Aspnetuserid;
             request.Accepteddate = null;
             request.Status = 1;
             request.Physicianid = null;
@@ -115,5 +120,24 @@ namespace HelloDoc.Areas.ProviderArea.Controllers
             return RedirectToAction("Dashboard");
         }
 
+        [Area("ProviderArea")]
+        [HttpGet]
+        public IActionResult ConcludeCare(int id)
+        {
+            RequestViewUploadsViewModel result = _allrequestdata.GetDocumentByRequestId(id);
+            return View(result);
+        }
+        [Area("ProviderArea")]
+        public IActionResult Download(int id)
+        {
+            var path = _db.Requestwisefiles.FirstOrDefault(x => x.Requestwisefileid == id).Filename;
+            var provider = new FileExtensionContentTypeProvider();
+            if (!provider.TryGetContentType(path, out var contentType))
+            {
+                contentType = "application/octet-stream";
+            }
+            var bytes = _documents.Download(id);
+            return File(bytes, contentType, Path.GetFileName(path));
+        }
     }
 }

@@ -12,5 +12,6 @@ namespace DataAccess.Repository.IRepository
         void Edit(int adminid, AdminProfileViewModel viewModel);
         void EditBillingDetails(int adminid, AdminProfileViewModel viewModel);
         void CreateAdmin(AdminProfileViewModel model);
+        bool CheckEmailExist(int id, string email);
     }
 }

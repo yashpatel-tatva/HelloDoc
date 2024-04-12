@@ -84,7 +84,7 @@ function filterDatawithoutpagination(datetoshow, region, showby) {
     console.log(datetoshow, region, showby);
     var status = 1;
     $.ajax({
-        url: 'AdminArea/AdminProviderTab/ShiftCountbyFilter',
+        url: '/AdminArea/AdminProviderTab/ShiftCountbyFilter',
         type: 'POST',
         data: { datetoshow: datetoshow.toISOString(), region: region, showby: showby, status: status },
         success: function (data) {

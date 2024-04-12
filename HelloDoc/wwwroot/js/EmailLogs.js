@@ -96,7 +96,7 @@ $('.paginate_Nextbutton').on('click', function () {
 
 function filterDatawithoutpagination(role, rname, email, createddate, sentdate) {
     $.ajax({
-        url: 'AdminArea/AdminRecordsTab/EmailContbyFilter',
+        url: '/AdminArea/AdminRecordsTab/EmailContbyFilter',
         type: 'POST',
         data: { role: role, rname: rname, email: email, createddate: createddate, senddate: sentdate },
         success: function (data) {

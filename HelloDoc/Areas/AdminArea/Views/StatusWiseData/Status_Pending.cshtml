@@ -231,7 +231,10 @@
                                         <div class="ps-1">@item.RequestorName</div>
                                     </div>
                                     <div class="row  mt-4 d-flex flex-wrap">
-                                        <div class="col-6 pt-2"><button type="button" class="w-100 small border-0 rounded-pill px-3 py-1 text-white gotopopup" action="SendAgreenment" style="background-color : darkorange">Send Agreement</button></div>
+                                            @if (item.IsAcceptedbyprovider)
+                                            {
+                                            <div class="col-6 pt-2"><button type="button" class="w-100 small border-0 rounded-pill px-3 py-1 text-white gotopopup" action="SendAgreenment" style="background-color : darkorange">Send Agreement</button></div>
+                                            }
                                         <div class="col-6 pt-2"><button type="button" class="w-100 small border-0 rounded-pill px-3 py-1 text-white gotoaction" action="ViewNotes" style="background-color : green">View Notes</button></div>
                                         <div class="col-6 pt-2"><button type="button" class="w-100 small border-0 rounded-pill px-3 py-1 text-white gotopopup" action="TransferCase" style="background-color : #0dcaf0">Transfer</button></div>
                                         <div class="col-6 pt-2"><button type="button" class="w-100 small border-0 rounded-pill px-3 py-1 text-white gotoaction" action="ViewUploads" style="background-color : green">View Uploads</button></div>

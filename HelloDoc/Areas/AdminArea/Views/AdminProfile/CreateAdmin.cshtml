@@ -67,7 +67,7 @@
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="email" class="form-control personalinfordit" placeholder="" id="editemail" asp-for="ConfirmEmail"><span>Confirm Email</span>
+                            <input type="email" class="form-control personalinfordit" placeholder="" id="editconfirmemail" asp-for="ConfirmEmail"><span>Confirm Email</span>
                         </div>
                         <span class="text-danger spanofvalid" asp-validation-for="ConfirmEmail"></span>
                     </div>
@@ -187,7 +187,8 @@
          if ($('#state').val() == "InValid") {
             error = error + "Select State";
         }
-
+        
+        
         if (error != "") {
             Swal.fire(error);
         }
@@ -207,5 +208,32 @@
         usernamefill();
     })
 
+
+    $('#editemail').on('blur', function () {
+        var email = $(this).val();
+        var id = 0;
+        checkemail(id, email);
+    })
+
+    function checkemail(id, email) {
+        var cansubmmit = false;
+        $.ajax({
+            url: '/AdminArea/AdminProfile/CheckEmailForAdmin',
+            data: { id, email },
+            type: 'POST',
+            async: false,
+            success: function (data) {
+                if (data) {
+                    $('#editemail').val("");
+                    Swal.fire("Email Already Exist!");
+                    cansubmmit = !data;
+                }
+                else {
+                    cansubmmit = !data;
+                }
+            }
+        });
+        return cansubmmit;
+    }
 </script>
 <link rel="stylesheet" href="~/css/error.css" asp-append-version="true" />

@@ -34,7 +34,7 @@
         var requestid = $('#inputhiddenrequestid').val();
         console.log(requestid);
         $.ajax({
-            url: 'AdminArea/Dashboard/ClearCaseSubmit',
+            url: '/AdminArea/Dashboard/ClearCaseSubmit',
             type: 'POST',
             data: { requestid: requestid},
             success: function (result) {

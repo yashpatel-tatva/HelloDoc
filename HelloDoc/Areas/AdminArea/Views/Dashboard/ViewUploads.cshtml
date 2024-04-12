@@ -76,6 +76,12 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @if(Model.requestwisefiles.Count() == 0)
+                            {
+                                <tr>
+                                    <td colspan="3" class="text-center">No document found</td>
+                                </tr>
+                            }
                             @foreach (var m in Model.requestwisefiles)
                             {
                                 <tr class="d-flex justify-content-between">
@@ -134,7 +140,7 @@
             //    var requestid = $('#hiddenrequestid').val();
             //    $.ajax({
             //        type: 'POST',
-            //        url: 'AdminArea/Dashboard/ViewFile',
+            //        url: '/AdminArea/Dashboard/ViewFile',
             //        data: { id: id },
             //        success: function (result) {
             //            window.open('/Documents/' + requestid + "/" + result);

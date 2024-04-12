@@ -86,3 +86,108 @@ $('.gotoaction').on('click', function (e) {
     $('.inputhiddenrequestid').val(id);
 
 });
+
+$('.gotoproviderpopup').on('click', function () {
+    var action = $(this).attr('action');
+    var id = $(this).closest('form').data('id');
+    var text = "";
+    var aftertext = "";
+    if (action == "AcceptCase") {
+        text = "Accept";
+        aftertext = "Accepted"
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You want to " + text + " this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, " + text + " it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '/ProviderArea/Dashboard/' + action,
+                    data: { id },
+                    type: 'POST',
+                    success: function (response) {
+                        Swal.fire({
+                            title: aftertext + "!",
+                            text: "Case has been " + aftertext + ".",
+                            icon: "success"
+                        });
+                        $('#nav-tabContent').html(response);
+                    }
+                });
+            }
+        });
+    }
+    else {
+        text = "Decline"
+        aftertext = "Declined"
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You want to " + text + " this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, " + text + " it!",
+            input: "text",
+            inputLabel: "Cancellation Notes",
+            inputValidator: (value) => {
+                if (!value) {
+                    return "You need to write something!";
+                }
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '/ProviderArea/Dashboard/' + action,
+                    data: { id, note: result.value },
+                    type: 'POST',
+                    success: function (response) {
+                        Swal.fire({
+                            title: aftertext + "!",
+                            text: "Case has been " + aftertext + ".",
+                            icon: "success"
+                        });
+                        $('#nav-tabContent').html(response);
+                    }
+                });
+            }
+        });
+    }
+
+})
+
+
+$('#housecallbtn').on('click', function () {
+    var id = $(this).closest('form').data('id');
+    $.ajax({
+        url: '/AdminArea/Dashboard/OnHouseOpenEncounter',
+        data: { id },
+        type: 'POST',
+        success: function (result) {
+            $('#nav-tabContent').html(result);
+            $('#closemodel').trigger('click');
+        },
+    });
+})
+
+$('.gotoactionproviderside').click(function (e) {
+    e.preventDefault();
+    var action = $(this).attr('action');
+    var id = $(this).closest('form').data('id');
+
+    $.ajax({
+        url: '/ProviderArea/Dashboard/' + action,
+        type: 'GET',
+        data: { id: id },
+        success: function (result) {
+            $('#nav-tabContent').html(result);
+        },
+        error: function (xhr, status, error) {
+            console.error('Error: ' + error);
+        },
+    });
+});

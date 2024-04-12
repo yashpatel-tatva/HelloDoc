@@ -68,7 +68,7 @@ $('.paginate_Nextbutton').on('click', function () {
 
 function filterDatawithoutpagination(role, rname, mobile, createddate, sentdate) {
     $.ajax({
-        url: 'AdminArea/AdminRecordsTab/SMSContbyFilter',
+        url: '/AdminArea/AdminRecordsTab/SMSContbyFilter',
         type: 'POST',
         data: { role: role, rname: rname, mobile: mobile, createddate: createddate, senddate: sentdate },
         success: function (data) {

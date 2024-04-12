@@ -173,5 +173,28 @@ namespace DataAccess.Repository
             _db.Aspnetuserroles.Add(aspnetuserrole);
             _db.SaveChanges();
         }
+
+        public bool CheckEmailExist(int id, string email)
+        {
+            if (id == 0)
+            {
+                var admin = GetFirstOrDefault(x => x.Email == email);
+                if (admin != null)
+                {
+                    return true;
+                }
+                else { return false; }
+            }
+            else
+            {
+                var adm = GetAll().Where(x => x.Adminid != id);
+                adm = adm.Where(x => x.Email == email);
+                if (adm.Count() != 0)
+                {
+                    return true;
+                }
+                else { return false; }
+            }
+        }
     }
 }

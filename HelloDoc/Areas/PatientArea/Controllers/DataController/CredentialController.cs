@@ -46,12 +46,18 @@ namespace HelloDoc.Areas.PatientArea.DataController
 
 
         [Area("PatientArea")]
-        [Route("/PatientArea/Credential/checkemail/{email}")]
         [HttpGet]
-        public async Task<IActionResult> CheckEmail(string email)
+        public bool CheckEmail(string email)
         {
-            var emailExists = await _context.Aspnetusers.FirstOrDefaultAsync(x => x.Email == email);
-            return Json(new { exists = emailExists });
+            var emailExists =  _context.Aspnetusers.FirstOrDefault(x => x.Email == email);
+            if(emailExists == null)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
         [Area("PatientArea")]
 

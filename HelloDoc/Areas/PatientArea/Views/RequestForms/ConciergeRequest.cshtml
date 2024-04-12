@@ -173,18 +173,23 @@
 
 <script>
     function checkEmailExists() {
-        var email = document.getElementById("patientEmail").value;
-        fetch('/Credential/checkemail/' + email)
-            .then(response => response.json())
-            .then(data => {
-                if (data.exists) {
+        var email = $('#patientEmail').val();
+        $.ajax({
+            url: '/PatientArea/Credential/checkemail/',
+            data: { email },
+            type: 'GET',
+            async: false,
+            success: function (data) {
+                if (data) {
                     document.getElementById("submitbtn").type = "submit";
-                } else {
+                }
+                else {
                     alert("Create Patient Account");
                     $(document).ready(function () {
                         $.ajax({
-                            url: '../Credential/SendEmailforcreateaccount',
+                            url: '/PatientArea/Credential/SendEmailforcreateaccount',
                             type: 'GET',
+                            async: false,
                             data: { email: email },
                             success: function (result) {
                             },
@@ -194,8 +199,8 @@
                         });
                     });
                 }
-            })
-            .catch(error => console.error('Error:', error));
+            }
+        });
     }
 </script>
 

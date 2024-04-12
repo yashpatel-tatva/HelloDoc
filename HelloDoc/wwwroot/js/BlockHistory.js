@@ -61,7 +61,7 @@ $('.paginate_Nextbutton').on('click', function () {
 
 function filterDatawithoutpagination(pname, email, createddate, mobile) {
     $.ajax({
-        url: 'AdminArea/AdminRecordsTab/BlockHistorydataCount',
+        url: '/AdminArea/AdminRecordsTab/BlockHistorydataCount',
         type: 'POST',
         data: { pname: pname, email: email, createddate: createddate, mobile: mobile },
         success: function (data) {

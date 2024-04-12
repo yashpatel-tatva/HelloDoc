@@ -93,12 +93,14 @@ $('#physicianEdit_Save').on('click', function () {
             if (!email || !emailregex.test(email)) {
                 $('#editemail').css("border", "1px solid red");
                 return false;
+            } else {
+                var boolas = checkemail(physicianid, email);
+                return boolas;
             }
             if (!phonenumber) {
                 $('#personalinforditphone').css("border", "1px solid red");
                 return false;
             }
-
             return true;
         }
 
@@ -370,3 +372,30 @@ $('#DeleteAccount').on('click', function () {
         }
     });
 });
+
+$('#editemail').on('blur', function () {
+    var email = $(this).val();
+    var id = physicianid;
+    checkemail(id, email);
+})
+
+function checkemail(id, email) {
+    var cansubmmit = false;
+    $.ajax({
+        url: '/AdminArea/AdminProviderTab/CheckEmailForPhysician',
+        data: { id, email },
+        type: 'POST',
+        async : false ,
+        success: function (data) {
+            if (data) {
+                $('#editemail').val("");
+                Swal.fire("Email Already Exist!");
+                cansubmmit = !data;
+            }
+            else {
+                cansubmmit = !data;
+            }
+        }
+    });
+    return cansubmmit;
+}

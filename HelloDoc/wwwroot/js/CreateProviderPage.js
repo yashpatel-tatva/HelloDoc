@@ -69,10 +69,37 @@ $('#editlastname').on('input', function () {
 
 
 $('#CreateAccountBtn').on('click', function () {
-
-    $(this).closest('form').submit();
+    var id = 0;
+    var email = $('#editemail').val();
+    var submit = checkemail(id, email);
+    if (submit) {
+        $(this).closest('form').submit();
+    }
 });
 
 $('.modal-dialog').draggable({
     handle: ".modal-header"
 });
+
+$('#editemail').on('blur', function () {
+    var email = $(this).val();
+    var id = 0;
+    checkemail(id, email);
+})
+
+function checkemail(id, email) {
+    var cansubmmit = false;
+    $.ajax({
+        url: '/AdminArea/AdminProviderTab/CheckEmailForPhysician',
+        data: { id, email },
+        type: 'POST',
+        success: function (data) {
+            if (data) {
+                $('#editemail').val("");
+                Swal.fire("Email Already Exist!");
+                cansubmmit = !data;
+            }
+        }
+    });
+    return cansubmmit;
+}

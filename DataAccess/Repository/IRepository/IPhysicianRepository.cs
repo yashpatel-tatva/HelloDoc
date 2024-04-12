@@ -9,5 +9,6 @@ namespace DataAccess.Repository.IRepository
         void SetSession(Physician physician);
         void RemoveSession();
         int GetSessionPhysicianId();
+        bool CheckEmailExist(int id, string email);
     }
 }

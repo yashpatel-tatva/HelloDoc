@@ -67,6 +67,18 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             TempData["Message"] = "Admin Created";
             return RedirectToAction("AdminTabsLayout", "Home");
         }
-
+        [Area("AdminArea")]
+        [HttpPost]
+        public bool CheckEmailForAdmin(string id, string email)
+        {
+            var admin = _admin.GetFirstOrDefault(x => x.Aspnetuserid == id);
+            var adminid = 0;
+            if(admin != null)
+            {
+                adminid = admin.Adminid;
+            }
+            var check = _admin.CheckEmailExist(adminid, email);
+            return check;
+        }
     }
 }

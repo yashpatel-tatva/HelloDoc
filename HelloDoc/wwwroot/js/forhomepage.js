@@ -91,7 +91,7 @@ $('#exportall').on('click', function () {
 
 $('#requestDTY').on('click', function () {
     $.ajax({
-        url: 'AdminArea/Dashboard/RequestDTYSupport',
+        url: '/AdminArea/Dashboard/RequestDTYSupport',
         success: function (result) {
 
             $('#PopUps').html(result);
@@ -185,7 +185,7 @@ $('.paginate_Nextbutton').on('click', function () {
 
 function filterwithoutpagination(state, requesttype, search, region) {
     $.ajax({
-        url: 'AdminArea/StatuswiseData/CountbyFilter',
+        url: '/AdminArea/StatuswiseData/CountbyFilter',
         type: 'POST',
         data: { state, requesttype, search, region },
         success: function (data) {
@@ -267,7 +267,7 @@ function printbuttons(data) {
 function filter(state, currentpage, pagesize, requesttype, search, region) {
     filterwithoutpagination(state, requesttype, search, region);
     $.ajax({
-        url: 'AdminArea/StatusWiseData/StatuswiseData',
+        url: '/AdminArea/StatusWiseData/StatuswiseData',
         type: 'POST',
         data: { state, currentpage, pagesize, requesttype, search, region },
         success: function (response) {

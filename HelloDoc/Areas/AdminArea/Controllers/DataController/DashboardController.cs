@@ -136,21 +136,21 @@ namespace HelloDoc.Areas.AdminArea.DataController
             return result;
         }
         [Area("AdminArea")]
-        [AuthorizationRepository("Admin")]
+        [AuthorizationRepository("Admin,Physician")]
         public List<Healthprofessionaltype> GetProfession()
         {
             var healthproffession = _db.Healthprofessionaltypes.ToList();
             return healthproffession;
         }
         [Area("AdminArea")]
-        [AuthorizationRepository("Admin")]
+        [AuthorizationRepository("Admin,Physician")]
         public List<Healthprofessional> GetVendorbyProfession(int professoinid)
         {
             var healthproffession = _db.Healthprofessionals.ToList().Where(x => x.Profession == professoinid).ToList();
             return healthproffession;
         }
         [Area("AdminArea")]
-        [AuthorizationRepository("Admin")]
+        [AuthorizationRepository("Admin,Physician")]
         public Healthprofessional GetVendorbyVendorid(int vendorid)
         {
             var healthproffession = _db.Healthprofessionals.FirstOrDefault(x => x.Vendorid == vendorid);
@@ -332,6 +332,14 @@ namespace HelloDoc.Areas.AdminArea.DataController
         [HttpGet]
         public IActionResult CancelCase(int id)
         {
+            if (_requests.GetById(id).Status == 4)
+            {
+                return BadRequest("Your case is now Active. you can not change . please contact provider");
+            }
+            if (_requests.GetById(id).Status == 3)
+            {
+                return BadRequest("This case has been camcel before ");
+            }
             DashpopupsViewModel dashpopupsViewModel = new DashpopupsViewModel();
             dashpopupsViewModel.RequestId = id;
             dashpopupsViewModel.PatientName = _requests.GetFirstOrDefault(x => x.Requestid == id).Firstname + " " + _requests.GetFirstOrDefault(x => x.Requestid == id).Lastname;
@@ -343,11 +351,16 @@ namespace HelloDoc.Areas.AdminArea.DataController
         [HttpPost]
         public IActionResult CancelCase(int requestid, int casetag, string note)
         {
-            _requestpopupaction.CancelCase(requestid, casetag, note);
-            if(_requests.GetById(requestid).Status == 4)
+            if (_requests.GetById(requestid).Status == 4)
             {
                 return BadRequest("Your case is now Active. you can not change . please contact provider");
             }
+             if (_requests.GetById(requestid).Status == 3)
+            {
+                return BadRequest("This case has been camcel before ");
+            }
+
+            _requestpopupaction.CancelCase(requestid, casetag, note);
             return RedirectToAction("AdminTabsLayout", "Home");
 
         }
@@ -429,7 +442,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
         }
 
         [Area("AdminArea")]
-        [AuthorizationRepository("Admin")]
+        [AuthorizationRepository("Admin,Physician")]
         [HttpGet]
         public IActionResult SendAgreenment(int id)
         {
@@ -445,7 +458,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
 
 
         [Area("AdminArea")]
-        [AuthorizationRepository("Admin")]
+        [AuthorizationRepository("Admin,Physician")]
         [HttpPost]
         public IActionResult SendAgreenment(int requestid, string mobile, string email)
         {
@@ -461,9 +474,13 @@ namespace HelloDoc.Areas.AdminArea.DataController
         public IActionResult PatientAgree(int requestid)
         {
             var request = _requests.GetFirstOrDefault(x => x.Requestid == requestid);
-            if(request.Status == 3)
+            if (request.Status == 3)
             {
                 return BadRequest("You can't change. Please Contact CustomerCare Service");
+            }
+            if (request.Status == 4)
+            {
+                return BadRequest("This is already an active case");
             }
             request.Status = 4;
             request.Accepteddate = DateTime.Now;
@@ -621,7 +638,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
 
 
         [Area("AdminArea")]
-        [AuthorizationRepository("Admin")]
+        [AuthorizationRepository("Admin,Physician")]
         [HttpPost]
         public IActionResult UploadFiles(List<IFormFile> files, int RequestsId)
         {
@@ -637,7 +654,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
         // orders start
 
         [Area("AdminArea")]
-        [AuthorizationRepository("Admin")]
+        [AuthorizationRepository("Admin,Physician")]
         [HttpGet]
         public IActionResult Orders(int id)
         {
@@ -647,14 +664,32 @@ namespace HelloDoc.Areas.AdminArea.DataController
         }
 
         [Area("AdminArea")]
-        [AuthorizationRepository("Admin")]
+        [AuthorizationRepository("Admin,Physician")]
         [HttpPost]
         public IActionResult SendOrderDetails(SendOrderViewModel model)
         {
-            model.CreatedBy = HttpContext.Session.GetString("AspNetId");
+            var jwtservice = HttpContext.RequestServices.GetService<IJwtRepository>();
+            var request = HttpContext.Request;
+            var token = request.Cookies["jwt"];
+            jwtservice.ValidateToken(token, out JwtSecurityToken jwttoken);
+            var roleClaim = jwttoken.Claims.FirstOrDefault(x => x.Type == "Role");
+            model.CreatedBy = jwttoken.Claims.FirstOrDefault(x => x.Type == "AspNetId").Value;
             _orderDetail.Add(model);
             TempData["Message"] = "Order Submitted";
-            return RedirectToAction("AdminTabsLayout", "Home");
+
+            if (roleClaim != null)
+            {
+                var role = roleClaim.Value;
+                if (role == "Admin")
+                {
+                    return RedirectToAction("AdminTabsLayout", "Home");
+                }
+                if (role == "Physician")
+                {
+                    return RedirectToAction("PhysicianTabsLayout", "Home", new { area = "ProviderArea" });
+                }
+            }
+            return BadRequest();
         }
 
 
@@ -908,7 +943,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
         [Area("AdminArea")]
         [AuthorizationRepository("Admin,Physician")]
         [HttpPost]
-        public IActionResult CallTypeHousecallforRequest(int id, int calltype, string time)
+        public IActionResult CallTypeHousecallforRequest(int id, int calltype)
         {
             var requestdetail = _requests.GetFirstOrDefault(x => x.Requestid == id);
             if (calltype == 1)
@@ -1054,7 +1089,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
 
                 var bytes = memoryStream.ToArray();
                 var result = new FileContentResult(bytes, "application/pdf");
-                result.FileDownloadName = "Encounter_"+model.RequestId+".pdf";
+                result.FileDownloadName = "Encounter_" + model.RequestId + ".pdf";
                 return result;
             }
         }

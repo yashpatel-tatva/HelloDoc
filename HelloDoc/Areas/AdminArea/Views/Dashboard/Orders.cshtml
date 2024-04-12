@@ -83,7 +83,7 @@
 <script>
     $(document).ready(function () {
         $.ajax({
-            url: 'AdminArea/Dashboard/GetProfession',
+            url: '/AdminArea/Dashboard/GetProfession',
             success: function (data) {
                 var proffession = $('.professiondropdown');
                 proffession.empty();
@@ -103,7 +103,7 @@
     });
     $('.professiondropdown').on('change', function () {
         $.ajax({
-            url: 'AdminArea/Dashboard/GetVendorbyProfession',
+            url: '/AdminArea/Dashboard/GetVendorbyProfession',
             data: { professoinid: $(this).val() },
             success: function (data) {
                 $('input[name="Contact"]').val("");
@@ -127,7 +127,7 @@
     })
     $('.businessdropdown').on('change', function () {
         $.ajax({
-            url: 'AdminArea/Dashboard/GetVendorbyVendorid',
+            url: '/AdminArea/Dashboard/GetVendorbyVendorid',
             data: { vendorid: $(this).val() },
             success: function (data) {
                 $('input[name="Contact"]').val(data.businesscontact);

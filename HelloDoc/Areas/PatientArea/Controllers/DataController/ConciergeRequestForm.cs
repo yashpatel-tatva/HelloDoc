@@ -72,12 +72,10 @@ namespace HelloDoc.Areas.PatientArea.DataController
                 };
                 _context.Add(concierge);
                 _context.SaveChanges();
-                var requestdata = await _context.Requests.FirstOrDefaultAsync(m => m.Email == model.Email);
-                var conciergedata = await _context.Concierges.FirstOrDefaultAsync(m => m.Conciergename == model.C_FirstName + model.C_LastName);
                 Requestconcierge requestconcierge = new Requestconcierge
                 {
-                    Requestid = requestdata.Requestid,
-                    Conciergeid = conciergedata.Conciergeid,
+                    Requestid = request.Requestid,
+                    Conciergeid = concierge.Conciergeid,
 
                 };
                 _context.Add(requestconcierge);

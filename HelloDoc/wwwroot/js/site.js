@@ -25,7 +25,7 @@
         // Add any other data you need (e.g., RequestsId)
 
         $.ajax({
-            url: 'AdminArea/Dashboard/UploadFiles', // Replace with your controller action URL
+            url: '/AdminArea/Dashboard/UploadFiles', // Replace with your controller action URL
             type: 'POST',
             data: formData,
             processData: false,
