@@ -90,6 +90,7 @@ namespace DataAccess.Repository
                     .Include(r => r.Requeststatuslogs)
                     .Include(x => x.Requestcloseds)
                     .Include(x => x.Requesttype)
+                    .Include(r => r.Requestnotes)
                     .Include(x => x.Requestwisefiles)
                     .Include(x => x.Encounters)
                     .AsEnumerable()
@@ -110,6 +111,7 @@ namespace DataAccess.Repository
                 .Include(r => r.Physician)
                 .Include(r => r.User.Region)
                 .Include(r => r.Requeststatuslogs)
+                .Include(r => r.Requestnotes)
                 .Include(x => x.Requesttype)
                 .Include(x => x.Requestwisefiles)
                 .Include(x => x.Encounters)
@@ -221,7 +223,7 @@ namespace DataAccess.Repository
                 //search.Requestor = item.Firstname + " " + item.Lastname;
                 search.Requestor = item.Requesttype.Name;
                 search.DateofService = item.Createddate;
-                var lastLog = item.Requeststatuslogs.Where(x => x.Status == 9).LastOrDefault();
+                var lastLog = item.Requeststatuslogs.Where(x => x.Status == 3 || x.Status == 7 || x.Status == 8).LastOrDefault();
                 search.CloseCaseDate = lastLog != null ? lastLog.Createddate : null;
                 search.Email = item.Requestclients.FirstOrDefault().Email;
                 search.Mobile = item.Requestclients.FirstOrDefault().Phonenumber;
@@ -241,12 +243,12 @@ namespace DataAccess.Repository
                 {
                     search.Phyicianname = "-";
                 }
-                var PhysicianNote = item.Requeststatuslogs.Where(x => x.Physicianid != null).LastOrDefault();
-                search.PhysicianNote = PhysicianNote != null ? PhysicianNote.Notes : "-";
+                var PhysicianNote = item.Requestnotes.LastOrDefault();
+                search.PhysicianNote = PhysicianNote != null ? PhysicianNote.Physiciannotes : "-";
                 var notelog = item.Requeststatuslogs.Where(x => x.Physicianid != null).LastOrDefault();
                 search.CancelledByPhyNote = notelog != null ? notelog.Notes : "-";
-                var AdminNote = item.Requeststatuslogs.Where(x => x.Adminid != null).LastOrDefault();
-                search.AdminNote = AdminNote != null ? AdminNote.Notes : "-";
+                var AdminNote = item.Requestnotes.LastOrDefault();
+                search.AdminNote = AdminNote != null ? AdminNote.Adminnotes : "-";
                 search.PatientNote = item.Requestclients.Last().Notes;
                 models.Add(search);
             }
@@ -397,6 +399,7 @@ namespace DataAccess.Repository
                 .Include(r => r.User)
                 .Include(r => r.Requestclients)
                 .Include(r => r.Physician)
+                .Include(r => r.Requestnotes)
                 .Include(r => r.User.Region)
                 .Include(r => r.Requeststatuslogs)
                 .Include(x => x.Requesttype)

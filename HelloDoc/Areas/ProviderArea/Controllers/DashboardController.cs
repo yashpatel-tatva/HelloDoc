@@ -139,5 +139,31 @@ namespace HelloDoc.Areas.ProviderArea.Controllers
             var bytes = _documents.Download(id);
             return File(bytes, contentType, Path.GetFileName(path));
         }
+
+        [Area("ProviderArea")]
+        [HttpPost]
+        public IActionResult SaveProviderNote(int requestid, string note)
+        {
+            _allrequestdata.SaveProviderNote(requestid, note);
+            return RedirectToAction("ConcludeCare", "Dashboard", new { id = requestid });
+        }
+        
+        [Area("ProviderArea")]
+        [HttpPost]
+        public IActionResult ConcludeCase(int requestid)
+        {
+            var request = _request.GetById(requestid);
+            request.Status = 8;
+            Requeststatuslog requeststatuslog = new Requeststatuslog();
+            requeststatuslog.Status = 8;
+            requeststatuslog.Requestid = requestid;
+            requeststatuslog.Physicianid = _physician.GetSessionPhysicianId();
+            requeststatuslog.Createddate = DateTime.Now;
+            requeststatuslog.Notes = "case caoncluded by provider";
+            _request.Update(request);
+            _db.Requeststatuslogs.Add(requeststatuslog);
+            _db.SaveChanges();
+            return RedirectToAction("Dashboard");
+        }
     }
 }

@@ -355,7 +355,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
             {
                 return BadRequest("Your case is now Active. you can not change . please contact provider");
             }
-             if (_requests.GetById(requestid).Status == 3)
+            if (_requests.GetById(requestid).Status == 3)
             {
                 return BadRequest("This case has been camcel before ");
             }
@@ -558,7 +558,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
         }
 
         [Area("AdminArea")]
-        [AuthorizationRepository("Admin")]
+        [AuthorizationRepository("Admin,Physician")]
         [HttpPost]
         public string ViewFile(int id)
         {
@@ -627,8 +627,16 @@ namespace HelloDoc.Areas.AdminArea.DataController
             emaillog.Subjectname = "Please Find Your Attachments Here";
             emaillog.Requestid = request.Requestid;
             emaillog.Confirmationnumber = request.Confirmationnumber;
-            emaillog.Adminid = _admin.GetSessionAdminId();
+            if (_admin.GetSessionAdminId() != -1)
+            {
+                emaillog.Roleid = 1;
+                emaillog.Adminid = _admin.GetSessionAdminId();
+            }
             emaillog.Emailtemplate = "For Files";
+            BitArray fortrue = new BitArray(1);
+            fortrue[0] = true;
+            emaillog.Isemailsent = fortrue;
+            emaillog.Senttries = 1;
             _db.Emaillogs.Add(emaillog);
             _db.SaveChanges();
             _sendemail.SendEmailwithAttachments(emailto.Email, "Your Attachments", "Please Find Your Attachments Here", filenames);
@@ -915,9 +923,23 @@ namespace HelloDoc.Areas.AdminArea.DataController
             BitArray fortrue = new BitArray(1);
             fortrue[0] = true;
             var encounter = _db.Encounters.FirstOrDefault(x => x.RequestId == id);
-            encounter.IsFinalized = fortrue;
-            _db.Encounters.Update(encounter);
-            _db.SaveChanges();
+            if (encounter == null)
+            {
+                var enounternew = new Encounter();
+                enounternew.RequestId = id;
+                enounternew.IsFinalized = fortrue;
+                enounternew.Date = DateTime.Now;
+                enounternew.Createddate = DateTime.Now;
+                enounternew.Createdby = _physician.GetFirstOrDefault(x => x.Physicianid == _physician.GetSessionPhysicianId()).Aspnetuserid;
+                _db.Encounters.Add(enounternew);
+                _db.SaveChanges();
+            }
+            else
+            {
+                encounter.IsFinalized = fortrue;
+                _db.Encounters.Update(encounter);
+                _db.SaveChanges();
+            }
             return RedirectToAction("PhysicianTabsLayout", "Home", new { area = "ProviderArea" });
         }
 

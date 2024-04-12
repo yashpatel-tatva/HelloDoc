@@ -19,9 +19,10 @@ namespace DataAccess.ServiceRepository
         private readonly IRequestRepository _request;
         private readonly IRequestStatusLogRepository _requeststatus;
         private readonly IAdminRepository _admin;
+        private readonly IPhysicianRepository _physician;
         private readonly IRequestwisefileRepository _requestwisefile;
 
-        public AllRequestDataRepository(HelloDocDbContext dbContext, IRequestwisefileRepository requestwisefileRepository, IHttpContextAccessor httpContextAccessor, IBlockCaseRepository blockCaseRepository, IRequestRepository requestRepository, IRequestStatusLogRepository requeststatus, IAdminRepository adminRepository)
+        public AllRequestDataRepository(HelloDocDbContext dbContext, IRequestwisefileRepository requestwisefileRepository, IHttpContextAccessor httpContextAccessor, IBlockCaseRepository blockCaseRepository, IRequestRepository requestRepository, IRequestStatusLogRepository requeststatus, IAdminRepository adminRepository , IPhysicianRepository physicianRepository)
         {
             _db = dbContext;
             _session = httpContextAccessor;
@@ -30,6 +31,7 @@ namespace DataAccess.ServiceRepository
             _requeststatus = requeststatus;
             _admin = adminRepository;
             _requestwisefile = requestwisefileRepository;
+            _physician = physicianRepository;
         }
 
         public List<AllRequestDataViewModel> FilteredRequest(List<Request> requests)
@@ -205,20 +207,45 @@ namespace DataAccess.ServiceRepository
         public void SaveAdminNotes(int id, RequestNotesViewModel model)
         {
             var curr = _db.Requestnotes.FirstOrDefault(x => x.Requestid == id);
+            var adminid = _session.HttpContext.Session.GetInt32("AdminId");
+            var aspid = _db.Admins.FirstOrDefault(x => x.Adminid == adminid).Aspnetuserid;
             if (curr != null)
             {
                 curr.Adminnotes = model.AdminNotes;
+                curr.Modifieddate = DateTime.Now;
+                curr.Modifiedby = aspid;
                 _db.Requestnotes.Update(curr);
             }
             else
             {
-                var adminid = _session.HttpContext.Session.GetInt32("AdminId");
-                var aspid = _db.Admins.FirstOrDefault(x => x.Adminid == adminid).Aspnetuserid;
                 Requestnote requestnote = new Requestnote();
 
                 requestnote.Requestid = id;
                 requestnote.Adminnotes = model.AdminNotes;
                 requestnote.Createdby = aspid;
+                requestnote.Createddate = DateTime.Now;
+                _db.Requestnotes.Add(requestnote);
+            }
+            _db.SaveChanges();
+        }
+
+        public void SaveProviderNote(int id, string note)
+        {
+            var curr = _db.Requestnotes.FirstOrDefault(x => x.Requestid == id);
+            var phyid = _physician.GetFirstOrDefault(x=>x.Physicianid == _physician.GetSessionPhysicianId()).Aspnetuserid;
+            if (curr != null)
+            {
+                curr.Physiciannotes = note;
+                curr.Modifieddate = DateTime.Now;
+                curr.Modifiedby = phyid;
+                _db.Requestnotes.Update(curr);
+            }
+            else
+            {
+                Requestnote requestnote = new Requestnote();
+                requestnote.Requestid = id;
+                requestnote.Physiciannotes = note;
+                requestnote.Createdby = phyid;
                 requestnote.Createddate = DateTime.Now;
                 _db.Requestnotes.Add(requestnote);
             }
@@ -293,7 +320,7 @@ namespace DataAccess.ServiceRepository
 
         public RequestViewUploadsViewModel GetDocumentByRequestId(int id)
         {
-            var request = _db.Requests.Include(r => r.Requestwisefiles).Include(r => r.User).Include(r => r.Requestclients).FirstOrDefault(x => x.Requestid == id);
+            var request = _db.Requests.Include(r => r.Requestwisefiles).Include(r => r.User).Include(r => r.Requestclients).Include(x => x.Encounters).Include(x=>x.Requestnotes).FirstOrDefault(x => x.Requestid == id);
             RequestViewUploadsViewModel model = new RequestViewUploadsViewModel();
             var user = request.User;
             model.RequestsId = id;
@@ -305,6 +332,8 @@ namespace DataAccess.ServiceRepository
             model.PatientEmail = request.Requestclients.ElementAt(0).Email;
             model.PatientMobile = request.Requestclients.ElementAt(0).Phonenumber;
             model.PatientDOB = new DateTime(Convert.ToInt32(user.Intyear), DateTime.ParseExact(user.Strmonth, "MMMM", CultureInfo.InvariantCulture).Month, Convert.ToInt32(user.Intdate));
+            model.Isencounterfinalized = request.Encounters.Count() != 0 ? request.Encounters.First().IsFinalized[0] : false;
+            model.ProviderNote = request.Requestnotes.Count() != 0 ? request.Requestnotes.First().Physiciannotes : "_";
             return model;
         }
 
@@ -359,6 +388,7 @@ namespace DataAccess.ServiceRepository
                 }
             }
         }
+
     }
 }
 

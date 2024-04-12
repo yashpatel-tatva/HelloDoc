@@ -11,13 +11,23 @@ namespace DataAccess.ServiceRepository
     public class ProviderMenuRepository : IProviderMenuRepository
     {
         private readonly IPhysicianRepository _physician;
+        private readonly IAdminRepository _admin;
+        private readonly IRequestRepository _request;
         private readonly IAspNetUserRepository _userRepository;
+        private readonly IShiftDetailRepository _shiftDetail;
+        private readonly IShiftRepository _shift;
+        private readonly ISchedulingRepository _scheduling;
         private readonly HelloDocDbContext _db;
-        public ProviderMenuRepository(IPhysicianRepository physician, HelloDocDbContext helloDocDbContext, IAspNetUserRepository aspNetUserRepository)
+        public ProviderMenuRepository(IPhysicianRepository physician, HelloDocDbContext helloDocDbContext, IAspNetUserRepository aspNetUserRepository , IAdminRepository adminRepository, IRequestRepository request, IShiftDetailRepository shiftDetail, IShiftRepository shift, ISchedulingRepository scheduling)
         {
             _physician = physician;
             _db = helloDocDbContext;
             _userRepository = aspNetUserRepository;
+            _admin = adminRepository;
+            _request = request;
+            _shiftDetail = shiftDetail;
+            _shift = shift;
+            _scheduling = scheduling;
         }
         public List<ProviderMenuViewModel> GetAllProviderDetailToDisplay(int region, int order)
         {
@@ -46,7 +56,22 @@ namespace DataAccess.ServiceRepository
                 model.Name = physician.Firstname + " " + physician.Lastname;
                 model.StopNotification = physician.Physiciannotifications.ElementAt(0).Isnotificationstopped.Get(0);
                 model.Role = _db.Aspnetroles.FirstOrDefault(x => x.Id == (_db.Aspnetuserroles.FirstOrDefault(x => x.Userid == physician.Aspnetuserid).Roleid)).Name;
-                model.OnCallStatus = "Active";
+                DateTime dateTime = DateTime.Now;
+                var shifts = _scheduling.ShifsOfDate(dateTime, region, 0, 0).Where(x => (x.StartTime <= dateTime && x.EndTime >= dateTime)).Select(x => x.Physicianid).ToList();
+                var oncall = _request.GetRequestsbyStatus(5).Where(x => x.Physicianid == physician.Physicianid);
+                if (shifts.Contains(physician.Physicianid))
+                {
+                    model.OnCallStatus = "OnShift";
+                }
+                else if(oncall.Count() != 0)
+                {
+                    model.OnCallStatus = "MDOnSite";
+                }
+                else
+                {
+                    model.OnCallStatus = "Unavailable";
+                }
+
                 if (physician.Status == 0)
                     model.Status = "Not Active";
                 else if (physician.Status == 1)
@@ -145,6 +170,8 @@ namespace DataAccess.ServiceRepository
             physician.Medicallicense = model.MedicalLicense;
             physician.Npinumber = model.NPINumber;
             physician.Syncemailaddress = model.SynchronizationEmail;
+            physician.Modifieddate = DateTime.Now;
+            physician.Modifiedby = _admin.GetFirstOrDefault(x => x.Adminid == _admin.GetSessionAdminId()).Aspnetuserid;
             var RegionToDelete = physician.Physicianregions.Select(x => x.Regionid).Except(model.SelectedRegionCB);
             foreach (var item in RegionToDelete)
             {
@@ -193,7 +220,8 @@ namespace DataAccess.ServiceRepository
             physician.Regionid = model.RegionID;
             physician.Zip = model.Zip;
             physician.Altphone = model.BusinessPhone;
-
+            physician.Modifieddate = DateTime.Now;
+            physician.Modifiedby = _admin.GetFirstOrDefault(x => x.Adminid == _admin.GetSessionAdminId()).Aspnetuserid;
             Random rand = new Random();
             double minLat = 24.396308;
             double maxLat = 49.384358;
@@ -205,6 +233,7 @@ namespace DataAccess.ServiceRepository
             physicianlocation.Physicianid = physician.Physicianid;
             physicianlocation.Latitude = (decimal?)latitude;
             physicianlocation.Longitude = (decimal?)longitude;
+
             physicianlocation.Createddate = DateTime.Now;
             physicianlocation.Physicianname = physician.Firstname + " " + physician.Lastname;
             physicianlocation.Address = physician.Address1 + " " + physician.City + " " + physician.Zip;
@@ -225,6 +254,8 @@ namespace DataAccess.ServiceRepository
             physician.Businesswebsite = model.BusinessWebSite;
             physician.Photo = model.Photo;
             physician.Signature = model.Sign;
+            physician.Modifieddate = DateTime.Now;
+            physician.Modifiedby = _admin.GetFirstOrDefault(x => x.Adminid == _admin.GetSessionAdminId()).Aspnetuserid;
             physician.Adminnotes = model.AdminNotes;
             _db.Update(physician);
             _db.SaveChanges();
@@ -239,6 +270,8 @@ namespace DataAccess.ServiceRepository
                     .FirstOrDefault(x => x.Physicianid == physicianid && (x.Isdeleted == null || x.Isdeleted[0] == false));
 
             physician.Adminnotes = adminnote;
+            physician.Modifieddate = DateTime.Now;
+            physician.Modifiedby = _admin.GetFirstOrDefault(x => x.Adminid == _admin.GetSessionAdminId()).Aspnetuserid;
             _db.Update(physician);
             _db.SaveChanges();
         }
@@ -252,6 +285,8 @@ namespace DataAccess.ServiceRepository
                     .FirstOrDefault(x => x.Physicianid == physicianid && (x.Isdeleted == null || x.Isdeleted[0] == false));
 
             physician.Photo = base64string;
+            physician.Modifieddate = DateTime.Now;
+            physician.Modifiedby = _admin.GetFirstOrDefault(x => x.Adminid == _admin.GetSessionAdminId()).Aspnetuserid;
             _db.Update(physician);
             _db.SaveChanges();
         }
@@ -264,6 +299,8 @@ namespace DataAccess.ServiceRepository
                     .FirstOrDefault(x => x.Physicianid == physicianid && (x.Isdeleted == null || x.Isdeleted[0] == false));
 
             physician.Signature = base64string;
+            physician.Modifieddate = DateTime.Now;
+            physician.Modifiedby = _admin.GetFirstOrDefault(x => x.Adminid == _admin.GetSessionAdminId()).Aspnetuserid;
             _db.Update(physician);
             _db.SaveChanges();
         }
@@ -313,6 +350,8 @@ namespace DataAccess.ServiceRepository
             {
                 physician.Iscredentialdoc = fortrue;
             }
+            physician.Modifieddate = DateTime.Now;
+            physician.Modifiedby = _admin.GetFirstOrDefault(x => x.Adminid == _admin.GetSessionAdminId()).Aspnetuserid;
             _db.Physicians.Update(physician);
             _db.SaveChanges();
         }

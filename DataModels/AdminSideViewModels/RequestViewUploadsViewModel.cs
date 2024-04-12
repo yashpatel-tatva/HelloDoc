@@ -14,7 +14,7 @@ namespace DataModels.AdminSideViewModels
 
         public string FirstName { get; set; }
         public string LastName { get; set; }
-
+        public bool Isencounterfinalized { get; set; }
         public string ProviderNote { get; set; }
         public DateTime PatientDOB { get; set; }
         public string PatientEmail { get; set; }

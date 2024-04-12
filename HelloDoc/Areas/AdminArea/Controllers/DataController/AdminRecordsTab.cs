@@ -203,7 +203,10 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
                 //}
                 em.Recipient = log.Emailid.Split('@')[0];
                 em.Action = log.Subjectname;
-                em.RoleName = _db.Aspnetroles.FirstOrDefault(x => x.Id == log.Roleid.ToString()).Name;
+                if (log.Roleid != null)
+                {
+                    em.RoleName = _db.Aspnetroles.FirstOrDefault(x => x.Id == log.Roleid.ToString()).Name;
+                }
                 em.Email = log.Emailid;
                 em.CreatedDate = log.Createdate;
                 em.SentDate = (DateTime)log.Sentdate;

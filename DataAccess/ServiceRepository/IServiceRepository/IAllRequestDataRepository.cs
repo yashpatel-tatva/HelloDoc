@@ -16,5 +16,6 @@ namespace DataAccess.ServiceRepository.IServiceRepository
         void EditEmailPhone(RequestDataViewModel model);
         RequestViewUploadsViewModel GetDocumentByRequestId(int id);
         void AddRequestasAdmin(FamilyRequestViewModel model);
+        void SaveProviderNote(int requestid, string note);
     }
 }

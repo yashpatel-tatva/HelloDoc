@@ -41,7 +41,6 @@ namespace DataAccess.Repository
                 requestwisefile.Requestid = id;
                 requestwisefile.Filename = filePath;
                 requestwisefile.Createddate = DateTime.Now;
-                requestwisefile.Adminid = _admin.GetSessionAdminId();
                 if (_admin.GetSessionAdminId() != -1)
                 {
                     requestwisefile.Adminid = _admin.GetSessionAdminId();
