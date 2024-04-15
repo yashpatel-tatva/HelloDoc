@@ -96,7 +96,7 @@ namespace DataModels.AdminSideViewModels
 
         public List<Role> roles { get; set; }
 
-
+        public string loggedpersonrole { get; set; }
 
     }
 }

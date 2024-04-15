@@ -51,6 +51,7 @@ namespace DataAccess.Repository
         {
             var aspnet = _db.Aspnetusers.FirstOrDefault(x => x.Id == aspnetid);
             aspnet.Passwordhash = password;
+            aspnet.Modifieddate = DateTime.Now;
             _db.Aspnetusers.Update(aspnet);
             _db.SaveChanges();
         }

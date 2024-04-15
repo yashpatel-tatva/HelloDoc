@@ -77,6 +77,11 @@ namespace DataAccess.Repository
             }
         }
 
+        public List<Shiftdetail> getall()
+        {
+            return _db.Shiftdetails.Include(x=>x.Shift).Include(x=>x.Shiftdetailregions).ToList();
+        }
+
         public void ReturnThisShift(int shiftdetailid, string modifiedby)
         {
             var shift = GetFirstOrDefault(x => x.Shiftdetailid == shiftdetailid);

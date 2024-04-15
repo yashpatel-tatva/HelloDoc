@@ -5,7 +5,7 @@
 @model List<ProviderMenuViewModel> ;
 <table class="w-100">
     <tbody>
-        <tr id="saveButton" style="border-top : 10px solid transparent ; border-bottom : 10px solid transparent">
+        <tr id="saveButton" style="border-top : 10px solid transparent ; border-bottom : 10px solid transparent ; display : none" class="justify-content-center">
             <td class="d-flex justify-content-center">
                 <button class="p-1 text-white bg-info rounded border-info d-flex align-items-center">
                     <span class="">Save</span>
@@ -73,8 +73,10 @@
                 }
             });
             if (isSame) {
+                $('#saveButton').css("display" , "flex");
                 $('#saveButton').hide();
             } else {
+                $('#saveButton').css("display", "none");
                 $('#saveButton').show();
             }
         });
@@ -97,7 +99,13 @@
                 success: function (result) {
                     $('#saveButton').hide();
                     $('input[name="StopNotificationCheckbox"]').css("border-color", "#0dcaf0");
-                    $('#nav-tabContent').html(result);
+                    Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: "Changes Saved",
+                        showConfirmButton: false,
+                        timer: 1000
+                    });
                 }
             });
         });

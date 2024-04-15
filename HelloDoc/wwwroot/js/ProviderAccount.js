@@ -192,17 +192,19 @@ $('#addresssaveandcancel').on('click', '#addresscancel', function () {
 
 $('#adminnoteEdit_Save').on('click', function () {
     if ($('#adminnoteEdit_Save').text() == "Edit") {
-        $('#editadminnotes').removeAttr("disabled");
+        $('.bnamewebnoteedit').removeAttr("disabled");
         $('#adminnoteEdit_Save').text("Save");
         $('#adminnotesaveandcancel').append('<button type="reset" class="ms-2 btn border-info text-info shadow-none" id="adminnotecancel">Cancel</button>');
     }
     else {
         var adminnote = $('#editadminnotes').val();
+        var businessname = $('#authbusinessname').val();
+        var businessweb = $('#authbusinessweb').val();
 
         $.ajax({
             url: '/AdminArea/AdminProviderTab/EditProviderAdminNote',
             type: 'POST',
-            data: { physicianid, adminnote },
+            data: { physicianid, adminnote , businessname , businessweb },
             success: function (response) {
                 $('#nav-tabContent').html(response);
                 Swal.fire({
@@ -217,7 +219,7 @@ $('#adminnoteEdit_Save').on('click', function () {
     }
 });
 $('#adminnotesaveandcancel').on('click', '#adminnotecancel', function () {
-    $('#editadminnotes').prop('disabled', true);
+    $('.bnamewebnoteedit').prop('disabled', true);
     $('#adminnoteEdit_Save').text("Edit");
     $(this).css('display', 'none');
 });

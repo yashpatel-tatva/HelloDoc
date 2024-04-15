@@ -79,6 +79,28 @@ $('.gotopopup').click(function (e) {
 });
 
 
+$('.gotoproviderpopupmodel').click(function (e) {
+    e.preventDefault();
+    var action = $(this).attr('action');
+    var id = $(this).closest('form').data('id');
+
+    $.ajax({
+        url: '/ProviderArea/Dashboard/' + action,
+        type: 'POST',
+        data: { id: id },
+        success: function (result) {
+            debugger
+            $('#PopUps').html(result);
+            var my = new bootstrap.Modal(document.getElementById('ModalToOpen'));
+            my.show();
+        },
+        error: function (xhr, status, error) {
+            console.error('Error: ' + error);
+        },
+    });
+});
+
+
 $('.gotoaction').on('click', function (e) {
     var name = $(this).closest('form').attr('value');
     $('.patientname').html(name);

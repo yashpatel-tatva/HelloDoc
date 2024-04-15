@@ -25,17 +25,17 @@
                             <span class="h2 ps-2">Login To Your Account</span>
                             <div class="py-2">
                                 <div class="my-2 form-group d-flex align-items-center rounded @TempData["Style"]">
-                                    <input type="email" asp-for="Email" class="form-control" placeholder="" ><span>Email</span>
+                                    <input type="email" asp-for="Email" class="form-control" placeholder="" required><span>Email</span>
                                     <label class="px-2"><i class="fa-regular fa-circle-user"></i></label>
                                 </div>
                                 <p style="color : red">@TempData["WrongEmail"]</p>
                                 <div class="my-2 form-group d-flex align-items-center rounded @TempData["Style"]">
-                                    <input type="password" asp-for="Passwordhash" id="showpass" class="form-control" placeholder="" ><span>Password</span>
+                                    <input type="password" asp-for="Passwordhash" id="showpass" class="form-control" placeholder="" required ><span>Password</span>
                                     <label id="eyeiconlabel" class="px-2"><i class="fa-regular fa-eye-slash" id="eyeicon"></i></label>
                                 </div>
                                 <p style="color : red">@TempData["Wrongpass"]</p>
                                 <div class="py-2 form-group border-0">
-                                    <button class="form-control subbtn">Log In</button>
+                                    <button type="submit" class="form-control subbtn">Log In</button>
                                 </div>
                             </div>
                             <div class="d-flex justify-content-center"><a asp-action="AdminForgetPassword">Forget Password?</a></div>
@@ -90,4 +90,7 @@
             eyeicon.classList.add("fa-eye");
         }
     })
+
+
+
 </script>

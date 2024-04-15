@@ -18,6 +18,10 @@
                 </div>
                 <div class="form-group d-flex align-items-center rounded my-3">
                     <select class="form-select shadow-none drawphysicianforshift" asp-for="Physicianid" disabled>
+                        @if(Model.loggedrole == "Physician")
+                        {
+                            <option value="@Model.Physicianid">@Model.Physicianname</option>
+                        }
                     </select>
                     <span class="selectedselectspan">Physician</span>
                 </div>
@@ -41,11 +45,14 @@
                             </div>
                         </div>
                     </div>
-                    <div class="d-flex my-3 justify-content-end gap-2 shiftfunction">
-                        <button type="button" id="ViewShiftReturnBtn" class="p-2 px-3 text-white bg-info rounded border-info  mx-1 shadow-none" data-id="@Model.ShiftId">Return</button>
-                        <button type="button" id="ViewShiftEdit_SaveBtn" class="p-2 px-3 text-white bg-info rounded border-info  mx-1 shadow-none" data-id="@Model.ShiftId">Edit</button>
-                        <button type="button" id="ViewShiftDeleteBtn" class="p-2 px-3 text-white bg-danger rounded border-danger  mx-1 shadow-none" data-id="@Model.ShiftId">Delete</button>
-                    </div>
+                    @if (Model.loggedrole == "Admin")
+                    {
+                        <div class="d-flex my-3 justify-content-end gap-2 shiftfunction">
+                            <button type="button" id="ViewShiftReturnBtn" class="p-2 px-3 text-white bg-info rounded border-info  mx-1 shadow-none" data-id="@Model.ShiftId">Return</button>
+                            <button type="button" id="ViewShiftEdit_SaveBtn" class="p-2 px-3 text-white bg-info rounded border-info  mx-1 shadow-none" data-id="@Model.ShiftId">Edit</button>
+                            <button type="button" id="ViewShiftDeleteBtn" class="p-2 px-3 text-white bg-danger rounded border-danger  mx-1 shadow-none" data-id="@Model.ShiftId">Delete</button>
+                        </div>
+                    }
                 </form>
             </div>
         </div>
@@ -69,37 +76,7 @@
             $('.drawbyregiondrop').val(@Model.Location)
         }
     });
-    $.ajax({
-        url: '/AdminArea/Dashboard/GetPhysicianByRegion',
-        type: 'POST',
-        data: { regionid: 0 },
-        success: function (data) {
-            var physiciandropdown = $('.drawphysicianforshift');
-            physiciandropdown.empty();
-            physiciandropdown.append($('<option>', {
-                hidden: "hidden",
-                value: "invalid",
-                text: "Select Physician"
-            }))
-            if (data.length == 0) {
-                physiciandropdown.append($('<option>', {
-                    value: "invalid",
-                    disabled: "disabled",
-                    text: "No Physician in this area",
-                    style: "color : red"
-                }))
-            }
-            else {
-                $.each(data, function (index, phy) {
-                    physiciandropdown.append($('<option>', {
-                        value: phy.physicianid,
-                        text: phy.firstname + " " + phy.lastname
-                    }))
-                });
-            }
-            $('.drawphysicianforshift').val(@Model.Physicianid)
-        }
-    });
+
     $(document).ready(function () {
         $('#ModalToOpen').draggable({
             handle: ".modal-dialog"
@@ -115,7 +92,7 @@
         var shiftdetailid = $(this).data('id');
         $.ajax({
             url: '/AdminArea/AdminProviderTab/DeleteShift',
-            data: { shiftdetailid, format , status , region},
+            data: { shiftdetailid, format, status, region },
             type: 'POST',
             success: function (response) {
                 $('#timewisedata').html(response);
@@ -214,7 +191,7 @@
             });
         }
     });
-  
+
 
     $(document).on('click', '#shifteditcancel', function () {
         $('.timeedit').prop('disabled', true);
@@ -223,3 +200,39 @@
     });
 
 </script>
+
+@if (Model.loggedrole == "Admin"){
+    <script>
+        $.ajax({
+            url: '/AdminArea/Dashboard/GetPhysicianByRegion',
+            type: 'POST',
+            data: { regionid: 0 },
+            success: function (data) {
+                var physiciandropdown = $('.drawphysicianforshift');
+                physiciandropdown.empty();
+                physiciandropdown.append($('<option>', {
+                    hidden: "hidden",
+                    value: "invalid",
+                    text: "Select Physician"
+                }))
+                if (data.length == 0) {
+                    physiciandropdown.append($('<option>', {
+                        value: "invalid",
+                        disabled: "disabled",
+                        text: "No Physician in this area",
+                        style: "color : red"
+                    }))
+                }
+                else {
+                    $.each(data, function (index, phy) {
+                        physiciandropdown.append($('<option>', {
+                            value: phy.physicianid,
+                            text: phy.firstname + " " + phy.lastname
+                        }))
+                    });
+                }
+                $('.drawphysicianforshift').val(@Model.Physicianid)
+            }
+        });
+    </script>
+}

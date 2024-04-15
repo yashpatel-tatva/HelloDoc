@@ -5,6 +5,7 @@ using DataModels.AdminSideViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
+using System.Collections;
 
 namespace HelloDoc.Areas.ProviderArea.Controllers
 {
@@ -153,9 +154,9 @@ namespace HelloDoc.Areas.ProviderArea.Controllers
         public IActionResult ConcludeCase(int requestid)
         {
             var request = _request.GetById(requestid);
-            request.Status = 8;
+            request.Status = 9;
             Requeststatuslog requeststatuslog = new Requeststatuslog();
-            requeststatuslog.Status = 8;
+            requeststatuslog.Status = 9;
             requeststatuslog.Requestid = requestid;
             requeststatuslog.Physicianid = _physician.GetSessionPhysicianId();
             requeststatuslog.Createddate = DateTime.Now;
@@ -164,6 +165,39 @@ namespace HelloDoc.Areas.ProviderArea.Controllers
             _db.Requeststatuslogs.Add(requeststatuslog);
             _db.SaveChanges();
             return RedirectToAction("Dashboard");
+        }
+        
+        
+        [Area("ProviderArea")]
+        [HttpPost]
+        public IActionResult TransferCase(int id)
+        {
+            return PartialView("_TransferCasePopUp" , new { requestid = id });
+        }
+        
+        [Area("ProviderArea")]
+        [HttpPost]
+        public void TransfertoAdmin(int requestid , string note)
+        {
+            var request = _request.GetById(requestid);
+            request.Status = 1;
+            request.Physicianid = null;
+            request.Accepteddate = null;
+            request.Modifieddate = DateTime.Now;
+            _request.Update(request) ;
+            _request.Save();
+            Requeststatuslog requeststatuslog = new Requeststatuslog() ;
+            requeststatuslog.Requestid = request.Requestid;
+            requeststatuslog.Status = 1;
+            requeststatuslog.Physicianid = _physician.GetSessionPhysicianId() ;
+            requeststatuslog.Notes = note ;
+            requeststatuslog.Createddate = DateTime.Now;
+            BitArray fortrue = new BitArray(1);
+            fortrue[0] = true;
+            requeststatuslog.Transtoadmin = fortrue;
+            _requeststatuslog.Add(requeststatuslog);
+            _requeststatuslog.Save();
+
         }
     }
 }

@@ -50,7 +50,7 @@ namespace DataAccess.Repository
         {
             BitArray forfalse = new BitArray(1);
             forfalse[0] = false;
-            var physician = Db.Physicians.Include(r => r.Physicianregions).Include(r => r.Physiciannotifications).Include(r => r.Physicianlocations).Include(r => r.Region).Include(r => r.Requests).Include(r => r.RequeststatuslogPhysicians).Include(r => r.RequeststatuslogTranstophysicians).Include(r => r.Requestwisefiles).Where(x => x.Isdeleted == forfalse).ToList();
+            var physician = Db.Physicians.Include(r => r.Physicianregions).Include(r => r.Physiciannotifications).Include(r => r.Physicianlocations).Include(r => r.Region).Include(r => r.Requests).Include(r => r.RequeststatuslogPhysicians).Include(r => r.RequeststatuslogTranstophysicians).Include(r => r.Requestwisefiles).Include(x=>x.Physicianregions).Where(x => x.Isdeleted == forfalse).ToList();
             return physician;
         }
 

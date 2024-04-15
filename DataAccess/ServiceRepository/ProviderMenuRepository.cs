@@ -18,7 +18,7 @@ namespace DataAccess.ServiceRepository
         private readonly IShiftRepository _shift;
         private readonly ISchedulingRepository _scheduling;
         private readonly HelloDocDbContext _db;
-        public ProviderMenuRepository(IPhysicianRepository physician, HelloDocDbContext helloDocDbContext, IAspNetUserRepository aspNetUserRepository , IAdminRepository adminRepository, IRequestRepository request, IShiftDetailRepository shiftDetail, IShiftRepository shift, ISchedulingRepository scheduling)
+        public ProviderMenuRepository(IPhysicianRepository physician, HelloDocDbContext helloDocDbContext, IAspNetUserRepository aspNetUserRepository, IAdminRepository adminRepository, IRequestRepository request, IShiftDetailRepository shiftDetail, IShiftRepository shift, ISchedulingRepository scheduling)
         {
             _physician = physician;
             _db = helloDocDbContext;
@@ -32,7 +32,7 @@ namespace DataAccess.ServiceRepository
         public List<ProviderMenuViewModel> GetAllProviderDetailToDisplay(int region, int order)
         {
 
-            var physicians = _physician.getAll().Where(x => x.Isdeleted == null || x.Isdeleted[0] == false);
+            var physicians = _physician.GetAll().Where(x => x.Isdeleted == null || x.Isdeleted[0] == false);
             var phyregion = _db.Physicianregions.Include(x => x.Physician).ToList();
 
             if (region != 0)
@@ -54,24 +54,8 @@ namespace DataAccess.ServiceRepository
                 ProviderMenuViewModel model = new ProviderMenuViewModel();
                 model.PhysicanId = physician.Physicianid;
                 model.Name = physician.Firstname + " " + physician.Lastname;
-                model.StopNotification = physician.Physiciannotifications.ElementAt(0).Isnotificationstopped.Get(0);
-                model.Role = _db.Aspnetroles.FirstOrDefault(x => x.Id == (_db.Aspnetuserroles.FirstOrDefault(x => x.Userid == physician.Aspnetuserid).Roleid)).Name;
-                DateTime dateTime = DateTime.Now;
-                var shifts = _scheduling.ShifsOfDate(dateTime, region, 0, 0).Where(x => (x.StartTime <= dateTime && x.EndTime >= dateTime)).Select(x => x.Physicianid).ToList();
-                var oncall = _request.GetRequestsbyStatus(5).Where(x => x.Physicianid == physician.Physicianid);
-                if (shifts.Contains(physician.Physicianid))
-                {
-                    model.OnCallStatus = "OnShift";
-                }
-                else if(oncall.Count() != 0)
-                {
-                    model.OnCallStatus = "MDOnSite";
-                }
-                else
-                {
-                    model.OnCallStatus = "Unavailable";
-                }
-
+                model.StopNotification = _db.Physiciannotifications.FirstOrDefault(x => x.Pysicianid == physician.Physicianid).Isnotificationstopped[0];
+                model.Role = _db.Roles.Where(x => x.Roleid == physician.Roleid).First().Name;
                 if (physician.Status == 0)
                     model.Status = "Not Active";
                 else if (physician.Status == 1)
@@ -79,8 +63,27 @@ namespace DataAccess.ServiceRepository
                 else
                     model.Status = "Pending";
                 model.Email = physician.Email;
+                model.OnCallStatus = "Unavailable";
                 providers.Add(model);
             }
+            DateTime dateTime = DateTime.Now;
+            var shifts = _scheduling.ShifsOfDate(dateTime, region, 0, 0).Where(x => (x.StartTime <= dateTime && x.EndTime >= dateTime)).Select(x => x.Physicianid).ToList();
+            var oncall = _request.GetAll().Where(x => x.Status == 5).Select(x => x.Physicianid);
+            foreach (var phyid in shifts)
+            {
+                if (providers.FirstOrDefault(x => x.PhysicanId == phyid) != null)
+                {
+                    providers.FirstOrDefault(x => x.PhysicanId == phyid).OnCallStatus = "OnShift";
+                }
+            }
+            foreach (var phyid in oncall)
+            {
+                if (providers.FirstOrDefault(x => x.PhysicanId == phyid) != null)
+                {
+                    providers.FirstOrDefault(x => x.PhysicanId == phyid).OnCallStatus = "MDOnSite";
+                }
+            }
+
             return providers;
         }
         public void ChangeNotification(List<int> checkedToUnchecked, List<int> uncheckedToChecked)
@@ -286,7 +289,14 @@ namespace DataAccess.ServiceRepository
 
             physician.Photo = base64string;
             physician.Modifieddate = DateTime.Now;
-            physician.Modifiedby = _admin.GetFirstOrDefault(x => x.Adminid == _admin.GetSessionAdminId()).Aspnetuserid;
+            if (_admin.GetSessionAdminId() != -1)
+            {
+                physician.Modifiedby = _admin.GetFirstOrDefault(x => x.Adminid == _admin.GetSessionAdminId()).Aspnetuserid;
+            }
+            if (_physician.GetSessionPhysicianId() != -1)
+            {
+                physician.Modifiedby = _physician.GetFirstOrDefault(x => x.Physicianid == _physician.GetSessionPhysicianId()).Aspnetuserid;
+            }
             _db.Update(physician);
             _db.SaveChanges();
         }
@@ -300,7 +310,14 @@ namespace DataAccess.ServiceRepository
 
             physician.Signature = base64string;
             physician.Modifieddate = DateTime.Now;
-            physician.Modifiedby = _admin.GetFirstOrDefault(x => x.Adminid == _admin.GetSessionAdminId()).Aspnetuserid;
+            if (_admin.GetSessionAdminId() != -1)
+            {
+                physician.Modifiedby = _admin.GetFirstOrDefault(x => x.Adminid == _admin.GetSessionAdminId()).Aspnetuserid;
+            }
+            if (_physician.GetSessionPhysicianId() != -1)
+            {
+                physician.Modifiedby = _physician.GetFirstOrDefault(x => x.Physicianid == _physician.GetSessionPhysicianId()).Aspnetuserid;
+            }
             _db.Update(physician);
             _db.SaveChanges();
         }
@@ -511,6 +528,18 @@ namespace DataAccess.ServiceRepository
             physicianlocation.Address = physician.Address1 + " " + physician.City + " " + physician.Zip;
             _db.Physicianlocations.Add(physicianlocation);
             return physician.Physicianid;
+        }
+
+        public void EditProviderBuisnessname_web(int physicianid, string businessname, string businessweb)
+        {
+            var physician = _db.Physicians.FirstOrDefault(x => x.Physicianid == physicianid);
+
+            physician.Businessname = businessname;
+            physician.Businesswebsite = businessweb;
+
+            _db.Physicians.Update(physician);
+            _db.SaveChanges();
+
         }
     }
 }

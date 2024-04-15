@@ -4,10 +4,12 @@ using DataModels.AdminSideViewModels;
 using HelloDoc;
 using HelloDoc.Areas.PatientArea.ViewModels;
 using Microsoft.AspNetCore.Http;
+using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using System.Globalization;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace DataAccess.ServiceRepository
 {
@@ -22,7 +24,7 @@ namespace DataAccess.ServiceRepository
         private readonly IPhysicianRepository _physician;
         private readonly IRequestwisefileRepository _requestwisefile;
 
-        public AllRequestDataRepository(HelloDocDbContext dbContext, IRequestwisefileRepository requestwisefileRepository, IHttpContextAccessor httpContextAccessor, IBlockCaseRepository blockCaseRepository, IRequestRepository requestRepository, IRequestStatusLogRepository requeststatus, IAdminRepository adminRepository , IPhysicianRepository physicianRepository)
+        public AllRequestDataRepository(HelloDocDbContext dbContext, IRequestwisefileRepository requestwisefileRepository, IHttpContextAccessor httpContextAccessor, IBlockCaseRepository blockCaseRepository, IRequestRepository requestRepository, IRequestStatusLogRepository requeststatus, IAdminRepository adminRepository, IPhysicianRepository physicianRepository)
         {
             _db = dbContext;
             _session = httpContextAccessor;
@@ -167,7 +169,7 @@ namespace DataAccess.ServiceRepository
                 model.PhysicianNotes = reqnotes.Physiciannotes;
                 model.AdminNotes = reqnotes.Adminnotes;
             }
-            var reqstatuslog = _requeststatus.GetStatusbyId(id).Where(x => x.Transtophysicianid != null).ToList().OrderBy(x => x.Createddate);
+            var reqstatuslog = _requeststatus.GetStatusbyId(id).Where(x => x.Transtophysicianid != null || x.Transtoadmin != null).ToList().OrderBy(x => x.Createddate);
             List<string> notes = new List<string>();
             if (reqstatuslog == null)
             {
@@ -177,26 +179,36 @@ namespace DataAccess.ServiceRepository
             {
                 foreach (var note in reqstatuslog)
                 {
-                    var date = note.Createddate;
-                    var name = "";
-                    var position = "";
-                    var afterphysicanid = note.Transtophysicianid;
-                    var afterphysician = _db.Physicians.FirstOrDefault(x => x.Physicianid == afterphysicanid).Firstname;
-                    if (note.Adminid != null)
-                    {
-                        var admin = _admin.GetFirstOrDefault(x => x.Adminid == note.Adminid);
-                        name = admin.Firstname + " " + admin.Lastname;
-                        position = "Admin";
-
-                    }
-                    if (note.Physicianid != null)
+                    if (note.Transtoadmin != null && note.Transtoadmin[0] == true)
                     {
                         var physician = _db.Physicians.FirstOrDefault(x => x.Physicianid == note.Physicianid);
-                        name = physician.Firstname + " " + physician.Lastname;
-                        position = "Physician";
+                        var name = physician.Firstname + " " + physician.Lastname;
+                        var transfernote = name + "(Physician) transferred case to Admin on " + note.Createddate.ToString("dd-MM-yyyy") + " at " + note.Createddate.ToString("hh:mm tt");
+                        notes.Add(transfernote);
                     }
-                    var transfernote = name + "(" + position + ") transferred case to " + afterphysician + " on " + date.ToString("dd-MM-yyyy") + " at " + date.ToString("hh:mm tt");
-                    notes.Add(transfernote);
+                    else
+                    {
+                        var date = note.Createddate;
+                        var name = "";
+                        var position = "";
+                        var afterphysicanid = note.Transtophysicianid;
+                        var afterphysician = _db.Physicians.FirstOrDefault(x => x.Physicianid == afterphysicanid).Firstname;
+                        if (note.Adminid != null)
+                        {
+                            var admin = _admin.GetFirstOrDefault(x => x.Adminid == note.Adminid);
+                            name = admin.Firstname + " " + admin.Lastname;
+                            position = "Admin";
+
+                        }
+                        if (note.Physicianid != null)
+                        {
+                            var physician = _db.Physicians.FirstOrDefault(x => x.Physicianid == note.Physicianid);
+                            name = physician.Firstname + " " + physician.Lastname;
+                            position = "Physician";
+                        }
+                        var transfernote = name + "(" + position + ") transferred case to " + afterphysician + " on " + date.ToString("dd-MM-yyyy") + " at " + date.ToString("hh:mm tt");
+                        notes.Add(transfernote);
+                    }
                 }
 
             }
@@ -232,7 +244,7 @@ namespace DataAccess.ServiceRepository
         public void SaveProviderNote(int id, string note)
         {
             var curr = _db.Requestnotes.FirstOrDefault(x => x.Requestid == id);
-            var phyid = _physician.GetFirstOrDefault(x=>x.Physicianid == _physician.GetSessionPhysicianId()).Aspnetuserid;
+            var phyid = _physician.GetFirstOrDefault(x => x.Physicianid == _physician.GetSessionPhysicianId()).Aspnetuserid;
             if (curr != null)
             {
                 curr.Physiciannotes = note;
@@ -320,7 +332,7 @@ namespace DataAccess.ServiceRepository
 
         public RequestViewUploadsViewModel GetDocumentByRequestId(int id)
         {
-            var request = _db.Requests.Include(r => r.Requestwisefiles).Include(r => r.User).Include(r => r.Requestclients).Include(x => x.Encounters).Include(x=>x.Requestnotes).FirstOrDefault(x => x.Requestid == id);
+            var request = _db.Requests.Include(r => r.Requestwisefiles).Include(r => r.User).Include(r => r.Requestclients).Include(x => x.Encounters).Include(x => x.Requestnotes).FirstOrDefault(x => x.Requestid == id);
             RequestViewUploadsViewModel model = new RequestViewUploadsViewModel();
             var user = request.User;
             model.RequestsId = id;

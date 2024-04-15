@@ -11,6 +11,21 @@
     }
 });
 
+$.ajax({
+    url: '/AdminArea/Dashboard/GetRegionofPhysician',
+    success: function (data) {  
+        var drawbyregiondropforprovider = $('.drawbyregiondropforprovider');
+        $.each(data, function (index, regions) {
+            drawbyregiondropforprovider.append($('<option>', {
+                value: regions.regionid,
+                text: regions.name
+            }))
+        });
+    }
+});
+
+
+
 function getphysician(regionid) {
     $.ajax({
         url: '/AdminArea/Dashboard/GetPhysicianByRegion',
@@ -60,6 +75,15 @@ $('.drawbyregiondrop').on('change', function () {
             text: "Select Physician"
         }))
         $('.drawbyregiondrop').closest('.form-group').css("border", "1px solid red");
+    }
+});
+$('.drawbyregiondropforprovider').on('change', function () {
+    var regionid = $(this).val();
+    if (regionid != "") {
+        $('.drawbyregiondropforprovider').closest('.form-group').css("border", "1px solid darkgrey");
+    }
+    else if (regionid == "") {
+        $('.drawbyregiondropforprovider').closest('.form-group').css("border", "1px solid red");
     }
 });
 
@@ -114,21 +138,31 @@ $('#shiftdate').on('blur', function () {
     }
 });
 $('#Createconfirmbutton').on('click', function () {
-    var region = $('.drawbyregiondrop').val();
-    var physician = $('.drawphysician').val();
+    var region = $('#drawbyregiondrop').val();
+    var physician = $('#drawphysician').val();
     var shiftdate = $('#shiftdate').val();
     var starttime = $('#startTime').val();
     var endtime = $('#endTime').val();
     var repeatonoff = $('#repeatonoff').prop('checked');
     var repeatdays = [];
     var format = $('#format').val();
+    console.log(region);
+    console.log(physician);
+    console.log(shiftdate);
+    console.log(starttime);
+    console.log(endtime);
+    console.log(repeatonoff);
+    console.log(repeatdays);
+    console.log(repeattimes);
     $('input[name="repeatdays"]:checked').each(function () {
         repeatdays.push($(this).val());
     });
     var repeattimes = $('.drawrepeat').val();
 
-    if (region == 0) {
+    if (region == 0 || region == "") {
+        console.log("asaqs")
         $('.drawbyregiondrop').closest('.form-group').css("border", "1px solid red");
+        $('.drawbyregiondropforprovider').closest('.form-group').css("border", "1px solid red");
     }
     else if (physician == "invalid") {
         $('.drawphysician').closest('.form-group').css("border", "1px solid red");
@@ -155,15 +189,15 @@ $('#Createconfirmbutton').on('click', function () {
         console.log(repeatdays);
         console.log(repeattimes);
         var model = {
-            region : region,
-            physician : physician,
-            shiftdate : shiftdate,
-            starttime : starttime,
-            endtime : endtime,
-            repeatonoff : repeatonoff,
-            repeatdays : repeatdays,
+            region: region,
+            physician: physician,
+            shiftdate: shiftdate,
+            starttime: starttime,
+            endtime: endtime,
+            repeatonoff: repeatonoff,
+            repeatdays: repeatdays,
             repeattimes: repeattimes,
-            format : format
+            format: format
         }
         console.log(model);
         $.ajax({
@@ -183,7 +217,7 @@ $('#Createconfirmbutton').on('click', function () {
                 });
             },
             error: function (error) {
-                console.error(error);
+                location.reload();
             }
         });
     }

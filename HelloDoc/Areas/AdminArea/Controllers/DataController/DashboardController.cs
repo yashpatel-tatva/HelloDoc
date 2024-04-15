@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using System.Collections;
+using System.Drawing;
 using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO.Compression;
@@ -30,6 +31,9 @@ namespace HelloDoc.Areas.AdminArea.DataController
         private readonly IPaginationRepository _paginator;
         private readonly IAllRequestDataRepository _allrequestdata;
         private readonly IPhysicianRepository _physician;
+        private readonly IShiftDetailRepository _shiftDetail;
+        private readonly IShiftRepository _shift;
+        private readonly ISchedulingRepository _scheduling;
 
         public DashboardController(
             HelloDocDbContext db,
@@ -44,7 +48,10 @@ namespace HelloDoc.Areas.AdminArea.DataController
             IOrderDetailRepository orderDetailRepository,
             IPaginationRepository paginationRepository,
             IAllRequestDataRepository allRequestDataRepository1,
-            IPhysicianRepository physicianRepository
+            IPhysicianRepository physicianRepository,
+            IShiftDetailRepository shiftDetailRepository,
+            IShiftRepository shiftRepository,
+            ISchedulingRepository schedulingRepository
             )
         {
             _db = db;
@@ -60,6 +67,9 @@ namespace HelloDoc.Areas.AdminArea.DataController
             _paginator = paginationRepository;
             _allrequestdata = allRequestDataRepository1;
             _physician = physicianRepository;
+            _shift = shiftRepository;
+            _scheduling = schedulingRepository;
+            _shiftDetail = shiftDetailRepository;
         }
 
         // data from tables start
@@ -73,11 +83,24 @@ namespace HelloDoc.Areas.AdminArea.DataController
         }
 
         [Area("AdminArea")]
-        [AuthorizationRepository("Admin")]
+        [AuthorizationRepository("Admin,Physician")]
         public List<Region> GetRegion()
         {
             var regions = _db.Regions.ToList();
             return regions;
+        }
+
+        [Area("AdminArea")]
+        [AuthorizationRepository("Admin,Physician")]
+        public List<Region> GetRegionofPhysician()
+        {
+            if (_physician.GetSessionPhysicianId() != -1)
+            {
+                var regions = _db.Physicianregions.Include(x => x.Region).Where(x => x.Physicianid == _physician.GetSessionPhysicianId()).Select(x => x.Region).ToList();
+                return regions;
+            }
+
+            return null;
         }
 
         [Area("AdminArea")]
@@ -984,9 +1007,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
             }
             return RedirectToAction("Dashboard", "Dashboard", new { area = "ProviderArea" });
         }
-        [Area("AdminArea")]
-        [AuthorizationRepository("Admin")]
-        [HttpPost]
+
         public IActionResult EditEncounterAsAdmin(int id)
         {
             var request = _requests.GetById(id);
@@ -1115,5 +1136,43 @@ namespace HelloDoc.Areas.AdminArea.DataController
                 return result;
             }
         }
+        [Area("AdminArea")]
+        [AuthorizationRepository("Admin")]
+        [HttpPost]
+        public void SendEmailToAllOffduty(string message)
+        {
+            List<int> OnCallIds = new List<int>();
+            List<int> OffDutyIds = new List<int>();
+
+            DateTime dateTime = DateTime.Now;
+
+            var shifts = _scheduling.ShifsOfDate(dateTime, 0, 0, 0).Where(x => (x.StartTime <= dateTime && x.EndTime >= dateTime)).Select(x => x.ShiftId).ToList();
+            foreach (var shift in shifts)
+            {
+                var shiftid = _shiftDetail.GetFirstOrDefault(x => x.Shiftdetailid == shift).Shiftid;
+                var physicianId = _shift.GetFirstOrDefault(x => x.Shiftid == shiftid).Physicianid;
+                if (!OnCallIds.Contains(physicianId))
+                {
+                    OnCallIds.Add(physicianId);
+                }
+            }
+            var allphyids = _physician.GetAll().Select(x => x.Physicianid).ToList();
+            OffDutyIds = allphyids.Except(OnCallIds).ToList();
+            var stopnoti = _db.Physiciannotifications
+                              .AsEnumerable()
+                              .Where(x => x.Isnotificationstopped[0] == true)
+                              .Select(x => x.Pysicianid)
+                              .ToList();
+            foreach (var id in stopnoti)
+            {
+                OffDutyIds.Remove(id);
+            }
+            foreach(var id in OffDutyIds)
+            {
+                var physicianemail = _physician.GetFirstOrDefault(x=>x.Physicianid == id).Email;
+                _sendemail.Sendemail(physicianemail, "There is an urgent need to address the shortage of physicians.", message);
+            }
+        }
+
     }
 }

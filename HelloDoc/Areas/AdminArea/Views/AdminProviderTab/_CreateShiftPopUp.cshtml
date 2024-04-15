@@ -9,19 +9,37 @@
             </div>
             <div class="modal-body">
                 <form method="Post">
-                    <input type="hidden" value="@Model.format" id="format"/>
-                    <div class="did-floating-label-content my-3 form-group d-flex align-items-center rounded">
-                        <select class="form-select form-select-lg fs-6 form-control drawbyregiondrop did-floating-select" onclick="this.setAttribute('value', this.value);" onchange="this.setAttribute('value', this.value);" value="" aria-label=".form-select-lg example">
-                            <option value=""></option>
-                        </select>
-                        <span class="did-floating-label">Region</span>
-                    </div>
-                    <div class="form-group d-flex align-items-center rounded my-3">
-                        <select class="form-select shadow-none drawphysician" disabled>
-                            <option value="invalid" hidden>Select Physician</option>
-                        </select>
-                        <span class="selectedselectspan">Physician</span>
-                    </div>
+                    <input type="hidden" value="@Model.format" id="format" />
+                    @if (Model.role == "Admin")
+                    {
+                        <div class="did-floating-label-content my-3 form-group d-flex align-items-center rounded">
+                            <select class="form-select form-select-lg fs-6 form-control drawbyregiondrop did-floating-select" id="drawbyregiondrop" onclick="this.setAttribute('value', this.value);" onchange="this.setAttribute('value', this.value);" value="" aria-label=".form-select-lg example">
+                                <option value=""></option>
+                            </select>
+                            <span class="did-floating-label">Region</span>
+                        </div>
+                        <div class="form-group d-flex align-items-center rounded my-3">
+                            <select class="form-select shadow-none drawphysician" id="drawphysician" disabled>
+                                <option value="invalid" hidden>Select Physician</option>
+                            </select>
+                            <span class="selectedselectspan">Physician</span>
+                        </div>
+                    }
+                    @if(Model.role == "Physician")
+                    {
+                        <div class="did-floating-label-content my-3 form-group d-flex align-items-center rounded">
+                            <select class="form-select form-select-lg fs-6 form-control drawbyregiondropforprovider did-floating-select" id="drawbyregiondrop" onclick="this.setAttribute('value', this.value);" onchange="this.setAttribute('value', this.value);" value="" aria-label=".form-select-lg example">
+                                <option value=""></option>
+                            </select>
+                            <span class="did-floating-label">Region</span>
+                        </div>
+                         <div class="form-group d-flex align-items-center rounded my-3 d-none">
+                            <select class="form-select shadow-none" id="drawphysician" disabled>
+                                <option value="@Model.phyid">@Model.phyname</option>
+                            </select>
+                            <span class="selectedselectspan">Physician</span>
+                        </div>
+                    }
                     <div class="form-group d-flex align-items-center rounded my-3">
                         @{
                             string today = DateTime.Today.ToString("yyyy-MM-dd");

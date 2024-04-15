@@ -3,15 +3,17 @@ using DataAccess.Repository.IRepository;
 using DataAccess.ServiceRepository;
 using DataAccess.ServiceRepository.IServiceRepository;
 using DataModels.AdminSideViewModels;
+using iTextSharp.text;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using System.Collections;
 using System.Drawing;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace HelloDoc.Areas.AdminArea.Controllers.DataController
 {
-    [AuthorizationRepository("Admin")]
+    [AuthorizationRepository("Admin,Physician")]
     public class AdminProviderTabController : Controller
     {
         private readonly IProviderMenuRepository _providerMenu;
@@ -57,11 +59,10 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         }
         [Area("AdminArea")]
         [HttpPost]
-        public IActionResult ChangeNotification(List<int> checkedToUnchecked, List<int> uncheckedToChecked)
+        public void ChangeNotification(List<int> checkedToUnchecked, List<int> uncheckedToChecked)
         {
             _providerMenu.ChangeNotification(checkedToUnchecked, uncheckedToChecked);
-            TempData["Message"] = "Changes Saved";
-            return RedirectToAction("AdminTabsLayout", "Home");
+            //return RedirectToAction("AdminTabsLayout", "Home");
         }
         [Area("AdminArea")]
         [HttpPost]
@@ -86,6 +87,16 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         {
             PhysicianAccountViewModel model = new PhysicianAccountViewModel();
             model = _providerMenu.GetPhysicianAccountById(physicianid);
+            var jwtservice = HttpContext.RequestServices.GetService<IJwtRepository>();
+            var request = HttpContext.Request;
+            var token = request.Cookies["jwt"];
+            jwtservice.ValidateToken(token, out JwtSecurityToken jwttoken);
+            var roleClaim = jwttoken.Claims.FirstOrDefault(x => x.Type == "Role");
+            if (roleClaim != null)
+            {
+                var role = roleClaim.Value;
+                model.loggedpersonrole = role;
+            }
             return View(model);
         }
 
@@ -119,9 +130,10 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         }
         [Area("AdminArea")]
         [HttpPost]
-        public IActionResult EditProviderAdminNote(int physicianid, string adminnote)
+        public IActionResult EditProviderAdminNote(int physicianid, string adminnote, string businessname, string businessweb)
         {
             _providerMenu.EditProviderAdminNote(physicianid, adminnote);
+            _providerMenu.EditProviderBuisnessname_web(physicianid, businessname, businessweb);
             return RedirectToAction("EditProviderPage", new { physicianid = physicianid });
         }
         [Area("AdminArea")]
@@ -285,7 +297,14 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             }
             shift.Repeatupto = model.repeattimes;
             shift.Createddate = DateTime.Now;
-            shift.Createdby = _admin.GetFirstOrDefault(x => x.Adminid == _admin.GetSessionAdminId()).Aspnetuserid;
+            if (_admin.GetSessionAdminId() != -1)
+            {
+                shift.Createdby = _admin.GetFirstOrDefault(x => x.Adminid == _admin.GetSessionAdminId()).Aspnetuserid;
+            }
+            if (_physician.GetSessionPhysicianId() != -1)
+            {
+                shift.Createdby = _physician.GetFirstOrDefault(x => x.Physicianid == _physician.GetSessionPhysicianId()).Aspnetuserid;
+            }
             _db.Shifts.Add(shift);
             _db.SaveChanges();
 
@@ -359,6 +378,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
                     {
                         if ((s.Starttime > StartTimewithdate && s.Starttime > EndTimewithdate) || (s.Endtime < StartTimewithdate && s.Endtime < EndTimewithdate))
                         {
+                            shownmsg = true;
                             IsValid = true;
                         }
                         else
@@ -445,7 +465,24 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         [Area("AdminArea")]
         public IActionResult CreateShiftPopUp(string format)
         {
-            return PartialView("_CreateShiftPopUp", new { format });
+            var jwtservice = HttpContext.RequestServices.GetService<IJwtRepository>();
+            var request = HttpContext.Request;
+            var token = request.Cookies["jwt"];
+            jwtservice.ValidateToken(token, out JwtSecurityToken jwttoken);
+            var roleClaim = jwttoken.Claims.FirstOrDefault(x => x.Type == "Role");
+            var role = "";
+            if (roleClaim != null)
+            {
+                role = roleClaim.Value;
+            }
+            if (_physician.GetSessionPhysicianId() != -1)
+            {
+                var phyid = _physician.GetSessionPhysicianId();
+                var phyname = _physician.GetFirstOrDefault(x => x.Physicianid == _physician.GetSessionPhysicianId()).Firstname + " " +
+                    _physician.GetFirstOrDefault(x => x.Physicianid == _physician.GetSessionPhysicianId()).Lastname;
+                return PartialView("_CreateShiftPopUp", new { format = format, role = role, phyid = phyid, phyname = phyname });
+            }
+            return PartialView("_CreateShiftPopUp", new { format = format, role = role });
         }
 
         //[Area("AdminArea")]
@@ -474,7 +511,28 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         public SchedulingDataViewModel DateWiseData(DateTime datetoshow, int region, int status, int next, int pagesize)
         {
             SchedulingDataViewModel schedulingDataViewModel = new SchedulingDataViewModel();
-            schedulingDataViewModel.Shifts = _scheduling.ShifsOfDateforMonth(datetoshow, region, status, next, pagesize);
+
+
+            var jwtservice = HttpContext.RequestServices.GetService<IJwtRepository>();
+            var request = HttpContext.Request;
+            var token = request.Cookies["jwt"];
+            jwtservice.ValidateToken(token, out JwtSecurityToken jwttoken);
+            var roleClaim = jwttoken.Claims.FirstOrDefault(x => x.Type == "Role");
+            var role = "";
+            if (roleClaim != null)
+            {
+                role = roleClaim.Value;
+            }
+            if (role == "Physician")
+            {
+                var physicianid = _physician.GetSessionPhysicianId();
+                var list = _scheduling.ShifsOfDateOfProvider(datetoshow, status, next, physicianid , pagesize);
+                schedulingDataViewModel.Shifts = list;
+            }
+            if(role == "Admin")
+            {
+                schedulingDataViewModel.Shifts = _scheduling.ShifsOfDateforMonth(datetoshow, region, status, next, pagesize);
+            }
             return schedulingDataViewModel;
         }
 
@@ -511,6 +569,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             schedulingDataViewModel.Shifts = shifts;
             schedulingDataViewModel.firstMonthdate = DateOnly.FromDateTime(firstDayOfMonth);
             schedulingDataViewModel.lastMonthdate = DateOnly.FromDateTime(lastDayOfMonth);
+            
             return PartialView("_Monthwisedata", schedulingDataViewModel);
         }
 
@@ -518,8 +577,28 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         [HttpPost]
         public List<ShiftData> GetNextShiftsOfDate(DateTime datetoshow, int region, int status, int next)
         {
-            var list = _scheduling.ShifsOfDate(datetoshow, region, status, next);
-            return list;
+            var jwtservice = HttpContext.RequestServices.GetService<IJwtRepository>();
+            var request = HttpContext.Request;
+            var token = request.Cookies["jwt"];
+            jwtservice.ValidateToken(token, out JwtSecurityToken jwttoken);
+            var roleClaim = jwttoken.Claims.FirstOrDefault(x => x.Type == "Role");
+            var role = "";
+            if (roleClaim != null)
+            {
+                role = roleClaim.Value;
+            }
+            if (role == "Physician")
+            {
+                var physicianid = _physician.GetSessionPhysicianId();
+                var list = _scheduling.ShifsOfDateOfProvider(datetoshow, status, next , physicianid , 3);
+                return list;
+            }
+            if (role == "Admin")
+            {
+                var list = _scheduling.ShifsOfDate(datetoshow, region, status, next);
+                return list;
+            }
+            return null;
         }
 
 
@@ -527,15 +606,27 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         [HttpPost]
         public IActionResult ViewShiftPopUp(int ShiftDetailId, string format)
         {
-            var shiftdetail = _db.Shiftdetails.Include(x => x.Shift).Include(x => x.Shiftdetailregions).FirstOrDefault(x => x.Shiftdetailid == ShiftDetailId);
+            var shiftdetail = _db.Shiftdetails.Include(x => x.Shift).Include(x=>x.Shift.Physician).Include(x => x.Shiftdetailregions).FirstOrDefault(x => x.Shiftdetailid == ShiftDetailId);
             ShiftData model = new ShiftData();
             model.ShiftId = ShiftDetailId;
             model.Physicianid = shiftdetail.Shift.Physicianid;
+            model.Physicianname = shiftdetail.Shift.Physician.Firstname + " " + shiftdetail.Shift.Physician.Lastname;
             model.Location = shiftdetail.Regionid.ToString();
             model.Shiftdate = shiftdetail.Shiftdate;
             model.StartTime = shiftdetail.Starttime;
             model.EndTime = shiftdetail.Endtime;
             model.format = format;
+            var jwtservice = HttpContext.RequestServices.GetService<IJwtRepository>();
+            var request = HttpContext.Request;
+            var token = request.Cookies["jwt"];
+            jwtservice.ValidateToken(token, out JwtSecurityToken jwttoken);
+            var roleClaim = jwttoken.Claims.FirstOrDefault(x => x.Type == "Role");
+            var role = "";
+            if (roleClaim != null)
+            {
+                role = roleClaim.Value;
+            }
+            model.loggedrole = role;
             return PartialView("_ViewShiftPopUp", model);
         }
 
@@ -736,17 +827,36 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         public int ShiftCountbyFilter(DateTime datetoshow, int region, string showby, int status)
         {
             SchedulingDataViewModel model = new SchedulingDataViewModel();
-            if (showby == "DayWiseData")
+            var jwtservice = HttpContext.RequestServices.GetService<IJwtRepository>();
+            var request = HttpContext.Request;
+            var token = request.Cookies["jwt"];
+            jwtservice.ValidateToken(token, out JwtSecurityToken jwttoken);
+            var roleClaim = jwttoken.Claims.FirstOrDefault(x => x.Type == "Role");
+            var role = "";
+            if (roleClaim != null)
             {
-                model.Shifts = _scheduling.ShifsOfDate(datetoshow, region, status, 0);
+                role = roleClaim.Value;
             }
-            else if (showby == "WeekWiseData")
+            if (role == "Physician")
             {
-                model.Shifts = _scheduling.ShifsOfWeek(datetoshow, region, status, 0);
+                var physicianid = _physician.GetSessionPhysicianId();
+                var list = _scheduling.ShifsOfDateOfProvider(datetoshow, status, 0, physicianid , 0);
+                return list.Count;
             }
-            else
+            if (role == "Admin")
             {
-                model.Shifts = _scheduling.ShifsOfMonth(datetoshow, region, status, 0);
+                if (showby == "DayWiseData")
+                {
+                    model.Shifts = _scheduling.ShifsOfDate(datetoshow, region, status, 0);
+                }
+                else if (showby == "WeekWiseData")
+                {
+                    model.Shifts = _scheduling.ShifsOfWeek(datetoshow, region, status, 0);
+                }
+                else
+                {
+                    model.Shifts = _scheduling.ShifsOfMonth(datetoshow, region, status, 0);
+                }
             }
             return model.Shifts.Count();
         }

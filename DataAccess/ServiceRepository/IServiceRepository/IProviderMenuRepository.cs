@@ -22,5 +22,6 @@ namespace DataAccess.ServiceRepository.IServiceRepository
         void AddCredential(int physicianid, IFormFile file);
         void DeleteThisAccount(int physicianid);
         int AddAccount(PhysicianAccountViewModel physicianAccountViewModel);
+        void EditProviderBuisnessname_web(int physicianid, string businessname, string businessweb);
     }
 }
