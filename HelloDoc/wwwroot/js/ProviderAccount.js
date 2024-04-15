@@ -56,6 +56,13 @@ $('#resetpassword').on('click', function () {
         }
     }
 });
+
+$('#passsaveandcancle').on('click', '#passcancel', function () {
+    $('#password').prop('disabled', true);
+    $('#resetpassword').text("Reset Password");
+    $(this).css('display', 'none');
+});
+
 $('#physicianEdit_Save').on('click', function () {
     console.log($('#physicianEdit_Save').text());
     if ($('#physicianEdit_Save').text() == "Edit") {
