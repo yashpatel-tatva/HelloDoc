@@ -29,7 +29,7 @@
         });
     }
     function handleTabTriggers() {
-        var target = localStorage.getItem('target');
+        var target = localStorage.getItem('target3');
         if (target == null) {
             if ($(window).width() < 760) {
                 $('.accordianmaintabs[data-bs-target="#nav-home"]').trigger('click');
@@ -49,7 +49,7 @@
         $('.maintabs').removeClass('active');
         $(this).addClass('active');
         var target = $(this).data('bs-target');
-        localStorage.setItem('target', target);
+        localStorage.setItem('target3', target);
         handleTabClick(target);
     });
 
@@ -58,7 +58,7 @@
         $('.accordianmaintabs').removeClass('active');
         $(this).addClass('active');
         var target = $(this).data('bs-target');
-        localStorage.setItem('target', target);
+        localStorage.setItem('target3', target);
         handleTabClick(target);
     });
 

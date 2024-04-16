@@ -1,7 +1,9 @@
 ﻿using DataAccess.Repository.IRepository;
 using DataAccess.ServiceRepository;
 using DataModels.AdminSideViewModels;
+using HelloDoc.Areas.PatientArea.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using System.Globalization;
 
 namespace HelloDoc.Areas.AdminArea.Controllers.DataController
 {
@@ -27,6 +29,29 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             model.State = _dbContext.Regions.ToList();
             return View(model);
         }
+
+        [Area("AdminArea")]
+        [HttpPost]
+        public IActionResult ThisAdminProfile(int adminid)
+        {
+            AdminProfileViewModel model = new AdminProfileViewModel();
+            model = _admin.GetAdminProfile(adminid);
+            model.State = _dbContext.Regions.ToList();
+            return PartialView("AdminProfile", model);
+        }
+
+        [Area("AdminArea")]
+        [HttpPost]
+        public IActionResult ThisUserProfile(int userid)
+        {
+            PatientDashboardViewModel patientDashboard = new PatientDashboardViewModel();
+            var user = _dbContext.Users.FirstOrDefault(m => m.Userid == userid);
+            patientDashboard.User = user;
+            DateTime date = new DateTime(Convert.ToInt32(user.Intyear), DateTime.ParseExact(user.Strmonth, "MMMM", CultureInfo.InvariantCulture).Month, Convert.ToInt32(user.Intdate));
+            patientDashboard.birthdate = date;
+            return PartialView("../../../PatientArea/Views/Dashboard/UserProfile" ,patientDashboard);
+        }
+
         [Area("AdminArea")]
         [HttpPost]
         public void ResetPassword(string aspnetid, string password)
@@ -39,14 +64,14 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         public IActionResult AdminInfoEdit(AdminProfileViewModel viewModel)
         {
             viewModel.SelectRegion = Request.Form["admineditregion"].ToList();
-            _admin.Edit(_admin.GetSessionAdminId(), viewModel);
+            _admin.Edit(viewModel.Adminid, viewModel);
             return RedirectToAction("AdminTabsLayout", "Home");
         }
         [Area("AdminArea")]
         [HttpPost]
         public IActionResult AdminBillingInfoEdit(AdminProfileViewModel viewModel)
         {
-            _admin.EditBillingDetails(_admin.GetSessionAdminId(), viewModel);
+            _admin.EditBillingDetails(viewModel.Adminid, viewModel);
             return RedirectToAction("AdminTabsLayout", "Home");
         }
         [Area("AdminArea")]
@@ -73,7 +98,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         {
             var admin = _admin.GetFirstOrDefault(x => x.Aspnetuserid == id);
             var adminid = 0;
-            if(admin != null)
+            if (admin != null)
             {
                 adminid = admin.Adminid;
             }

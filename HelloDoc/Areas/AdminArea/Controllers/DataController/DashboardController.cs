@@ -111,6 +111,13 @@ namespace HelloDoc.Areas.AdminArea.DataController
             var physician = _db.Physicians.Where(x => x.Physicianid != request.Physicianid).ToList();
             return physician;
         }
+        
+        [Area("AdminArea")]
+        [AuthorizationRepository("Admin")]
+        public List<Aspnetrole> GetRoles()
+        {
+           return _db.Aspnetroles.ToList();
+        }
 
         [Area("AdminArea")]
         [AuthorizationRepository("Admin")]
@@ -671,6 +678,15 @@ namespace HelloDoc.Areas.AdminArea.DataController
         [Area("AdminArea")]
         [AuthorizationRepository("Admin,Physician")]
         [HttpPost]
+        public IActionResult UploadFilesfromConclude(List<IFormFile> files, int RequestsId)
+        {
+            _requestwisefile.Add(RequestsId, files);
+            return RedirectToAction("ConcludeCare", "Dashboard", new { area = "ProviderArea", id = RequestsId });
+        }
+        
+        [Area("AdminArea")]
+        [AuthorizationRepository("Admin,Physician")]
+        [HttpPost]
         public IActionResult UploadFiles(List<IFormFile> files, int RequestsId)
         {
             _requestwisefile.Add(RequestsId, files);
@@ -828,7 +844,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
                 model.role = role;
                 return View(model);
             }
-            else if (request.Status == 6 && encounter.IsFinalized != fortrue)
+            else if ((request.Status == 6 || request.Status == 7 || request.Status == 8 || request.Status == 3) && encounter.IsFinalized != fortrue)
             {
                 return PartialView("_DownLoadEncounter", new { requestid = request.Requestid, role = role });
             }
@@ -892,7 +908,14 @@ namespace HelloDoc.Areas.AdminArea.DataController
             {
                 _db.Encounters.Update(encounter);
                 encounter.Modifieddate = DateTime.Now;
-                encounter.Modifiedby = _physician.GetFirstOrDefault(x => x.Physicianid == _physician.GetSessionPhysicianId()).Aspnetuserid;
+                if (_physician.GetSessionPhysicianId() != -1)
+                {
+                    encounter.Modifiedby = _physician.GetFirstOrDefault(x => x.Physicianid == _physician.GetSessionPhysicianId()).Aspnetuserid;
+                }
+                if(_admin.GetSessionAdminId() != -1)
+                {
+                    encounter.Modifiedby = _admin.GetFirstOrDefault(x=>x.Adminid == _admin.GetSessionAdminId()).Aspnetuserid;   
+                }
             }
             _db.SaveChanges();
             var jwtservice = HttpContext.RequestServices.GetService<IJwtRepository>();
@@ -928,7 +951,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
                 Requeststatuslog requeststatuslog = new Requeststatuslog();
                 requeststatuslog.Status = requestdetail.Status;
                 requeststatuslog.Requestid = requestdetail.Requestid;
-                requeststatuslog.Notes = "Provider chose for consultunt";
+                requeststatuslog.Notes = "Provider choose for consultunt";
                 requeststatuslog.Createddate = DateTime.Now;
                 requeststatuslog.Physicianid = _physician.GetSessionPhysicianId();
                 _db.Requeststatuslogs.Add(requeststatuslog);
@@ -977,7 +1000,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
             Requeststatuslog requeststatuslog = new Requeststatuslog();
             requeststatuslog.Status = request.Status;
             requeststatuslog.Requestid = request.Requestid;
-            requeststatuslog.Notes = "Provider chose for consultunt";
+            requeststatuslog.Notes = "Provider choose for housecall";
             requeststatuslog.Createddate = DateTime.Now;
             requeststatuslog.Physicianid = _physician.GetSessionPhysicianId();
             _db.Requeststatuslogs.Add(requeststatuslog);
@@ -1008,6 +1031,9 @@ namespace HelloDoc.Areas.AdminArea.DataController
             return RedirectToAction("Dashboard", "Dashboard", new { area = "ProviderArea" });
         }
 
+        [Area("AdminArea")]
+        [AuthorizationRepository("Admin")]
+        [HttpPost]
         public IActionResult EditEncounterAsAdmin(int id)
         {
             var request = _requests.GetById(id);
@@ -1094,38 +1120,76 @@ namespace HelloDoc.Areas.AdminArea.DataController
                 var writer = PdfWriter.GetInstance(pdf, memoryStream);
                 pdf.Open();
 
-                // Add content to the PDF here. For example:
-                pdf.Add(new Paragraph($"First Name: {model.Firstname}"));
-                pdf.Add(new Paragraph($"Last Name: {model.Lastname}"));
-                pdf.Add(new Paragraph($"DOB: {model.DOB}"));
-                pdf.Add(new Paragraph($"Mobile: {model.Mobile}"));
-                pdf.Add(new Paragraph($"Email: {model.Email}"));
-                pdf.Add(new Paragraph($"Location: {model.Location}"));
-                pdf.Add(new Paragraph($"History Of Illness: {model.HistoryOfIllness}"));
-                pdf.Add(new Paragraph($"Medical History: {model.MedicalHistory}"));
-                pdf.Add(new Paragraph($"Medication: {model.Medication}"));
-                pdf.Add(new Paragraph($"Allergies: {model.Allergies}"));
-                pdf.Add(new Paragraph($"Temp: {model.Temp}"));
-                pdf.Add(new Paragraph($"HR: {model.HR}"));
-                pdf.Add(new Paragraph($"RR: {model.RR}"));
-                pdf.Add(new Paragraph($"BPs: {model.BPs}"));
-                pdf.Add(new Paragraph($"BPd: {model.BPd}"));
-                pdf.Add(new Paragraph($"O2: {model.O2}"));
-                pdf.Add(new Paragraph($"Pain: {model.Pain}"));
-                pdf.Add(new Paragraph($"Heent: {model.Heent}"));
-                pdf.Add(new Paragraph($"CV: {model.CV}"));
-                pdf.Add(new Paragraph($"Chest: {model.Chest}"));
-                pdf.Add(new Paragraph($"ABD: {model.ABD}"));
-                pdf.Add(new Paragraph($"Extr: {model.Extr}"));
-                pdf.Add(new Paragraph($"Skin: {model.Skin}"));
-                pdf.Add(new Paragraph($"Neuro: {model.Neuro}"));
-                pdf.Add(new Paragraph($"Other: {model.Other}"));
-                pdf.Add(new Paragraph($"Diagnosis: {model.Diagnosis}"));
-                pdf.Add(new Paragraph($"Treatment Plan: {model.TreatmentPlan}"));
-                pdf.Add(new Paragraph($"Medications Dispended: {model.MedicationsDispended}"));
-                pdf.Add(new Paragraph($"Procedure: {model.Procedure}"));
-                pdf.Add(new Paragraph($"Followup: {model.Followup}"));
-                pdf.Add(new Paragraph($"Is Finaled: {model.isFinaled}"));
+                // Create a table with two columns
+                PdfPTable table = new PdfPTable(2);
+
+
+                // Add cells to the table here:
+                table.AddCell(CreateCell("First Name"));
+                table.AddCell(CreateCell(model.Firstname ?? "N/A"));
+                table.AddCell(CreateCell("Last Name"));
+                table.AddCell(CreateCell(model.Lastname ?? "N/A"));
+                table.AddCell(CreateCell("DOB"));
+                table.AddCell(CreateCell(model.DOB?.ToString() ?? "N/A"));
+                table.AddCell(CreateCell("Mobile"));
+                table.AddCell(CreateCell(model.Mobile ?? "N/A"));
+                table.AddCell(CreateCell("Email"));
+                table.AddCell(CreateCell(model.Email ?? "N/A"));
+                table.AddCell(CreateCell("Location"));
+                table.AddCell(CreateCell(model.Location ?? "N/A"));
+                table.AddCell(CreateCell("History Of Illness"));
+                table.AddCell(CreateCell(model.HistoryOfIllness ?? "N/A"));
+                table.AddCell(CreateCell("Medical History"));
+                table.AddCell(CreateCell(model.MedicalHistory ?? "N/A"));
+                table.AddCell(CreateCell("Medication"));
+                table.AddCell(CreateCell(model.Medication ?? "N/A"));
+                table.AddCell(CreateCell("Allergies"));
+                table.AddCell(CreateCell(model.Allergies ?? "N/A"));
+                table.AddCell(CreateCell("Temp"));
+                table.AddCell(CreateCell(model.Temp?.ToString() ?? "N/A"));
+                table.AddCell(CreateCell("HR"));
+                table.AddCell(CreateCell(model.HR?.ToString() ?? "N/A"));
+                table.AddCell(CreateCell("RR"));
+                table.AddCell(CreateCell(model.RR?.ToString() ?? "N/A"));
+                table.AddCell(CreateCell("Blood pressure(Systolic)"));
+                table.AddCell(CreateCell(model.BPs?.ToString() ?? "N/A"));
+                table.AddCell(CreateCell("Blood pressure(Diastolic)"));
+                table.AddCell(CreateCell(model.BPd?.ToString() ?? "N/A"));
+                table.AddCell(CreateCell("O2"));
+                table.AddCell(CreateCell(model.O2?.ToString() ?? "N/A"));
+                table.AddCell(CreateCell("Pain"));
+                table.AddCell(CreateCell(model.Pain?.ToString() ?? "N/A"));
+                table.AddCell(CreateCell("Heent"));
+                table.AddCell(CreateCell(model.Heent ?? "N/A"));
+                table.AddCell(CreateCell("CV"));
+                table.AddCell(CreateCell(model.CV ?? "N/A"));
+                table.AddCell(CreateCell("Chest"));
+                table.AddCell(CreateCell(model.Chest ?? "N/A"));
+                table.AddCell(CreateCell("ABD"));
+                table.AddCell(CreateCell(model.ABD ?? "N/A"));
+                table.AddCell(CreateCell("Extr"));
+                table.AddCell(CreateCell(model.Extr ?? "N/A"));
+                table.AddCell(CreateCell("Skin"));
+                table.AddCell(CreateCell(model.Skin ?? "N/A"));
+                table.AddCell(CreateCell("Neuro"));
+                table.AddCell(CreateCell(model.Neuro ?? "N/A"));
+                table.AddCell(CreateCell("Other"));
+                table.AddCell(CreateCell(model.Other ?? "N/A"));
+                table.AddCell(CreateCell("Diagnosis"));
+                table.AddCell(CreateCell(model.Diagnosis ?? "N/A"));
+                table.AddCell(CreateCell("Treatment Plan"));
+                table.AddCell(CreateCell(model.TreatmentPlan ?? "N/A"));
+                table.AddCell(CreateCell("Medications Dispended"));
+                table.AddCell(CreateCell(model.MedicationsDispended ?? "N/A"));
+                table.AddCell(CreateCell("Procedure"));
+                table.AddCell(CreateCell(model.Procedure ?? "N/A"));
+                table.AddCell(CreateCell("Followup"));
+                table.AddCell(CreateCell(model.Followup ?? "N/A"));
+                table.AddCell(CreateCell("Is Finaled"));
+                table.AddCell(CreateCell(model.isFinaled.ToString() ?? "N/A"));
+
+                // Add the table to the PDF
+                pdf.Add(table);
 
                 pdf.Close();
                 writer.Close();
@@ -1135,6 +1199,12 @@ namespace HelloDoc.Areas.AdminArea.DataController
                 result.FileDownloadName = "Encounter_" + model.RequestId + ".pdf";
                 return result;
             }
+        }
+        private PdfPCell CreateCell(string content)
+        {
+            PdfPCell cell = new PdfPCell(new Phrase(content));
+            cell.Padding = 5;
+            return cell;
         }
         [Area("AdminArea")]
         [AuthorizationRepository("Admin")]
@@ -1167,9 +1237,9 @@ namespace HelloDoc.Areas.AdminArea.DataController
             {
                 OffDutyIds.Remove(id);
             }
-            foreach(var id in OffDutyIds)
+            foreach (var id in OffDutyIds)
             {
-                var physicianemail = _physician.GetFirstOrDefault(x=>x.Physicianid == id).Email;
+                var physicianemail = _physician.GetFirstOrDefault(x => x.Physicianid == id).Email;
                 _sendemail.Sendemail(physicianemail, "There is an urgent need to address the shortage of physicians.", message);
             }
         }

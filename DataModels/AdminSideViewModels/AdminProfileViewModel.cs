@@ -7,6 +7,7 @@ namespace DataModels.AdminSideViewModels
     public class AdminProfileViewModel
     {
         public string Aspnetid { get; set; }
+        public int Adminid { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
         public string Status { get; set; }

@@ -74,27 +74,53 @@ namespace HelloDoc.Areas.AdminArea.Controllers
         [HttpPost]
         public IActionResult AdminResetPassword(Aspnetuser aspnetuser)
         {
-            string password = Path.GetRandomFileName();
-            password = password.Replace(".", "");
-            password = password.Substring(0, 8);
-            var asp = _userRepository.GetFirstOrDefault(x => x.Email == aspnetuser.Email);
-            if (asp == null)
-            {
-                TempData["Message"] = "Your Email Does not exist";
-                return RedirectToAction("AdminForgetPassword");
-            }
-            var role = _db.Aspnetuserroles.FirstOrDefault(x => x.Userid == asp.Id).Roleid;
-            if (role != "1")
-            {
-                TempData["Message"] = "You are not Admin";
-                return RedirectToAction("AdminForgetPassword");
-            }
-            asp.Passwordhash = password;
-            _userRepository.Update(asp);
-            _userRepository.Save();
-            _sendEmail.Sendemail(aspnetuser.Email, "Your OTP", "You can Login With this Password = " + password + "\n" + "You can Reset password from your profile");
-            TempData["Message"] = "OTP has been sent. You can Login through it." + "\n" + "You can Reset password from your profile";
+            //string password = Path.GetRandomFileName();
+            //password = password.Replace(".", "");
+            //password = password.Substring(0, 8);
+            //var asp = _userRepository.GetFirstOrDefault(x => x.Email == aspnetuser.Email);
+            //if (asp == null)
+            //{
+            //    TempData["Message"] = "Your Email Does not exist";
+            //    return RedirectToAction("AdminForgetPassword");
+            //}
+            //var role = _db.Aspnetuserroles.FirstOrDefault(x => x.Userid == asp.Id).Roleid;
+            //if (role != "1")
+            //{
+            //    TempData["Message"] = "You are not Admin";
+            //    return RedirectToAction("AdminForgetPassword");
+            //}
+            //asp.Passwordhash = password;
+            //_userRepository.Update(asp);
+            //_userRepository.Save();
+            //_sendEmail.Sendemail(aspnetuser.Email, "Your OTP", "You can Login With this Password = " + password + "\n" + "You can Reset password from your profile");
+            //TempData["Message"] = "OTP has been sent. You can Login through it." + "\n" + "You can Reset password from your profile";
+
+            string Id = (_db.Aspnetusers.FirstOrDefault(x => x.Email == aspnetuser.Email)).Id;
+            string baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}";
+            string resetPasswordPath = Url.Action("ResetPassword", "Home", new { id = Id });
+            string resetPasswordUrl = baseUrl + resetPasswordPath;
+            _sendEmail.Sendemail(aspnetuser.Email, "Reset Password Link", resetPasswordUrl);
+            TempData["Message"] = "Reset Link Sent" + "\n" + "You can Reset password from that page";
             return RedirectToAction("AdminLogin", new { email = aspnetuser.Email });
+        }
+
+        [Area("AdminArea")]
+        public IActionResult ResetPassword(string id)
+        {
+            var aspuser = _db.Aspnetusers.FirstOrDefault(x => x.Id == id);
+
+            return View(aspuser);
+        }
+
+        [Area("AdminArea")]
+        [HttpPost]
+        public IActionResult ResetPasswordOfthis(Aspnetuser aspnetuser)
+        {
+            var aspuser = _db.Aspnetusers.FirstOrDefault(x => x.Email == aspnetuser.Email);
+            aspuser.Passwordhash = aspnetuser.Passwordhash;
+            _db.Aspnetusers.Update(aspuser);
+            _db.SaveChanges();
+            return RedirectToAction("AdminLogin");
         }
 
         [Area("AdminArea")]

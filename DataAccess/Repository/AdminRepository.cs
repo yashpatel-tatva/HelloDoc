@@ -50,6 +50,7 @@ namespace DataAccess.Repository
         {
             var admin = _db.Admins.Include(r => r.Aspnetuser).Include(x => x.Adminregions).FirstOrDefault(x => x.Adminid == id);
             AdminProfileViewModel model = new AdminProfileViewModel();
+            model.Adminid = admin.Adminid;
             model.Username = admin.Aspnetuser.Username;
             model.Password = admin.Aspnetuser.Passwordhash;
             if (admin.Status == 0)

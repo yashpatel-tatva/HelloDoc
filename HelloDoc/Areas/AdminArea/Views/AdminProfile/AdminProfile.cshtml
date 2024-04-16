@@ -29,6 +29,7 @@
                         <div class="form-group d-flex align-items-center rounded">
                             <input type="text" class="form-control" placeholder="" asp-for="Password" id="password" disabled><span>Password</span>
                             <input type="text" class="form-control" placeholder="" value="@Model.Aspnetid" id="aspnetid" hidden>
+                            
                         </div>
                         <span class="text-danger" asp-validation-for="Password" class="text-danger"></span>
                     </div>
@@ -55,6 +56,7 @@
 
                 <div class="h5 fw-bold">Administrator Information</div>
                 <form asp-action="AdminInfoEdit" asp-controller="AdminProfile" method="post">
+                    <input type="text" class="form-control" placeholder="" asp-for="Adminid" value="@Model.Adminid" id="adminid" hidden>
                     <div class="row d-flex">
                         <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                             <div class="form-group d-flex align-items-center rounded">
@@ -116,6 +118,7 @@
                 </form>
                 <div class="h5 fw-bold">Mailing & Billing Information</div>
                 <form asp-action="AdminBillingInfoEdit" asp-controller="AdminProfile" method="post">
+                    <input type="text" class="form-control" placeholder="" asp-for="Adminid" value="@Model.Adminid" id="adminid" hidden>
                     <div class="row d-flex">
                         <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                             <div class="form-group d-flex align-items-center rounded">

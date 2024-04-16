@@ -1,4 +1,5 @@
-﻿using HelloDoc.Areas.PatientArea.ViewModels;
+﻿using DataAccess.Repository.IRepository;
+using HelloDoc.Areas.PatientArea.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
@@ -11,9 +12,11 @@ namespace HelloDoc.Areas.PatientArea.DataController
     {
 
         public readonly HelloDocDbContext _context;
-        public DashboardController(HelloDocDbContext context)
+        private readonly IAdminRepository _admin;
+        public DashboardController(HelloDocDbContext context , IAdminRepository adminRepository)
         {
             _context = context;
+            _admin = adminRepository;
         }
         [Area("PatientArea")]
         public void AddPatientRequestWiseFile(List<IFormFile> formFile, int requestid)
@@ -62,14 +65,14 @@ namespace HelloDoc.Areas.PatientArea.DataController
                 int id = (int)HttpContext.Session.GetInt32("UserId");
                 PatientDashboardViewModel patientDashboard = new PatientDashboardViewModel();
                 var user = await _context.Users.FirstOrDefaultAsync(m => m.Userid == id);
+                patientDashboard.User = user;
+                DateTime date = new DateTime(Convert.ToInt32(user.Intyear), DateTime.ParseExact(user.Strmonth, "MMMM", CultureInfo.InvariantCulture).Month, Convert.ToInt32(user.Intdate));
+                patientDashboard.birthdate = date;
+
                 var request = from m in _context.Requests
                               where m.Userid == id
                               select m;
-                patientDashboard.User = user;
                 patientDashboard.Requests = request.ToList();
-
-                DateTime date = new DateTime(Convert.ToInt32(user.Intyear), DateTime.ParseExact(user.Strmonth, "MMMM", CultureInfo.InvariantCulture).Month, Convert.ToInt32(user.Intdate));
-                patientDashboard.birthdate = date;
                 List<Requestwisefile> files;
                 if (patientDashboardviewmodel.RequestsId == 0)
                 {
@@ -95,7 +98,7 @@ namespace HelloDoc.Areas.PatientArea.DataController
 
         public async Task<IActionResult> Edit(PatientDashboardViewModel model)
         {
-            int id = (int)HttpContext.Session.GetInt32("UserId");
+            int id = model.User.Userid;
             var user = await _context.Users.FirstOrDefaultAsync(m => m.Userid == id);
 
             user.Firstname = model.User.Firstname;
@@ -109,12 +112,18 @@ namespace HelloDoc.Areas.PatientArea.DataController
             user.Strmonth = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(model.birthdate.Month);
             user.Intdate = model.birthdate.Day;
             user.Intyear = model.birthdate.Year;
-            user.Modifiedby = model.User.Email;
-            user.Modifieddate = DateTime.Now;
             HttpContext.Session.SetString("UserName", user.Firstname + " " + user.Lastname);
 
             _context.Users.Update(user);
             _context.SaveChanges();
+            if(_admin.GetSessionAdminId() != -1)
+            {
+                user.Modifiedby = _admin.GetFirstOrDefault(x=>x.Adminid == _admin.GetSessionAdminId()).Aspnetuserid;
+                user.Modifieddate = DateTime.Now;
+                return RedirectToAction("AdminTabsLayout" , "Home" , new { area = "AdminArea"});
+            }
+            user.Modifiedby = model.User.Aspnetuserid;
+            user.Modifieddate = DateTime.Now;
             return RedirectToAction("Dashboard", "Dashboard");
         }
         [Area("PatientArea")]

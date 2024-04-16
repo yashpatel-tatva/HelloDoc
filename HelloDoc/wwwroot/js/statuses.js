@@ -67,7 +67,6 @@ $('.gotopopup').click(function (e) {
         type: 'GET',
         data: { id: id },
         success: function (result) {
-            debugger
             $('#PopUps').html(result);
             var my = new bootstrap.Modal(document.getElementById('ModalToOpen'));
             my.show();
@@ -89,7 +88,6 @@ $('.gotoproviderpopupmodel').click(function (e) {
         type: 'POST',
         data: { id: id },
         success: function (result) {
-            debugger
             $('#PopUps').html(result);
             var my = new bootstrap.Modal(document.getElementById('ModalToOpen'));
             my.show();
@@ -183,7 +181,7 @@ $('.gotoproviderpopup').on('click', function () {
 })
 
 
-$('#housecallbtn').on('click', function () {
+$('.housecallbtn').on('click', function () {
     var id = $(this).closest('form').data('id');
     $.ajax({
         url: '/AdminArea/Dashboard/OnHouseOpenEncounter',

@@ -1,0 +1,84 @@
+﻿@{
+    Layout = null;
+}
+@using DataModels.AdminSideViewModels
+@model List<UserAccessViewModel>
+
+
+
+<table class="table table-hover  rounded">
+    <thead class="thead-dark bg-body-secondary viewuploadtablehead">
+        <tr style="--bs-table-bg: #ebebeb; color : black">
+            <th style="width : 20% " class="text-dark">Account Type</th>
+            <th style="width : 20%" class="text-dark">Account POC</th>
+            <th style="width : 20%" class="text-dark">Phone</th>
+            <th style="width : 10%" class="text-dark">Staus</th>
+            <th style="width : 20%" class="text-dark">Open Request</th>
+            <th style="width : 10%" class="text-dark">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                @if (item.Accounttype == "1")
+                {
+                    <td>Admin</td>
+                }@if (item.Accounttype == "2")
+                {
+                    <td>Physician</td>
+                }@if (item.Accounttype == "3")
+                {
+                    <td>Patient</td>
+                }
+                <td>@item.UserName</td>
+                <td>@item.Phone</td>
+                <td>@item.Status</td>
+                <td>@item.Openrequest</td>
+                <td>
+                    <button type="button" class="btn border-info text-info shadow-none editthis" data-name="@item.Accounttype" data-id="@item.UserId">
+                        <span>Edit</span>
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<script>
+    $('.editthis').on('click', function () {
+        var role = $(this).data('name');
+        var id = $(this).data('id');
+        if (role == "2") {
+            $.ajax({
+                url: '/AdminArea/AdminProviderTab/EditProviderPage',
+                type: 'POST',
+                data: { physicianid:  id },
+                success: function (result) {
+                    $('#nav-tabContent').html(result);
+                }
+            });
+        }
+        if(role == "1"){
+            $.ajax({
+                url: '/AdminArea/AdminProfile/ThisAdminProfile',
+                type: 'POST',
+                data: { adminid: id },
+                success: function (result) {
+                    $('#nav-tabContent').html(result);
+                }
+            });
+        }
+        if(role == "3"){
+            $.ajax({
+                url: '/AdminArea/AdminProfile/ThisUserProfile',
+                type: 'POST',
+                data: { userid : id },
+                success: function (result) {
+                    $('#nav-tabContent').html(result);
+                }
+            });
+        }
+    })
+</script>

@@ -435,7 +435,8 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             return blockhistory.Count();
         }
 
-
+        [Area("AdminArea")]
+        [HttpPost]
         public void UnblockCase(int id)
         {
             _blockCase.UnblockThis(id);

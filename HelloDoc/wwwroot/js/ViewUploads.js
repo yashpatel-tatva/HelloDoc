@@ -31,7 +31,7 @@ $('input[type="tel"]').each(function () {
             fullNumber = fullNumber.replace("+" + countryCode + "+", "+");
         }
         console.log(fullNumber);
-        $(this).val(fullNumber);
+        $(this).val(fullNumber.replace(" ",""));
     });
 });
 $('.deleteall').on('click', function () {

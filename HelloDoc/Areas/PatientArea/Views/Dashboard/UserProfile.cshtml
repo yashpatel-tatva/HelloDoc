@@ -1,10 +1,13 @@
-﻿@model HelloDoc.Areas.PatientArea.ViewModels.PatientDashboardViewModel;
-<div class="container-fluid pb-5 mb-5">
+﻿@{
+    Layout = null;
+}
+@model HelloDoc.Areas.PatientArea.ViewModels.PatientDashboardViewModel;
+<div class="container pb-5 mb-5">
     <div class="px-4">
         <div class="d-flex justify-content-between align-items-center py-3">
             <div class="h3 mb-0 fw-bold">User Profile</div>
             <div>
-                <a asp-controller="Dashboard" asp-action="Dashboard">
+                <a onclick="location.reload()">
                     <button class="d-flex babtn rounded align-item-center p-1 px-2">
                         <div><img src="~/res/back.png" width="15px" height="10px"></div>
                         <div><span>Back</span></div>
@@ -13,21 +16,22 @@
             </div>
         </div>
         <div class="bg-light rounded p-3 shadow" id="content1">
-            <form asp-action="Edit" asp-controller="Dashboard">
+            <form asp-action="Edit" asp-controller="Dashboard" asp-area="PatientArea">
+                <input type="hidden" asp-for="User.Userid" value="@Model.User.Userid" />
                 <div>
                     <div class="h5 fw-bold">Patient Information</div>
                     <div class="row d-flex">
                         <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                             <div class="form-group d-flex align-items-center rounded">
-                                <input type="text" class="form-control" placeholder="" asp-for="User.Firstname"  disabled><span>First Name</span>
+                                <input type="text" class="form-control" placeholder="" id="firstname" asp-for="User.Firstname" disabled><span>First Name</span>
                             </div>
-                            <span asp-validation-for="User.Firstname" class="text-danger"></span>
+                            <span asp-validation-for="User.Firstname" class="text-danger spanofvalid" id="firstnamespan"></span>
                         </div>
                         <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                             <div class="form-group d-flex align-items-center rounded">
-                                <input type="text" class="form-control" placeholder="" asp-for="User.Lastname"  disabled><span>Last Name</span>
+                                <input type="text" class="form-control" placeholder="" id="lastname" asp-for="User.Lastname" disabled><span>Last Name</span>
                             </div>
-                            <span asp-validation-for="User.Lastname" class="text-danger"></span>
+                            <span asp-validation-for="User.Lastname" class="text-danger spanofvalid" id="lastnamespan"></span>
 
                         </div>
                         <div class="py-2 col-xl-6 col-md-6 col-sm-12">
@@ -37,7 +41,7 @@
                                 }
                                 <input type="date" class="form-control" placeholder="" asp-for="birthdate" max=@today min="1940-01-01" value="@Model.birthdate.ToString("yyyy-MM-dd")" disabled><span>Date of Birth</span>
                             </div>
-                            <span asp-validation-for="birthdate" class="text-danger"></span>
+                            <span asp-validation-for="birthdate" class="text-danger spanofvalid"></span>
 
                         </div>
                     </div>
@@ -48,16 +52,16 @@
                         <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                             <div class="telephone rounded">
                                 <div class="input-group d-flex align-items-center rounded ">
-                                    <input type="tel"  id="tel" class="form-control" asp-for="User.Mobile" disabled>
+                                    <input type="tel" class="form-control" id="mobile" asp-for="User.Mobile" disabled>
                                 </div>
                             </div>
-                                <span asp-validation-for="User.Mobile" class="text-danger"></span>
+                            <span asp-validation-for="User.Mobile" class="text-danger spanofvalid" id="mobilespan"></span>
                         </div>
                         <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                             <div class="form-group d-flex align-items-center rounded">
-                                <input type="email" class="form-control" placeholder="" asp-for="User.Email"  id="patientEmail" disabled> <span>Email</span>
+                                <input type="email" class="form-control" placeholder="" id="email" asp-for="User.Email" id="patientEmail" disabled> <span>Email</span>
                             </div>
-                            <span asp-validation-for="User.Email" class="text-danger"></span>
+                            <span asp-validation-for="User.Email" class="text-danger spanofvalid" id="emailspan"></span>
 
                         </div>
                     </div>
@@ -67,49 +71,44 @@
                     <div class="row d-flex">
                         <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                             <div class="form-group d-flex align-items-center rounded">
-                                <input type="text" class="form-control" placeholder="" asp-for="User.Street"  disabled><span>Street</span>
+                                <input type="text" class="form-control" placeholder="" id="street" asp-for="User.Street" disabled><span>Street</span>
                             </div>
-                            <span asp-validation-for="User.Street" class="text-danger"></span>
+                            <span asp-validation-for="User.Street" class="text-danger spanofvalid" id="streetspan"></span>
 
                         </div>
                         <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                             <div class="form-group d-flex align-items-center rounded">
-                                <input type="text" class="form-control" placeholder="" asp-for="User.City"  disabled><span>City</span>
+                                <input type="text" class="form-control" placeholder="" id="city" asp-for="User.City" disabled><span>City</span>
                             </div>
-                            <span asp-validation-for="User.City" class="text-danger"></span>
+                            <span asp-validation-for="User.City" class="text-danger spanofvalid" id="cityspan"></span>
 
                         </div>
                         <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                             <div class="form-group d-flex align-items-center rounded">
-                                <input type="text" class="form-control" placeholder="" asp-for="User.State"  disabled><span>State</span>
+                                <input type="text" class="form-control" placeholder="" id="state" asp-for="User.State" disabled><span>State</span>
                             </div>
-                            <span asp-validation-for="User.State" class="text-danger"></span>
+                            <span asp-validation-for="User.State" class="text-danger spanofvalid" id="statespan"></span>
 
                         </div>
                         <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                             <div class="form-group d-flex align-items-center rounded">
-                                <input type="text" class="form-control" placeholder="" asp-for="User.Zip"  disabled><span>Zip Code</span>
+                                <input type="text" class="form-control" placeholder="" id="zip" asp-for="User.Zip" disabled><span>Zip Code</span>
                             </div>
-                            <span asp-validation-for="User.Zip" class="text-danger"></span>
+                            <span asp-validation-for="User.Zip" class="text-danger spanofvalid" id="zipspan"></span>
 
                         </div>
                     </div>
                 </div>
-                <div class="">
-                    <div class="row d-flex justify-content-end">
-                        <div class="py-2 col-xl-1 col-md-2 col-4 align-items-center">
-                            <div class="form-group d-flex justify-content-end   border-0">
-                                <a id="editButton" class="p-2 btn btn-info  rounded w-80 text-decoration-none " >
-                                    <h5 class="text-white px-2 mb-0">Edit</h5>
-                                </a>
+                <div class="form-group d-flex gap-2 justify-content-end   border-0">
+                    <a id="editButton" class="p-2 btn btn-info  rounded w-80 text-decoration-none ">
+                        <h5 class="text-white px-2 mb-0">Edit</h5>
+                    </a>
 
-                                <button id="saveButton" class="p-2 btn btn-info  rounded w-80" type="submit" hidden>
-                                    <h5 class="text-white px-2 mb-0">Save</h5>
-                                </button>
-                            </div>
-                        </div>
-
-                    </div>
+                    <button id="saveButton" class="p-2 btn btn-info  rounded w-80" type="button">
+                        <h5 class="text-white px-2 mb-0">Save</h5>
+                    </button><button id="resetButton" class="p-2 btn border-info bg-transperent rounded w-80" type="reset">
+                        <h5 class="text-info px-2 mb-0">Cancel</h5>
+                    </button>
                 </div>
             </form>
         </div>
@@ -120,20 +119,115 @@
 
 <script>
     $(document).ready(function () {
+        $('#saveButton').hide();
+        $('#resetButton').hide();
         $('#editButton').click(function () {
-            // Remove disabled attribute to make inputs editable
-            // $('#name').prop('disabled', false);
-            // $('#age').prop('disabled', false);
             $('input[type="text"]').removeAttr('disabled', false);
             $('input[type="date"]').removeAttr('disabled', false);
             $('input[type="tel"]').removeAttr('disabled', false);
             $('input[type="email"]').removeAttr('disabled', false);
-            // Hide the edit button after clicking it
             $(this).hide();
-            $('#saveButton').removeAttr('hidden', false);
+            $('#saveButton').show();
+            $('#resetButton').show();
+        });
+        $('#resetButton').click(function () {
+            $('input[type="text"]').prop('disabled', true);
+            $('input[type="date"]').prop('disabled', true);
+            $('input[type="tel"]').prop('disabled', true);
+            $('input[type="email"]').prop('disabled', true);
+            $('#editButton').show();
+            $('#saveButton').hide();
+            $(this).hide();
+        })
+
+        $('#saveButton').click(function () {
+
+
+            var nameRegex = /^[a-zA-Z]+(\s[a-zA-Z]+)*$/;
+            var zipcodeRegex = /^\d{6}(?:[-\s]\d{4})?$/;
+            var phoneRegex = /^\+\d*$/;
+
+
+            var firstname = $('#firstname').val();
+            var lastname = $('#lastname').val();
+
+            var mobile = $('#mobile').val();
+            var email = $('#email').val();
+            var street = $('#street').val();
+            var city = $('#city').val();
+            var state = $('#state').val();
+            var zip = $('#zip').val();
+            var bool = true;
+
+            console.log(mobile)
+
+            if (!nameRegex.test(firstname)) {
+                $('#firstnamespan').text('Firstname is Invalid')
+                bool = false;
+            }
+            if (!nameRegex.test(lastname)) {
+                $('#lastnamespan').text('Lastname is Invalid')
+                bool = false;
+            }
+            if (!phoneRegex.test(mobile)) {
+                $('#mobilespan').text('Mobile is Invalid')
+                bool = false;
+            }
+            if (!nameRegex.test(street)) {
+                $('#streetspan').text('Invalid Text')
+                bool = false;
+            }
+            if (!nameRegex.test(city)) {
+                $('#cityspan').text('Invalid Text')
+                bool = false;
+            }
+            if (!nameRegex.test(state)) {
+                $('#statespan').text('Invalid Text')
+                bool = false;
+            }
+            if (!zipcodeRegex.test(zip)) {
+                $('#zipspan').text('Invalid Zip')
+                bool = false;
+            }
+         
+         
+            
+
+
+
+            if(bool == true){
+                $(this).closest('form').submit();
+            }
+
+
+
+        })
+        $('.spanofvalid').bind("DOMSubtreeModified", function () {
+            if ($(this).text().trim() !== '') {
+                $(this).parents('.py-2').addClass('error');
+            } else {
+                $(this).parents('.py-2').removeClass('error');
+            }
+        });
+
+        $('input[type="tel"]').each(function () {
+            var iti = window.intlTelInput(this, {
+                nationalMode: false,
+                utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"
+            });
+            $(this).on('input', function () {
+                var fullNumber = iti.getNumber();
+                var countryCode = iti.getSelectedCountryData().dialCode;
+                if (fullNumber.startsWith("+" + countryCode + "+" + countryCode)) {
+                    fullNumber = fullNumber.replace("+" + countryCode + "+", "+");
+                }
+                $(this).val(fullNumber.replace(" ",""));
+            });
         });
     });
 </script>
 <script>
 
 </script>
+
+<link rel="stylesheet" href="~/css/error.css" asp-append-version="true" />

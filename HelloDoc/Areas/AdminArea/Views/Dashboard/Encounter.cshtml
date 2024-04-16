@@ -255,7 +255,7 @@
                 fullNumber = fullNumber.replace("+" + countryCode + "+", "+");
             }
             console.log(fullNumber);
-            $(this).val(fullNumber);
+            $(this).val(fullNumber.replace(" ",""));
         });
     });
 
@@ -278,7 +278,7 @@
                     success: function (result) {
                         $('#nav-tabContent').html(result);
                         Swal.fire({
-                            title: aftertext + "!",
+                            title: "Finalized!",
                             text: "Encounter  has been Finalized.",
                             icon: "success"
                         });

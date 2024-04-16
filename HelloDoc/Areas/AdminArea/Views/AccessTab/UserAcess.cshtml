@@ -1,0 +1,38 @@
+﻿@{
+    Layout = null;
+}
+<div class="container">
+    <div class="d-flex justify-content-between">
+        <div class="h3 subinfotext fw-bold">User Access</div>
+    </div>
+    <div class="bg-light rounded my-3 shadow" id="content">
+        <div class="">
+            <div class="d-flex p-3 justify-content-between align-items-center">
+                <div>
+                    <select class="form-select  mb-0 fs-6 form-control drawbyroles">
+                        <option value="0">All Roles</option>
+                    </select>
+                </div>
+            </div>
+            <div class="table-responsive" id="_allusers">
+            </div>
+            <div class="d-flex align-items-center justify-content-between p-3 pagination_div">
+                <div class="info_div">
+                    <span id="fromthisshift"></span>
+                    <span>-</span>
+                    <span id="tothisshift"></span>
+                    <span>out of</span>
+                    <span id="totalcountofshift"></span>
+                </div>
+                <div class="d-flex align-items-center info_div">
+                    <div class="paginate_Previousbutton text-info"><i class="bi bi-chevron-left"></i></i></div>
+                    <div class="dataTables_paginate d-flex"></div>
+                    <div class="paginate_Nextbutton text-info"><i class="bi bi-chevron-right"></i></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/UserAccess.js" asp-append-version="true"></script>

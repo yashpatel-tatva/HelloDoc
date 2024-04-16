@@ -11,7 +11,7 @@
             fullNumber = fullNumber.replace("+" + countryCode + "+", "+");
         }
         console.log(fullNumber);
-        $(this).val(fullNumber);
+        $(this).val(fullNumber.replace(" ",""));
     });
 });
 document.querySelectorAll('.fileToUpload').forEach(function (inputElement) {

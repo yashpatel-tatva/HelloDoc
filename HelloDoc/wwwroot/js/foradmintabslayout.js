@@ -29,6 +29,9 @@
             case '#nav-createadmin':
                 url = 'AdminArea/AdminProfile/CreateAdmin';
                 break;
+            case '#nav_useraccess':
+                url = 'AdminArea/AccessTab/UserAcess';
+                break;
             case '#patient-records':
                 url = 'AdminArea/AdminRecordsTab/PatientHistory';
                 break;
@@ -83,6 +86,19 @@
             $('.rd').addClass('active');
         } else {
             $('.rd').removeClass('active');
+        }
+        $('.adi').on('click', function () {
+            if ($(this).hasClass('active')) {
+                $('.ad').addClass('active');
+            } else {
+                $('.ad').removeClass('active');
+            }
+        });
+
+        if ($('.adi').hasClass('active')) {
+            $('.ad').addClass('active');
+        } else {
+            $('.ad').removeClass('active');
         }
     }
     function handleTabTriggers() {
@@ -145,5 +161,18 @@
         $('.rd').addClass('active');
     } else {
         $('.rd').removeClass('active');
+    }
+    $('.adi').on('click', function () {
+        if ($(this).hasClass('active')) {
+            $('.ad').addClass('active');
+        } else {
+            $('.ad').removeClass('active');
+        }
+    });
+
+    if ($('.adi').hasClass('active')) {
+        $('.ad').addClass('active');
+    } else {
+        $('.ad').removeClass('active');
     }
 });

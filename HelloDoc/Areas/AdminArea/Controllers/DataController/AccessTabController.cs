@@ -1,6 +1,8 @@
 ﻿using DataAccess.Repository.IRepository;
 using DataAccess.ServiceRepository;
+using DataModels.AdminSideViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace HelloDoc.Areas.AdminArea.Controllers.DataController
 {
@@ -31,6 +33,12 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         }
         [Area("AdminArea")]
         public IActionResult CreateRolePage()
+        {
+            return View();
+        }
+
+        [Area("AdminArea")]
+        public IActionResult UserAcess()
         {
             return View();
         }
@@ -117,5 +125,76 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             TempData["Message"] = Rolename + " Role Edited";
             return RedirectToAction("AdminTabsLayout", "Home");
         }
+
+
+        [Area("AdminArea")]
+        [HttpPost]
+        public int UserCountbyFilter(int role)
+        {
+            var userid = _db.Aspnetusers.Count();
+            if(role != 0)
+            {
+                userid = _db.Aspnetuserroles.Where(x => x.Roleid.Contains(role.ToString())).Count();
+            }
+            return userid;
+        }
+
+        [Area("AdminArea")]
+        [HttpPost]
+        public IActionResult AllUsersDataFilter(int role, int currentpage, int pagesize)
+        {
+            var usersid = _db.Aspnetuserroles.Skip((currentpage - 1) * pagesize).Take(pagesize).ToList();
+            if (role != 0)
+            {
+                usersid = _db.Aspnetuserroles.Where(x => x.Roleid.Contains(role.ToString())).Skip((currentpage - 1) * pagesize).Take(pagesize).ToList();
+            }
+            var users = _db.Aspnetusers.Include(x => x.Aspnetuserroles).Where(x => usersid.Select(x => x.Userid).Contains(x.Id)).ToList();
+            List<UserAccessViewModel> list = new List<UserAccessViewModel>();
+            foreach (var user in users)
+            {
+                UserAccessViewModel model = new UserAccessViewModel();
+                model.AspnetId = user.Id;
+                model.Accounttype = user.Aspnetuserroles.FirstOrDefault().Roleid;
+                if (model.Accounttype == "1")
+                {
+                    var thisuser = _admin.GetFirstOrDefault(x => x.Aspnetuserid == user.Id);
+                    model.UserId = thisuser.Adminid;
+                    model.UserName = thisuser.Firstname + " " + thisuser.Lastname;
+                    model.Phone = thisuser.Mobile;
+                    if (thisuser.Status != null)
+                    {
+                        model.Status = (int)thisuser.Status;
+                    }
+                    model.Openrequest = _db.Requests.Where(x => x.Status != 9).AsEnumerable().Where(x => x.Isdeleted == null || x.Isdeleted[0] == false).Count();
+                }
+                if (model.Accounttype == "2")
+                {
+                    var thisuser = _db.Physicians.FirstOrDefault(x => x.Aspnetuserid == user.Id);
+                    model.UserId = thisuser.Physicianid;
+                    model.UserName = thisuser.Firstname + " " + thisuser.Lastname;
+                    model.Phone = thisuser.Mobile;
+                    if (thisuser.Status != null)
+                    {
+                        model.Status = (int)thisuser.Status;
+                    }
+                    model.Openrequest = _db.Requests.Where(x => x.Status != 9 && x.Physicianid == thisuser.Physicianid).AsEnumerable().Where(x => x.Isdeleted == null || x.Isdeleted[0] == false).Count();
+                }
+                if (model.Accounttype == "3")
+                {
+                    var thisuser = _db.Users.FirstOrDefault(x => x.Aspnetuserid == user.Id);
+                    model.UserId = thisuser.Userid;
+                    model.UserName = thisuser.Firstname + " " + thisuser.Lastname;
+                    model.Phone = thisuser.Mobile;
+                    if (thisuser.Status != null)
+                    {
+                        model.Status = (int)thisuser.Status;
+                    }
+                    model.Openrequest = _db.Requests.Where(x => x.Status != 9 && x.Userid == thisuser.Userid).AsEnumerable().Where(x => x.Isdeleted == null || x.Isdeleted[0] == false).Count();
+                }
+                list.Add(model);
+            }
+            return PartialView("_UserAccess", list);
+        }
+
     }
 }

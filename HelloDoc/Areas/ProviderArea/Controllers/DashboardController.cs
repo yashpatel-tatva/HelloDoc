@@ -154,9 +154,9 @@ namespace HelloDoc.Areas.ProviderArea.Controllers
         public IActionResult ConcludeCase(int requestid)
         {
             var request = _request.GetById(requestid);
-            request.Status = 9;
+            request.Status = 8;
             Requeststatuslog requeststatuslog = new Requeststatuslog();
-            requeststatuslog.Status = 9;
+            requeststatuslog.Status = 8;
             requeststatuslog.Requestid = requestid;
             requeststatuslog.Physicianid = _physician.GetSessionPhysicianId();
             requeststatuslog.Createddate = DateTime.Now;

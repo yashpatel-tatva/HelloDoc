@@ -526,10 +526,10 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             if (role == "Physician")
             {
                 var physicianid = _physician.GetSessionPhysicianId();
-                var list = _scheduling.ShifsOfDateOfProvider(datetoshow, status, next, physicianid , pagesize);
+                var list = _scheduling.ShifsOfDateOfProvider(datetoshow, status, next, physicianid, pagesize);
                 schedulingDataViewModel.Shifts = list;
             }
-            if(role == "Admin")
+            if (role == "Admin")
             {
                 schedulingDataViewModel.Shifts = _scheduling.ShifsOfDateforMonth(datetoshow, region, status, next, pagesize);
             }
@@ -562,14 +562,14 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         public IActionResult MonthWiseData(DateTime datetoshow, int region, int status)
         {
             SchedulingDataViewModel schedulingDataViewModel = new SchedulingDataViewModel();
-            schedulingDataViewModel.physicianDatas = _scheduling.GetPhysicianData();
+            //schedulingDataViewModel.physicianDatas = _scheduling.GetPhysicianData();
             DateTime firstDayOfMonth = new DateTime(datetoshow.Year, datetoshow.Month, 1);
             DateTime lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
-            var shifts = _scheduling.ShifsOfMonth(datetoshow, region, status, 0);
-            schedulingDataViewModel.Shifts = shifts;
+            //var shifts = _scheduling.ShifsOfMonth(datetoshow, region, status, 0);
+            //schedulingDataViewModel.Shifts = shifts;
             schedulingDataViewModel.firstMonthdate = DateOnly.FromDateTime(firstDayOfMonth);
             schedulingDataViewModel.lastMonthdate = DateOnly.FromDateTime(lastDayOfMonth);
-            
+
             return PartialView("_Monthwisedata", schedulingDataViewModel);
         }
 
@@ -590,7 +590,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             if (role == "Physician")
             {
                 var physicianid = _physician.GetSessionPhysicianId();
-                var list = _scheduling.ShifsOfDateOfProvider(datetoshow, status, next , physicianid , 3);
+                var list = _scheduling.ShifsOfDateOfProvider(datetoshow, status, next, physicianid, 3);
                 return list;
             }
             if (role == "Admin")
@@ -606,7 +606,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         [HttpPost]
         public IActionResult ViewShiftPopUp(int ShiftDetailId, string format)
         {
-            var shiftdetail = _db.Shiftdetails.Include(x => x.Shift).Include(x=>x.Shift.Physician).Include(x => x.Shiftdetailregions).FirstOrDefault(x => x.Shiftdetailid == ShiftDetailId);
+            var shiftdetail = _db.Shiftdetails.Include(x => x.Shift).Include(x => x.Shift.Physician).Include(x => x.Shiftdetailregions).FirstOrDefault(x => x.Shiftdetailid == ShiftDetailId);
             ShiftData model = new ShiftData();
             model.ShiftId = ShiftDetailId;
             model.Physicianid = shiftdetail.Shift.Physicianid;
@@ -840,7 +840,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             if (role == "Physician")
             {
                 var physicianid = _physician.GetSessionPhysicianId();
-                var list = _scheduling.ShifsOfDateOfProvider(datetoshow, status, 0, physicianid , 0);
+                var list = _scheduling.ShifsOfDateOfProvider(datetoshow, status, 0, physicianid, 0);
                 return list.Count;
             }
             if (role == "Admin")
@@ -871,7 +871,8 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
                 _shiftDetail.DeleteThisShift(shiift, modifiedby);
             }
         }
-
+        [Area("AdminArea")]
+        [HttpPost]
         public void ApproveSelecetdShifts(List<int> shiftdetailsid)
         {
             var modifiedby = _admin.GetFirstOrDefault(x => x.Adminid == _admin.GetSessionAdminId()).Aspnetuserid;

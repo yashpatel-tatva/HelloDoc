@@ -3,7 +3,7 @@
 
 $('#dashtables').hide();
 
-var target1 = localStorage.getItem('target1')
+var target1 = localStorage.getItem('target4')
 var state;
 var currentpage = 1;
 var pagesize = $('#pagesizedropdown').val();
@@ -27,7 +27,7 @@ $('.dashboardtab').on('click', function (e) {
     $('.dashboardtab').removeClass('active');
     $(this).addClass('active');
     var target1 = $(this).data('bs-target');
-    localStorage.setItem('target1', target1);
+    localStorage.setItem('target4', target1);
     switch (target1) {
         case '#s_new':
             $('#status_text').html("(New)")
