@@ -733,7 +733,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
                 }
                 if (role == "Physician")
                 {
-                    return RedirectToAction("PhysicianTabsLayout", "Home", new { area = "ProviderArea" });
+                    return RedirectToAction("Dashboard", "Dashboard", new { area = "ProviderArea" });
                 }
             }
             return BadRequest();
@@ -934,7 +934,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
             }
             else
             {
-                return RedirectToAction("PhysicianTabsLayout", "Home", new { area = "ProviderArea" });
+                return RedirectToAction("Dashboard", "Dashboard", new { area = "ProviderArea" });
             }
         }
 
@@ -986,7 +986,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
                 _db.Encounters.Update(encounter);
                 _db.SaveChanges();
             }
-            return RedirectToAction("PhysicianTabsLayout", "Home", new { area = "ProviderArea" });
+            return RedirectToAction("Dashboard", "Dashboard", new { area = "ProviderArea" });
         }
 
         [Area("AdminArea")]

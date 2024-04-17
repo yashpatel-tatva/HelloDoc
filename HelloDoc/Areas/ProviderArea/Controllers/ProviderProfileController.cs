@@ -24,7 +24,7 @@ namespace HelloDoc.Areas.ProviderArea.Controllers
         [Area("ProviderArea")]
         public IActionResult ProviderProfile()
         {
-            return RedirectToAction("EditProviderPage", "AdminProviderTab", new { area = "AdminArea", physicianid = _physician.GetSessionPhysicianId() });
+            return View(new { physicianid = _physician.GetSessionPhysicianId()});
         }
 
         [Area("ProviderArea")]

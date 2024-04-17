@@ -75,9 +75,56 @@
             </div>
         </nav>
     </header>
+
+    @{
+        int id = (int)Context.Session.GetInt32("PhysicianId");
+        string username1 = Context.Session.GetString("UserName");
+    }
+
+    <nav style="background-color:white" class="resstartpadding">
+        <div class="mainnav">
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <button class="nav-link maintabs me-3" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Dashboard</button>
+                <button class="nav-link maintabs me-3" data-bs-toggle="tab" data-bs-target="#nav-invoice" type="button" role="tab" aria-controls="nav-ProviderLocation" aria-selected="false">Invoice</button>
+                <button class="nav-link maintabs me-3" data-bs-toggle="tab" data-bs-target="#nav-schedule" type="button" role="tab" aria-controls="nav-schedule" aria-selected="false">My Schedule</button>
+                <button class="nav-link maintabs me-3" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">My Profile</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="position-relative">
+        <div class="offcanvas offcanvas-start position-absolute" data-bs-scroll="false" style="width:65%" tabindex="-1" id="layoutnav" aria-labelledby="offcanvasWithBackdropLabel">
+            <span class="p-2 "> <span class="small">Welcome , </span><b>@username1</b></span>
+            <div class="maintabsul">
+                <div class="accordianmaintabs" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Dashboard</div>
+                <div class="accordianmaintabs" data-bs-toggle="tab" data-bs-target="#nav-invoice" type="button" role="tab" aria-controls="nav-ProviderLocation" aria-selected="false">Invoice</div>
+                <div class="accordianmaintabs" data-bs-toggle="tab" data-bs-target="#nav-schedule" type="button" role="tab" aria-controls="nav-Profile" aria-selected="false">My Schedule</div>
+                <div class="accordianmaintabs" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-Profile" aria-selected="false">My Profile</div>
+            </div>
+        </div>
+
+    </div>
+    @if (TempData["Message"] != null)
+    {
+        <script>
+        Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: "@TempData["Message"]",
+            showConfirmButton: false,
+            timer: 1000
+        });
+        </script>
+    }
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/forphysiciantabslayout.js" asp-append-version="true"></script>
+    <div class="tab-content respadding" id="nav-tabContent">
     @RenderBody()
+    </div>
     <ejs-scripts></ejs-scripts>
-    <footer class="text-muted mt-5" >
+    <footer class="text-muted mt-5">
         <div class="bg-dark d-flex justify-content-end py-2 mt-auto position-fixed bottom-0  w-100" id="bg" style="z-index:10">
             <span class="fw-medium px-2  "><a href="#" class="text-secondary">Terms and Condition</a></span>
             <span class="fw-medium px-2  "><a href="#" class="text-secondary"> | </a></span>
@@ -86,18 +133,15 @@
     </footer>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
-    <script>
-        $(function () {
+    <script>$(function () {
             let $modal = $("#ModalToOpen");
             $modal.draggable({
                 handle: ".modal-header",
             });
             $modal.resizable();
-        });
-    </script>
+        });</script>
 
-    <script>
-        $('input[type="tel"]').each(function () {
+    <script>$('input[type="tel"]').each(function () {
             var iti = window.intlTelInput(this, {
                 nationalMode: false,
                 utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"
@@ -109,11 +153,9 @@
                     fullNumber = fullNumber.replace("+" + countryCode + "+", "+");
                 }
                 console.log(fullNumber);
-                $(this).val(fullNumber.replace(" ",""));
+                $(this).val(fullNumber.replace(" ", ""));
             });
-        });
-
-    </script>
+        });</script>
 
     <script src="~/js/requestform.js" asp-append-version="true"></script>
     <script src="~/js/nightmode.js" asp-append-version="true"></script>

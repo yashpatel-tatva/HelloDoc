@@ -18,15 +18,19 @@
                 url = '/ProviderArea/Dashboard/Dashboard';
         }
 
-        $.ajax({
-            url: url,
-            success: function (response) {
-                $('#nav-tabContent').html(response);
-            },
-            error: function (xhr, status, error) {
-                console.error(error);
-            }
-        });
+        //$.ajax({
+        //    url: url,
+        //    success: function (response) {
+        //        $('#nav-tabContent').html(response);
+        //    },
+        //    error: function (xhr, status, error) {
+        //        console.error(error);
+        //    }
+        //});
+        var link = document.createElement('a');
+        link.href = url;
+        link.click();
+
     }
     function handleTabTriggers() {
         var target = localStorage.getItem('target3');
@@ -62,5 +66,5 @@
         handleTabClick(target);
     });
 
-    handleTabTriggers();
+    //handleTabTriggers();
 });

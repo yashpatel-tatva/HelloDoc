@@ -54,7 +54,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers
                     if (role == "Physician")
                     {
                         _physician.SetSession(_physician.GetFirstOrDefault(x=>x.Aspnetuserid == aspnetid));
-                        return RedirectToAction("PhysicianTabsLayout", "Home", new { area = "ProviderArea" });
+                        return RedirectToAction("Dashboard", "Dashboard", new { area = "ProviderArea" });
                     }
                 }
             }
@@ -215,7 +215,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers
                     Expires = DateTime.Now.AddHours(2)
                 };
                 Response.Cookies.Append("jwt", _jwtRepository.GenerateJwtToken(loggedInPersonViewModel), option);
-                return RedirectToAction("PhysicianTabsLayout", "Home", new { area = "ProviderArea" });
+                return RedirectToAction("Dashboard", "Dashboard", new { area = "ProviderArea" });
             }
             return View(new { email = email, password = password });
         }

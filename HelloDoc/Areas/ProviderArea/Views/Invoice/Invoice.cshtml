@@ -1,4 +1,10 @@
 ﻿@{
-    Layout = null;
+//Layout = null;
 }
 <h1>Invoice</h1>
+<script>localStorage.setItem('target3', "#nav-invoice");
+    var target = localStorage.getItem('target3');
+    $('.maintabs').removeClass('active');
+    $('.accordianmaintabs').removeClass('active');
+    $('.maintabs[data-bs-target="' + target + '"]').addClass('active');
+    $('.accordianmaintabs[data-bs-target="' + target + '"]').addClass('active');</script>

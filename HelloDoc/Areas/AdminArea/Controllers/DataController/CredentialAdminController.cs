@@ -107,7 +107,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
                             Expires = DateTime.Now.AddHours(2)
                         };
                         Response.Cookies.Append("jwt", _jwtRepository.GenerateJwtToken(loggedInPersonViewModel), option);
-                        return RedirectToAction("PhysicianTabsLayout", "Home", new { area = "ProviderArea" });
+                        return RedirectToAction("Dashboard", "Dashboard", new { area = "ProviderArea" });
                     }
                     else
                     {

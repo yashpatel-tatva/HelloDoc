@@ -1,4 +1,27 @@
 ﻿@{
-    Layout = null;
+//Layout = null;
 }
 <h1>ProviderProfile</h1>
+
+
+<script>localStorage.setItem('target3', "#nav-profile");
+    var target = localStorage.getItem('target3');
+    $('.maintabs').removeClass('active');
+    $('.accordianmaintabs').removeClass('active');
+    $('.maintabs[data-bs-target="' + target + '"]').addClass('active');
+    $('.accordianmaintabs[data-bs-target="' + target + '"]').addClass('active');
+
+    var physicianid = @Model.physicianid
+    console.log(physicianid);
+    $.ajax({
+        url: '/AdminArea/AdminProviderTab/EditProviderPage',
+        type: 'POST',
+        data: { physicianid: physicianid },
+        success: function (result) {
+            $('#nav-tabContent').html(result);
+        }
+    });
+
+
+
+</script>

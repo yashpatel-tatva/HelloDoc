@@ -1,5 +1,5 @@
 ﻿@{
-    Layout = null;
+//Layout = null;
 }
 @using DataModels.AdminSideViewModels;
 @model AdminDashboardViewModel;
@@ -129,7 +129,12 @@
         </div>
     </div>
 </div>
-
+<script>localStorage.setItem('target3', "#nav-home");
+    var target = localStorage.getItem('target3');
+    $('.maintabs').removeClass('active');
+    $('.accordianmaintabs').removeClass('active');
+    $('.maintabs[data-bs-target="' + target + '"]').addClass('active');
+    $('.accordianmaintabs[data-bs-target="' + target + '"]').addClass('active');</script>
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
