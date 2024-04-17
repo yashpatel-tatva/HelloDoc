@@ -408,3 +408,18 @@ function checkemail(id, email) {
     });
     return cansubmmit;
 }
+
+
+$('#requestadmin').on('click', function () {
+    var physicianid = $('#inputhiddenid').val();
+    $.ajax({
+        url: '/ProviderArea/ProviderProfile/RequesttoadminPopup',
+        data: { physicianid },
+        type: 'POST',
+        success: function (result) {
+            $('#PopUps').html(result);
+            var my = new bootstrap.Modal(document.getElementById('ModalToOpen'));
+            my.show();
+        }
+    })
+})

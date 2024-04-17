@@ -17,7 +17,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers
         private readonly IJwtRepository _jwtRepository;
         private readonly IPhysicianRepository _physician;
 
-        public HomeController(IAdminRepository admin, ISendEmailRepository sendEmailRepository, IAspNetUserRepository aspNetUserRepository, HelloDocDbContext helloDocDbContext, IJwtRepository jwtRepository , IPhysicianRepository physician)
+        public HomeController(IAdminRepository admin, ISendEmailRepository sendEmailRepository, IAspNetUserRepository aspNetUserRepository, HelloDocDbContext helloDocDbContext, IJwtRepository jwtRepository, IPhysicianRepository physician)
         {
             _admin = admin;
             _sendEmail = sendEmailRepository;
@@ -27,9 +27,31 @@ namespace HelloDoc.Areas.AdminArea.Controllers
             _physician = physician;
         }
 
+        [Area("AdminArea")]
         public IActionResult Index()
         {
-            return View();
+            var jwtservice = HttpContext.RequestServices.GetService<IJwtRepository>();
+            var request = HttpContext.Request;
+            var token = request.Cookies["jwt"];
+            if (token != null)
+            {
+                jwtservice.ValidateToken(token, out JwtSecurityToken jwttoken);
+                var roleClaim = jwttoken.Claims.FirstOrDefault(x => x.Type == "Role");
+
+                if (roleClaim != null)
+                {
+                    var role = roleClaim.Value;
+                    if (role == "Admin")
+                    {
+                        return RedirectToAction("AdminTabsLayout", "Home");
+                    }
+                    if (role == "Physician")
+                    {
+                        return RedirectToAction("PhysicianTabsLayout", "Home", new { area = "ProviderArea" });
+                    }
+                }
+            }
+            return RedirectToAction("AdminLogin", "Home");
         }
         //[Area("AdminArea")]
         //public IActionResult AdminLogin()
@@ -39,6 +61,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers
         [Area("AdminArea")]
         public IActionResult AdminLogin(string email)
         {
+
             Aspnetuser aspnetuser = new Aspnetuser();
             aspnetuser.Email = email;
             var jwt = HttpContext.Request.Cookies["jwt"];
@@ -108,7 +131,11 @@ namespace HelloDoc.Areas.AdminArea.Controllers
         public IActionResult ResetPassword(string id)
         {
             var aspuser = _db.Aspnetusers.FirstOrDefault(x => x.Id == id);
-
+            var email = _db.Emaillogs.Where(x => x.Emailid == aspuser.Email).Where(x => x.Subjectname == "Reset Password Link").OrderBy(x => x.Sentdate).LastOrDefault();
+            if (email.Sentdate < DateTime.Now.AddDays(-1))
+            {
+                return PartialView("_passwordError");
+            }
             return View(aspuser);
         }
 
@@ -138,17 +165,17 @@ namespace HelloDoc.Areas.AdminArea.Controllers
             foreach (var user in aspnetusers)
             {
                 var asp = _db.Aspnetuserroles.Where(x => x.Userid == user.Id && x.Roleid == role).FirstOrDefault();
-                if(asp != null)
+                if (asp != null)
                 {
                     var aspid = asp.Userid.ToString();
-                if (role == "1")
-                {
-                    admin = _admin.GetFirstOrDefault(z => z.Aspnetuserid == aspid);
-                }
-                if(role == "2")
-                {
-                    physician  =_physician.GetFirstOrDefault(x=>x.Aspnetuserid== aspid);
-                }
+                    if (role == "1")
+                    {
+                        admin = _admin.GetFirstOrDefault(z => z.Aspnetuserid == aspid);
+                    }
+                    if (role == "2")
+                    {
+                        physician = _physician.GetFirstOrDefault(x => x.Aspnetuserid == aspid);
+                    }
                 }
             }
             if (role == "1")
@@ -181,7 +208,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers
                     Expires = DateTime.Now.AddHours(2)
                 };
                 Response.Cookies.Append("jwt", _jwtRepository.GenerateJwtToken(loggedInPersonViewModel), option);
-                return RedirectToAction("PhysicianTabsLayout", "Home" , new {area = "ProviderArea"});
+                return RedirectToAction("PhysicianTabsLayout", "Home", new { area = "ProviderArea" });
             }
             return View(new { email = email, password = password });
         }

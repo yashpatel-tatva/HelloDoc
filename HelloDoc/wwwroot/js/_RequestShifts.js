@@ -16,7 +16,7 @@ $('input[name="selectedshift"]').on('change', function () {
     else {
         $('input[name="selectall"]').prop("checked", false);
     }
-    if ($('input[name="selectedshift"]').length === 0) {
+    if ($('input[name="selectedshift"]:checked').length === 0) {
         $('#deleteselected').prop("disabled", true);
         $('#approveselected').prop("disabled", true);
     }

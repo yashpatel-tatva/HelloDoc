@@ -1,0 +1,56 @@
+﻿<div class="modal fade rounded-3 shadow" id="ModalToOpen" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h5 class="modal-title text-white">Request to Administrator</h5>
+                <button class="btn" type="button" data-dismiss="modal">
+                    <i class="fa-solid fa-xmark" style="color: #ffffff;"></i>
+                </button>
+            </div>
+            <form>
+                <div class="modal-body">
+                    <input type="number" id="inputhiddenid" value="@Model.physicianid" hidden />
+                    <label class="my-2 text-secondary  fw-normal mb-3" style="font-size:12.8px">Need to send message to edit.</label>
+                    <div class="form-group rounded d-flex align-items-center">
+                        <textarea class="form-control  shadow-none" id="messagearea" placeholder="" rows="4"></textarea>
+                        <span>Message</span>
+                    </div>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" id="confirmbutton" class=" p-2 px-3 text-white bg-info rounded border-info  ">Submit</button>
+                    <button type="button" class="btn btn-outline-info" data-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#confirmbutton').on('click', function () {
+        var message = $('#messagearea').val();
+        var physicianid = $('#inputhiddenid').val();
+        var regex = /^(?=.*[A-Za-z])[A-Za-z0-9 !#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/;
+        if(regex.test(message)){
+            $.ajax({
+                url : '/ProviderArea/ProviderProfile/RequesttoAdmin',
+                data : {physicianid , message},
+                type : 'POST',
+                success : function(){
+                    Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: "Request of Edit hase been sent",
+                        showConfirmButton: false,
+                        timer: 1000
+                    });
+                    setTimeout(function () {
+                        location.reload();
+                    }, 1000);
+                }
+            })
+        }
+        else{
+            Swal.fire("Enter Meaningful Text");
+        }
+    })
+</script>
