@@ -1,4 +1,5 @@
-﻿using DataAccess.ServiceRepository.IServiceRepository;
+﻿using DataAccess.Repository.IRepository;
+using DataAccess.ServiceRepository.IServiceRepository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Routing;
@@ -20,6 +21,8 @@ namespace DataAccess.ServiceRepository
         {
 
             var jwtservice = context.HttpContext.RequestServices.GetService<IJwtRepository>();
+            var adminservice = context.HttpContext.RequestServices.GetService<IAdminRepository>();
+            var physicianservice = context.HttpContext.RequestServices.GetService<IPhysicianRepository>();
             if (jwtservice == null)
             {
                 context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Home", action = "AdminLogin" }));
@@ -36,6 +39,7 @@ namespace DataAccess.ServiceRepository
             }
 
             var roleClaim = jwttoken.Claims.FirstOrDefault(x => x.Type == "Role");
+            var aspnetid  = jwttoken.Claims.FirstOrDefault(x => x.Type == "AspNetId").Value;
 
             if (roleClaim == null)
             {
@@ -49,7 +53,16 @@ namespace DataAccess.ServiceRepository
                 return;
             }
 
-
+            if(roleClaim.Value == "Physician")
+            {
+                var physician = physicianservice.GetFirstOrDefault(x => x.Aspnetuserid == aspnetid);
+                physicianservice.SetSession(physician);
+            }
+            if(roleClaim.Value== "Admin")
+            {
+                var admin = adminservice.GetFirstOrDefault(x=>x.Aspnetuserid== aspnetid); 
+                adminservice.SetSession(admin);
+            }
 
 
 
