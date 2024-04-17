@@ -31,32 +31,20 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         {
             List<Physician> physician = _physician.GetAll().AsEnumerable().Where(x => x.Isdeleted == null || x.Isdeleted[0] == false).ToList();
             List<LocationData> result = new List<LocationData>();
-            foreach (var x in physician)
-            {
-                try
-                {
-                    LocationData locationdata = new LocationData();
-                    locationdata.Physicianid = x.Physicianid;
-                    locationdata.Name = x.Firstname + " " + x.Lastname;
-                    locationdata.Photo = x.Photo;
-                    //locationdata.Lat = x.Physicianlocations.LastOrDefault(x => x.Physicianid == x.Physicianid).Latitude;
-                    //locationdata.Long = x.Physicianlocations.LastOrDefault(x => x.Physicianid == x.Physicianid).Longitude;
-                    result.Add(locationdata);
-                }
-                catch { }
-            }
-            var lastLocations = _db.Physicianlocations.Include(x => x.Physician).AsEnumerable().Where(x => x.Physician.Isdeleted[0]==false)
+            
+            var lastLocations = _db.Physicianlocations.Include(x => x.Physician).AsEnumerable().Where(x => x.Physician.Isdeleted == null || x.Physician.Isdeleted[0]==false)
                                  .GroupBy(l => l.Physicianid)
                                  .Select(g => g.OrderByDescending(l => l.Createddate).First())
                                  .ToList();
             foreach (var phy in lastLocations)
             {
-                try
-                {
-                    result.FirstOrDefault(x => x.Physicianid == phy.Physicianid).Lat = phy.Latitude;
-                    result.FirstOrDefault(x => x.Physicianid == phy.Physicianid).Long = phy.Longitude;
-                }
-                catch { }
+                result.Add(new LocationData() {
+                    Physicianid = phy.Physicianid,
+                    Name = phy.Physician.Firstname + " " + phy.Physician.Lastname,
+                    Photo = phy.Physician.Photo,
+                    Lat = phy.Latitude,
+                    Long = phy.Longitude
+                });
             }
 
             var providerlocation = result.ToJson();
