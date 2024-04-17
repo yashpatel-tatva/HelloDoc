@@ -23,13 +23,13 @@
                 <div class="row d-flex">
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="textbox" class="form-control" placeholder="" asp-for="B_FirstName" ><span>Your First Name</span>
+                            <input type="textbox" class="form-control" placeholder="" asp-for="B_FirstName"><span>Your First Name</span>
                         </div>
                         <span asp-validation-for="B_FirstName" class="text-danger"></span>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="textbox" class="form-control" placeholder="" asp-for="B_LastName" ><span>Your Last Name</span>
+                            <input type="textbox" class="form-control" placeholder="" asp-for="B_LastName"><span>Your Last Name</span>
                         </div>
                         <span asp-validation-for="B_LastName" class="text-danger"></span>
                     </div>
@@ -39,23 +39,23 @@
                                 <input type="tel" id="tel" class="form-control" asp-for="B_Phone">
                             </div>
                         </div>
-                            <span asp-validation-for="B_Phone" class="text-danger"></span>
+                        <span asp-validation-for="B_Phone" class="text-danger"></span>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="email" class="form-control" placeholder="" asp-for="B_Email" ><span>Your Email</span>
+                            <input type="email" class="form-control" placeholder="" asp-for="B_Email"><span>Your Email</span>
                         </div>
                         <span asp-validation-for="B_Email" class="text-danger"></span>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="textbox" class="form-control" placeholder="" asp-for="PropertyName" ><span>Business/Property Name</span>
+                            <input type="textbox" class="form-control" placeholder="" asp-for="PropertyName"><span>Business/Property Name</span>
                         </div>
                         <span asp-validation-for="PropertyName" class="text-danger"></span>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="textbox" class="form-control" placeholder="" asp-for="CaseNumber" ><span>Case Number</span>
+                            <input type="textbox" class="form-control" placeholder="" asp-for="CaseNumber"><span>Case Number</span>
                         </div>
                         <span asp-validation-for="CaseNumber" class="text-danger"></span>
                     </div>
@@ -72,13 +72,13 @@
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="textbox" class="form-control" placeholder="" asp-for="FirstName" ><span>First Name</span>
+                            <input type="textbox" class="form-control" placeholder="" asp-for="FirstName"><span>First Name</span>
                         </div>
                         <span asp-validation-for="FirstName" class="text-danger"></span>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="textbox" class="form-control" placeholder="" asp-for="LastName" ><span>Last Name</span>
+                            <input type="textbox" class="form-control" placeholder="" asp-for="LastName"><span>Last Name</span>
                         </div>
                         <span asp-validation-for="LastName" class="text-danger"></span>
                     </div>
@@ -87,7 +87,7 @@
                             @{
                                 string today = DateTime.Today.ToString("yyyy-MM-dd");
                             }
-                            <input type="date" class="form-control" placeholder="" min="1940-01-01" max=@today asp-for="BirthDate" ><span>Date of Birth</span>
+                            <input type="date" class="form-control" placeholder="" min="1940-01-01" max=@today asp-for="BirthDate"><span>Date of Birth</span>
                         </div>
                         <span asp-validation-for="BirthDate" class="text-danger"></span>
                     </div>
@@ -117,31 +117,31 @@
                 <div class="row d-flex">
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="textbox" class="form-control" placeholder="" asp-for="Street" maxlength="50" ><span>Street</span>
+                            <input type="textbox" class="form-control" placeholder="" asp-for="Street" maxlength="50"><span>Street</span>
                         </div>
                         <span asp-validation-for="Street" class="text-danger"></span>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="textbox" class="form-control" placeholder="" asp-for="City" ><span>City</span>
+                            <input type="textbox" class="form-control" placeholder="" asp-for="City"><span>City</span>
                         </div>
                         <span asp-validation-for="City" class="text-danger"></span>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="textbox" class="form-control" placeholder="" asp-for="State" ><span>State</span>
+                            <input type="textbox" class="form-control" placeholder="" asp-for="State"><span>State</span>
                         </div>
                         <span asp-validation-for="State" class="text-danger"></span>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="textbox" class="form-control" placeholder="" asp-for="ZipCode" ><span>Zip Code</span>
+                            <input type="textbox" class="form-control" placeholder="" asp-for="ZipCode"><span>Zip Code</span>
                         </div>
                         <span asp-validation-for="ZipCode" class="text-danger"></span>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="textbox" class="form-control" placeholder="" asp-for="Room" ><span>Room # / Suite (Optional)</span>
+                            <input type="textbox" class="form-control" placeholder="" asp-for="Room"><span>Room # / Suite (Optional)</span>
                         </div>
                         <span asp-validation-for="Room" class="text-danger"></span>
                     </div>
@@ -172,33 +172,36 @@
 <script>
     function checkEmailExists() {
         var email = $('#patientEmail').val();
-        $.ajax({
-            url: '/PatientArea/Credential/checkemail/',
-            data: { email },
-            type: 'GET',
-            async: false,
-            success: function (data) {
-                if (data) {
-                    document.getElementById("submitbtn").type = "submit";
-                }
-                else {
-                    alert("Create Patient Account");
-                    $(document).ready(function () {
-                        $.ajax({
-                            url: '/PatientArea/Credential/SendEmailforcreateaccount',
-                            type: 'GET',
-                            async: false,
-                            data: { email: email },
-                            success: function (result) {
-                            },
-                            error: function (xhr, status, error) {
-                                console.error('Error: ' + error);
-                            },
+        var emailRegex = /^[a-zA-Z0-9._%+-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (emailRegex.test(email)) {
+            $.ajax({
+                url: '/PatientArea/Credential/checkemail/',
+                data: { email },
+                type: 'GET',
+                async: false,
+                success: function (data) {
+                    if (data) {
+                        document.getElementById("submitbtn").type = "submit";
+                    }
+                    else {
+                        alert("Create Patient Account");
+                        $(document).ready(function () {
+                            $.ajax({
+                                url: '/PatientArea/Credential/SendEmailforcreateaccount',
+                                type: 'GET',
+                                async: false,
+                                data: { email: email },
+                                success: function (result) {
+                                },
+                                error: function (xhr, status, error) {
+                                    console.error('Error: ' + error);
+                                },
+                            });
                         });
-                    });
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 </script>
 

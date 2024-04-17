@@ -12,7 +12,7 @@ namespace DataAccess.ServiceRepository
         private readonly HelloDocDbContext _context;
         private readonly IAdminRepository _admin;
         private readonly IPhysicianRepository _physician;
-        public SendEmailRepository(HelloDocDbContext helloDocDbContext, IAdminRepository adminRepository , IPhysicianRepository physicianRepository)
+        public SendEmailRepository(HelloDocDbContext helloDocDbContext, IAdminRepository adminRepository, IPhysicianRepository physicianRepository)
         {
             _context = helloDocDbContext;
             _admin = adminRepository;
@@ -28,29 +28,40 @@ namespace DataAccess.ServiceRepository
                 EnableSsl = true,
                 Credentials = new NetworkCredential(mail, password)
             };
-            Emaillog emaillog = new Emaillog();
-            emaillog.Emailid = email;
-            emaillog.Sentdate = DateTime.Now;
-            emaillog.Createdate = DateTime.Now;
-            emaillog.Subjectname = subject;
-            emaillog.Emailtemplate = message;
             if (_admin.GetSessionAdminId() != -1)
             {
+                Emaillog emaillog = new Emaillog();
+                emaillog.Emailid = email;
+                emaillog.Sentdate = DateTime.Now;
+                emaillog.Createdate = DateTime.Now;
+                emaillog.Subjectname = subject;
+                emaillog.Emailtemplate = message;
                 emaillog.Roleid = 1;
                 emaillog.Adminid = _admin.GetSessionAdminId();
+                BitArray fortrue = new BitArray(1);
+                fortrue[0] = true;
+                emaillog.Isemailsent = fortrue;
+                emaillog.Senttries = 1;
+                _context.Emaillogs.Add(emaillog);
+                _context.SaveChanges();
             }
-            if(_physician.GetSessionPhysicianId() != -1)
+            if (_physician.GetSessionPhysicianId() != -1)
             {
-
+                Emaillog emaillog = new Emaillog();
+                emaillog.Emailid = email;
+                emaillog.Sentdate = DateTime.Now;
+                emaillog.Createdate = DateTime.Now;
+                emaillog.Subjectname = subject;
+                emaillog.Emailtemplate = message;
                 emaillog.Roleid = 2;
                 emaillog.Physicianid = _physician.GetSessionPhysicianId();
+                BitArray fortrue = new BitArray(1);
+                fortrue[0] = true;
+                emaillog.Isemailsent = fortrue;
+                emaillog.Senttries = 1;
+                _context.Emaillogs.Add(emaillog);
+                _context.SaveChanges();
             }
-            BitArray fortrue = new BitArray(1);
-            fortrue[0] = true;
-            emaillog.Isemailsent = fortrue;
-            emaillog.Senttries = 1;
-            _context.Emaillogs.Add(emaillog);
-            _context.SaveChanges();
             return client.SendMailAsync(new MailMessage(from: mail, to: email, subject, message));
         }
 

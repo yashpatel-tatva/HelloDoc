@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
 
 namespace HelloDoc.Areas.PatientArea.ViewModels
 {
@@ -35,6 +36,7 @@ namespace HelloDoc.Areas.PatientArea.ViewModels
         }
         public List<Requestwisefile> requestwisefiles { get; set; }
 
+        [Required]
         public DateTime birthdate { get; set; }
         public int RequestsId { get; set; }
         public bool showdocument { get; set; }

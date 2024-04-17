@@ -145,7 +145,7 @@
                 <div class="row d-flex justify-content-end">
                     <div class="py-2 col-xl-1 col-md-2 col-4 align-items-center">
                         <div class="form-group d-flex  border-0">
-                            <button type="button" id="submitbtn" class="p-2 uploadbtn rounded w-100  border-0">
+                            <button type="submit" id="submitbtn" class="p-2 uploadbtn rounded w-100  border-0">
                                 Submit
                             </button>
                         </div>
@@ -213,13 +213,11 @@
                     patientPassword.style.display = 'none';
                     patientConfirmPassword.style.display = 'none';
                     div.style.display = 'none';
-                    document.getElementById("submitbtn").type = "submit";
                 }
                 else {
                     patientPassword.style.display = 'block';
                     patientConfirmPassword.style.display = 'block';
                     div.style.display = 'block';
-                    document.getElementById("submitbtn").type = "button";
                 }
             }
         });

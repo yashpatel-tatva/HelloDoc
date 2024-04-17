@@ -175,7 +175,7 @@ namespace DataAccess.Repository
             if (todate != null)
             {
                 DateTime ToDate = DateTime.Parse(todate);
-                requests = requests.Where(x => x.Createddate <= ToDate).ToList();
+                requests = requests.Where(x => x.Createddate <= ToDate.AddDays(1)).ToList();
             }
             if (providername != null)
             {

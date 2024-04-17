@@ -38,25 +38,21 @@ namespace HelloDoc.Areas.PatientArea.ViewModels
         [RegularExpression(@"^\+?(\d[\d-. ]+)?(\([\d-. ]+\))?[\d-. ]+\d$", ErrorMessage = "Please enter valid phone number")]
         public string Phone { get; set; }
 
-
+        [Required]
         public DateOnly BirthDate { get; set; }
 
 
-
-        [MaybeNull]
         public string C_Street { get; set; }
 
         [RegularExpression(@"^(?=.*\S)[a-zA-Z\s.'-]+$", ErrorMessage = "Enter a valid")]
-        [MaybeNull]
+
         public string C_City { get; set; }
 
         [RegularExpression(@"^(?=.*\S)[a-zA-Z\s.'-]+$", ErrorMessage = "Enter a valid")]
-        [MaybeNull]
         public string C_State { get; set; }
 
         [StringLength(10, ErrorMessage = "Enter valid Zip Code")]
         [RegularExpression(@"^\d{6}$", ErrorMessage = "Enter a valid 6-digit zip code")]
-        [MaybeNull]
         public string C_ZipCode { get; set; }
 
         [RegularExpression(@"^[a-zA-Z0-9]+$", ErrorMessage = "Enter a valid")]

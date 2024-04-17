@@ -18,6 +18,7 @@ namespace HelloDoc.Areas.PatientArea.ViewModels
         public string LastName { get; set; }
 
 
+        [Required]
         public DateTime BirthDate { get; set; }
 
 

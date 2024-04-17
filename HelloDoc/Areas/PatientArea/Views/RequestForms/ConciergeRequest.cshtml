@@ -174,33 +174,36 @@
 <script>
     function checkEmailExists() {
         var email = $('#patientEmail').val();
-        $.ajax({
-            url: '/PatientArea/Credential/checkemail/',
-            data: { email },
-            type: 'GET',
-            async: false,
-            success: function (data) {
-                if (data) {
-                    document.getElementById("submitbtn").type = "submit";
-                }
-                else {
-                    alert("Create Patient Account");
-                    $(document).ready(function () {
-                        $.ajax({
-                            url: '/PatientArea/Credential/SendEmailforcreateaccount',
-                            type: 'GET',
-                            async: false,
-                            data: { email: email },
-                            success: function (result) {
-                            },
-                            error: function (xhr, status, error) {
-                                console.error('Error: ' + error);
-                            },
+       var emailRegex = /^[a-zA-Z0-9._%+-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (emailRegex.test(email)) {
+            $.ajax({
+                url: '/PatientArea/Credential/checkemail/',
+                data: { email },
+                type: 'GET',
+                async: false,
+                success: function (data) {
+                    if (data) {
+                        document.getElementById("submitbtn").type = "submit";
+                    }
+                    else {
+                        alert("Create Patient Account");
+                        $(document).ready(function () {
+                            $.ajax({
+                                url: '/PatientArea/Credential/SendEmailforcreateaccount',
+                                type: 'GET',
+                                async: false,
+                                data: { email: email },
+                                success: function (result) {
+                                },
+                                error: function (xhr, status, error) {
+                                    console.error('Error: ' + error);
+                                },
+                            });
                         });
-                    });
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 </script>
 

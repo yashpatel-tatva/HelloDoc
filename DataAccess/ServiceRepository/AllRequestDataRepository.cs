@@ -43,7 +43,10 @@ namespace DataAccess.ServiceRepository
             {
                 AllRequestDataViewModel model = new AllRequestDataViewModel();
                 model.PatientName = item.User.Firstname + " " + item.User.Lastname;
-                model.PatientDOB = new DateOnly(Convert.ToInt32(item.User.Intyear), DateTime.ParseExact(item.User.Strmonth, "MMMM", CultureInfo.InvariantCulture).Month, Convert.ToInt32(item.User.Intdate));
+                if (item.User.Intyear != null && item.User.Strmonth != null && item.User.Strmonth != null)
+                {
+                    model.PatientDOB = new DateOnly(Convert.ToInt32(item.User.Intyear), DateTime.ParseExact(item.User.Strmonth, "MMMM", CultureInfo.InvariantCulture).Month, Convert.ToInt32(item.User.Intdate));
+                }
                 model.RequestorName = item.Firstname + " " + item.Lastname;
                 model.RequestedDate = item.Createddate;
                 model.PatientPhone = item.Requestclients.FirstOrDefault(x => x.Requestid == item.Requestid).Phonenumber;

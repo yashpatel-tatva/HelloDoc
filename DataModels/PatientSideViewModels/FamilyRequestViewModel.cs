@@ -39,6 +39,8 @@ namespace HelloDoc.Areas.PatientArea.ViewModels
         [StringLength(23)]
         [RegularExpression(@"^\+?(\d[\d-. ]+)?(\([\d-. ]+\))?[\d-. ]+\d$", ErrorMessage = "Please enter valid phone number")]
         public string Phone { get; set; }
+
+        [Required]
         public DateOnly BirthDate { get; set; }
 
 
