@@ -52,15 +52,23 @@
                 url = '/AdminArea/Dashboard/Dashboard';
         }
 
-        $.ajax({
-            url: url,
-            success: function (response) {
-                $('#nav-tabContent').html(response);
-            },
-            error: function (xhr, status, error) {
-                console.error(error);
-            }
-        });
+        //$.ajax({
+        //    url: url,
+        //    success: function (response) {
+        //        $('#nav-tabContent').html(response);
+        //    },
+        //    error: function (xhr, status, error) {
+        //        console.error(error);
+        //    }
+        //});
+
+        var link = document.createElement('a');
+        link.href = url;
+        link.click();
+
+
+      
+
         $('.pdi').on('click', function () {
             if ($(this).hasClass('active')) {
                 $('.pd').addClass('active');
@@ -135,7 +143,10 @@
         handleTabClick(target);
     });
 
-    handleTabTriggers();
+
+
+    console.log(  $('.maintabs[data-bs-target="' + target + '"]'))
+    //handleTabTriggers();
     $('.pdi').on('click', function () {
         if ($(this).hasClass('active')) {
             $('.pd').addClass('active');

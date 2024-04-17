@@ -30,7 +30,7 @@ namespace DataAccess.Repository
             }
             else
             {
-                var phys = getAll().Where(x => x.Physicianid != id);
+                var phys = GetAll().Where(x => x.Physicianid != id);
                 phys = phys.Where(x=>x.Email == email);
                 if (phys.Count() != 0)
                 {

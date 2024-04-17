@@ -65,14 +65,14 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         {
             viewModel.SelectRegion = Request.Form["admineditregion"].ToList();
             _admin.Edit(viewModel.Adminid, viewModel);
-            return RedirectToAction("AdminTabsLayout", "Home");
+             return RedirectToAction("Dashboard", "Dashboard");
         }
         [Area("AdminArea")]
         [HttpPost]
         public IActionResult AdminBillingInfoEdit(AdminProfileViewModel viewModel)
         {
             _admin.EditBillingDetails(viewModel.Adminid, viewModel);
-            return RedirectToAction("AdminTabsLayout", "Home");
+             return RedirectToAction("Dashboard", "Dashboard");
         }
         [Area("AdminArea")]
         public IActionResult CreateAdmin()
@@ -90,7 +90,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             model.selectedregion = Request.Form["selectedregion"].ToList();
             _admin.CreateAdmin(model);
             TempData["Message"] = "Admin Created";
-            return RedirectToAction("AdminTabsLayout", "Home");
+             return RedirectToAction("Dashboard", "Dashboard");
         }
         [Area("AdminArea")]
         [HttpPost]

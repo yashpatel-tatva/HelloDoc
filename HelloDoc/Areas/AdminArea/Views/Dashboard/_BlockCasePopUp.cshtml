@@ -32,8 +32,10 @@
     $("#Blockconfirmbutton").on('click', function () {
         var note = $('#Blockreason').val();
         var requestid = $('#inputhiddenrequestid').val();
-        if (note == "") {
+        var regex = /^(?=.*[A-Za-z])[A-Za-z0-9 !#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/;
+        if (!regex.test(note)) {
             $(".blocknotes").css("border-color", "red");
+            Swal.fire("Enter Meaningful Text");
         } else {
             $.ajax({
                 url: '/AdminArea/Dashboard/BlockCase',

@@ -1,5 +1,5 @@
 ﻿@{
-    Layout = null;
+    //Layout = null;
 }
 @using DataModels;
 @model List<Role>;
@@ -7,7 +7,7 @@
     <div class="d-flex justify-content-between mx-3">
         <div class="h3 subinfotext fw-bold">Account Access</div>
         <div>
-            <a asp-action="AdminTabsLayout" asp-controller="Home">
+            <a asp-action="Dashboard" asp-controller="Dashboard">
                 <button type="button" class="d-flex babtn rounded align-item-center p-1 px-2">
                     <div><img src="~/res/back.png" width="15px" height="10px"></div>
                     <div><span>Back</span></div>
@@ -70,5 +70,12 @@
         </div>
     </div>
 </div>
-
+<script>
+    localStorage.setItem('target', "#nav-Access");
+    var target = localStorage.getItem('target');
+    $('.maintabs').removeClass('active');
+    $('.accordianmaintabs').removeClass('active');
+    $('.maintabs[data-bs-target="' + target + '"]').addClass('active');
+    $('.accordianmaintabs[data-bs-target="' + target + '"]').addClass('active');
+</script>
 <script src="~/js/Accesstab.js" asp-append-version="true"></script>

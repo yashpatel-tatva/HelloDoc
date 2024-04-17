@@ -32,6 +32,7 @@ $('#resetpassword').on('click', function () {
 
         if (!passwordRegex.test(password)) {
             $('#password').css("border", "1px solid red");
+            Swal.fire("Enter Valid Password");
         }
         else {
             $.ajax({

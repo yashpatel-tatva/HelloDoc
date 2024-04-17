@@ -120,7 +120,7 @@ namespace HelloDoc.Areas.PatientArea.DataController
             {
                 user.Modifiedby = _admin.GetFirstOrDefault(x=>x.Adminid == _admin.GetSessionAdminId()).Aspnetuserid;
                 user.Modifieddate = DateTime.Now;
-                return RedirectToAction("AdminTabsLayout" , "Home" , new { area = "AdminArea"});
+                return RedirectToAction("Dashboard" , "Dashboard" , new { area = "AdminArea"});
             }
             user.Modifiedby = model.User.Aspnetuserid;
             user.Modifieddate = DateTime.Now;

@@ -284,7 +284,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
         public IActionResult CreateRequestsubmit(FamilyRequestViewModel model)
         {
             _allrequest.AddRequestasAdmin(model);
-            return RedirectToAction("AdminTabsLayout", "Home");
+             return RedirectToAction("Dashboard", "Dashboard");
         }
 
 
@@ -391,7 +391,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
             }
 
             _requestpopupaction.CancelCase(requestid, casetag, note);
-            return RedirectToAction("AdminTabsLayout", "Home");
+             return RedirectToAction("Dashboard", "Dashboard");
 
         }
 
@@ -412,7 +412,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
         public IActionResult BlockCase(int requestid, string note)
         {
             _requestpopupaction.BlockCase(requestid, note);
-            return RedirectToAction("AdminTabsLayout", "Home");
+             return RedirectToAction("Dashboard", "Dashboard");
         }
 
 
@@ -447,7 +447,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
         public IActionResult AssignCase(int requestid, int phyid, string note)
         {
             _requestpopupaction.AssignCase(requestid, phyid, _admin.GetSessionAdminId(), note);
-            return RedirectToAction("AdminTabsLayout", "Home");
+             return RedirectToAction("Dashboard", "Dashboard");
         }
 
 
@@ -468,7 +468,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
         public IActionResult ClearCaseSubmit(int requestid)
         {
             _requestpopupaction.ClearCase(requestid);
-            return RedirectToAction("AdminTabsLayout", "Home");
+             return RedirectToAction("Dashboard", "Dashboard");
         }
 
         [Area("AdminArea")]
@@ -496,7 +496,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
             //var reqplai = EncryptionRepository.Decrypt(requestidcipher);
             var link = "https://localhost:7249/PatientArea/Home/ViewAgreement?requestid=" + requestidcipher;
             _sendemail.Sendemail(email, "View Agreenment", link);
-            return RedirectToAction("AdminTabsLayout", "Home");
+             return RedirectToAction("Dashboard", "Dashboard");
         }
 
         [Area("AdminArea")]
@@ -729,7 +729,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
                 var role = roleClaim.Value;
                 if (role == "Admin")
                 {
-                    return RedirectToAction("AdminTabsLayout", "Home");
+                     return RedirectToAction("Dashboard", "Dashboard");
                 }
                 if (role == "Physician")
                 {
@@ -762,7 +762,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
         public IActionResult CloseCaseSubmit(int requestid)
         {
             _requestpopupaction.CloseCase(requestid);
-            return RedirectToAction("AdminTabsLayout", "Home");
+             return RedirectToAction("Dashboard", "Dashboard");
         }
 
         // Close Case End
@@ -930,7 +930,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
             }
             if (role == "Admin")
             {
-                return RedirectToAction("AdminTabsLayout", "Home", new { area = "AdminArea" });
+                return RedirectToAction("Dashboard", "Dashboard", new { area = "AdminArea" });
             }
             else
             {

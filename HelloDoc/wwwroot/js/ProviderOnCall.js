@@ -1,10 +1,8 @@
 ﻿$('#calenderviewbtn').on('click', function () {
-    $.ajax({
-        url: '/AdminArea/AdminProviderTab/Scheduling',
-        success: function (response) {
-            $('#nav-tabContent').html(response);
-        }
-    });
+    var url = '/AdminArea/AdminProviderTab/Scheduling';
+    var link = document.createElement('a');
+    link.href = url;
+    link.click();
 });
 
 $('.drawbyregiondropdown').on('change', function () {

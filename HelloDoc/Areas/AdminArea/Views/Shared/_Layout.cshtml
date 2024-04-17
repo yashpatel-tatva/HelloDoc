@@ -31,7 +31,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" asp-append-version="true"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js" asp-append-version="true"></script>
-
+    <link rel="stylesheet" href="~/css/error.css" asp-append-version="true" />
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
           integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
@@ -75,9 +75,105 @@
             </div>
         </nav>
     </header>
-    @RenderBody()
+
+    @{
+        int id = (int)Context.Session.GetInt32("AdminId");
+        string username1 = Context.Session.GetString("UserName");
+    }
+    @* @using DataModels.AdminSideViewModels;
+    @model DashpopupsViewModel;*@
+
+    <nav style="background-color:white" class="resstartpadding">
+        <div class="mainnav">
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <button class="nav-link maintabs me-3" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Dashboard</button>
+                <button class="nav-link maintabs me-3" data-bs-toggle="tab" data-bs-target="#nav-ProviderLocation" type="button" role="tab" aria-controls="nav-ProviderLocation" aria-selected="false">Provider Location</button>
+                <button class="nav-link maintabs me-3" data-bs-toggle="tab" data-bs-target="#nav-Profile" type="button" role="tab" aria-controls="nav-Profile" aria-selected="false">My Profile</button>
+                <button class="nav-link me-3 dropdown pd ms-2" type="button" data-bs-toggle="dropdown" role="tab" aria-expanded="false">
+                    Providers
+                </button>
+                <div class="dropdown-menu dropdown-menu-right provider-dropdown">
+                    <button type="button" class="dropdown-item pdi maintabs ps-2" data-bs-target="#providers">Provider</button>
+                    <button type="button" class="dropdown-item pdi maintabs ps-2" data-bs-target="#scheduling">Scheduling</button>
+                    <button type="button" class="dropdown-item pdi maintabs ps-2" data-bs-target="#invoicing">Invoicing</button>
+                </div>
+                <button class="nav-link maintabs me-3" data-bs-toggle="tab" data-bs-target="#nav-Partners" type="button" role="tab" aria-controls="nav-Partners" aria-selected="false">Partners</button>
+                <button class="nav-link me-3 dropdown ad ms-2" type="button" data-bs-toggle="dropdown" role="tab" aria-expanded="false">
+                    Access
+                </button>
+                <div class="dropdown-menu dropdown-menu-right access-dropdown">
+                    <button type="button" class="dropdown-item adi maintabs ps-2" data-bs-target="#nav-Access">Access</button>
+                    <button type="button" class="dropdown-item adi maintabs ps-2" data-bs-target="#nav-createadmin">Create Admin</button>
+                    <button type="button" class="dropdown-item adi maintabs ps-2" data-bs-target="#nav_useraccess">User Access</button>
+                </div> <button class="nav-link me-3 dropdown rd ms-2" type="button" data-bs-toggle="dropdown" role="tab" aria-expanded="false">
+                    Records
+                </button>
+                <div class="dropdown-menu dropdown-menu-right records-dropdown">
+                    <button type="button" class="dropdown-item rdi maintabs ps-2" data-bs-target="#search-records">Search Records</button>
+                    <button type="button" class="dropdown-item rdi maintabs ps-2" data-bs-target="#email-logs">Email Logs</button>
+                    <button type="button" class="dropdown-item rdi maintabs ps-2" data-bs-target="#sms-logs">SMS Logs</button>
+                    <button type="button" class="dropdown-item rdi maintabs ps-2" data-bs-target="#patient-records">Patient Records</button>
+                    <button type="button" class="dropdown-item rdi maintabs ps-2" data-bs-target="#block-history">Block History</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="position-relative">
+        <div class="offcanvas offcanvas-start position-absolute" data-bs-scroll="false" style="width:65%" tabindex="-1" id="layoutnav" aria-labelledby="offcanvasWithBackdropLabel">
+            <span class="p-2 "> <span class="small">Welcome , </span><b>@username1</b></span>
+            <div class="maintabsul">
+                <div class="accordianmaintabs" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Dashboard</div>
+                <div class="accordianmaintabs" data-bs-toggle="tab" data-bs-target="#nav-ProviderLocation" type="button" role="tab" aria-controls="nav-ProviderLocation" aria-selected="false">Provider </div>
+                <div class="accordianmaintabs" data-bs-toggle="tab" data-bs-target="#nav-Profile" type="button" role="tab" aria-controls="nav-Profile" aria-selected="false">My Profile</div>
+                <div class="accordion customaccordion p-0" id="accordionExample">
+                    <div class="accordion-item border-0 shadow-none">
+                        <button class="accordion-button sidebar collapsed p-0 m-0 align-items-center shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            <h6 class="mb-0" id="headingTwo" style="padding : 5px 10%">
+                                Providers
+                            </h6>
+                        </button>
+                        <div id="collapseTwo" class="accordion-collapse collapse sidebar" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                            <ul class="accordion-body sidebar m-0" style="list-style : inside">
+                                <li class="accordianmaintabs" data-bs-target="#providers">Provider</li>
+                                <li class="accordianmaintabs" data-bs-target="#scheduling">Scheduling</li>
+                                <li class="accordianmaintabs" data-bs-target="#invoicing">Invoice</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordianmaintabs" data-bs-toggle="tab" data-bs-target="#nav-Partners" type="button" role="tab" aria-controls="nav-Partners" aria-selected="false">Partners</div>
+                <div class="accordianmaintabs" data-bs-toggle="tab" data-bs-target="#nav-Access" type="button" role="tab" aria-controls="nav-Access" aria-selected="false">Access</div>
+                <div class="accordianmaintabs" data-bs-toggle="tab" data-bs-target="#nav-createadmin" type="button" role="tab" aria-controls="nav-createadmin" aria-selected="false">Create Admin</div>
+                <div class="accordianmaintabs" data-bs-toggle="tab" data-bs-target="#nav-Records" type="button" role="tab" aria-controls="nav-Records" aria-selected="false">Records</div>
+            </div>
+        </div>
+    </div>
+    @if (TempData["Message"] != null)
+    {
+        <script>
+            Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: "@TempData["Message"]",
+                showConfirmButton: false,
+                timer: 1000
+            });
+        </script>
+    }
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/foradmintabslayout.js" asp-append-version="true"></script>
+
+
+    <div class="tab-content respadding" id="nav-tabContent">
+        @RenderBody()
+    </div>
+
     <ejs-scripts></ejs-scripts>
-    <footer class="text-muted mt-5" >
+    <footer class="text-muted mt-5">
         <div class="bg-dark d-flex justify-content-end py-2 mt-auto position-fixed bottom-0  w-100" id="bg" style="z-index:10">
             <span class="fw-medium px-2  "><a href="#" class="text-secondary">Terms and Condition</a></span>
             <span class="fw-medium px-2  "><a href="#" class="text-secondary"> | </a></span>
@@ -109,7 +205,7 @@
                     fullNumber = fullNumber.replace("+" + countryCode + "+", "+");
                 }
                 console.log(fullNumber);
-                $(this).val(fullNumber.replace(" ",""));
+                $(this).val(fullNumber.replace(" ", ""));
             });
         });
 

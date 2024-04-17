@@ -9,6 +9,8 @@ namespace DataModels.AdminSideViewModels
         public string Aspnetid { get; set; }
         public int Adminid { get; set; }
         public string Username { get; set; }
+
+        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$", ErrorMessage = "Password must be at least 8 characters and contain at least one uppercase letter, one lowercase letter, one digit, and one special character.")]
         public string Password { get; set; }
         public string Status { get; set; }
         public string Role { get; set; }

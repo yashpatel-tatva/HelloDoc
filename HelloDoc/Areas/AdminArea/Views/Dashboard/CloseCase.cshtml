@@ -9,7 +9,7 @@
         <div class="d-flex justify-content-between mx-3">
             <div class="h3 subinfotext fw-bold">Close Case</div>
             <div>
-                <a asp-controller="Home" asp-action="AdminTabsLayout">
+                <a asp-controller="Dashboard" asp-action="Dashboard">
                     <button class="d-flex babtn rounded align-item-center p-1 px-2">
                         <div><img src="~/res/back.png" width="15px" height="10px"></div>
                         <div><span>Back</span></div>
@@ -74,45 +74,47 @@
             </form>
             <div class="p-3 mt-4">
                 <div class="h5 fw-bold">Patient Information</div>
-                <div class="row d-flex">
-                    <div class="py-2 col-xl-6 col-md-6 col-sm-12">
-                        <div class="form-group d-flex align-items-center rounded">
-                            <input type="text" class="form-control" placeholder="" asp-for="FirstName" disabled><span>First Name</span>
+                <form class="p-0">
+                    <div class="row d-flex">
+                        <div class="py-2 col-xl-6 col-md-6 col-sm-12">
+                            <div class="form-group d-flex align-items-center rounded">
+                                <input type="text" class="form-control" placeholder="" asp-for="FirstName" disabled><span>First Name</span>
+                            </div>
+                            <span asp-validation-for="FirstName" class="text-danger spanofvalid"></span>
                         </div>
-                        <span asp-validation-for="FirstName"></span>
-                    </div>
-                    <div class="py-2 col-xl-6 col-md-6 col-sm-12">
-                        <div class="form-group d-flex align-items-center rounded">
-                            <input type="text" class="form-control" placeholder="" asp-for="LastName" disabled><span>Last Name</span>
+                        <div class="py-2 col-xl-6 col-md-6 col-sm-12">
+                            <div class="form-group d-flex align-items-center rounded">
+                                <input type="text" class="form-control" placeholder="" asp-for="LastName" disabled><span>Last Name</span>
+                            </div>
+                            <span asp-validation-for="LastName" class="text-danger spanofvalid"></span>
                         </div>
-                        <span asp-validation-for="LastName"></span>
-                    </div>
-                    <div class="py-2 col-xl-6 col-md-6 col-sm-12">
-                        <div class="form-group d-flex align-items-center rounded">
-                            <input type="date" class="form-control" placeholder="" min="1940-01-01" max="2000-01-01" asp-for="PatientDOB" disabled><span>Date of Birth</span>
-                        </div>
-                    </div>
-                    <div class="py-2 col-xl-5 col-md-5 col-sm-10 col-10">
-                        <div class="telephone rounded">
-                            <div class="input-group d-flex align-items-center rounded ">
-                                <input type="tel" class="form-control CloseCasePatientMobile" asp-for="PatientMobile" disabled>
+                        <div class="py-2 col-xl-6 col-md-6 col-sm-12">
+                            <div class="form-group d-flex align-items-center rounded">
+                                <input type="date" class="form-control" placeholder="" min="1940-01-01" max="2000-01-01" asp-for="PatientDOB" disabled><span>Date of Birth</span>
                             </div>
                         </div>
-                            <span asp-validation-for="PatientMobile"></span>
-                    </div>
-                    <div class="py-2 col-xl-1 col-md-1 col-sm-2 col-2 ps-0">
-                        <div class="border border-1 border-info d-flex w-100 h-100 align-items-center justify-content-center rounded">
-                            <button class=" text-info border-0 bg-transparent"><i class="bi bi-telephone-fill" style="font-size : 1.5rem"></i></button>
+                        <div class="py-2 col-xl-5 col-md-5 col-sm-10 col-10">
+                            <div class="telephone rounded">
+                                <div class="input-group d-flex align-items-center rounded ">
+                                    <input type="tel" class="form-control CloseCasePatientMobile" asp-for="PatientMobile" disabled>
+                                </div>
+                            </div>
+                            <span asp-validation-for="PatientMobile" class="text-danger spanofvalid"></span>
+                        </div>
+                        <div class="py-2 col-xl-1 col-md-1 col-sm-2 col-2 ps-0">
+                            <div class="border border-1 border-info d-flex w-100 h-100 align-items-center justify-content-center rounded">
+                                <button class=" text-info border-0 bg-transparent"><i class="bi bi-telephone-fill" style="font-size : 1.5rem"></i></button>
+                            </div>
+                        </div>
+                        <div class="py-2 col-xl-6 col-md-6 col-sm-12">
+                            <div class="form-group d-flex align-items-center rounded">
+                                <input type="email" class="form-control CloseCasePatientEmail" placeholder="" asp-for="PatientEmail" disabled>
+                                <span>Email</span>
+                            </div>
+                            <span asp-validation-for="PatientEmail" class="text-danger spanofvalid"></span>
                         </div>
                     </div>
-                    <div class="py-2 col-xl-6 col-md-6 col-sm-12">
-                        <div class="form-group d-flex align-items-center rounded">
-                            <input type="email" class="form-control CloseCasePatientEmail" placeholder="" asp-for="PatientEmail"  disabled>
-                            <span>Email</span>
-                        </div>
-                        <span asp-validation-for="PatientEmail"></span>
-                    </div>
-                </div>
+                </form>
             </div>
             <div class="d-flex justify-content-end gap-2 p-3">
                 <button type="button" class=" p-2 px-3 text-white bg-info rounded border-info  mx-2 shadow-none" id="Edit_Save">Edit</button>
@@ -122,6 +124,11 @@
     </div>
 </div>
 
+
+<script>
+
+</script>
+<link rel="stylesheet" href="~/css/error.css" asp-append-version="true" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
 <script src="~/js/ViewUploads.js" asp-append-version="true"></script>

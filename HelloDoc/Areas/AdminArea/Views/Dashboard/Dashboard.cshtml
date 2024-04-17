@@ -1,5 +1,5 @@
 ﻿@{
-    Layout = null;
+    //Layout = null;
 }
 
 @using DataModels.AdminSideViewModels;
@@ -7,11 +7,18 @@
 
 <div id="dashboardView">
 </div>
-
+<partial id="PopUps" />
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
-
+<script>
+    localStorage.setItem('target', "#nav-home");
+    var target = localStorage.getItem('target');
+    $('.maintabs').removeClass('active');
+    $('.accordianmaintabs').removeClass('active');
+    $('.maintabs[data-bs-target="' + target + '"]').addClass('active');
+    $('.accordianmaintabs[data-bs-target="' + target + '"]').addClass('active');
+</script>
 <script>
     $(document).ready(function () {
         $.ajax({

@@ -1,5 +1,5 @@
 ﻿@{
-    Layout = "_SchedulerLayout";
+    //Layout = "_SchedulerLayout";
 }
 <div class="container">
     <div class="d-flex justify-content-between">
@@ -62,6 +62,13 @@
 
     <div id="PopUps"></div>
 </div>
-
+<script>
+    localStorage.setItem('target', "#scheduling");
+    var target = localStorage.getItem('target');
+    $('.maintabs').removeClass('active');
+    $('.accordianmaintabs').removeClass('active');
+    $('.maintabs[data-bs-target="' + target + '"]').addClass('active');
+    $('.accordianmaintabs[data-bs-target="' + target + '"]').addClass('active');
+</script>
 <script src="~/js/Scheduling.js" asp-append-version="true"></script>
 <link href="~/css/Scheduling.css" rel="stylesheet" asp-append-version="true" />

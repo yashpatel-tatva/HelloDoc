@@ -1,4 +1,6 @@
-﻿namespace DataModels.AdminSideViewModels
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace DataModels.AdminSideViewModels
 {
     public class RequestDataViewModel
     {
@@ -51,7 +53,12 @@
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTime PatientDOB { get; set; }
+
+
+        [RegularExpression(@"^(\+\d{1,3}[- ]?)?\d{10}$", ErrorMessage = "Mobile number format is not valid")]
         public string PatientMobile { get; set; }
+
+        [EmailAddress(ErrorMessage = "Invalid Email Address")]
         public string PatientEmail { get; set; }
         public string Region { get; set; }
         public string BusinessName { get; set; }

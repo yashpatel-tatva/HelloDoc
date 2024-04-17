@@ -1,5 +1,5 @@
 ﻿@{
-    Layout = null;
+    //Layout = null;
 }
 <div class="container">
     <div class="d-flex justify-content-between">
@@ -34,5 +34,12 @@
         </div>
     </div>
 </div>
-
+<script>
+    localStorage.setItem('target', "#nav_useraccess");
+    var target = localStorage.getItem('target');
+    $('.maintabs').removeClass('active');
+    $('.accordianmaintabs').removeClass('active');
+    $('.maintabs[data-bs-target="' + target + '"]').addClass('active');
+    $('.accordianmaintabs[data-bs-target="' + target + '"]').addClass('active');
+</script>
 <script src="~/js/UserAccess.js" asp-append-version="true"></script>

@@ -81,7 +81,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
                             Expires = DateTime.Now.AddHours(2)
                         };
                         Response.Cookies.Append("jwt", _jwtRepository.GenerateJwtToken(loggedInPersonViewModel), option);
-                        return RedirectToAction("AdminTabsLayout", "Home");
+                        return RedirectToAction("Dashboard", "Dashboard");
                     }
                     else
                     {

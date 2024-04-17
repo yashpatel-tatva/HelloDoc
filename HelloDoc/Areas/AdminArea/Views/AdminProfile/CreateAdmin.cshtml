@@ -1,5 +1,5 @@
 ﻿@{
-    Layout = null;
+    //Layout = null;
 }
 @using DataModels.AdminSideViewModels
 @model AdminProfileViewModel
@@ -7,7 +7,7 @@
     <div class="d-flex justify-content-between mx-3">
         <div class="h3 subinfotext fw-bold">Create Admin Account</div>
         <div>
-            <a asp-action="AdminTabsLayout" asp-controller="Home">
+            <a asp-action="Dashboard" asp-controller="Dashboard">
                 <button type="button" class="d-flex babtn rounded align-item-center p-1 px-2">
                     <div><img src="~/res/back.png" width="15px" height="10px"></div>
                     <div><span>Back</span></div>
@@ -152,6 +152,14 @@
         opacity: 1;
     }
 </style>
+<script>
+    localStorage.setItem('target', "#nav-createadmin");
+    var target = localStorage.getItem('target');
+    $('.maintabs').removeClass('active');
+    $('.accordianmaintabs').removeClass('active');
+    $('.maintabs[data-bs-target="' + target + '"]').addClass('active');
+    $('.accordianmaintabs[data-bs-target="' + target + '"]').addClass('active');
+</script>
 <script>
     $('input[type="tel"]').each(function () {
         var iti = window.intlTelInput(this, {

@@ -53,6 +53,7 @@
         var requestid = $('#inputhiddenrequestid').val();
         if (phyid == "invalid") {
             $("#physiciandropdown").css("border-color", "red");
+            Swal.fire("Select Physician");
         } else {
             $.ajax({
                 url: '/AdminArea/Dashboard/AssignCase',

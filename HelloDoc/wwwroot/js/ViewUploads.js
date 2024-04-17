@@ -1,4 +1,11 @@
-﻿$('.deletebtn').on('click', function () {
+﻿$('.spanofvalid').bind("DOMSubtreeModified", function () {
+    if ($(this).text().trim() !== '') {
+        $(this).parents('.py-2').addClass('error');
+    } else {
+        $(this).parents('.py-2').removeClass('error');
+    }
+});
+$('.deletebtn').on('click', function () {
     var id = $(this).val();
     $.ajax({
         type: 'POST',
@@ -31,7 +38,7 @@ $('input[type="tel"]').each(function () {
             fullNumber = fullNumber.replace("+" + countryCode + "+", "+");
         }
         console.log(fullNumber);
-        $(this).val(fullNumber.replace(" ",""));
+        $(this).val(fullNumber.replace(" ", ""));
     });
 });
 $('.deleteall').on('click', function () {
@@ -154,26 +161,31 @@ $('#Edit_Save').on('click', function () {
             pageredirectto: "CloseCase"
         };
 
+        var error = $('.spanofvalid').text().trim() !== '';
 
-        $.ajax({
-            type: 'POST',
-            url: '/AdminArea/Dashboard/EditEmailPhone',
-            contentType: 'application/json',
-            data: JSON.stringify(model),
-            success: function (response) {
-                Swal.fire({
-                    position: "top-end",
-                    icon: "success",
-                    title: "Email and Mobile Edited",
-                    showConfirmButton: false,
-                    timer: 1000
-                });
-                $('#nav-tabContent').html(response);
-            },
-            error: function (error) {
-                console.error('Error saving admin notes:', error);
-            }
-        });
+        if (!error) {
+
+            $.ajax({
+                type: 'POST',
+                url: '/AdminArea/Dashboard/EditEmailPhone',
+                contentType: 'application/json',
+                data: JSON.stringify(model),
+                success: function (response) {
+                    Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: "Email and Mobile Edited",
+                        showConfirmButton: false,
+                        timer: 1000
+                    });
+                    $('#nav-tabContent').html(response);
+                },
+                error: function (error) {
+                    console.error('Error saving admin notes:', error);
+                }
+            });
+        }
+
     }
 });
 $('#Close_Cancle').on('click', function () {

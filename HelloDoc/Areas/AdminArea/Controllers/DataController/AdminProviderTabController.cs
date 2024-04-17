@@ -62,7 +62,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         public void ChangeNotification(List<int> checkedToUnchecked, List<int> uncheckedToChecked)
         {
             _providerMenu.ChangeNotification(checkedToUnchecked, uncheckedToChecked);
-            //return RedirectToAction("AdminTabsLayout", "Home");
+            // return RedirectToAction("Dashboard", "Dashboard");
         }
         [Area("AdminArea")]
         [HttpPost]
@@ -271,7 +271,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             physicianAccountViewModel.SelectedRegionCB = list;
             physicianAccountViewModel.Createby = _admin.GetFirstOrDefault(x => x.Adminid == _admin.GetSessionAdminId()).Aspnetuserid;
             var physicianid = _providerMenu.AddAccount(physicianAccountViewModel);
-            return RedirectToAction("AdminTabsLayout", "Home");
+             return RedirectToAction("Dashboard", "Dashboard");
         }
 
 

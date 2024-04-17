@@ -1,5 +1,5 @@
 ﻿@{
-    Layout = null;
+    //Layout = null;
 }
 @using DataModels.AdminSideViewModels
 @model AdminProfileViewModel
@@ -19,37 +19,39 @@
         <div class="bg-light rounded m-3 shadow" id="content">
             <div class="p-3">
                 <div class="h5 fw-bold">Account Information</div>
-                <div class="d-flex row">
-                    <div class="py-2 col-xl-6 col-md-6 col-sm-12">
-                        <div class="form-group d-flex align-items-center rounded">
-                            <input type="text" class="form-control" placeholder="" asp-for="Username" disabled><span>Username</span>
+                <form>
+                    <div class="d-flex row">
+                        <div class="py-2 col-xl-6 col-md-6 col-sm-12">
+                            <div class="form-group d-flex align-items-center rounded">
+                                <input type="text" class="form-control" placeholder="" asp-for="Username" disabled><span>Username</span>
+                            </div>
+                        </div>
+                        <div class="py-2 col-xl-6 col-md-6 col-sm-12">
+                            <div class="form-group d-flex align-items-center rounded">
+                                <input type="text" class="form-control" placeholder="" asp-for="Password" id="password" disabled><span>Password</span>
+                                <input type="text" class="form-control" placeholder="" value="@Model.Aspnetid" id="aspnetid" hidden>
+
+                            </div>
+                            <span class="text-danger spanofvalid" asp-validation-for="Password"></span>
+                        </div>
+                        <div class="py-2 col-xl-6 col-md-6 col-sm-12">
+                            <div class="form-group d-flex align-items-center rounded">
+                                <select class="form-select" disabled>
+                                    <option>Active</option>
+                                </select>
+                                <span class="selectedselectspan">Status</span>
+                            </div>
+                        </div>
+                        <div class="py-2 col-xl-6 col-md-6 col-sm-12">
+                            <div class="form-group d-flex align-items-center rounded">
+                                <select class="form-select" disabled>
+                                    <option>Master Admin</option>
+                                </select>
+                                <span class="selectedselectspan">Role</span>
+                            </div>
                         </div>
                     </div>
-                    <div class="py-2 col-xl-6 col-md-6 col-sm-12">
-                        <div class="form-group d-flex align-items-center rounded">
-                            <input type="text" class="form-control" placeholder="" asp-for="Password" id="password" disabled><span>Password</span>
-                            <input type="text" class="form-control" placeholder="" value="@Model.Aspnetid" id="aspnetid" hidden>
-                            
-                        </div>
-                        <span class="text-danger" asp-validation-for="Password" class="text-danger"></span>
-                    </div>
-                    <div class="py-2 col-xl-6 col-md-6 col-sm-12">
-                        <div class="form-group d-flex align-items-center rounded">
-                            <select class="form-select" disabled>
-                                <option>Active</option>
-                            </select>
-                            <span class="selectedselectspan">Status</span>
-                        </div>
-                    </div>
-                    <div class="py-2 col-xl-6 col-md-6 col-sm-12">
-                        <div class="form-group d-flex align-items-center rounded">
-                            <select class="form-select" disabled>
-                                <option>Master Admin</option>
-                            </select>
-                            <span class="selectedselectspan">Role</span>
-                        </div>
-                    </div>
-                </div>
+                </form>
                 <div class="d-flex justify-content-end py-4" id="passsaveandcancle">
                     <button type="button" class="btn border-info text-info shadow-none" id="resetpassword">Reset Password</button>
                 </div>
@@ -90,17 +92,17 @@
                                     <input type="tel" class="form-control adminedit " id="admineditmobile" asp-for="Mobile" disabled>
                                 </div>
                             </div>
-                                <span class="text-danger" asp-validation-for="Mobile"></span>
+                            <span class="text-danger" asp-validation-for="Mobile"></span>
                         </div>
                         <div class="py-2 col-xl-6 col-md-6 col-sm-12 d-flex justify-content-between align-items-center flex-wrap">
-                            @foreach(var item in Model.State)
+                            @foreach (var item in Model.State)
                             {
                                 <div class="form-check form-check-inline ">
                                     @if (Model.SelectRegion == null)
                                     {
                                         <input type="checkbox" name="admineditregion" id="region_@item.Regionid" value="@item.Regionid" disabled />
                                     }
-                                    else if(Model.SelectRegion.Contains(item.Regionid.ToString()))
+                                    else if (Model.SelectRegion.Contains(item.Regionid.ToString()))
                                     {
                                         <input type="checkbox" class="form-check-input" name="admineditregion" id="region_@item.Regionid" value="@item.Regionid" checked disabled />
                                     }
@@ -161,7 +163,7 @@
                                     <input type="tel" class="form-control  addressedit" id="addresseditBillMobile" asp-for="BillMobile" disabled>
                                 </div>
                             </div>
-                                <span class="text-danger" asp-validation-for="BillMobile"></span>
+                            <span class="text-danger" asp-validation-for="BillMobile"></span>
                         </div>
                         <div class="d-flex justify-content-end gap-2 p-3" id="addresssaveandcancel">
                             <button type="button" class=" p-2 px-3 text-white bg-info rounded border-info  mx-2 px-3 shadow-none" id="addressEdit_Save">Edit</button>
@@ -175,5 +177,20 @@
 <script>
     $('#state').val(@Model.Region);
 
+</script>
+<script>
+    localStorage.setItem('target', "#nav-Profile");
+    var target = localStorage.getItem('target');
+    $('.maintabs').removeClass('active');
+    $('.accordianmaintabs').removeClass('active');
+    $('.maintabs[data-bs-target="' + target + '"]').addClass('active');
+    $('.accordianmaintabs[data-bs-target="' + target + '"]').addClass('active');
+    $('.spanofvalid').bind("DOMSubtreeModified", function () {
+        if ($(this).text().trim() !== '') {
+            $(this).parents('.py-2').addClass('error');
+        } else {
+            $(this).parents('.py-2').removeClass('error');
+        }
+    });
 </script>
 <script src="~/js/AdminProfile.js" asp-append-version="true"></script>

@@ -1,4 +1,13 @@
 ﻿@{
-    Layout = null;
+    //Layout = null;
 }
 <h1>Invoicing</h1>
+
+<script>
+    localStorage.setItem('target', "#invoicing");
+    var target = localStorage.getItem('target');
+    $('.maintabs').removeClass('active');
+    $('.accordianmaintabs').removeClass('active');
+    $('.maintabs[data-bs-target="' + target + '"]').addClass('active');
+    $('.accordianmaintabs[data-bs-target="' + target + '"]').addClass('active');
+</script>

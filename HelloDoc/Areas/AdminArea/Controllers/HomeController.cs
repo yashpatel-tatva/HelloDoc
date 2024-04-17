@@ -37,16 +37,23 @@ namespace HelloDoc.Areas.AdminArea.Controllers
             {
                 jwtservice.ValidateToken(token, out JwtSecurityToken jwttoken);
                 var roleClaim = jwttoken.Claims.FirstOrDefault(x => x.Type == "Role");
-
+                var aspnetid = jwttoken.Claims.FirstOrDefault(x => x.Type == "AspNetId").Value;
+                if (aspnetid == null)
+                {
+                    return RedirectToAction("AdminLogin", "Home");
+                }
                 if (roleClaim != null)
                 {
                     var role = roleClaim.Value;
                     if (role == "Admin")
                     {
-                        return RedirectToAction("AdminTabsLayout", "Home");
+
+                        _admin.SetSession(_admin.GetFirstOrDefault(x => x.Aspnetuserid == aspnetid));
+                        return RedirectToAction("Dashboard", "Dashboard");
                     }
                     if (role == "Physician")
                     {
+                        _physician.SetSession(_physician.GetFirstOrDefault(x=>x.Aspnetuserid == aspnetid));
                         return RedirectToAction("PhysicianTabsLayout", "Home", new { area = "ProviderArea" });
                     }
                 }
@@ -192,7 +199,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers
                     Expires = DateTime.Now.AddHours(2)
                 };
                 Response.Cookies.Append("jwt", _jwtRepository.GenerateJwtToken(loggedInPersonViewModel), option);
-                return RedirectToAction("AdminTabsLayout", "Home");
+                 return RedirectToAction("Dashboard", "Dashboard");
             }
             if (role == "2")
             {

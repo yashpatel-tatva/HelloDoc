@@ -1,5 +1,5 @@
 ﻿@{
-    Layout = null;
+    //Layout = null;
 }
 @using DataModels.AdminSideViewModels;
 @model List<ProviderMenuViewModel> ;
@@ -39,5 +39,12 @@
         <partial id="_ContactProvider"></partial>
     </div>
 </div>
-
+<script>
+    localStorage.setItem('target', "#providers");
+    var target = localStorage.getItem('target');
+    $('.maintabs').removeClass('active');
+    $('.accordianmaintabs').removeClass('active');
+    $('.maintabs[data-bs-target="' + target + '"]').addClass('active');
+    $('.accordianmaintabs[data-bs-target="' + target + '"]').addClass('active');
+</script>
 <script src="~/js/ProviderMenu.js" asp-append-version="true"></script>

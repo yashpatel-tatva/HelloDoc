@@ -1,5 +1,5 @@
 ﻿@{
-    Layout = null;
+    //Layout = null;
 }
 
 
@@ -17,7 +17,7 @@
     <div class="d-flex justify-content-between">
         <div class="h3 fw-bold">Provider Location</div>
         <div>
-            <a asp-action="AdminTabsLayout" asp-controller="Home">
+            <a asp-action="Dashboard" asp-controller="Dashboard">
                 <button class="d-flex babtn border border-info border-1 rounded align-items-center p-1 px-2">
                     <div class="d-flex"><img src="~/res/back.png" width="15px" height="15px"></div>
                     <div class="px-1"><span>Back</span></div>
@@ -29,5 +29,12 @@
         <div id="map" style="z-index : 0!important"></div>
     </div>
 </div>
-
+<script>
+    localStorage.setItem('target', "#nav-ProviderLocation");
+    var target = localStorage.getItem('target');
+    $('.maintabs').removeClass('active');
+    $('.accordianmaintabs').removeClass('active');
+    $('.maintabs[data-bs-target="' + target + '"]').addClass('active');
+    $('.accordianmaintabs[data-bs-target="' + target + '"]').addClass('active');
+</script>
 <script src="~/js/ProviderLocation.js" asp-append-version="true"></script>

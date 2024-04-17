@@ -45,6 +45,7 @@
         var note = $('#Cancelreason').val();
         if (casetag == "1234") {
             $("#casetagdropdown").css("border-color", "red");
+            Swal.fire("Seletct Reason");
         } else {
             $.ajax({
                 url: '/AdminArea/Dashboard/CancelCase',

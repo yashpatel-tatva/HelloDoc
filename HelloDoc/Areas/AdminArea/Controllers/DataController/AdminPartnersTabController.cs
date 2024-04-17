@@ -162,7 +162,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
                 _db.SaveChanges();
                 TempData["Message"] = "Vendor Updated";
             }
-            return RedirectToAction("AdminTabsLayout", "Home");
+             return RedirectToAction("Dashboard", "Dashboard");
         }
     }
 }

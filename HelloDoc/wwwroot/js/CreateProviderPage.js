@@ -11,7 +11,7 @@
             fullNumber = fullNumber.replace("+" + countryCode + "+", "+");
         }
         console.log(fullNumber);
-        $(this).val(fullNumber.replace(" ",""));
+        $(this).val(fullNumber.replace(" ", ""));
     });
 });
 document.querySelectorAll('.fileToUpload').forEach(function (inputElement) {
@@ -71,9 +71,15 @@ $('#editlastname').on('input', function () {
 $('#CreateAccountBtn').on('click', function () {
     var id = 0;
     var email = $('#editemail').val();
-    var submit = checkemail(id, email);
-    if (submit) {
-        $(this).closest('form').submit();
+    if (email == "") {
+        Swal.fire("Enter Email");
+    } else {
+        var submit = checkemail(id, email);
+        console.log("click", submit)
+        if (submit) {
+            console.log("click", submit)
+            $(this).closest('form').submit();
+        }
     }
 });
 
@@ -92,14 +98,28 @@ function checkemail(id, email) {
     $.ajax({
         url: '/AdminArea/AdminProviderTab/CheckEmailForPhysician',
         data: { id, email },
+        async: false,
         type: 'POST',
         success: function (data) {
             if (data) {
                 $('#editemail').val("");
                 Swal.fire("Email Already Exist!");
                 cansubmmit = !data;
+                console.log("if", cansubmmit)
+            }
+            else {
+                cansubmmit = !data;
+                console.log("else", cansubmmit)
             }
         }
     });
+    console.log("cansuy", cansubmmit)
     return cansubmmit;
 }
+$('.spanofvalid').bind("DOMSubtreeModified", function () {
+    if ($(this).text().trim() !== '') {
+        $(this).parents('.py-2').addClass('error');
+    } else {
+        $(this).parents('.py-2').removeClass('error');
+    }
+});

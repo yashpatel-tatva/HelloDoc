@@ -26,10 +26,12 @@ $('#SendLinkSubmitBtn').on('click', function () {
 
     if (email == null || email == "" || !regex.test(email)) {
         $('#sendlinkemail').css("border", "1px solid red");
+        Swal.fire("Enter valid email");
         flage = false;
     }
     if (mobile == null || mobile == "") {
         $('#sendlinkmobile').css("border", "1px solid red");
+        Swal.fire("Enter valid Mobile");
         flage = false;
     }
     if (flage == true) {

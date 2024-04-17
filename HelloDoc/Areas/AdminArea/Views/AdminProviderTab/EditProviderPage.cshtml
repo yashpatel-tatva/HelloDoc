@@ -41,15 +41,17 @@
                     <div class="form-group d-flex align-items-center rounded">
                         <input type="text" class="form-control" placeholder="" asp-for="Username" disabled><span>Username</span>
                     </div>
-                    <span class="text-danger" asp-validation-for="Username"></span>
+                    <span class="text-danger spanofvalid" asp-validation-for="Username"></span>
 
                 </div>
                 <div class="py-2 col-xl-6 col-md-6 col-sm-12">
-                    <div class="form-group d-flex align-items-center rounded">
-                        <input type="text" class="form-control" placeholder="" asp-for="Password" id="password" disabled><span>Password</span>
-                        <input type="text" class="form-control" placeholder="" value="@Model.Aspnetid" id="aspnetid" hidden>
-                    </div>
-                    <span class="text-danger" asp-validation-for="Password"></span>
+                    <form>
+                        <div class="form-group d-flex align-items-center rounded">
+                            <input type="text" class="form-control" placeholder="" asp-for="Password" id="password" disabled><span>Password</span>
+                            <input type="text" class="form-control" placeholder="" value="@Model.Aspnetid" id="aspnetid" hidden>
+                        </div>
+                        <span class="text-danger spanofvalid" asp-validation-for="Password"></span>
+                    </form>
                 </div>
                 @if (Model.loggedpersonrole == "Admin")
                 {
@@ -85,19 +87,19 @@
                         <div class="form-group d-flex align-items-center rounded">
                             <input type="text" class="form-control personalinfordit" placeholder="" id="editfirstname" asp-for="FirstName" disabled><span>First Name</span>
                         </div>
-                        <span class="text-danger" asp-validation-for="FirstName"></span>
+                        <span class="text-danger spanofvalid" asp-validation-for="FirstName"></span>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                         <div class="form-group d-flex align-items-center rounded">
                             <input type="text" class="form-control personalinfordit" placeholder="" id="editlastname" asp-for="LastName" disabled><span>Last Name</span>
                         </div>
-                        <span class="text-danger" asp-validation-for="LastName"></span>
+                        <span class="text-danger spanofvalid" asp-validation-for="LastName"></span>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                         <div class="form-group d-flex align-items-center rounded">
                             <input type="email" class="form-control personalinfordit" placeholder="" id="editemail" asp-for="Email" disabled><span>Email</span>
                         </div>
-                        <span class="text-danger" asp-validation-for="Email"></span>
+                        <span class="text-danger spanofvalid" asp-validation-for="Email"></span>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                         <div class="telephone rounded">
@@ -105,19 +107,19 @@
                                 <input type="tel" class="form-control  personalinfordit" id="personalinforditphone" asp-for="Phone" disabled>
                             </div>
                         </div>
-                        <span class="text-danger" asp-validation-for="Phone"></span>
+                        <span class="text-danger spanofvalid" asp-validation-for="Phone"></span>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                         <div class="form-group d-flex align-items-center rounded">
                             <input type="text" class="form-control personalinfordit" placeholder="" id="editmedical" asp-for="MedicalLicense" disabled><span>Medical License #</span>
                         </div>
-                        <span class="text-danger" asp-validation-for="MedicalLicense"></span>
+                        <span class="text-danger spanofvalid" asp-validation-for="MedicalLicense"></span>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                         <div class="form-group d-flex align-items-center rounded">
                             <input type="text" class="form-control personalinfordit" placeholder="" id="editnpi" asp-for="NPINumber" disabled><span>NPI Number</span>
                         </div>
-                        <span class="text-danger" asp-validation-for="NPINumber"></span>
+                        <span class="text-danger spanofvalid" asp-validation-for="NPINumber"></span>
                     </div>
                     @if (Model.loggedpersonrole == "Admin")
                     {
@@ -125,7 +127,7 @@
                             <div class="form-group d-flex align-items-center rounded">
                                 <input type="email" class="form-control personalinfordit" placeholder="" id="editsyncemail" asp-for="SynchronizationEmail" disabled><span>Synchronization Email</span>
                             </div>
-                            <span class="text-danger" asp-validation-for="SynchronizationEmail"></span>
+                            <span class="text-danger spanofvalid" asp-validation-for="SynchronizationEmail"></span>
                         </div>
                     }
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 d-flex justify-content-between align-items-center flex-wrap">
@@ -163,19 +165,19 @@
                         <div class="form-group d-flex align-items-center rounded">
                             <input type="text" class="form-control addressedit" id="addresseditAddress1" placeholder="" asp-for="Address1" disabled><span>Address1</span>
                         </div>
-                        <span class="text-danger" asp-validation-for="Address1"></span>
+                        <span class="text-danger spanofvalid" asp-validation-for="Address1"></span>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                         <div class="form-group d-flex align-items-center rounded">
                             <input type="text" class="form-control addressedit" id="addresseditAddress2" placeholder="" asp-for="Address2" disabled><span>Address2</span>
                         </div>
-                        <span class="text-danger" asp-validation-for="Address2"></span>
+                        <span class="text-danger spanofvalid" asp-validation-for="Address2"></span>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                         <div class="form-group d-flex align-items-center rounded">
                             <input type="text" class="form-control addressedit" id="addresseditCity" placeholder="" asp-for="City" disabled><span>City</span>
                         </div>
-                        <span class="text-danger" asp-validation-for="City"></span>
+                        <span class="text-danger spanofvalid" asp-validation-for="City"></span>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                         <div class="form-group d-flex align-items-center rounded">
@@ -192,7 +194,7 @@
                         <div class="form-group d-flex align-items-center rounded">
                             <input type="text" class="form-control addressedit" id="addresseditZip" placeholder="" asp-for="Zip" disabled><span>Zip</span>
                         </div>
-                        <span class="text-danger" asp-validation-for="Zip"></span>
+                        <span class="text-danger spanofvalid" asp-validation-for="Zip"></span>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                         <div class="telephone rounded">
@@ -200,7 +202,7 @@
                                 <input type="tel" class="form-control  addressedit" id="addresseditBillMobile" asp-for="BusinessPhone" disabled>
                             </div>
                         </div>
-                        <span class="text-danger" asp-validation-for="BusinessPhone"></span>
+                        <span class="text-danger spanofvalid" asp-validation-for="BusinessPhone"></span>
                     </div>
                     @if (Model.loggedpersonrole == "Admin")
                     {
@@ -217,13 +219,13 @@
                         <div class="form-group d-flex align-items-center rounded">
                             <input type="text" class="form-control authedit bnamewebnoteedit" id="authbusinessname" placeholder="" asp-for="BusinessName" disabled><span>Business Name</span>
                         </div>
-                        <span class="text-danger" asp-validation-for="BusinessName"></span>
+                        <span class="text-danger spanofvalid" asp-validation-for="BusinessName"></span>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                         <div class="form-group d-flex align-items-center rounded">
                             <input type="text" class="form-control authedit bnamewebnoteedit" id="authbusinessweb" placeholder="" asp-for="BusinessWebSite" disabled><span>Business WebSite</span>
                         </div>
-                        <span class="text-danger" asp-validation-for="BusinessWebSite"></span>
+                        <span class="text-danger spanofvalid" asp-validation-for="BusinessWebSite"></span>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                         <div class="form-group rounded d-flex align-items-center justify-content-between uploadbtndiv">
@@ -435,7 +437,7 @@
                 </div>
 
                 <input type="file" id="SelectFileToUpload" accept=".pdf" hidden />
-                <span class="text-danger" style="font-size : large!important" id="errormessageforfile"></span>
+                <span class="text-danger spanofvalid" style="font-size : large!important" id="errormessageforfile"></span>
 
                 <hr class="text-muted" style="border : 2px solid black" />
 
@@ -527,6 +529,6 @@
         </div>
     </div>
 </div>
-
+<link rel="stylesheet" href="~/css/error.css" asp-append-version="true" />
 <script src="~/js/ProviderAccount.js" asp-append-version="true"></script>
 <script src="~/js/requestform.js" asp-append-version="true"></script>

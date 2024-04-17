@@ -29,7 +29,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         [Area("AdminArea")]
         public JsonResult ProviderLocationJson()
         {
-            List<Physician> physician = _physician.GetAll().AsEnumerable().Where(x=>x.Isdeleted == null || x.Isdeleted[0] == false).ToList();
+            List<Physician> physician = _physician.GetAll().AsEnumerable().Where(x => x.Isdeleted == null || x.Isdeleted[0] == false).ToList();
             List<LocationData> result = new List<LocationData>();
             foreach (var x in physician)
             {
@@ -45,14 +45,18 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
                 }
                 catch { }
             }
-            var lastLocations = _db.Physicianlocations
+            var lastLocations = _db.Physicianlocations.Include(x => x.Physician).AsEnumerable().Where(x => x.Physician.Isdeleted[0]==false)
                                  .GroupBy(l => l.Physicianid)
                                  .Select(g => g.OrderByDescending(l => l.Createddate).First())
                                  .ToList();
             foreach (var phy in lastLocations)
             {
-                result.FirstOrDefault(x => x.Physicianid == phy.Physicianid).Lat = phy.Latitude;
-                result.FirstOrDefault(x => x.Physicianid == phy.Physicianid).Long = phy.Longitude;
+                try
+                {
+                    result.FirstOrDefault(x => x.Physicianid == phy.Physicianid).Lat = phy.Latitude;
+                    result.FirstOrDefault(x => x.Physicianid == phy.Physicianid).Long = phy.Longitude;
+                }
+                catch { }
             }
 
             var providerlocation = result.ToJson();

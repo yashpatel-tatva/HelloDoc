@@ -41,6 +41,7 @@
 
         if (digitRegex.test(message) || spaceRegex.test(message) || emptyRegex.test(message) || specialCharRegex.test(message)) {
             $(this).closest('form-group').css("border-color", "red");
+            Swal.fire("Enter Meaningful Text");
         } else {
             $.ajax({
                 url: '/AdminArea/Dashboard/SendEmailToAllOffduty',

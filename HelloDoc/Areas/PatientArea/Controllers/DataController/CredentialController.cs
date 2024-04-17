@@ -49,7 +49,7 @@ namespace HelloDoc.Areas.PatientArea.DataController
         [HttpGet]
         public bool CheckEmail(string email)
         {
-            var emailExists =  _context.Aspnetusers.FirstOrDefault(x => x.Email == email);
+            var emailExists =  _context.Users.FirstOrDefault(x => x.Email == email);
             if(emailExists == null)
             {
                 return false;

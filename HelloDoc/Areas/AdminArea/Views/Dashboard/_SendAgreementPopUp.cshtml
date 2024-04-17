@@ -72,6 +72,7 @@
         var requestid = $('#inputhiddenrequestid').val();
         if (email == "") {
             $("#patientemail").css("border-color", "red");
+            Swal.fire("Enter Email");
         } else {
             $.ajax({
                 url: '/AdminArea/Dashboard/SendAgreenment',

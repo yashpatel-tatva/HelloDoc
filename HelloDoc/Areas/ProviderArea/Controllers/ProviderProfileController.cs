@@ -1,6 +1,7 @@
 ﻿using DataAccess.Repository.IRepository;
 using DataAccess.ServiceRepository.IServiceRepository;
 using Microsoft.AspNetCore.Mvc;
+using NPOI.OpenXmlFormats;
 
 namespace HelloDoc.Areas.ProviderArea.Controllers
 {
@@ -8,10 +9,16 @@ namespace HelloDoc.Areas.ProviderArea.Controllers
     {
         private readonly IPhysicianRepository _physician;
         private readonly ISendEmailRepository _sendemail;
-        public ProviderProfileController(IPhysicianRepository physician , ISendEmailRepository sendEmailRepository)
+        private readonly IAdminRepository _admin;
+        private readonly IRequestStatusLogRepository _requestStatusLog;
+        private readonly HelloDocDbContext dbContext;
+        public ProviderProfileController(IPhysicianRepository physician , ISendEmailRepository sendEmailRepository, IRequestStatusLogRepository requestStatusLog, HelloDocDbContext dbContext, IAdminRepository admin)
         {
             _physician = physician;
             _sendemail = sendEmailRepository;
+            _requestStatusLog = requestStatusLog;
+            this.dbContext = dbContext;
+            _admin = admin;
         }
 
         [Area("ProviderArea")]
@@ -30,9 +37,9 @@ namespace HelloDoc.Areas.ProviderArea.Controllers
         [HttpPost]
         public void RequesttoAdmin(int physicianid , string message)
         {
-            var phy = _physician.GetFirstOrDefault(x => x.Physicianid== physicianid);
-            var phyemail = phy.Email;
-            _sendemail.Sendemail(phyemail, "Requet For Edit profle", message);
+            var admin = dbContext.Requeststatuslogs.Where(x=>x.Transtophysicianid == physicianid).OrderBy(x=>x.Createddate).LastOrDefault().Adminid;
+            var adminemail = _admin.GetFirstOrDefault(x => x.Adminid == admin).Email;
+            _sendemail.Sendemail(adminemail, "Requet For Edit profle", message);
         }
     }
 }

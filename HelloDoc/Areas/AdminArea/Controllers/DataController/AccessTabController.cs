@@ -97,7 +97,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         {
             _role.AddThisRole(Rolename, accounttype, menuitems, _admin.GetFirstOrDefault(x => x.Adminid == _admin.GetSessionAdminId()).Aspnetuserid);
             TempData["Message"] = Rolename + " Role Created";
-            return RedirectToAction("AdminTabsLayout", "Home");
+             return RedirectToAction("Dashboard", "Dashboard");
         }
         [Area("AdminArea")]
         [HttpPost]
@@ -106,7 +106,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             var Rolename = _role.GetFirstOrDefault(x => x.Roleid == roleid).Name;
             _role.DeleteThisRole(roleid);
             TempData["Message"] = Rolename + " Role Created";
-            return RedirectToAction("AdminTabsLayout", "Home");
+             return RedirectToAction("Dashboard", "Dashboard");
         }
         [Area("AdminArea")]
         [HttpPost]
@@ -123,7 +123,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             _role.EditThisRole(Roleid, accounttype, menuitems, _admin.GetFirstOrDefault(x => x.Adminid == _admin.GetSessionAdminId()).Aspnetuserid);
             var Rolename = _role.GetFirstOrDefault(x => x.Roleid == Roleid).Name;
             TempData["Message"] = Rolename + " Role Edited";
-            return RedirectToAction("AdminTabsLayout", "Home");
+             return RedirectToAction("Dashboard", "Dashboard");
         }
 
 

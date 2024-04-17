@@ -1,4 +1,11 @@
-﻿$('input[type="tel"]').each(function () {
+﻿$('.spanofvalid').bind("DOMSubtreeModified", function () {
+    if ($(this).text().trim() !== '') {
+        $(this).parents('.py-2').addClass('error');
+    } else {
+        $(this).parents('.py-2').removeClass('error');
+    }
+});
+$('input[type="tel"]').each(function () {
     var iti = window.intlTelInput(this, {
         nationalMode: false,
         utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"
@@ -10,7 +17,7 @@
             fullNumber = fullNumber.replace("+" + countryCode + "+", "+");
         }
         console.log(fullNumber);
-        $(this).val(fullNumber.replace(" ",""));
+        $(this).val(fullNumber.replace(" ", ""));
     });
 });
 
@@ -33,6 +40,7 @@ $('#resetpassword').on('click', function () {
 
         if (!passwordRegex.test(password)) {
             $('#password').css("border", "1px solid red");
+            Swal.fire("Enter Valid Password");
         }
         else {
             $.ajax({
@@ -108,6 +116,7 @@ $('#physicianEdit_Save').on('click', function () {
                 $('#personalinforditphone').css("border", "1px solid red");
                 return false;
             }
+
             return true;
         }
 
@@ -124,22 +133,26 @@ $('#physicianEdit_Save').on('click', function () {
                 SelectedRegionCB: selectedregion
             }
             console.log(JSON.stringify(model));
-            $.ajax({
-                url: '/AdminArea/AdminProviderTab/EditProviderPersonal',
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify(model),
-                success: function (response) {
-                    $('#nav-tabContent').html(response);
-                    Swal.fire({
-                        position: "top-end",
-                        icon: "success",
-                        title: "Saved",
-                        showConfirmButton: false,
-                        timer: 1000
-                    });
-                }
-            });
+            var error = $('.spanofvalid').text().trim() !== '';
+            console.log(error)
+            if (!error) {
+                $.ajax({
+                    url: '/AdminArea/AdminProviderTab/EditProviderPersonal',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(model),
+                    success: function (response) {
+                        $('#nav-tabContent').html(response);
+                        Swal.fire({
+                            position: "top-end",
+                            icon: "success",
+                            title: "Saved",
+                            showConfirmButton: false,
+                            timer: 1000
+                        });
+                    }
+                });
+            }
         }
     }
 });
@@ -211,7 +224,7 @@ $('#adminnoteEdit_Save').on('click', function () {
         $.ajax({
             url: '/AdminArea/AdminProviderTab/EditProviderAdminNote',
             type: 'POST',
-            data: { physicianid, adminnote , businessname , businessweb },
+            data: { physicianid, adminnote, businessname, businessweb },
             success: function (response) {
                 $('#nav-tabContent').html(response);
                 Swal.fire({
@@ -394,7 +407,7 @@ function checkemail(id, email) {
         url: '/AdminArea/AdminProviderTab/CheckEmailForPhysician',
         data: { id, email },
         type: 'POST',
-        async : false ,
+        async: false,
         success: function (data) {
             if (data) {
                 $('#editemail').val("");
