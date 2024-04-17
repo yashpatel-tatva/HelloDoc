@@ -23,53 +23,54 @@ namespace HelloDoc.Areas.AdminArea.DataController
         [HttpPost]
         public IActionResult StatuswiseData(string state, int currentpage, int pagesize, int requesttype, string search, int region)
         {
-            return RedirectToAction("Status_" + state, new { state, currentpage, pagesize, requesttype, search, region });
+            List<Request> model1 = _paginator.requests(state, currentpage, pagesize, requesttype, search, region);
+            List<AllRequestDataViewModel> filtereddata = _allrequestdata.FilteredRequest(model1);
+            return View("Status_" + state, filtereddata);
         }
 
 
-        [Area("AdminArea")]
-        public IActionResult Status_New(string state, int currentpage, int pagesize, int requesttype, string search, int region)
-        {
-            List<Request> model1 = _paginator.requests(state, currentpage, pagesize, requesttype, search, region);
-            List<AllRequestDataViewModel> filtereddata = _allrequestdata.FilteredRequest(model1);
-            return View(filtereddata);
-        }
-
-        [Area("AdminArea")]
-        public IActionResult Status_Pending(string state, int currentpage, int pagesize, int requesttype, string search, int region)
-        {
-            List<Request> model1 = _paginator.requests(state, currentpage, pagesize, requesttype, search, region);
-            List<AllRequestDataViewModel> filtereddata = _allrequestdata.FilteredRequest(model1);
-            return View(filtereddata);
-        }
-        [Area("AdminArea")]
-        public IActionResult Status_Active(string state, int currentpage, int pagesize, int requesttype, string search, int region)
-        {
-            List<Request> model1 = _paginator.requests(state, currentpage, pagesize, requesttype, search, region);
-            List<AllRequestDataViewModel> filtereddata = _allrequestdata.FilteredRequest(model1);
-            return View(filtereddata);
-        }
-        [Area("AdminArea")]
-        public IActionResult Status_Conclude(string state, int currentpage, int pagesize, int requesttype, string search, int region)
-        {
-            List<Request> model1 = _paginator.requests(state, currentpage, pagesize, requesttype, search, region);
-            List<AllRequestDataViewModel> filtereddata = _allrequestdata.FilteredRequest(model1);
-            return View(filtereddata);
-        }
-        [Area("AdminArea")]
-        public IActionResult Status_Toclose(string state, int currentpage, int pagesize, int requesttype, string search, int region)
-        {
-            List<Request> model1 = _paginator.requests(state, currentpage, pagesize, requesttype, search, region);
-            List<AllRequestDataViewModel> filtereddata = _allrequestdata.FilteredRequest(model1);
-            return View(filtereddata);
-        }
-        [Area("AdminArea")]
-        public IActionResult Status_Unpaid(string state, int currentpage, int pagesize, int requesttype, string search, int region)
-        {
-            List<Request> model1 = _paginator.requests(state, currentpage, pagesize, requesttype, search, region);
-            List<AllRequestDataViewModel> filtereddata = _allrequestdata.FilteredRequest(model1);
-            return View(filtereddata);
-        }
+        //[Area("AdminArea")]
+        //public IActionResult Status_New(string state, int currentpage, int pagesize, int requesttype, string search, int region)
+        //{
+        //    List<Request> model1 = _paginator.requests(state, currentpage, pagesize, requesttype, search, region);
+        //    List<AllRequestDataViewModel> filtereddata = _allrequestdata.FilteredRequest(model1);
+        //    return View("Status_" + state, filtereddata);
+        //}
+        //[Area("AdminArea")]
+        //public IActionResult Status_Pending(string state, int currentpage, int pagesize, int requesttype, string search, int region)
+        //{
+        //    List<Request> model1 = _paginator.requests(state, currentpage, pagesize, requesttype, search, region);
+        //    List<AllRequestDataViewModel> filtereddata = _allrequestdata.FilteredRequest(model1);
+        //    return View(filtereddata);
+        //}
+        //[Area("AdminArea")]
+        //public IActionResult Status_Active(string state, int currentpage, int pagesize, int requesttype, string search, int region)
+        //{
+        //    List<Request> model1 = _paginator.requests(state, currentpage, pagesize, requesttype, search, region);
+        //    List<AllRequestDataViewModel> filtereddata = _allrequestdata.FilteredRequest(model1);
+        //    return View(filtereddata);
+        //}
+        //[Area("AdminArea")]
+        //public IActionResult Status_Conclude(string state, int currentpage, int pagesize, int requesttype, string search, int region)
+        //{
+        //    List<Request> model1 = _paginator.requests(state, currentpage, pagesize, requesttype, search, region);
+        //    List<AllRequestDataViewModel> filtereddata = _allrequestdata.FilteredRequest(model1);
+        //    return View(filtereddata);
+        //}
+        //[Area("AdminArea")]
+        //public IActionResult Status_Toclose(string state, int currentpage, int pagesize, int requesttype, string search, int region)
+        //{
+        //    List<Request> model1 = _paginator.requests(state, currentpage, pagesize, requesttype, search, region);
+        //    List<AllRequestDataViewModel> filtereddata = _allrequestdata.FilteredRequest(model1);
+        //    return View(filtereddata);
+        //}
+        //[Area("AdminArea")]
+        //public IActionResult Status_Unpaid(string state, int currentpage, int pagesize, int requesttype, string search, int region)
+        //{
+        //    List<Request> model1 = _paginator.requests(state, currentpage, pagesize, requesttype, search, region);
+        //    List<AllRequestDataViewModel> filtereddata = _allrequestdata.FilteredRequest(model1);
+        //    return View(filtereddata);
+        //}
 
         [Area("AdminArea")]
         [HttpPost]

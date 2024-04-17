@@ -3,53 +3,53 @@
         var url;
         switch (target) {
             case '#nav-home':
-                url = 'AdminArea/Dashboard/Dashboard';
+                url = '/AdminArea/Dashboard/Dashboard';
                 break;
             case '#nav-ProviderLocation':
-                url = 'AdminArea/ProviderLocation/ProviderLocation';
+                url = '/AdminArea/ProviderLocation/ProviderLocation';
                 break;
             case '#nav-Profile':
-                url = 'AdminArea/AdminProfile/AdminProfile';
+                url = '/AdminArea/AdminProfile/AdminProfile';
                 break;
             case '#providers':
-                url = 'AdminArea/AdminProviderTab/Providers';
+                url = '/AdminArea/AdminProviderTab/Providers';
                 break;
             case '#scheduling':
-                url = 'AdminArea/AdminProviderTab/Scheduling';
+                url = '/AdminArea/AdminProviderTab/Scheduling';
                 break;
             case '#invoicing':
-                url = 'AdminArea/AdminProviderTab/Invoicing';
+                url = '/AdminArea/AdminProviderTab/Invoicing';
                 break;
             case '#nav-Partners':
-                url = 'AdminArea/AdminPartnersTab/Vendors';
+                url = '/AdminArea/AdminPartnersTab/Vendors';
                 break;
             case '#nav-Access':
-                url = 'AdminArea/AccessTab/AccessPage';
+                url = '/AdminArea/AccessTab/AccessPage';
                 break;
             case '#nav-createadmin':
-                url = 'AdminArea/AdminProfile/CreateAdmin';
+                url = '/AdminArea/AdminProfile/CreateAdmin';
                 break;
             case '#nav_useraccess':
-                url = 'AdminArea/AccessTab/UserAcess';
+                url = '/AdminArea/AccessTab/UserAcess';
                 break;
             case '#patient-records':
-                url = 'AdminArea/AdminRecordsTab/PatientHistory';
+                url = '/AdminArea/AdminRecordsTab/PatientHistory';
                 break;
             case '#search-records':
-                url = 'AdminArea/AdminRecordsTab/SearchRecords';
+                url = '/AdminArea/AdminRecordsTab/SearchRecords';
                 break;
             case '#email-logs':
-                url = 'AdminArea/AdminRecordsTab/EmailLogs';
+                url = '/AdminArea/AdminRecordsTab/EmailLogs';
                 break;
             case '#sms-logs':
-                url = 'AdminArea/AdminRecordsTab/SmsLogs';
+                url = '/AdminArea/AdminRecordsTab/SmsLogs';
                 break;
             case '#block-history':
-                url = 'AdminArea/AdminRecordsTab/BlockHistory';
+                url = '/AdminArea/AdminRecordsTab/BlockHistory';
                 break;
 
             default:
-                url = 'AdminArea/Dashboard/Dashboard';
+                url = '/AdminArea/Dashboard/Dashboard';
         }
 
         $.ajax({

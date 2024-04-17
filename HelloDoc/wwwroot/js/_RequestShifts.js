@@ -9,6 +9,9 @@
         $('#approveselected').prop("disabled", false);
     }
 });
+
+$('#deleteselected').prop("disabled", true);
+$('#approveselected').prop("disabled", true);
 $('input[name="selectedshift"]').on('change', function () {
     if ($('input[name="selectedshift"]').length === $('input[name="selectedshift"]:checked').length) {
         $('input[name="selectall"]').prop("checked", true);

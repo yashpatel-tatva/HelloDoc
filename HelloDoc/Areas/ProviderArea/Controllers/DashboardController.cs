@@ -50,36 +50,38 @@ namespace HelloDoc.Areas.ProviderArea.Controllers
         [HttpPost]
         public IActionResult StatuswiseData(string state, int currentpage, int pagesize, int requesttype, string search, int region)
         {
-            return RedirectToAction("Status_" + state, new { state, currentpage, pagesize, requesttype, search, region });
-        }
-        [Area("ProviderArea")]
-        public IActionResult Status_New(string state, int currentpage, int pagesize, int requesttype, string search, int region)
-        {
             List<Request> model1 = _paginator.requestsofProvider(state, currentpage, pagesize, requesttype, search, region, _physician.GetSessionPhysicianId());
             List<AllRequestDataViewModel> filtereddata = _allrequestdata.FilteredRequest(model1);
-            return View(filtereddata);
+            return View("Status_" + state, filtereddata);
         }
-        [Area("ProviderArea")]
-        public IActionResult Status_Pending(string state, int currentpage, int pagesize, int requesttype, string search, int region)
-        {
-            List<Request> model1 = _paginator.requestsofProvider(state, currentpage, pagesize, requesttype, search, region, _physician.GetSessionPhysicianId());
-            List<AllRequestDataViewModel> filtereddata = _allrequestdata.FilteredRequest(model1);
-            return View(filtereddata);
-        }
-        [Area("ProviderArea")]
-        public IActionResult Status_Active(string state, int currentpage, int pagesize, int requesttype, string search, int region)
-        {
-            List<Request> model1 = _paginator.requestsofProvider(state, currentpage, pagesize, requesttype, search, region, _physician.GetSessionPhysicianId());
-            List<AllRequestDataViewModel> filtereddata = _allrequestdata.FilteredRequest(model1);
-            return View(filtereddata);
-        }
-        [Area("ProviderArea")]
-        public IActionResult Status_Conclude(string state, int currentpage, int pagesize, int requesttype, string search, int region)
-        {
-            List<Request> model1 = _paginator.requestsofProvider(state, currentpage, pagesize, requesttype, search, region, _physician.GetSessionPhysicianId());
-            List<AllRequestDataViewModel> filtereddata = _allrequestdata.FilteredRequest(model1);
-            return View(filtereddata);
-        }
+        //[Area("ProviderArea")]
+        //public IActionResult Status_New(string state, int currentpage, int pagesize, int requesttype, string search, int region)
+        //{
+        //    List<Request> model1 = _paginator.requestsofProvider(state, currentpage, pagesize, requesttype, search, region, _physician.GetSessionPhysicianId());
+        //    List<AllRequestDataViewModel> filtereddata = _allrequestdata.FilteredRequest(model1);
+        //    return View(filtereddata);
+        //}
+        //[Area("ProviderArea")]
+        //public IActionResult Status_Pending(string state, int currentpage, int pagesize, int requesttype, string search, int region)
+        //{
+        //    List<Request> model1 = _paginator.requestsofProvider(state, currentpage, pagesize, requesttype, search, region, _physician.GetSessionPhysicianId());
+        //    List<AllRequestDataViewModel> filtereddata = _allrequestdata.FilteredRequest(model1);
+        //    return View(filtereddata);
+        //}
+        //[Area("ProviderArea")]
+        //public IActionResult Status_Active(string state, int currentpage, int pagesize, int requesttype, string search, int region)
+        //{
+        //    List<Request> model1 = _paginator.requestsofProvider(state, currentpage, pagesize, requesttype, search, region, _physician.GetSessionPhysicianId());
+        //    List<AllRequestDataViewModel> filtereddata = _allrequestdata.FilteredRequest(model1);
+        //    return View(filtereddata);
+        //}
+        //[Area("ProviderArea")]
+        //public IActionResult Status_Conclude(string state, int currentpage, int pagesize, int requesttype, string search, int region)
+        //{
+        //    List<Request> model1 = _paginator.requestsofProvider(state, currentpage, pagesize, requesttype, search, region, _physician.GetSessionPhysicianId());
+        //    List<AllRequestDataViewModel> filtereddata = _allrequestdata.FilteredRequest(model1);
+        //    return View(filtereddata);
+        //}
         [Area("ProviderArea")]
         [HttpPost]
         public int CountbyFilter(string state, int requesttype, string search, int region)

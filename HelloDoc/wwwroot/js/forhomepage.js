@@ -72,7 +72,7 @@ $('#dashtables').show();
 
 $('#export').on('click', function () {
     var link = document.createElement('a');
-    link.href = 'AdminArea/Dashboard/Export?state=' + state + "&requesttype=" + requesttype + "&search=" + search + "&region=" + region;
+    link.href = '/AdminArea/Dashboard/Export?state=' + state + "&requesttype=" + requesttype + "&search=" + search + "&region=" + region;
     link.style.display = 'none';
     document.body.appendChild(link);
     link.click();
@@ -82,7 +82,7 @@ $('#export').on('click', function () {
 
 $('#exportall').on('click', function () {
     var link = document.createElement('a');
-    link.href = 'AdminArea/Dashboard/ExportAll';
+    link.href = '/AdminArea/Dashboard/ExportAll';
     link.style.display = 'none';
     document.body.appendChild(link);
     link.click();

@@ -76,7 +76,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "Admin",
-    pattern: "{area=AdminArea}/{controller=Home}/{action=AdminTabsLayout}/{id?}");
+    pattern: "{area=AdminArea}/{controller=Home}/{action=Index}/{id?}");
 
 app.MapControllerRoute(
     name: "Patient",
