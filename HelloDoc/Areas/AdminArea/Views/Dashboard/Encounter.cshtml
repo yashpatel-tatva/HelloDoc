@@ -276,12 +276,12 @@
                     data: { id },
                     type: 'POST',
                     success: function (result) {
-                        $('#nav-tabContent').html(result);
                         Swal.fire({
                             title: "Finalized!",
                             text: "Encounter  has been Finalized.",
                             icon: "success"
                         });
+                        location.reload();
                     },
                 });
             }

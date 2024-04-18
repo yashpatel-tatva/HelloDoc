@@ -90,7 +90,7 @@ $('#Role_Save').on('click', function () {
             processData: false,
             contentType: false,
             success: function (response) {
-                $('#nav-tabContent').html(response);
+                location.reload();
             }
         });
     }
@@ -103,7 +103,7 @@ $('.roledeletebtn').on('click', function () {
         type: 'POST',
         data: { roleid },
         success: function (response) {
-            $('#nav-tabContent').html(response);
+            location.reload();
         }
     });
 });

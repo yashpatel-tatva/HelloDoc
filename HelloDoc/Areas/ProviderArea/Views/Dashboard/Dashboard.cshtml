@@ -1,8 +1,12 @@
 ﻿@{
 //Layout = null;
 }
+@{
+    ViewData["Title"] = "Dashboard";
+}
 @using DataModels.AdminSideViewModels;
 @model AdminDashboardViewModel;
+<partial id="PopUps"></partial>
 <nav>
     <div class="nav nav-tabs" id="status-tab" role="tablist">
         <div class="allstatus ">
@@ -86,12 +90,12 @@
                         <label class="displayflexorblock btn" for="2"><span><i class="fa-solid fa-circle" style="color: #e59132;"></i></span><span class="ps-2size">Family/Friend</span></label>
                     </div>
                     <div class="d-flex rounded ">
-                        <input type="radio" name="requestby" id="3" class="btn-check" autocomplete="off" />
-                        <label class="displayflexorblock btn" for="3"><span><i class="fa-solid fa-circle" style="color: #d8697b;"></i></span><span class="ps-2size">Business</span></label>
+                        <input type="radio" name="requestby" id="4" class="btn-check" autocomplete="off" />
+                        <label class="displayflexorblock btn" for="4"><span><i class="fa-solid fa-circle" style="color: #d8697b;"></i></span><span class="ps-2size">Business</span></label>
                     </div>
                     <div class="d-flex rounded ">
-                        <input type="radio" name="requestby" id="4" class="btn-check" autocomplete="off" />
-                        <label class="displayflexorblock btn" for="4"><span><i class="fa-solid fa-circle" style="color: #077aba;"></i></span><span class="ps-2size">Concierge</span></label>
+                        <input type="radio" name="requestby" id="3" class="btn-check" autocomplete="off" />
+                        <label class="displayflexorblock btn" for="3"><span><i class="fa-solid fa-circle" style="color: #077aba;"></i></span><span class="ps-2size">Concierge</span></label>
                     </div>
                     <div class="d-flex rounded ">
                         <input type="radio" name="requestby" id="5" class="btn-check" autocomplete="off" />

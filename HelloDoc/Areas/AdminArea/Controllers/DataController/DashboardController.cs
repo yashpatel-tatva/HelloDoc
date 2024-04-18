@@ -2,6 +2,7 @@
 using DataAccess.ServiceRepository;
 using DataAccess.ServiceRepository.IServiceRepository;
 using DataModels.AdminSideViewModels;
+using DataModels.CommonViewModel;
 using HelloDoc.Areas.PatientArea.ViewModels;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
@@ -84,9 +85,18 @@ namespace HelloDoc.Areas.AdminArea.DataController
 
         [Area("AdminArea")]
         [AuthorizationRepository("Admin,Physician")]
-        public List<Region> GetRegion()
+        public List<RegionDataModel> GetRegion()
         {
-            var regions = _db.Regions.ToList();
+            var region = _db.Regions.ToList();
+            List<RegionDataModel> regions = new List<RegionDataModel>();
+            foreach(var r in region)
+            {
+                regions.Add(new RegionDataModel
+                {
+                    Name = r.Name,
+                    Regionid = r.Regionid,
+                });
+            }
             return regions;
         }
 

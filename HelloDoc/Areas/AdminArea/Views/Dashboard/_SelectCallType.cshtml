@@ -78,8 +78,8 @@
                 data: { id, calltype },
                 type: 'POST',
                 success: function (result) {
-                    $('#nav-tabContent').html(result);
                     $('#closemodel').trigger('click');
+                    location.reload();
                 },
             });
         }
@@ -89,8 +89,8 @@
                 data: { id, calltype },
                 type: 'POST',
                 success: function (result) {
-                    $('#nav-tabContent').html(result);
                     $('#closemodel').trigger('click');
+                    location.reload();
                 },
             });
         }

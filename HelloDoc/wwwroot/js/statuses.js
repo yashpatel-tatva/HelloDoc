@@ -135,7 +135,7 @@ $('.gotoproviderpopup').on('click', function () {
                             text: "Case has been " + aftertext + ".",
                             icon: "success"
                         });
-                        $('#nav-tabContent').html(response);
+                        location.reload();
                     }
                 });
             }
@@ -171,7 +171,7 @@ $('.gotoproviderpopup').on('click', function () {
                             text: "Case has been " + aftertext + ".",
                             icon: "success"
                         });
-                        $('#nav-tabContent').html(response);
+                        location.reload();
                     }
                 });
             }

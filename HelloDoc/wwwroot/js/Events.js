@@ -1,4 +1,4 @@
-﻿$('.events').on('click', function () {
+﻿$('.datafield').on('click', ".events" , function () {
     console.log($(this).data('id'));
     $.ajax({
         url: '/AdminArea/AdminProviderTab/ViewShiftPopUp',
