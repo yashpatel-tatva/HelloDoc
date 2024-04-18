@@ -131,7 +131,10 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
                 if (record.Status == 6) model.Status = "Conclude";
                 if (record.Status == 3 || record.Status == 7 || record.Status == 8) model.Status = "ToClose";
                 if (record.Status == 9) model.Status = "Unpaid";
-                model.IsFinalReport = false;
+                if (record.Encounters.Count() != 0)
+                {
+                    model.IsFinalReport = record.Encounters.First().IsFinalized[0];
+                }
                 model.DocumentCount = record.Requestwisefiles.Count();
                 records.Add(model);
             }

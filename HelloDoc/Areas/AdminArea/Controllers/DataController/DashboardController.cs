@@ -89,7 +89,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
         {
             var region = _db.Regions.ToList();
             List<RegionDataModel> regions = new List<RegionDataModel>();
-            foreach(var r in region)
+            foreach (var r in region)
             {
                 regions.Add(new RegionDataModel
                 {
@@ -119,14 +119,15 @@ namespace HelloDoc.Areas.AdminArea.DataController
         {
             var request = _requests.GetFirstOrDefault(x => x.Requestid == requestid);
             var physician = _db.Physicians.Where(x => x.Physicianid != request.Physicianid).ToList();
+            physician = physician.Where(x => x.Isdeleted[0] == false).ToList();
             return physician;
         }
-        
+
         [Area("AdminArea")]
         [AuthorizationRepository("Admin")]
         public List<Aspnetrole> GetRoles()
         {
-           return _db.Aspnetroles.ToList();
+            return _db.Aspnetroles.ToList();
         }
 
         [Area("AdminArea")]
@@ -141,6 +142,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
             {
                 physician = phyregion.Where(x => x.Regionid == regionid).Select(x => x.Physician).Where(x => x.Physicianid != request.Physicianid).ToList();
             }
+            physician = physician.Where(x => x.Isdeleted[0] == false).ToList();
             List<Physician> result = new List<Physician>();
             foreach (var phy in physician)
             {
@@ -289,12 +291,31 @@ namespace HelloDoc.Areas.AdminArea.DataController
         }
 
         [Area("AdminArea")]
-        [AuthorizationRepository("Admin")]
+        [AuthorizationRepository("Admin,Physician")]
         [HttpPost]
         public IActionResult CreateRequestsubmit(FamilyRequestViewModel model)
         {
-            _allrequest.AddRequestasAdmin(model);
-             return RedirectToAction("Dashboard", "Dashboard");
+            var jwtservice = HttpContext.RequestServices.GetService<IJwtRepository>();
+            var request = HttpContext.Request;
+            var token = request.Cookies["jwt"];
+            jwtservice.ValidateToken(token, out JwtSecurityToken jwttoken);
+            var roleClaim = jwttoken.Claims.FirstOrDefault(x => x.Type == "Role");
+
+            if (roleClaim != null)
+            {
+                var role = roleClaim.Value;
+                if (role == "Admin")
+                {
+                    _allrequest.AddRequestasAdmin(model);
+                    return RedirectToAction("Dashboard", "Dashboard");
+                }
+                if(role == "Physician")
+                {
+                    _allrequest.AddRequestasPhysician(model);
+                    return RedirectToAction("Dashboard", "Dashboard" , new {area = "ProviderArea"});
+                }
+            }
+            return BadRequest();
         }
 
 
@@ -401,7 +422,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
             }
 
             _requestpopupaction.CancelCase(requestid, casetag, note);
-             return RedirectToAction("Dashboard", "Dashboard");
+            return RedirectToAction("Dashboard", "Dashboard");
 
         }
 
@@ -422,7 +443,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
         public IActionResult BlockCase(int requestid, string note)
         {
             _requestpopupaction.BlockCase(requestid, note);
-             return RedirectToAction("Dashboard", "Dashboard");
+            return RedirectToAction("Dashboard", "Dashboard");
         }
 
 
@@ -436,6 +457,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
             dashpopupsViewModel.RequestId = id;
             dashpopupsViewModel.regions = _db.Regions.ToList();
             dashpopupsViewModel.physicians = _db.Physicians.Where(x => x.Physicianid != request.Physicianid).ToList();
+            dashpopupsViewModel.physicians = dashpopupsViewModel.physicians.Where(x => x.Isdeleted[0] == false).ToList();
             return PartialView("_AssignCasePopUp", dashpopupsViewModel);
         }
         [Area("AdminArea")]
@@ -448,7 +470,8 @@ namespace HelloDoc.Areas.AdminArea.DataController
             dashpopupsViewModel.RequestId = id;
             dashpopupsViewModel.regions = _db.Regions.ToList();
             dashpopupsViewModel.physicians = _db.Physicians.Where(x => x.Physicianid != request.Physicianid).ToList();
-            return PartialView("_AssignCasePopUp", dashpopupsViewModel);
+            dashpopupsViewModel.physicians = dashpopupsViewModel.physicians.Where(x => x.Isdeleted[0]==false).ToList();
+            return PartialView("_TransferCasePopUp", dashpopupsViewModel);
         }
 
         [Area("AdminArea")]
@@ -457,7 +480,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
         public IActionResult AssignCase(int requestid, int phyid, string note)
         {
             _requestpopupaction.AssignCase(requestid, phyid, _admin.GetSessionAdminId(), note);
-             return RedirectToAction("Dashboard", "Dashboard");
+            return RedirectToAction("Dashboard", "Dashboard");
         }
 
 
@@ -478,7 +501,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
         public IActionResult ClearCaseSubmit(int requestid)
         {
             _requestpopupaction.ClearCase(requestid);
-             return RedirectToAction("Dashboard", "Dashboard");
+            return RedirectToAction("Dashboard", "Dashboard");
         }
 
         [Area("AdminArea")]
@@ -506,7 +529,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
             //var reqplai = EncryptionRepository.Decrypt(requestidcipher);
             var link = "https://localhost:7249/PatientArea/Home/ViewAgreement?requestid=" + requestidcipher;
             _sendemail.Sendemail(email, "View Agreenment", link);
-             return RedirectToAction("Dashboard", "Dashboard");
+            return RedirectToAction("Dashboard", "Dashboard");
         }
 
         [Area("AdminArea")]
@@ -693,7 +716,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
             _requestwisefile.Add(RequestsId, files);
             return RedirectToAction("ConcludeCare", "Dashboard", new { area = "ProviderArea", id = RequestsId });
         }
-        
+
         [Area("AdminArea")]
         [AuthorizationRepository("Admin,Physician")]
         [HttpPost]
@@ -739,7 +762,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
                 var role = roleClaim.Value;
                 if (role == "Admin")
                 {
-                     return RedirectToAction("Dashboard", "Dashboard");
+                    return RedirectToAction("Dashboard", "Dashboard");
                 }
                 if (role == "Physician")
                 {
@@ -772,7 +795,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
         public IActionResult CloseCaseSubmit(int requestid)
         {
             _requestpopupaction.CloseCase(requestid);
-             return RedirectToAction("Dashboard", "Dashboard");
+            return RedirectToAction("Dashboard", "Dashboard");
         }
 
         // Close Case End
@@ -922,9 +945,9 @@ namespace HelloDoc.Areas.AdminArea.DataController
                 {
                     encounter.Modifiedby = _physician.GetFirstOrDefault(x => x.Physicianid == _physician.GetSessionPhysicianId()).Aspnetuserid;
                 }
-                if(_admin.GetSessionAdminId() != -1)
+                if (_admin.GetSessionAdminId() != -1)
                 {
-                    encounter.Modifiedby = _admin.GetFirstOrDefault(x=>x.Adminid == _admin.GetSessionAdminId()).Aspnetuserid;   
+                    encounter.Modifiedby = _admin.GetFirstOrDefault(x => x.Adminid == _admin.GetSessionAdminId()).Aspnetuserid;
                 }
             }
             _db.SaveChanges();

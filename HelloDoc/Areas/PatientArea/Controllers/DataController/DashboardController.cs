@@ -13,7 +13,7 @@ namespace HelloDoc.Areas.PatientArea.DataController
 
         public readonly HelloDocDbContext _context;
         private readonly IAdminRepository _admin;
-        public DashboardController(HelloDocDbContext context , IAdminRepository adminRepository)
+        public DashboardController(HelloDocDbContext context, IAdminRepository adminRepository)
         {
             _context = context;
             _admin = adminRepository;
@@ -73,6 +73,7 @@ namespace HelloDoc.Areas.PatientArea.DataController
                               where m.Userid == id
                               select m;
                 patientDashboard.Requests = request.ToList();
+
                 List<Requestwisefile> files;
                 if (patientDashboardviewmodel.RequestsId == 0)
                 {
@@ -83,6 +84,7 @@ namespace HelloDoc.Areas.PatientArea.DataController
                     files = (from m in _context.Requestwisefiles join admin in _context.Admins on m.Adminid equals admin.Adminid where m.Requestid == patientDashboardviewmodel.RequestsId && m.Isdeleted == null select m).ToList();
                     files = _context.Requestwisefiles.Include(r => r.Admin).ToList().Where(x => x.Requestid == patientDashboardviewmodel.RequestsId).Where(x => x.Isdeleted == null).ToList();
                     patientDashboard.RequestsId = patientDashboardviewmodel.RequestsId;
+                    patientDashboard.name = _context.Requestclients.FirstOrDefault(x => x.Requestid == patientDashboardviewmodel.RequestsId).Firstname + " " + _context.Requestclients.FirstOrDefault(x => x.Requestid == patientDashboardviewmodel.RequestsId).Lastname;
                 }
                 patientDashboard.requestwisefiles = files;
                 patientDashboard.showdocument = patientDashboardviewmodel.showdocument;
@@ -116,11 +118,11 @@ namespace HelloDoc.Areas.PatientArea.DataController
 
             _context.Users.Update(user);
             _context.SaveChanges();
-            if(_admin.GetSessionAdminId() != -1)
+            if (_admin.GetSessionAdminId() != -1)
             {
-                user.Modifiedby = _admin.GetFirstOrDefault(x=>x.Adminid == _admin.GetSessionAdminId()).Aspnetuserid;
+                user.Modifiedby = _admin.GetFirstOrDefault(x => x.Adminid == _admin.GetSessionAdminId()).Aspnetuserid;
                 user.Modifieddate = DateTime.Now;
-                return RedirectToAction("Dashboard" , "Dashboard" , new { area = "AdminArea"});
+                return RedirectToAction("Dashboard", "Dashboard", new { area = "AdminArea" });
             }
             user.Modifiedby = model.User.Aspnetuserid;
             user.Modifieddate = DateTime.Now;
@@ -140,7 +142,7 @@ namespace HelloDoc.Areas.PatientArea.DataController
                           select m;
             patientDashboard.User = user;
             patientDashboard.Requests = request.ToList();
-
+            patientDashboard.name = _context.Requestclients.FirstOrDefault(x => x.Requestid == model.RequestsId).Firstname + " " + _context.Requestclients.FirstOrDefault(x => x.Requestid == model.RequestsId).Lastname;
             DateTime date = new DateTime(Convert.ToInt32(user.Intyear), DateTime.ParseExact(user.Strmonth, "MMMM", CultureInfo.InvariantCulture).Month, Convert.ToInt32(user.Intdate));
             patientDashboard.birthdate = date;
 
@@ -166,27 +168,34 @@ namespace HelloDoc.Areas.PatientArea.DataController
         [HttpPost]
         public async Task<IActionResult> Download(PatientDashboardViewModel dashedit)
         {
-            var checkbox = Request.Form["downloadselect"].ToList();
-            var zipname = dashedit.RequestsId.ToString() + "_" + DateTime.Now + ".zip";
-            using (var memoryStream = new MemoryStream())
+            try
             {
-                using (var zipArchive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true))
+                var checkbox = Request.Form["downloadselect"].ToList();
+                var zipname = dashedit.RequestsId.ToString() + "_" + DateTime.Now + ".zip";
+                using (var memoryStream = new MemoryStream())
                 {
-                    foreach (var item in checkbox)
+                    using (var zipArchive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true))
                     {
-                        var s = Int32.Parse(item);
-                        var file = await _context.Requestwisefiles.FirstOrDefaultAsync(x => x.Requestwisefileid == s);
-                        var path = file.Filename;
-                        var bytes = await System.IO.File.ReadAllBytesAsync(path);
-                        var zipEntry = zipArchive.CreateEntry(Path.GetFileName(path), CompressionLevel.Fastest);
-                        using (var zipStream = zipEntry.Open())
+                        foreach (var item in checkbox)
                         {
-                            await zipStream.WriteAsync(bytes, 0, bytes.Length);
+                            var s = Int32.Parse(item);
+                            var file = await _context.Requestwisefiles.FirstOrDefaultAsync(x => x.Requestwisefileid == s);
+                            var path = file.Filename;
+                            var bytes = await System.IO.File.ReadAllBytesAsync(path);
+                            var zipEntry = zipArchive.CreateEntry(Path.GetFileName(path), CompressionLevel.Fastest);
+                            using (var zipStream = zipEntry.Open())
+                            {
+                                await zipStream.WriteAsync(bytes, 0, bytes.Length);
+                            }
                         }
                     }
+                    memoryStream.Position = 0; // Reset the position
+                    return File(memoryStream.ToArray(), "application/zip", zipname, enableRangeProcessing: true);
                 }
-                memoryStream.Position = 0; // Reset the position
-                return File(memoryStream.ToArray(), "application/zip", zipname, enableRangeProcessing: true);
+            }
+            catch
+            {
+                return NotFound();
             }
         }
 
@@ -194,15 +203,20 @@ namespace HelloDoc.Areas.PatientArea.DataController
 
         public async Task<IActionResult> Download(int id)
         {
-            var path = (await _context.Requestwisefiles.FirstOrDefaultAsync(x => x.Requestwisefileid == id)).Filename;
-            //var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "document", filename);
-            var provider = new FileExtensionContentTypeProvider();
-            if (!provider.TryGetContentType(path, out var contentType))
+            try
             {
-                contentType = "application/octet-stream";
+                var path = (await _context.Requestwisefiles.FirstOrDefaultAsync(x => x.Requestwisefileid == id)).Filename;
+                //var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "document", filename);
+                var provider = new FileExtensionContentTypeProvider();
+                if (!provider.TryGetContentType(path, out var contentType))
+                {
+                    contentType = "application/octet-stream";
+                }
+                var bytes = await System.IO.File.ReadAllBytesAsync(path);
+
+                return File(bytes, contentType, Path.GetFileName(path));
             }
-            var bytes = await System.IO.File.ReadAllBytesAsync(path);
-            return File(bytes, contentType, Path.GetFileName(path));
+            catch { return NotFound(); }
         }
 
         [Area("PatientArea")]

@@ -17,5 +17,6 @@ namespace DataAccess.ServiceRepository.IServiceRepository
         RequestViewUploadsViewModel GetDocumentByRequestId(int id);
         void AddRequestasAdmin(FamilyRequestViewModel model);
         void SaveProviderNote(int requestid, string note);
+        void AddRequestasPhysician(FamilyRequestViewModel model);
     }
 }

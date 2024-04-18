@@ -9,7 +9,14 @@
 <div class="container">
     <div>
         <div class="d-flex justify-content-between mx-3">
-            <div class="h3 subinfotext fw-bold">My Profile</div>
+            @if (Model.others)
+            {
+                <div class="h3 subinfotext fw-bold">@Model.FirstName's Profile</div>
+            }
+            else
+            {
+                <div class="h3 subinfotext fw-bold">My Profile</div>
+            }
             @*      <div>
             <a asp-action="AdminTabsLayout" asp-controller="Home">
             <button type="button" class="d-flex babtn rounded align-item-center p-1 px-2">
@@ -171,6 +178,7 @@
                         <div class="d-flex justify-content-end gap-2 p-3" id="addresssaveandcancel">
                             <button type="button" class=" p-2 px-3 text-white bg-info rounded border-info  mx-2 px-3 shadow-none" id="addressEdit_Save">Edit</button>
                         </div>
+                        <input type="hidden" value="@Model.others" asp-for="others" />
                     </div>
                 </form>
             </div>
@@ -181,19 +189,22 @@
     $('#state').val(@Model.Region);
 
 </script>
-<script>
-    localStorage.setItem('target', "#nav-Profile");
-    var target = localStorage.getItem('target');
-    $('.maintabs').removeClass('active');
-    $('.accordianmaintabs').removeClass('active');
-    $('.maintabs[data-bs-target="' + target + '"]').addClass('active');
-    $('.accordianmaintabs[data-bs-target="' + target + '"]').addClass('active');
-    $('.spanofvalid').bind("DOMSubtreeModified", function () {
-        if ($(this).text().trim() !== '') {
-            $(this).parents('.py-2').addClass('error');
-        } else {
-            $(this).parents('.py-2').removeClass('error');
-        }
-    });
-</script>
+@if (Model.others == false)
+{
+    <script>
+        localStorage.setItem('target', "#nav-Profile");
+        var target = localStorage.getItem('target');
+        $('.maintabs').removeClass('active');
+        $('.accordianmaintabs').removeClass('active');
+        $('.maintabs[data-bs-target="' + target + '"]').addClass('active');
+        $('.accordianmaintabs[data-bs-target="' + target + '"]').addClass('active');
+        $('.spanofvalid').bind("DOMSubtreeModified", function () {
+            if ($(this).text().trim() !== '') {
+                $(this).parents('.py-2').addClass('error');
+            } else {
+                $(this).parents('.py-2').removeClass('error');
+            }
+        });
+    </script>
+}
 <script src="~/js/AdminProfile.js" asp-append-version="true"></script>

@@ -133,14 +133,21 @@ namespace HelloDoc.Areas.ProviderArea.Controllers
         [Area("ProviderArea")]
         public IActionResult Download(int id)
         {
-            var path = _db.Requestwisefiles.FirstOrDefault(x => x.Requestwisefileid == id).Filename;
-            var provider = new FileExtensionContentTypeProvider();
-            if (!provider.TryGetContentType(path, out var contentType))
+            try
             {
-                contentType = "application/octet-stream";
+                var path = _db.Requestwisefiles.FirstOrDefault(x => x.Requestwisefileid == id).Filename;
+                var provider = new FileExtensionContentTypeProvider();
+                if (!provider.TryGetContentType(path, out var contentType))
+                {
+                    contentType = "application/octet-stream";
+                }
+                var bytes = _documents.Download(id);
+                return File(bytes, contentType, Path.GetFileName(path));
             }
-            var bytes = _documents.Download(id);
-            return File(bytes, contentType, Path.GetFileName(path));
+            catch
+            {
+                return NotFound();
+            }
         }
 
         [Area("ProviderArea")]
@@ -150,7 +157,7 @@ namespace HelloDoc.Areas.ProviderArea.Controllers
             _allrequestdata.SaveProviderNote(requestid, note);
             return RedirectToAction("ConcludeCare", "Dashboard", new { id = requestid });
         }
-        
+
         [Area("ProviderArea")]
         [HttpPost]
         public IActionResult ConcludeCase(int requestid)
@@ -168,31 +175,31 @@ namespace HelloDoc.Areas.ProviderArea.Controllers
             _db.SaveChanges();
             return RedirectToAction("Dashboard");
         }
-        
-        
+
+
         [Area("ProviderArea")]
         [HttpPost]
         public IActionResult TransferCase(int id)
         {
-            return PartialView("_TransferCasePopUp" , new { requestid = id });
+            return PartialView("_TransferCasePopUp", new { requestid = id });
         }
-        
+
         [Area("ProviderArea")]
         [HttpPost]
-        public void TransfertoAdmin(int requestid , string note)
+        public void TransfertoAdmin(int requestid, string note)
         {
             var request = _request.GetById(requestid);
             request.Status = 1;
             request.Physicianid = null;
             request.Accepteddate = null;
             request.Modifieddate = DateTime.Now;
-            _request.Update(request) ;
+            _request.Update(request);
             _request.Save();
-            Requeststatuslog requeststatuslog = new Requeststatuslog() ;
+            Requeststatuslog requeststatuslog = new Requeststatuslog();
             requeststatuslog.Requestid = request.Requestid;
             requeststatuslog.Status = 1;
-            requeststatuslog.Physicianid = _physician.GetSessionPhysicianId() ;
-            requeststatuslog.Notes = note ;
+            requeststatuslog.Physicianid = _physician.GetSessionPhysicianId();
+            requeststatuslog.Notes = note;
             requeststatuslog.Createddate = DateTime.Now;
             BitArray fortrue = new BitArray(1);
             fortrue[0] = true;

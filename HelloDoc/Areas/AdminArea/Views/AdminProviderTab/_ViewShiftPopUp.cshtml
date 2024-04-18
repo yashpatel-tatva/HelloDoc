@@ -109,7 +109,9 @@
     });
 
     $('#ViewShiftReturnBtn').on('click', function () {
+        console.log("clicked");
         var shiftdetailid = $(this).data('id');
+        console.log(shiftdetailid)
         $.ajax({
             url: '/AdminArea/AdminProviderTab/RetuenShift',
             data: { shiftdetailid, format, status, region },

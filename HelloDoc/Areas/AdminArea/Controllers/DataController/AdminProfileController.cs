@@ -27,6 +27,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             AdminProfileViewModel model = new AdminProfileViewModel();
             model = _admin.GetAdminProfile(_admin.GetSessionAdminId());
             model.State = _dbContext.Regions.ToList();
+            model.others = false;
             return View(model);
         }
 
@@ -37,6 +38,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             AdminProfileViewModel model = new AdminProfileViewModel();
             model = _admin.GetAdminProfile(adminid);
             model.State = _dbContext.Regions.ToList();
+            model.others = true;
             return PartialView("AdminProfile", model);
         }
 
@@ -49,7 +51,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             patientDashboard.User = user;
             DateTime date = new DateTime(Convert.ToInt32(user.Intyear), DateTime.ParseExact(user.Strmonth, "MMMM", CultureInfo.InvariantCulture).Month, Convert.ToInt32(user.Intdate));
             patientDashboard.birthdate = date;
-            return PartialView("../../../PatientArea/Views/Dashboard/UserProfile" ,patientDashboard);
+            return PartialView("../../../PatientArea/Views/Dashboard/UserProfile", patientDashboard);
         }
 
         [Area("AdminArea")]
@@ -65,14 +67,28 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         {
             viewModel.SelectRegion = Request.Form["admineditregion"].ToList();
             _admin.Edit(viewModel.Adminid, viewModel);
-             return RedirectToAction("AdminProfile", "AdminProfile");
+            if (viewModel.others)
+            {
+                return RedirectToAction("UserAcess", "AccessTab");
+            }
+            else
+            {
+                return RedirectToAction("AdminProfile", "AdminProfile");
+            }
         }
         [Area("AdminArea")]
         [HttpPost]
         public IActionResult AdminBillingInfoEdit(AdminProfileViewModel viewModel)
         {
             _admin.EditBillingDetails(viewModel.Adminid, viewModel);
-             return RedirectToAction("AdminProfile", "AdminProfile");
+            if (viewModel.others)
+            {
+                return RedirectToAction("UserAcess", "AccessTab");
+            }
+            else
+            {
+                return RedirectToAction("AdminProfile", "AdminProfile");
+            }
         }
         [Area("AdminArea")]
         public IActionResult CreateAdmin()
@@ -90,7 +106,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             model.selectedregion = Request.Form["selectedregion"].ToList();
             _admin.CreateAdmin(model);
             TempData["Message"] = "Admin Created";
-             return RedirectToAction("CreateAdmin", "AdminProfile");
+            return RedirectToAction("CreateAdmin", "AdminProfile");
         }
         [Area("AdminArea")]
         [HttpPost]

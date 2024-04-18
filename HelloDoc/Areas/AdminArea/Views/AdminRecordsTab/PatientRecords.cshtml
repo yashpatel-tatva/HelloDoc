@@ -96,4 +96,10 @@
             },
         });
     });
+    $('.report').click(function(){
+        var id = $(this).data('id');
+        var link = document.createElement('a');
+        link.href = '/AdminArea/Dashboard/DownloadEncounterAsAdmin?id=' + id;
+        link.click();
+    })
 </script>

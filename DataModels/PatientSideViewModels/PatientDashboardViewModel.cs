@@ -40,7 +40,7 @@ namespace HelloDoc.Areas.PatientArea.ViewModels
         public DateTime birthdate { get; set; }
         public int RequestsId { get; set; }
         public bool showdocument { get; set; }
-
+        public string name { get; set; }
         public int reqfileid { get; set; }
         public List<IFormFile> Upload { get; set; }
         public string Uploader { get; set; }

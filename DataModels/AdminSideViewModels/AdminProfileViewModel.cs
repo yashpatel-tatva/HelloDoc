@@ -41,5 +41,8 @@ namespace DataModels.AdminSideViewModels
         [RegularExpression(@"^\+\d*$", ErrorMessage = "Phone number must start with + and contain only digits")]
         public string BillMobile { get; set; }
         public List<string> SelectRegion { get; set; }
+
+        public bool others { get; set; }
+
     }
 }

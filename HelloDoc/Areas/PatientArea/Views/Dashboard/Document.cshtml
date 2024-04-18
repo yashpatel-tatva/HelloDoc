@@ -21,7 +21,7 @@
         <div class="bglight rounded p-3 shadow" id="content">
             <form asp-action="AddDocument" asp-controller="Dashboard" enctype="multipart/form-data" method="post">
                 <div><span class="small">Patient Name </span></div>
-                <div class=""><span class="text-info h4">@Model.User.Firstname @Model.User.Lastname   </span><span class="h6">(@Model.Requests.FirstOrDefault(x => x.Requestid == Model.RequestsId).Confirmationnumber)</span></div>
+                <div class=""><span class="text-info h4">@Model.name  </span><span class="h6">(@Model.Requests.FirstOrDefault(x => x.Requestid == Model.RequestsId).Confirmationnumber)</span></div>
                 @*<div class=""><span class="text-info h4">@Model.User.Firstname @Model.User.Lastname   </span><span class="h6">(@Model.Requests.FirstOrDefault(x => x.Requestid == (Model.Requests.FirstOrDefault(m =>m.Userid == Model.User.Userid).Requestid)).Confirmationnumber)</span></div>*@
                 <div class="py-3"><span class="small">Check here for any files that you or the doctores of your subsequents reqestors have attached for you to review</span></div>
                 <div class="row d-flex">

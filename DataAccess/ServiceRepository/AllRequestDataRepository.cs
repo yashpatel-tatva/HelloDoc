@@ -404,6 +404,59 @@ namespace DataAccess.ServiceRepository
             }
         }
 
+        public void AddRequestasPhysician(FamilyRequestViewModel model)
+        {
+            var aspnetuser = _db.Aspnetusers.FirstOrDefault(m => m.Email == model.Email);
+            var user = _db.Users.FirstOrDefault(x => x.Email == model.Email);
+
+            var region = _db.Regions.FirstOrDefault(x => x.Regionid == user.Regionid);
+            var requestcount = (from m in _db.Requests where m.Createddate.Date == DateTime.Now.Date select m).ToList();
+            if (aspnetuser != null)
+            {
+                Request request = new Request
+                {
+                    Requesttypeid = 5,
+                    Userid = user.Userid,
+                    Firstname = model.F_FirstName,
+                    Lastname = model.F_LastName,
+                    Email = model.F_Email,
+                    Phonenumber = model.F_Phone,
+                    Status = 2,
+                    Physicianid = _physician.GetSessionPhysicianId(),
+                    Accepteddate = DateTime.Now,
+                    Createddate = DateTime.Now,
+                    Relationname = model.Relation,
+                    Confirmationnumber = (region.Abbreviation.Substring(0, 2) + DateTime.Now.Day.ToString() + DateTime.Now.Month.ToString().PadLeft(2, '0') + model.LastName.Substring(0, 2) + model.FirstName.Substring(0, 2) + requestcount.Count().ToString().PadLeft(4, '0')).ToUpper(),
+                    User = user,
+                };
+                _db.Add(request);
+                _db.SaveChanges();
+                Requestclient requestclient = new Requestclient
+                {
+                    Notes = model.Symptoms,
+                    Requestid = request.Requestid,
+                    Firstname = model.FirstName,
+                    Lastname = model.LastName,
+                    Email = model.Email,
+                    Phonenumber = model.Phone,
+                    State = model.State,
+                    Street = model.Street,
+                    City = model.City,
+                    Zipcode = model.ZipCode,
+                    Address = model.Room + " , " + model.Street + " , " + model.City + " , " + model.State,
+                    Intdate = model.BirthDate.Day,
+                    Intyear = model.BirthDate.Year,
+                    Strmonth = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(model.BirthDate.Month),
+                    Regionid = (int)user.Regionid,
+                };
+                _db.Add(requestclient);
+                _db.SaveChanges();
+                if (model.Upload != null)
+                {
+                    _requestwisefile.Add(request.Requestid, model.Upload);
+                }
+            }
+        }
     }
 }
 
