@@ -166,6 +166,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
             {
                 physician = phyregion.Where(x => x.Regionid == regionid).Select(x => x.Physician).ToList();
             }
+            physician = physician.Where(x => x.Isdeleted[0] == false).ToList();
             List<Physician> result = new List<Physician>();
             foreach (var phy in physician)
             {
