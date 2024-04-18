@@ -188,8 +188,8 @@ $('.housecallbtn').on('click', function () {
         data: { id },
         type: 'POST',
         success: function (result) {
-            $('#nav-tabContent').html(result);
             $('#closemodel').trigger('click');
+            $('#nav-tabContent').html(result);
         },
     });
 })
