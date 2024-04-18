@@ -23,8 +23,22 @@ namespace HelloDoc.Areas.PatientArea.DataController
         [HttpGet]
         public void SendEmailforcreateaccount(string email)
         {
-            var link = "https://localhost:7249/PatientArea/Credential/CreateAccount?email=" + email;
-            _sendemail.Sendemail(email, "Create New Account", link);
+            var emaillog = _context.Emaillogs.Where(x => x.Emailid == email).OrderBy(x => x.Sentdate).LastOrDefault();
+            if (emaillog != null)
+            {
+                if (emaillog.Sentdate < DateTime.Now.AddMinutes(-2))
+                {
+                    var link = "https://localhost:7249/PatientArea/Credential/CreateAccount?email=" + email;
+                    _sendemail.Sendemail(email, "Create New Account", link);
+                }
+
+            }
+            else
+            {
+                var link = "https://localhost:7249/PatientArea/Credential/CreateAccount?email=" + email;
+                _sendemail.Sendemail(email, "Create New Account", link);
+
+            }
         }
 
         [Area("PatientArea")]
@@ -49,8 +63,8 @@ namespace HelloDoc.Areas.PatientArea.DataController
         [HttpGet]
         public bool CheckEmail(string email)
         {
-            var emailExists =  _context.Users.FirstOrDefault(x => x.Email == email);
-            if(emailExists == null)
+            var emailExists = _context.Users.FirstOrDefault(x => x.Email == email);
+            if (emailExists == null)
             {
                 return false;
             }
