@@ -127,6 +127,7 @@
                     <div class="d-flex justify-content-end gap-2 p-3 " id="adminsaveandcancel">
                         <button type="button" class=" p-2 px-3 text-white bg-info rounded border-info  mx-2 px-3 shadow-none" id="adminEdit_Save">Edit</button>
                     </div>
+                    <input type="hidden" value="@Model.others" asp-for="others" />
                 </form>
                 <div class="h5 fw-bold">Mailing & Billing Information</div>
                 <form asp-action="AdminBillingInfoEdit" asp-controller="AdminProfile" method="post">

@@ -97,7 +97,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         {
             _role.AddThisRole(Rolename, accounttype, menuitems, _admin.GetFirstOrDefault(x => x.Adminid == _admin.GetSessionAdminId()).Aspnetuserid);
             TempData["Message"] = Rolename + " Role Created";
-             return RedirectToAction("Dashboard", "Dashboard");
+            return RedirectToAction("Dashboard", "Dashboard");
         }
         [Area("AdminArea")]
         [HttpPost]
@@ -106,7 +106,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             var Rolename = _role.GetFirstOrDefault(x => x.Roleid == roleid).Name;
             _role.DeleteThisRole(roleid);
             TempData["Message"] = Rolename + " Role Created";
-             return RedirectToAction("Dashboard", "Dashboard");
+            return RedirectToAction("Dashboard", "Dashboard");
         }
         [Area("AdminArea")]
         [HttpPost]
@@ -123,7 +123,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             _role.EditThisRole(Roleid, accounttype, menuitems, _admin.GetFirstOrDefault(x => x.Adminid == _admin.GetSessionAdminId()).Aspnetuserid);
             var Rolename = _role.GetFirstOrDefault(x => x.Roleid == Roleid).Name;
             TempData["Message"] = Rolename + " Role Edited";
-             return RedirectToAction("Dashboard", "Dashboard");
+            return RedirectToAction("Dashboard", "Dashboard");
         }
 
 
@@ -132,7 +132,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         public int UserCountbyFilter(int role)
         {
             var userid = _db.Aspnetusers.Count();
-            if(role != 0)
+            if (role != 0)
             {
                 userid = _db.Aspnetuserroles.Where(x => x.Roleid.Contains(role.ToString())).Count();
             }
@@ -165,7 +165,15 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
                     {
                         model.Status = (int)thisuser.Status;
                     }
-                    model.Openrequest = _db.Requests.Where(x => x.Status != 9).AsEnumerable().Where(x => x.Isdeleted == null || x.Isdeleted[0] == false).Count();
+                    var region = _db.Adminregions.Where(x => x.Adminid == thisuser.Adminid).Select(x => x.Regionid).ToList();
+                    try
+                    {
+                        model.Openrequest = _db.Requests.Include(x => x.Requestclients).Where(x => x.Status != 9).AsEnumerable().Where(x => x.Isdeleted == null || x.Isdeleted[0] == false).Where(x => region.Contains(x.Requestclients.FirstOrDefault().Regionid)).Count();
+                    }
+                    catch
+                    {
+                        model.Openrequest = _db.Requests.Where(x => x.Status != 9).AsEnumerable().Where(x => x.Isdeleted == null || x.Isdeleted[0] == false).Count();
+                    }
                 }
                 if (model.Accounttype == "2")
                 {

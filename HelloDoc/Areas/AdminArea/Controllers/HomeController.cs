@@ -53,7 +53,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers
                     }
                     if (role == "Physician")
                     {
-                        _physician.SetSession(_physician.GetFirstOrDefault(x=>x.Aspnetuserid == aspnetid));
+                        _physician.SetSession(_physician.GetFirstOrDefault(x => x.Aspnetuserid == aspnetid));
                         return RedirectToAction("Dashboard", "Dashboard", new { area = "ProviderArea" });
                     }
                 }
@@ -139,9 +139,12 @@ namespace HelloDoc.Areas.AdminArea.Controllers
         {
             var aspuser = _db.Aspnetusers.FirstOrDefault(x => x.Id == id);
             var email = _db.Emaillogs.Where(x => x.Emailid == aspuser.Email).Where(x => x.Subjectname == "Reset Password Link").OrderBy(x => x.Sentdate).LastOrDefault();
-            if (email.Sentdate < DateTime.Now.AddDays(-1))
+            if (email != null)
             {
-                return PartialView("_passwordError");
+                if (email.Sentdate < DateTime.Now.AddDays(-1))
+                {
+                    return PartialView("_passwordError");
+                }
             }
             return View(aspuser);
         }
@@ -199,7 +202,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers
                     Expires = DateTime.Now.AddHours(2)
                 };
                 Response.Cookies.Append("jwt", _jwtRepository.GenerateJwtToken(loggedInPersonViewModel), option);
-                 return RedirectToAction("Dashboard", "Dashboard");
+                return RedirectToAction("Dashboard", "Dashboard");
             }
             if (role == "2")
             {
