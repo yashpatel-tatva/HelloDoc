@@ -53,6 +53,12 @@
                             <button type="button" id="ViewShiftDeleteBtn" class="p-2 px-3 text-white bg-danger rounded border-danger  mx-1 shadow-none" data-id="@Model.ShiftId">Delete</button>
                         </div>
                     }
+                    @if (Model.loggedrole == "Physician")
+                    {
+                        <div class="d-flex my-3 justify-content-end gap-2 shiftfunction">
+                            <button type="button" id="ViewShiftEdit_SaveBtn" class="p-2 px-3 text-white bg-info rounded border-info  mx-1 shadow-none" data-id="@Model.ShiftId">Edit</button>
+                        </div>
+                    }
                 </form>
             </div>
         </div>

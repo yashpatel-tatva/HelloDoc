@@ -271,7 +271,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             physicianAccountViewModel.SelectedRegionCB = list;
             physicianAccountViewModel.Createby = _admin.GetFirstOrDefault(x => x.Adminid == _admin.GetSessionAdminId()).Aspnetuserid;
             var physicianid = _providerMenu.AddAccount(physicianAccountViewModel);
-             return RedirectToAction("Dashboard", "Dashboard");
+            return RedirectToAction("Dashboard", "Dashboard");
         }
 
 
@@ -666,7 +666,15 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             var endTime = new TimeSpan(int.Parse(endTimeParts[0]), int.Parse(endTimeParts[1]), 0);
             var StartTimewithdate = new DateTime(currentDate.Year, currentDate.Month, currentDate.Day, startTime.Hours, startTime.Minutes, 0);
             var EndTimewithdate = new DateTime(currentDate.Year, currentDate.Month, currentDate.Day, endTime.Hours, endTime.Minutes, 0);
-            var modifiedby = _admin.GetFirstOrDefault(x => x.Adminid == _admin.GetSessionAdminId()).Aspnetuserid;
+            var modifiedby = "";
+            if (_admin.GetSessionAdminId() != -1)
+            {
+                modifiedby = _admin.GetFirstOrDefault(x => x.Adminid == _admin.GetSessionAdminId()).Aspnetuserid;
+            }
+            if (_physician.GetSessionPhysicianId() != -1)
+            {
+                modifiedby = _physician.GetFirstOrDefault(x => x.Physicianid == _physician.GetSessionPhysicianId()).Aspnetuserid;
+            }
             var edited = _shiftDetail.EditShiftDetail(shiftdetailid, currentDate, StartTimewithdate, EndTimewithdate, modifiedby);
             if (edited)
             {
@@ -693,7 +701,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
 
             DateTime dateTime = DateTime.Now;
 
-            var shifts = _scheduling.ShifsOfDate(dateTime, region, 0, 0).Where(x => (x.StartTime <= dateTime && x.EndTime >= dateTime)).Select(x => x.ShiftId).ToList();
+            var shifts = _scheduling.ShifsOfDate(dateTime, region, 0, 0).Where(x => (x.StartTime <= dateTime && x.EndTime >= dateTime)).Where(x=>x.Status == 2).Select(x => x.ShiftId).ToList();
             foreach (var shift in shifts)
             {
                 var shiftid = _shiftDetail.GetFirstOrDefault(x => x.Shiftdetailid == shift).Shiftid;

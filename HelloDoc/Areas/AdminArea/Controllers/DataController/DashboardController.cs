@@ -310,10 +310,10 @@ namespace HelloDoc.Areas.AdminArea.DataController
                     _allrequest.AddRequestasAdmin(model);
                     return RedirectToAction("Dashboard", "Dashboard");
                 }
-                if(role == "Physician")
+                if (role == "Physician")
                 {
                     _allrequest.AddRequestasPhysician(model);
-                    return RedirectToAction("Dashboard", "Dashboard" , new {area = "ProviderArea"});
+                    return RedirectToAction("Dashboard", "Dashboard", new { area = "ProviderArea" });
                 }
             }
             return BadRequest();
@@ -376,13 +376,21 @@ namespace HelloDoc.Areas.AdminArea.DataController
             return View(result);
         }
 
-        [Area("AdminArea")]
-        [AuthorizationRepository("Admin")]
-        [HttpPost]
+
         public IActionResult SaveAdminNotes([FromBody] RequestNotesViewModel model)
         {
             var id = model.RequestId;
             _allrequest.SaveAdminNotes(id, model);
+            return RedirectToAction("ViewNotes", "Dashboard", new { id = id });
+        }
+
+        [Area("AdminArea")]
+        [AuthorizationRepository("Physician")]
+        [HttpPost]
+        public IActionResult SavePhysicianNotes([FromBody] RequestNotesViewModel model)
+        {
+            var id = model.RequestId;
+            _allrequest.SaveProviderNote(id, model.PhysicianNotes);
             return RedirectToAction("ViewNotes", "Dashboard", new { id = id });
         }
         // View notes end
@@ -471,7 +479,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
             dashpopupsViewModel.RequestId = id;
             dashpopupsViewModel.regions = _db.Regions.ToList();
             dashpopupsViewModel.physicians = _db.Physicians.Where(x => x.Physicianid != request.Physicianid).ToList();
-            dashpopupsViewModel.physicians = dashpopupsViewModel.physicians.Where(x => x.Isdeleted[0]==false).ToList();
+            dashpopupsViewModel.physicians = dashpopupsViewModel.physicians.Where(x => x.Isdeleted[0] == false).ToList();
             return PartialView("_TransferCasePopUp", dashpopupsViewModel);
         }
 

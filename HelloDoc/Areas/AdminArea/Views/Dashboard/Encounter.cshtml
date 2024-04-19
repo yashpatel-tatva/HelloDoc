@@ -255,42 +255,69 @@
                 fullNumber = fullNumber.replace("+" + countryCode + "+", "+");
             }
             console.log(fullNumber);
-            $(this).val(fullNumber.replace(" ",""));
+            $(this).val(fullNumber.replace(" ", ""));
         });
     });
 
     $('#finalize').on('click', function () {
-        var id = $('#Requestid').val();
-        Swal.fire({
-            title: "Are you sure?",
-            text: "You can not make changes after this!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, Finalize it!"
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: '/AdminArea/Dashboard/FinalizeEncounter',
-                    data: { id },
-                    type: 'POST',
-                    success: function (result) {
-                        Swal.fire({
-                            title: "Finalized!",
-                            text: "Encounter  has been Finalized.",
-                            icon: "success"
-                        });
-                        location.reload();
-                    },
-                });
-            }
-        });
+        $('#Savechanges').click();
+        if ($('.spanofvalid').text() !== '') {
+            Swal.fire("Fill Form First")
+        }
+        else {
+            var id = $('#Requestid').val();
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You can not make changes after this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, Finalize it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/AdminArea/Dashboard/FinalizeEncounter',
+                        data: { id },
+                        type: 'POST',
+                        success: function (result) {
+                            Swal.fire({
+                                title: "Finalized!",
+                                text: "Encounter  has been Finalized.",
+                                icon: "success"
+                            });
+                            location.reload();
+                        },
+                    });
+                }
+            });
+        }
     })
 
 
-    $('#Savechanges').on('click', function () {
-        $(this).closest('form').submit();
+    $('#Savechanges').on('click', function (event) {
+        event.preventDefault(); // Prevent the form from submitting normally
+        var form = $(this).closest('form');
+
+        if (form.valid()) { // Check if the form is valid
+            $.ajax({
+                type: form.attr('method'), // Get the form method (GET, POST, etc.)
+                url: form.attr('action'), // Get the form action URL
+                data: form.serialize(), // Serialize the form data
+                success: function (data) {
+                    // Code to run if the request succeeds
+                    console.log('Form submitted successfully');
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    // Code to run if the request fails
+                    console.log('Form submission failed: ' + textStatus, errorThrown);
+                }
+            });
+        } else {
+            // If the form is not valid, show the validation errors
+            form.validate().focusInvalid();
+        }
     });
+
 
 </script>

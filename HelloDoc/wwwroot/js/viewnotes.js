@@ -30,3 +30,37 @@
     });
 
 });
+
+
+$('#PhysiciainNoteSaveSubmitButton').on('click', function () {
+
+    var requestid = $('#hiddenrequestid').val();
+    var Notes = $('#PhysicianNotes').val();
+
+    var model = {
+        requestid: requestid,
+        PhysicianNotes: Notes
+    };
+    console.log(model)
+
+    $.ajax({
+        url: '/AdminArea/Dashboard/SavePhysicianNotes',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(model),
+        success: function (response) {
+            Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: "Notes Saved",
+                showConfirmButton: false,
+                timer: 1000
+            });
+            $('#nav-tabContent').html(response);
+        },
+        error: function (error) {
+            console.error('Error saving physician notes:', error);
+        }
+    });
+
+});
