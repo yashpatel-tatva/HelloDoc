@@ -76,12 +76,7 @@
         </nav>
     </header>
 
-    @{
-        int id = (int)Context.Session.GetInt32("AdminId");
-        string username1 = Context.Session.GetString("UserName");
-    }
-    @* @using DataModels.AdminSideViewModels;
-    @model DashpopupsViewModel;*@
+
 
     <nav style="background-color:white" class="resstartpadding">
         <div class="mainnav">
@@ -121,7 +116,11 @@
 
     <div class="position-relative">
         <div class="offcanvas offcanvas-start position-absolute" data-bs-scroll="false" style="width:65%" tabindex="-1" id="layoutnav" aria-labelledby="offcanvasWithBackdropLabel">
-            <span class="p-2 "> <span class="small">Welcome , </span><b>@username1</b></span>
+            @if (!string.IsNullOrEmpty(loggedinperson))
+            {
+                var username1 = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler().ReadJwtToken(loggedinperson).Claims.FirstOrDefault(x => x.Type == "UserName").Value;
+                <span class="p-2 "> <span class="small">Welcome , </span><b>@username1</b></span>
+            }
             <div class="maintabsul">
                 <div class="accordianmaintabs" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Dashboard</div>
                 <div class="accordianmaintabs" data-bs-toggle="tab" data-bs-target="#nav-ProviderLocation" type="button" role="tab" aria-controls="nav-ProviderLocation" aria-selected="false">Provider </div>
