@@ -61,7 +61,7 @@ namespace DataModels.AdminSideViewModels
         public int RegionID { get; set; }
 
         [Required]
-        [RegularExpression(@"^\d{5}$", ErrorMessage = "Zip code must be exactly 5 digits.")]
+        [RegularExpression(@"^\d{6}$", ErrorMessage = "Zip code must be exactly 6 digits.")]
         public string Zip { get; set; }
 
         [Phone]

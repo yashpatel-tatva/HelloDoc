@@ -45,7 +45,11 @@ namespace HelloDoc.Areas.PatientArea.DataController
         [HttpPost]
         public IActionResult CreateAccount(PatientRequestViewModel model)
         {
-            _patientFormsRepository.AddNewUserAndAspUser(model);
+            var result = _patientFormsRepository.AddNewUserAndAspUser(model);
+            if (!result)
+            {
+                return BadRequest("Account Alerady exist");
+            }
 
             return RedirectToAction("PatientLogin", "Home");
         }

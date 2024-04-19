@@ -40,12 +40,18 @@ input[type = "radio"] {
     border: 0;
 }
 
-.form-group,
-.telephone {
+.form-group{
     position: relative;
     /* border: 1px solid; */
     border: 1px solid darkgray;
     overflow : hidden;
+}
+
+
+.telephone {
+    position: relative;
+    /* border: 1px solid; */
+    border: 1px solid darkgray;
 }
 
 .selectedselectspan {

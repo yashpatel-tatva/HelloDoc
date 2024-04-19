@@ -14,8 +14,13 @@ namespace DataAccess.ServiceRepository
             _context = context;
         }
 
-        public void AddNewUserAndAspUser(PatientRequestViewModel model)
+        public bool AddNewUserAndAspUser(PatientRequestViewModel model)
         {
+            var user = _context.Users.FirstOrDefault(x=>x.Email == model.Email);
+            if (user != null)
+            {
+                return false;
+            }
             Aspnetuser newaspnetuser = new Aspnetuser
             {
                 Id = Guid.NewGuid().ToString(),
@@ -50,6 +55,7 @@ namespace DataAccess.ServiceRepository
             aspnetuserrole.Roleid = "3";
             _context.Aspnetuserroles.Add(aspnetuserrole);
             _context.SaveChanges();
+            return true;
         }
 
         public void AddRequestFromPatient(PatientRequestViewModel model)

@@ -4,7 +4,7 @@ namespace DataAccess.ServiceRepository.IServiceRepository
 {
     public interface IPatientFormsRepository
     {
-        void AddNewUserAndAspUser(PatientRequestViewModel model);
+        bool AddNewUserAndAspUser(PatientRequestViewModel model);
 
         void AddRequestFromPatient(PatientRequestViewModel model);
     }

@@ -198,14 +198,18 @@
 </script>
 <script>
     function checkEmailExists() {
-        var email = document.getElementById("patientEmail").value;
-        fetch('/PatientArea/Credential/checkemail/' + email)
-            .then(response => response.json())
-            .then(data => {
+
+        var email = $('#patientEmail').val();
+        $.ajax({
+            url: '/PatientArea/Credential/checkemail/',
+            data: { email },
+            type: 'GET',
+            async: false,
+            success: function (data) {
                 var div = document.getElementById("passwordf")
                 var patientPassword = document.getElementById('showpass');
                 var patientConfirmPassword = document.getElementById('showpass1');
-                if (data.exists) {
+                if (data) {
                     patientPassword.style.display = 'none';
                     patientConfirmPassword.style.display = 'none';
                     div.style.display = 'none';
@@ -215,8 +219,8 @@
                     patientConfirmPassword.style.display = 'block';
                     div.style.display = 'block';
                 }
-            })
-            .catch(error => console.error('Error:', error));
+            }
+        });
     }
     function print() {
         var pass = document.getElementById("showpass").value
