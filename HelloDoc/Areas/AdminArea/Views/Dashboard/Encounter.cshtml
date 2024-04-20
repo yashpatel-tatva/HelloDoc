@@ -214,7 +214,7 @@
                         {
                             <button type="button" class="p-2px-3mx-2 text-white bg-info rounded border-info" id="Savechanges">Save Changes</button>
                         }
-                        @if (!Model.isFinaled)
+                        @if (!Model.isFinaled && Model.role != "Admin")
                         {
                             <button type="button" class="p-2px-3mx-2 text-white rounded" id="finalize" style="background-color : rebeccapurple ; border-color : rebeccapurple">Finalize</button>
                         }

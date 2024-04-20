@@ -835,7 +835,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
             {
                 return PartialView("_SelectCallType", request);
             }
-            if (request.Status == 6 && encounter == null)
+            if (request.Status == 6 && encounter == null && role== "Physician")
             {
                 EncounterFormViewModel model = new EncounterFormViewModel();
                 model.Firstname = request.Requestclients.First().Firstname;
@@ -848,7 +848,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
                 model.RequestId = request.Requestid;
                 return View(model);
             }
-            else if (request.Status == 6 && encounter.IsFinalized[0] != true)
+            else if (request.Status == 6 && encounter != null && encounter.IsFinalized[0] != true && role == "Physician")
             {
                 EncounterFormViewModel model = new EncounterFormViewModel();
                 model.RequestId = request.Requestid;
@@ -886,9 +886,9 @@ namespace HelloDoc.Areas.AdminArea.DataController
                 model.role = role;
                 return View(model);
             }
-            else if ((request.Status == 6 || request.Status == 7 || request.Status == 8 || request.Status == 3) && encounter.IsFinalized != fortrue)
+            else if ((request.Status == 6 || request.Status == 7 || request.Status == 8 || request.Status == 3))
             {
-                return PartialView("_DownLoadEncounter", new { requestid = request.Requestid, role = role });
+                return PartialView("_DownLoadEncounter", new { requestid = request.Requestid, isencounter = (encounter != null)  , role = role });
             }
             else
             {
@@ -1088,6 +1088,8 @@ namespace HelloDoc.Areas.AdminArea.DataController
             model.Mobile = request.Requestclients.FirstOrDefault().Phonenumber;
             model.Email = request.Requestclients.FirstOrDefault().Email;
             model.Location = request.Requestclients.FirstOrDefault().Address;
+            if(encounter != null)
+            {
             model.HistoryOfIllness = encounter.HistoryIllness;
             model.MedicalHistory = encounter.MedicalHistory;
             model.Medication = encounter.Medications;
@@ -1113,6 +1115,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
             model.Procedure = encounter.Procedures;
             model.Followup = encounter.FollowUp;
             model.isFinaled = encounter.IsFinalized[0];
+            }
             model.role = "Admin";
             return PartialView("Encounter", model);
         }
