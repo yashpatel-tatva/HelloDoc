@@ -46,7 +46,7 @@ builder.Services.AddScoped<IJwtRepository, JwtRepository>();
 builder.Services.AddScoped<IPatientFormsRepository, PatientFormsRepository>();
 builder.Services.AddScoped<IPaginationRepository, PaginationRepository>();
 builder.Services.AddScoped<IProviderMenuRepository, ProviderMenuRepository>();
-
+builder.Services.AddScoped<IAddRequestRepository, AddRequestRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

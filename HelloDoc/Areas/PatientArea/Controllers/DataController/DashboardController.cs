@@ -1,4 +1,5 @@
 ﻿using DataAccess.Repository.IRepository;
+using DataAccess.ServiceRepository.IServiceRepository;
 using HelloDoc.Areas.PatientArea.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
@@ -13,48 +14,17 @@ namespace HelloDoc.Areas.PatientArea.DataController
 
         public readonly HelloDocDbContext _context;
         private readonly IAdminRepository _admin;
-        public DashboardController(HelloDocDbContext context, IAdminRepository adminRepository)
+        private readonly IAddRequestRepository _addrequest;
+        public DashboardController(HelloDocDbContext context, IAdminRepository adminRepository , IAddRequestRepository addRequestRepository)
         {
             _context = context;
             _admin = adminRepository;
+            _addrequest = addRequestRepository;
         }
         [Area("PatientArea")]
         public void AddPatientRequestWiseFile(List<IFormFile> formFile, int requestid)
         {
-            foreach (var file in formFile)
-            {
-                string filename = file.FileName;
-                string filenameWithoutExtension = Path.GetFileNameWithoutExtension(filename);
-                string extension = Path.GetExtension(filename);
-                string filewith = filenameWithoutExtension + "_" + DateTime.Now.ToString("dd`MM`yyyy`HH`mm`ss") + extension;
-
-                //string directoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "HalloDoc Request Documents", requestid.ToString());
-                string directoryPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Documents", requestid.ToString());
-
-                if (!Directory.Exists(directoryPath))
-                {
-                    // Create the directory
-                    Directory.CreateDirectory(directoryPath);
-                }
-
-                string filePath = Path.Combine(directoryPath, filewith);
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
-                {
-                    file.CopyTo(fileStream);
-                }
-
-
-                var data3 = new Requestwisefile()
-                {
-                    Requestid = requestid,
-                    Filename = filePath,
-                    Createddate = DateTime.Now,
-                };
-
-                _context.Requestwisefiles.Add(data3);
-
-            }
-            _context.SaveChanges();
+            _addrequest.AddPatientRequestWiseFile(formFile, requestid);
         }
         [Area("PatientArea")]
 

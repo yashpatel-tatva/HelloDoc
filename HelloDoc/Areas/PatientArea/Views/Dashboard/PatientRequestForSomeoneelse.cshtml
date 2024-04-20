@@ -64,7 +64,7 @@
                 <div class="row d-flex">
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 ">
                         <div class="form-group d-flex align-items-center rounded">
-                            <input type="email" class="form-control" placeholder=""  asp-for="Email" id="patientEmail"> <span>Email</span>
+                            <input type="email" class="form-control" placeholder="" onblur="checkEmailExists()" asp-for="Email" id="patientEmail"> <span>Email</span>
                         </div>
                         <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
@@ -144,7 +144,7 @@
                 <div class="row d-flex justify-content-end">
                     <div class="py-2 col-xl-1 col-md-2 col-4 align-items-center">
                         <div class="form-group d-flex  border-0">
-                            <button type="submit" class="p-2 uploadbtn rounded w-100  border-0">
+                            <button type="button" id="submitbtn" class="p-2 uploadbtn rounded w-100  border-0" onclick="checkEmailExists()">
                                 Submit
                             </button>
                         </div>
@@ -171,4 +171,40 @@ var iti = window.intlTelInput(input, {
     hiddenInput: "full",
     utilsScript: "//cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.3/js/utils.js"
 });
+    function checkEmailExists() {
+        var email = $('#patientEmail').val();
+        var emailRegex = /^[a-zA-Z0-9._%+-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (emailRegex.test(email)) {
+            $.ajax({
+                url: '/PatientArea/Credential/checkemail/',
+                data: { email },
+                type: 'GET',
+                async: false,
+                success: function (data) {
+                    if (data) {
+                        document.getElementById("submitbtn").type = "submit";
+                    }
+                    else {
+                        alert("Create Patient Account Via Link that hase been sent to this email. After that try to submit.");
+                        $(document).ready(function () {
+                            $.ajax({
+                                url: '/PatientArea/Credential/SendEmailforcreateaccount',
+                                type: 'GET',
+                                async: false,
+                                data: { email: email },
+                                success: function (result) {
+                                },
+                                error: function (xhr, status, error) {
+                                    console.error('Error: ' + error);
+                                },
+                            });
+                        });
+                    }
+                }
+            });
+        }
+        else {
+            alert("Enter Email First");
+        }
+    }
 </script>
