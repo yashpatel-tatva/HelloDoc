@@ -208,13 +208,13 @@ $('#Createconfirmbutton').on('click', function () {
             success: function (response) {
                 $('#timewisedata').html(response);
                 $('#CreateShiftCancelbutton').trigger('click');
-                Swal.fire({
-                    position: "top-end",
-                    icon: "success",
-                    title: "Shift Created",
-                    showConfirmButton: false,
-                    timer: 1000
-                });
+                //Swal.fire({
+                //    position: "top-end",
+                //    icon: "success",
+                //    title: "Shift Created",
+                //    showConfirmButton: false,
+                //    timer: 1000
+                //});
             },
             error: function (error) {
                 location.reload();

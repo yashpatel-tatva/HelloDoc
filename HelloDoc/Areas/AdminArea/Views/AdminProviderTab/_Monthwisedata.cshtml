@@ -337,3 +337,15 @@
     }
 </script>*@
 <script src="~/js/Events.js" asp-append-version="true"></script>
+@if (TempData["Message"] != null)
+{
+    <script>
+        Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: "@TempData["Message"]",
+            showConfirmButton: false,
+            timer: 1000
+        });
+    </script>
+}

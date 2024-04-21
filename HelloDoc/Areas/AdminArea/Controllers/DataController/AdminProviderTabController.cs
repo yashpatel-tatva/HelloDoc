@@ -322,7 +322,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             if (shift.Weekdays == null)
             {
                 bool IsValid = false;
-                var shiftdetailexistdata = _db.Shiftdetails.Include(x => x.Shift).Where(x => x.Shift.Physicianid == model.physician).ToList();
+                var shiftdetailexistdata = _db.Shiftdetails.Include(x => x.Shift).Where(x => x.Shift.Physicianid == model.physician).Where(x=>x.Shiftdate == currentDate).AsEnumerable().Where(x => x.Isdeleted[0] == false).ToList();
                 if (shiftdetailexistdata.Count() != 0)
                 {
                     foreach (var item in shiftdetailexistdata)
@@ -333,7 +333,9 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
                         }
                         else
                         {
+                            IsValid = false;
                             shownmsg = false;
+                            break;
                         }
 
                     }
@@ -363,7 +365,6 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
                     _db.Shiftdetailregions.Add(shiftdetailregion);
                     _db.SaveChanges();
                     TempData["Message"] = "Shift Created for : " + _physician.GetFirstOrDefault(x => x.Physicianid == shift.Physicianid).Firstname;
-
                 }
             }
             for (int i = 0; i < model.repeattimes * 7; i++)
@@ -371,7 +372,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
                 var IsValid = false;
                 StartTimewithdate = new DateTime(currentDate.Year, currentDate.Month, currentDate.Day, startTime.Hours, startTime.Minutes, 0);
                 EndTimewithdate = new DateTime(currentDate.Year, currentDate.Month, currentDate.Day, endTime.Hours, endTime.Minutes, 0);
-                var shiftdetailexistdata = _db.Shiftdetails.Include(x => x.Shift).Where(x => x.Shift.Physicianid == model.physician).Where(x => x.Shiftdate == currentDate);
+                var shiftdetailexistdata = _db.Shiftdetails.Include(x => x.Shift).Where(x => x.Shift.Physicianid == model.physician).Where(x => x.Shiftdate == currentDate).AsEnumerable().Where(x => x.Isdeleted[0]==false).ToList();
                 if (shiftdetailexistdata.Count() != 0)
                 {
                     foreach (var s in shiftdetailexistdata)
@@ -383,9 +384,9 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
                         }
                         else
                         {
+                            IsValid = false;
                             shownmsg = false;
-                            currentDate = currentDate.AddDays(1);
-                            continue;
+                            break;
                         }
                     }
                 }
