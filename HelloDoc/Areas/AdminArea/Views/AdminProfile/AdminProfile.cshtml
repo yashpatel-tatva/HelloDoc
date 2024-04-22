@@ -199,13 +199,16 @@
         $('.accordianmaintabs').removeClass('active');
         $('.maintabs[data-bs-target="' + target + '"]').addClass('active');
         $('.accordianmaintabs[data-bs-target="' + target + '"]').addClass('active');
-        $('.spanofvalid').bind("DOMSubtreeModified", function () {
-            if ($(this).text().trim() !== '') {
-                $(this).parents('.py-2').addClass('error');
-            } else {
-                $(this).parents('.py-2').removeClass('error');
-            }
-        });
+        
     </script>
 }
+<script>
+    $('.spanofvalid').bind("DOMSubtreeModified", function () {
+        if ($(this).text().trim() !== '') {
+            $(this).parents('.py-2').addClass('error');
+        } else {
+            $(this).parents('.py-2').removeClass('error');
+        }
+    });
+</script>
 <script src="~/js/AdminProfile.js" asp-append-version="true"></script>
