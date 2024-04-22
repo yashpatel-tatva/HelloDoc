@@ -44,11 +44,10 @@ namespace DataAccess.Repository
 
             var shiftdetailexistdata = _db.Shiftdetails
                 .Include(x => x.Shift)
-                .Where(x => x.Shift.Physicianid == physicianid && x.Shiftdate == currentDate).AsEnumerable().Where(x => x.Isdeleted[0]==false)
+                .Where(x => x.Shift.Physicianid == physicianid && x.Shiftdate == currentDate).AsEnumerable().Where(x => x.Isdeleted[0] == false)
                 .ToList();
 
-            if (shiftdetailexistdata.Any(s =>
-                !(s.Starttime >= endTimewithdate || s.Endtime <= startTimewithdate)))
+            if (shiftdetailexistdata.Any(s => s.Shiftdetailid != shiftdetailid && !(s.Starttime >= endTimewithdate || s.Endtime <= startTimewithdate)))
             {
                 return false;
             }
@@ -68,7 +67,7 @@ namespace DataAccess.Repository
 
         public List<Shiftdetail> getall()
         {
-            return _db.Shiftdetails.Include(x=>x.Shift).Include(x=>x.Shiftdetailregions).ToList();
+            return _db.Shiftdetails.Include(x => x.Shift).Include(x => x.Shiftdetailregions).ToList();
         }
 
         public void ReturnThisShift(int shiftdetailid, string modifiedby)
