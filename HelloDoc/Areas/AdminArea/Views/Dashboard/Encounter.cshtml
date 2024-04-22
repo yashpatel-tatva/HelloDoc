@@ -226,6 +226,9 @@
     </div>
 </div>
 <link rel="stylesheet" href="~/css/error.css" asp-append-version="true" />
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js" asp-append-version="true"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js" asp-append-version="true"></script>
+
 <script>
     var observer = new MutationObserver(function (mutations) {
         mutations.forEach(function (mutation) {
@@ -298,7 +301,7 @@
     $('#Savechanges').on('click', function (event) {
         event.preventDefault(); // Prevent the form from submitting normally
         var form = $(this).closest('form');
-
+        
         if (form.valid()) { // Check if the form is valid
             $.ajax({
                 type: form.attr('method'), // Get the form method (GET, POST, etc.)
