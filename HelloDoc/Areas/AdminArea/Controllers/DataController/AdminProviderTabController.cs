@@ -637,7 +637,15 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         {
             var date = _shiftDetail.GetFirstOrDefault(x => x.Shiftdetailid == shiftdetailid).Shiftdate;
             var datetoshow = new DateTime(date.Year, date.Month, date.Day);
-            var modifiedby = _admin.GetFirstOrDefault(x => x.Adminid == _admin.GetSessionAdminId()).Aspnetuserid;
+            var modifiedby = "";
+            if (_admin.GetSessionAdminId() != -1)
+            {
+                modifiedby = _admin.GetFirstOrDefault(x => x.Adminid == _admin.GetSessionAdminId()).Aspnetuserid;
+            }
+            if (_physician.GetSessionPhysicianId() != -1)
+            {
+                modifiedby = _physician.GetFirstOrDefault(x => x.Physicianid == _physician.GetSessionPhysicianId()).Aspnetuserid;
+            }
             _shiftDetail.DeleteThisShift(shiftdetailid, modifiedby);
             return RedirectToAction(format, new { datetoshow, region, status });
         }
