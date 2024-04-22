@@ -1,0 +1,10 @@
+[user]
+	name = yashpatel-tatva
+	email = 156052898+yashpatel-tatva@users.noreply.github.com
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[pull]
+	rebase = false
