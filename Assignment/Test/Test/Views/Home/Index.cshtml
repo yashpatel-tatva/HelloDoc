@@ -1,0 +1,40 @@
+﻿@{
+    ViewData["Title"] = "Hospial Management System";
+}
+
+<div class="mt-2">
+    <div class="w-100 d-flex">
+        <div class="py-2 col-xl-12 col-md-12 col-12 col-sm-12">
+            <div class="form-group d-flex align-items-center rounded">
+                <input type="text" class="form-control " id="search" placeholder=""><span>Search</span>
+            </div>
+        </div>
+    </div>
+    <div class="table-responsive small" id="dashtables"></div>
+    <div class="d-flex align-items-center justify-content-between p-3 pagination_div">
+        <div class="info_div">
+            Show
+            <select id="pagesizedropdown">
+                <option value="1">1</option>
+                <option value="2">2 </option>
+                <option value="3" selected>3</option>
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="20">25</option>
+            </select>
+            Entry
+        </div>
+        <div class="info_div">
+            <span id="fromthisrequest"></span>
+            <span>-</span>
+            <span id="tothisrequest"></span>
+            <span>out of</span>
+            <span id="totalcountofrequest"></span>
+        </div>
+        <div class="d-flex align-items-center info_div">
+            <div class="paginate_Previousbutton text-info">Prev</div>
+            <div class="dataTables_paginate d-flex"></div>
+            <div class="paginate_Nextbutton text-info">Next</div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,45 @@
+﻿@model List<Patient>
+@{
+    Layout = null;
+}
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Patient Id</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Age</th>
+            <th>Phone Number</th>
+            <th>Gender</th>
+            <th>Dieses</th>
+            <th>Doctor</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var patient in Model)
+        {
+            <tr>
+                <td>@patient.Id</td>
+                <td>@patient.FirstName</td>
+                <td>@patient.LastName</td>
+                <td>@patient.Email</td>
+                <td>@patient.Age</td>
+                <td>@patient.Phone</td>
+                <td>@patient.Gender.ToUpperInvariant()</td>
+                <td>@patient.Dieses</td>
+                <td>@patient.Specialist</td>
+                <td>
+                    <div class="d-flex align-items-center gap-2">
+                        <button type="button" class="p-1 px-4 text-white rounded shadow-none edit" data-id="@patient.Id" style="background-color : #3f51b5 ; border-color : #3f51b5">Edit</button>
+                        <button type="button" class="p-1 px-4 text-white bg-danger rounded border-danger shadow-none delete" data-id="@patient.Id" >Delete</button>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script src="~/js/data.js" asp-append-version="true"></script>

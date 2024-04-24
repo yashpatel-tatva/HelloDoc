@@ -1,0 +1,130 @@
+﻿@using Entity.ViewModels
+@model PatientViewModel
+
+<div class="modal fade rounded-4 shadow" id="ModalToOpen" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color : #5e94d7">
+                <h5 class="modal-title text-white mt-3">Patient Form</h5>
+                <button class="btn" type="button" data-dismiss="modal">
+                    <i class="fa-solid fa-xmark" style="color: #ffffff;"></i>
+                </button>
+            </div>
+            <form asp-action="PatientEditOrAdd" asp-controller="Home" , method="Post">
+                @if (Model != null)
+                {
+                    <input type="hidden" asp-for="Id" value="@Model.Id" />
+                }
+                <div class="modal-body">
+                    <div class="d-flex">
+                        <div class="py-2 col-xl-6 col-md-6 col-sm-6">
+                            <div class="form-group d-flex align-items-center rounded mx-1">
+                                <input type="text" class="form-control" placeholder="" asp-for="FirstName"><span>First Name</span>
+                            </div>
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                        </div>
+                        <div class="py-2 col-xl-6 col-md-6 col-sm-6">
+                            <div class="form-group d-flex align-items-center rounded mx-1">
+                                <input type="text" class="form-control" placeholder="" asp-for="LastName"><span>Last Name</span>
+                            </div>
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="d-flex">
+                        <div class="py-2 col-xl-6 col-md-6 col-sm-6">
+                            <div class="form-group d-flex align-items-center rounded mx-1">
+                                <input type="email" class="form-control" placeholder="" id="email" asp-for="Email"><span>Email</span>
+                            </div>
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="py-2 col-xl-6 col-md-6 col-sm-6">
+                            <div class="form-group d-flex align-items-center rounded mx-1">
+                                <input type="number" class="form-control" placeholder="" id="age" asp-for="Age"><span>Age</span>
+                            </div>
+                            <span asp-validation-for="Age" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="d-flex">
+                        <div class="py-2 col-xl-6 col-md-6 col-sm-6 d-flex   align-items-center small">
+                            <span class="me-1">Gender :</span>
+                            @if (Model != null)
+                            {
+                                var gender = Model.Gender;
+                                var male = ""; var female = ""; var others = "";
+                                if (gender == "male") { male = "checked"; }
+                                if (gender == "female") { female = "checked"; }
+                                if (gender == "others") { others = "checked"; }
+                                <div><input type="radio" name="gender" id="male" value="male" @male /><label class="me-1" for="male">Male</label></div>
+                                <div><input type="radio" name="gender" id="female" value="female" @female /><label class="me-1" for="female">Female</label></div>
+                                <div><input type="radio" name="gender" id="others" value="others" @others /><label class="me-1" for="others">Others</label></div>
+                            }
+                            else
+                            {
+                                <div><input type="radio" name="gender" id="male" value="male" /><label class="me-1" for="male">Male</label></div>
+                                <div><input type="radio" name="gender" id="female" value="female" /><label class="me-1" for="female">Female</label></div>
+                                <div><input type="radio" name="gender" id="others" value="others" /><label class="me-1" for="others">Others</label></div>
+                            }
+                        </div>
+                        <span asp-validation-for="Gender" class="text-danger"></span>
+                        <div class="py-2 col-xl-6 col-md-6 col-sm-6">
+                            <div class="telephone rounded mx-1">
+                                <div class="input-group d-flex align-items-center rounded ">
+                                    <input type="tel" class="form-control" asp-for="Phone">
+                                </div>
+                            </div>
+                            <span asp-validation-for="Phone" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="d-flex mt-3">
+                        <div class="py-2 col-xl-6 col-md-6 col-sm-6">
+                            <div class="form-group d-flex align-items-center rounded mx-1">
+                                <input type="text" class="form-control" list="listofDieses" placeholder="" id="Dieses" asp-for="Dieses"><span>Dieses</span>
+                                <datalist id="listofDieses">
+                                </datalist>
+                            </div>
+                            <span asp-validation-for="Dieses" class="text-danger"></span>
+                        </div>
+                        <div class="py-2 col-xl-6 col-md-6 col-sm-6">
+                            <div class="form-group d-flex align-items-center rounded mx-1">
+                                <input type="text" class="form-control" list="listofDoctor" asp-for="Specialist" placeholder=""><span>Specialist</span>
+                                <datalist id="listofDoctor">
+                                </datalist>
+                            </div>
+                            <span asp-validation-for="Specialist" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-center border-0">
+                    <div class="d-flex w-100">
+                        <button type="button" class="col-6 p-1 px-4 text-black bg-light rounded border-light shadow-none" data-bs-dismiss="modal" id="cancel">Cancel</button>
+                        <button type="button" class="col-6 p-1 px-4 text-white rounded shadow-none" id="save" style="background-color : #3f51b5 ; border-color : #3f51b5">Save</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" asp-append-version="true"></script>
+
+<script>
+    $('input[type="tel"]').each(function () {
+        var iti = window.intlTelInput(this, {
+            nationalMode: false,
+            utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"
+        });
+        $(this).on('blur', function () {
+            var fullNumber = iti.getNumber();
+            var countryCode = iti.getSelectedCountryData().dialCode;
+            if (fullNumber.startsWith("+" + countryCode + "+" + countryCode)) {
+                fullNumber = fullNumber.replace("+" + countryCode + "+", "+");
+            }
+            console.log(fullNumber);
+            $(this).val(fullNumber.replace(" ", ""));
+        });
+    });
+
+</script>
+
+<script src="~/js/model.js" asp-append-version="true"></script>
