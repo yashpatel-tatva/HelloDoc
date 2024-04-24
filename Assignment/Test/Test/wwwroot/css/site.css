@@ -219,3 +219,10 @@ input:not(:placeholder-shown) + span {
             font-weight: 550;
         }
 }
+::-webkit-scrollbar {
+    display: none;
+}
+/*
+#dashtables{
+    height : 590px
+}*/
