@@ -29,28 +29,28 @@ body {
 }
 
 
-.form-group input {
-    width: 100%;
-    outline: none;
-    border: 0;
-    background-color: transparent;
-    padding: 10px;
-    font-size: 1em;
-}
+    .form-group input {
+        width: 100%;
+        outline: none;
+        border: 0;
+        background-color: transparent;
+        padding: 10px;
+        font-size: 1em;
+    }
 
-.form-group span {
-    position: absolute;
-    left: 10px;
-    top: 10px;
-    pointer-events: none;
-    font-size: 1em;
-    transition: 0.5s;
-    color: darkgrey;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 90%;
-}
+    .form-group span {
+        position: absolute;
+        left: 10px;
+        top: 10px;
+        pointer-events: none;
+        font-size: 1em;
+        transition: 0.5s;
+        color: darkgrey;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 90%;
+    }
 
 input:not(:placeholder-shown):not(:focus) + span {
     /* color: inherit; */
@@ -115,14 +115,14 @@ input:not(:placeholder-shown) + span {
     border: 1px solid darkgray;
 }
 
-.telephone input {
-    width: 100%;
-    outline: none;
-    border: 0;
-    background-color: transparent;
-    padding: 12.5px 15px 12.5px 15px;
-    font-size: 1em;
-}
+    .telephone input {
+        width: 100%;
+        outline: none;
+        border: 0;
+        background-color: transparent;
+        padding: 12.5px 15px 12.5px 15px;
+        font-size: 1em;
+    }
 
 
 
@@ -160,3 +160,62 @@ input:not(:placeholder-shown) + span {
         background: #5e94d7 !important;
         color: white !important
     }
+
+
+@media only screen and (max-width:700px) {
+
+
+    .paginate_button,
+    .paginate_Nextbutton,
+    .paginate_Previousbutton, .paginate_buttonNaN {
+        padding: 0px !important;
+        border: 1px solid #80808070 !important;
+        font-size: smaller;
+        height: 25px !important;
+        width: 25px !important;
+    }
+
+    .paginate_button,
+    .paginate_Nextbutton,
+    .paginate_Previousbutton,
+    .paginate_buttonNaN {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .dataTables_info {
+        font-size: small;
+        font-weight: 600;
+    }
+
+    .dataTables_paginate {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: 600;
+    }
+
+        .dataTables_paginate span {
+            display: flex;
+        }
+
+    .paginate_button.current {
+        background: #0dcaf0 !important;
+        color: #fff !important;
+        border: none;
+    }
+
+
+    .pagination_div {
+        flex-wrap: wrap !important;
+    }
+
+        .pagination_div .info_div {
+            width: 100% !important;
+            text-align: center !important;
+            justify-content: center;
+            /*font-size: small;*/
+            font-weight: 550;
+        }
+}
