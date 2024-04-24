@@ -5,6 +5,10 @@
     else if ($('#age').val() == 0) {
         Swal.fire("Add Age!");
     }
+    else if ($('#age').val() >= 100) {
+        Swal.fire("Enter Valid!");
+        $('#age').val("")
+    }
     else {
         $(this).closest('form').submit();
     }
