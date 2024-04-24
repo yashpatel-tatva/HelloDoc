@@ -63,7 +63,7 @@ input:not(:placeholder-shown):not(:focus) + span {
 
 input:focus + span,
 input:not(:placeholder-shown) + span {
-    color: #0dcaf0;
+    color: #5e94d7;
     transform: translateX(-3px) translateY(-20px);
     font-size: 0.75em !important;
     padding: 0px 5px;
@@ -77,7 +77,7 @@ input:not(:placeholder-shown) + span {
 
 .form-group:focus-within,
 .telephone:focus-within {
-    border: 1px solid #0dcaf0;
+    border: 1px solid #5e94d7;
 }
 
 
@@ -146,17 +146,17 @@ input:not(:placeholder-shown) + span {
 }
 
     .paginate_button.current {
-        background: #0dcaf0 !important;
+        background: #5e94d7 !important;
         color: #fff !important;
         border: none;
     }
 
     .paginate_button:hover {
-        background: #0dcaf0 !important;
+        background: #5e94d7 !important;
     }
 
     .paginate_Nextbutton:hover,
     .paginate_Previousbutton:hover {
-        background: #0dcaf0 !important;
+        background: #5e94d7 !important;
         color: white !important
     }
