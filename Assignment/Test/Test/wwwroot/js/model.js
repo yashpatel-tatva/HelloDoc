@@ -10,7 +10,36 @@
         $('#age').val("")
     }
     else {
-        $(this).closest('form').submit();
+        //$(this).closest('form').submit();
+        event.preventDefault();
+        var form = $(this).closest('form');
+
+        if (form.valid()) {
+            $.ajax({
+                type: form.attr('method'),
+                url: form.attr('action'),
+                data: form.serialize(),
+                success: function (data) {
+                    Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: "Submitted",
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                    var currentpage = $('.current').data('id');
+                    var pagesize = $('#pagesizedropdown').val();
+                    var search = $('#search').val();
+                    filter(currentpage, pagesize, search);
+                    $('#cancel').trigger('click');
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('Form submission failed: ' + textStatus, errorThrown);
+                }
+            });
+        } else {
+            form.validate().focusInvalid();
+        }
     }
 })
 

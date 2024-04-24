@@ -28,7 +28,10 @@ $('.delete').on('click', function () {
                 showConfirmButton: false,
                 timer: 1500
             });
-            location.reload();
+            var currentpage = $('.current').data('id');
+            var pagesize = $('#pagesizedropdown').val();
+            var search = $('#search').val();
+            filter(currentpage, pagesize, search) 
         }
     })
 })
