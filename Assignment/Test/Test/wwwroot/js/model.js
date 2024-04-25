@@ -44,23 +44,23 @@
 })
 
 
-$('#email').on('blur', function () {
-    var email = $(this).val();
-    var id = $('#id').val();
-    $.ajax({
-        url: '/Home/CheckEmail',
-        data: { email, id },
-        type: 'POST',
-        success: function (data) {
-            if (data) {
-                Swal.fire("Email already Exist!");
-                $('#email').val("");
-            }
-            else {
-            }
-        }
-    })
-})
+//$('#email').on('blur', function () {
+//    var email = $(this).val();
+//    var id = $('#id').val();
+//    $.ajax({
+//        url: '/Home/CheckEmail',
+//        data: { email, id },
+//        type: 'POST',
+//        success: function (data) {
+//            if (data) {
+//                Swal.fire("Email already Exist!");
+//                $('#email').val("");
+//            }
+//            else {
+//            }
+//        }
+//    })
+//})
 
 
 $.ajax({
