@@ -13,7 +13,7 @@
             <form asp-action="PatientEditOrAdd" asp-controller="Home" , method="Post">
                 @if (Model != null)
                 {
-                    <input type="hidden" asp-for="Id" value="@Model.Id" />
+                    <input type="hidden" asp-for="Id" id="id" value="@Model.Id" />
                 }
                 <div class="modal-body">
                     <div class="d-flex">
