@@ -161,7 +161,7 @@ namespace DataAccess.ServiceRepository
         {
             List<ShiftData> shiftDatas = new List<ShiftData>();
             DateOnly currentday = DateOnly.FromDateTime(datetoshow);
-            var shiftdetail = _shiftDetail.getall().Where(x => x.Isdeleted[0] == false).Where(x=>x.Shift.Physicianid == physicianid).Where(x => x.Shiftdate == currentday);
+            var shiftdetail = _shiftDetail.getall().Where(x => x.Isdeleted[0] == false).Where(x => x.Shift.Physicianid == physicianid).Where(x => x.Shiftdate == currentday);
             if (status != 0)
             {
                 shiftdetail = shiftdetail.Where(x => x.Status == status);
@@ -218,7 +218,7 @@ namespace DataAccess.ServiceRepository
 
         public List<ShiftData> ShifsOfDate(DateTime datetoshow, int region, int status, int next, string v2)
         {
-            
+
             List<ShiftData> shiftDatas = new List<ShiftData>();
             DateOnly currentday = DateOnly.FromDateTime(datetoshow);
             var shiftdetail = _shiftDetail.GetAll().Where(x => x.Isdeleted[0] == false).Where(x => x.Endtime >= DateTime.Now && x.Shiftdate == currentday);
@@ -276,6 +276,18 @@ namespace DataAccess.ServiceRepository
                 shifts = shifts.Skip(skips).Take(10).ToList();
             }
             return shifts;
+        }
+        public TimeOnly TotalHrsofThisDateShifts(int physicianid, DateTime date)
+        {
+            var todaysshifts = ShifsOfDate(date, 0, 0, 0).Where(x => x.Physicianid == physicianid).ToList();
+            TimeOnly total = TimeOnly.MinValue;
+            foreach (var shift in todaysshifts)
+            {
+                var start = shift.StartTime; var end = shift.EndTime;
+                var diff = end - start;
+                total = total.Add(diff);
+            }
+            return total;
         }
     }
 }

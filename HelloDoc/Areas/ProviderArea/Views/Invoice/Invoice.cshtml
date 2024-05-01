@@ -1,8 +1,56 @@
 ﻿@{
+    //Layout = null;
+}
+@{
     ViewData["Title"] = "Invoice";
 }
-<h1>Invoice</h1>
-<script>localStorage.setItem('target3', "#nav-invoice");
+<input type="hidden" id="physicianid" value="@Model.physicianid" />
+<div class="container">
+    <div class="d-flex justify-content-between mx-3">
+        <div class="h3 subinfotext fw-bold">
+            Timesheets
+        </div>
+        <div>
+            <a asp-action="Dashboard" asp-controller="Dashboard">
+                <button type="button" class="d-flex babtn rounded align-item-center p-1 px-2">
+                    <div><img src="~/res/back.png" width="15px" height="10px"></div>
+                    <div><span>Back</span></div>
+                </button>
+            </a>
+        </div>
+    </div>
+    <div class="bg-light rounded m-3 shadow" id="content">
+        <div class="p-3">
+            <div class="d-flex justify-content-between">
+                <div class="form-group d-flex align-items-center rounded">
+                    <select class="form-select shadow-none" id="biweekDropdown">
+                    </select>
+                    <span class="selectedselectspan">Search By TimeSheet Period</span>
+                </div>
+                <div class="d-flex align-items-center">
+                    <div class="d-flex justify-content-end">
+                        <button type="button" class="btn border-info text-info shadow-none" id="finalizetimesheet">Finalize TimeSheet</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="datatoprintintimesheet">
+
+        </div>
+    </div>
+    <div class="bg-light rounded m-3 shadow" id="content1">
+        <div class="p-3">
+            <div class="h6 subinfotext fw-bold">
+                Timesheets Reimbursement
+            </div>
+        </div>
+        <div id="datatoprintinreimbursement">
+        </div>
+    </div>
+</div>
+
+<script src="~/js/Invoice.js" asp-append-version="true"></script>
+<script>    localStorage.setItem('target3', "#nav-invoice");
     var target = localStorage.getItem('target3');
     $('.maintabs').removeClass('active');
     $('.accordianmaintabs').removeClass('active');

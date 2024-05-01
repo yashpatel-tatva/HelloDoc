@@ -1,0 +1,116 @@
+﻿@using DataModels.AdminSideViewModels
+@model List<ReimbursementViewModel>
+
+<style>
+    table {
+        width: 100%;
+    }
+
+    th, td {
+        padding: 0.5rem;
+        /*text-align: center;*/
+        /*color: #212529bf !important;*/
+        vertical-align: middle;
+    }
+
+    .form-group input {
+        padding: 5px 10px;
+    }
+
+    .form-group {
+        width: 80%
+    }
+</style>
+<div class="bg-light rounded m-3 shadow" id="content">
+    <div class="table-responsive">
+        <table class="table table-hover mt-1">
+            <thead style="--bs-table-bg: rgb(235, 235, 235) ; color: black !important">
+                <tr>
+                    <th style="width : 10%">Date</th>
+                    <th style="width : 20%">Item</th>
+                    <th style="width : 20%">Amount</th>
+                    <th style="width : 25%">Bill</th>
+                    <th style="width : 25%">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <form data-id="@item.Id" data-name="@item.ThisDate">
+
+                    <tr>
+                        <td>@item.ThisDate.ToString("dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture)</td>
+                        <td>
+                                @if (item.Item != null)
+                                {
+                                <span>
+                                        @item.Item
+                                </span>
+                                <div class="form-group d-flex align-items-center rounded d-none">
+                                    <input type="text" class="form-control item_@item.Id" placeholder="" asp-for="@item.Item" value="@item.Item">
+                                </div>
+                                }
+                                else
+                                {
+                                <span class="d-none">
+                                        @item.Item
+                                </span>
+                                <div class="form-group d-flex align-items-center rounded">
+                                    <input type="text" class="form-control item_@item.Id" placeholder="" asp-for="@item.Item" value="@item.Item">
+                                </div>
+                                }
+                        </td>
+                        <td>
+                            <div class="form-group d-flex align-items-center rounded">
+                                <input type="number" class="form-control"  placeholder="" asp-for="@item.Amount" value="@item.Amount">
+                            </div>
+                        </td>
+                        <td style="text-align : center">
+                                @if (item.Billname != null)
+                                {
+                                <span>
+                                        @item.Billname
+                                </span>
+                                <div class="form-group rounded d-flex align-items-center justify-content-between uploadbtndiv d-none">
+                                    <div class="px-3 table-responsive">
+                                        <input type="file" id="actual-btn" asp-for="@item.Bill" hidden />
+                                        <label role="button" for="actual-btn" id="file-chosen" class="choosenfile text-dark text-nowrap">Select File</label>
+                                    </div>
+                                    <button type="button" class="uploadbtn px-2 py-1 d-flex ms-1 border-0">
+                                        <label role="button" class="d-flex align-items-center"><i class="bi bi-cloud-arrow-up p-2"></i><div class="cnr">Upload</div></label>
+                                    </button>
+                                </div>
+                                }
+                                else
+                                {
+                                <span class="d-none">
+                                        @item.Billname
+                                </span>
+                                <div class="form-group rounded d-flex align-items-center justify-content-between uploadbtndiv">
+                                    <div class="px-3 table-responsive">
+                                        <input type="file" id="actual-btn" asp-for="@item.Bill" hidden />
+                                        <label role="button" for="actual-btn" id="file-chosen" class="choosenfile text-dark text-nowrap">Select File</label>
+                                    </div>
+                                    <button type="button" class="uploadbtn px-2 py-1 d-flex ms-1 border-0">
+                                        <label role="button" class="d-flex align-items-center"><i class="bi bi-cloud-arrow-up p-2"></i><div class="cnr">Upload</div></label>
+                                    </button>
+                                </div>
+                                }
+                        </td>
+                        <td>
+                                @if (item.Billname != null)
+                                {
+                                <div class="d-flex align-items-center justify-content-center gap-2">
+                                    <button type="button" class="btn border-info text-info shadow-none editbill">Edit</button>
+                                    <button type="button" class="btn border-info text-info shadow-none deletebill">Delete</button>
+                                    <button type="button" class="btn border-info text-info shadow-none viewbill">View</button>
+                                </div>
+                                }
+                        </td>
+                    </tr>
+                    </form>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -9,6 +9,7 @@ namespace DataAccess.Repository.IRepository
         void Update(Requeststatuslog requeststatuslog);
 
         List<Requeststatuslog> GetStatusbyId(int RequestId);
+        List<Requeststatuslog> GetForPhysician(int RequestId);
 
         void Save();
     }

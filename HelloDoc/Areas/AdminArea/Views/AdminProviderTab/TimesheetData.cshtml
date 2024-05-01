@@ -1,0 +1,36 @@
+﻿@using DataModels.AdminSideViewModels
+@model BiWeekOnlyView
+@{
+    Layout = null;
+}
+<div class="table-responsive">
+    <table class="w-100 table">
+        <thead class="thead-dark bg-body-secondary">
+            <tr style="--bs-table-bg: #ebebeb; color : black">
+                <th>Shift Date</th>
+                <th>Shift</th>
+                <th>NightShift Weekend</th>
+                <th>Housecall</th>
+                <th>Housecall Night</th>
+                <th>Phone Consults</th>
+                <th>Phone Consults Nightshift</th>
+                <th>Batch Testing</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var item in Model.TimeSheets)
+            {
+                <tr>
+                    <td>@item.ShiftDate.ToString("MMM dd , yyyy")</td>
+                    <td>@item.Shift</td>
+                    <td>@item.NightShift</td>
+                    <td>@item.HouseCall</td>
+                    <td>@item.HouseCallNight</td>
+                    <td>@item.PhoneCall</td>
+                    <td>@item.PhoneCallNight</td>
+                    <td>@item.BatchTesting</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

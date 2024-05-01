@@ -1,0 +1,124 @@
+﻿@model Payrate
+@{
+    Layout = null;
+}
+<style>
+    table {
+        width: 100%;
+    }
+
+    th, td {
+        padding: 0.5rem;
+        text-align: center;
+        /*color: #212529bf !important;*/
+        vertical-align: middle;
+    }
+</style>
+<div class="container">
+    <div class="d-flex justify-content-between mx-3">
+        <div class="h3 subinfotext fw-bold">
+            Payrate
+        </div>
+        <input type="hidden" id="physicianid" value="@Model.Physicinaid" />
+        <a>
+            <button type="button" class="d-flex babtn rounded align-item-center p-1 px-2" id="backtoedit">
+                <div><img src="~/res/back.png" width="15px" height="10px"></div>
+                <div><span>Back</span></div>
+            </button>
+        </a>
+    </div>
+    <div class="bg-light rounded m-3 shadow" id="content">
+        <div class="table-responsive">
+            <table class="table table-hover mt-1">
+                <thead style="--bs-table-bg: rgb(235, 235, 235) ; color: black !important">
+                    <tr>
+                        <th style="width : 40%">Category</th>
+                        <th style="width : 40%">Payrate</th>
+                        <th style="width : 40%">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>NightShift_Weekend</td>
+                        <td>
+                            <div class="form-group d-flex align-items-center rounded">
+                                <input type="number" class="form-control nightshift" placeholder="" asp-for="Nightshift" readonly><span>Payrate</span>
+                            </div>
+                        </td>
+                        <td>
+                            <button type="button" class=" p-2 px-3 text-white bg-info rounded border-info  mx-2 px-3 shadow-none choosefield" id="nightshift">Edit</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Shifts</td>
+                        <td>
+                            <div class="form-group d-flex align-items-center rounded">
+                                <input type="number" class="form-control shift" placeholder="" asp-for="Shift" readonly><span>Payrate</span>
+                            </div>
+                        </td>
+                        <td>
+                            <button type="button" class=" p-2 px-3 text-white bg-info rounded border-info  mx-2 px-3 shadow-none choosefield" id="shift">Edit</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>HouseCalls_Nights_Weekend</td>
+                        <td>
+                            <div class="form-group d-flex align-items-center rounded">
+                                <input type="number" class="form-control nighthousecall" placeholder="" asp-for="Nighthousecall" readonly><span>Payrate</span>
+                            </div>
+                        </td>
+                        <td>
+                            <button type="button" class=" p-2 px-3 text-white bg-info rounded border-info  mx-2 px-3 shadow-none choosefield" id="nighthousecall">Edit</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>PhoneConsults</td>
+                        <td>
+                            <div class="form-group d-flex align-items-center rounded">
+                                <input type="number" class="form-control consult" placeholder="" asp-for="Consult" readonly><span>Payrate</span>
+                            </div>
+                        </td>
+                        <td>
+                            <button type="button" class=" p-2 px-3 text-white bg-info rounded border-info  mx-2 px-3 shadow-none choosefield" id="consult">Edit</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>PhoneConsults_Nights_Weekend</td>
+                        <td>
+                            <div class="form-group d-flex align-items-center rounded">
+                                <input type="number" class="form-control nightconsult" placeholder="" asp-for="Nightconsult" readonly><span>Payrate</span>
+                            </div>
+                        </td>
+                        <td>
+                            <button type="button" class=" p-2 px-3 text-white bg-info rounded border-info  mx-2 px-3 shadow-none choosefield" id="nightconsult">Edit</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>BatchTesting</td>
+                        <td>
+                            <div class="form-group d-flex align-items-center rounded">
+                                <input type="number" class="form-control batchtesting" placeholder="" asp-for="Batchtesting" readonly><span>Payrate</span>
+                            </div>
+                        </td>
+                        <td>
+                            <button type="button" class=" p-2 px-3 text-white bg-info rounded border-info  mx-2 px-3 shadow-none choosefield" id="batchtesting">Edit</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>HouseCalls</td>
+                        <td>
+                            <div class="form-group d-flex align-items-center rounded">
+                                <input type="number" class="form-control housecall" placeholder="" asp-for="Housecall" readonly><span>Payrate</span>
+                            </div>
+                        </td>
+                        <td>
+                            <button type="button" class=" p-2 px-3 text-white bg-info rounded border-info  mx-2 px-3 shadow-none choosefield" id="housecall">Edit</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/EnterPayrate.js" asp-append-version="true"></script>

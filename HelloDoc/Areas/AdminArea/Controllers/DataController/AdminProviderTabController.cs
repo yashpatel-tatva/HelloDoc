@@ -18,6 +18,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
     {
         private readonly IProviderMenuRepository _providerMenu;
         private readonly ISendEmailRepository _sendEmail;
+        private readonly IRequestStatusLogRepository _requestStatusLog;
         private readonly IPhysicianRepository _physician;
         private readonly IAdminRepository _admin;
         private readonly IAspNetUserRepository _userRepository;
@@ -25,8 +26,9 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         private readonly IShiftDetailRepository _shiftDetail;
         private readonly IShiftRepository _shift;
         private readonly ISchedulingRepository _scheduling;
+        private readonly IInvoiceReposiitory _invoice;
         private readonly HelloDocDbContext _db;
-        public AdminProviderTabController(IProviderMenuRepository providerMenu, IShiftRepository shiftRepository, ISendEmailRepository sendEmail, IPhysicianRepository physicianRepository, IShiftDetailRepository shiftDetailRepository, IAdminRepository adminRepository, IAspNetUserRepository userRepository, HelloDocDbContext helloDocDbContext, IRoleRepository role, ISchedulingRepository scheduling)
+        public AdminProviderTabController(IProviderMenuRepository providerMenu, IShiftRepository shiftRepository, ISendEmailRepository sendEmail, IPhysicianRepository physicianRepository, IShiftDetailRepository shiftDetailRepository, IAdminRepository adminRepository, IAspNetUserRepository userRepository, HelloDocDbContext helloDocDbContext, IRoleRepository role, ISchedulingRepository scheduling, IInvoiceReposiitory invoice, IRequestStatusLogRepository requestStatusLogRepository)
         {
             _providerMenu = providerMenu;
             _sendEmail = sendEmail;
@@ -38,6 +40,9 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             _shiftDetail = shiftDetailRepository;
             _shift = shiftRepository;
             _scheduling = scheduling;
+            _invoice = invoice;
+            _requestStatusLog = requestStatusLogRepository;
+
         }
 
         /// <summary>
@@ -961,6 +966,220 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         {
             return View();
         }
+        [Area("AdminArea")]
+        //[HttpPost]
+        public IActionResult EnterPayrate(int physicianid)
+        {
+            var payrate = _db.Payrates.FirstOrDefault(x => x.Physicinaid == physicianid);
+            return View(payrate);
+        }
+        [Area("AdminArea")]
+        [HttpPost]
+        public IActionResult Editnightshiftpayrate(int physicianid, int rate)
+        {
+            _invoice.Editnightshiftpayrate(physicianid, rate);
+            return RedirectToAction("EnterPayrate", new { physicianid });
+        }
+        [Area("AdminArea")]
+        [HttpPost]
+        public IActionResult Editshiftpayrate(int physicianid, int rate)
+        {
+            _invoice.Editshiftpayrate(physicianid, rate);
+            return RedirectToAction("EnterPayrate", new { physicianid });
+        }
+        [Area("AdminArea")]
+        [HttpPost]
+        public IActionResult Editnighthousecallpayrate(int physicianid, int rate)
+        {
+            _invoice.Editnighthousecallpayrate(physicianid, rate);
+            return RedirectToAction("EnterPayrate", new { physicianid });
+        }
+        [Area("AdminArea")]
+        [HttpPost]
+        public IActionResult Editconsultpayrate(int physicianid, int rate)
+        {
+            _invoice.Editconsultpayrate(physicianid, rate);
+            return RedirectToAction("EnterPayrate", new { physicianid });
+        }
+        [Area("AdminArea")]
+        [HttpPost]
+        public IActionResult Editnightconsultpayrate(int physicianid, int rate)
+        {
+            _invoice.Editnightconsultpayrate(physicianid, rate);
+            return RedirectToAction("EnterPayrate", new { physicianid });
+        }
+        [Area("AdminArea")]
+        [HttpPost]
+        public IActionResult Editbatchtestingpayrate(int physicianid, int rate)
+        {
+            _invoice.Editbatchtestingpayrate(physicianid, rate);
+            return RedirectToAction("EnterPayrate", new { physicianid });
+        }
+        [Area("AdminArea")]
+        [HttpPost]
+        public IActionResult Edithousecallpayrate(int physicianid, int rate)
+        {
+            _invoice.Edithousecallpayrate(physicianid, rate);
+            return RedirectToAction("EnterPayrate", new { physicianid });
+        }
+        [Area("AdminArea")]
+        [HttpPost]
+        public IActionResult TimesheetData(int physiciainid, string selecteddate)
+        {
+            var date = DateTime.Parse(selecteddate);
+            var timesheetexist = _db.Biweektimes.FirstOrDefault(x => x.Physicianid == physiciainid && x.Firstday == date);
+            if (timesheetexist == null)
+            {
+                return Ok("No Record(s) Found");
+            }
+            BiWeekOnlyView model = new BiWeekOnlyView();
+            List<TimeSheetOnlyView> timeSheetOnlyViews = new List<TimeSheetOnlyView>();
 
+            model.PhysicianId = physiciainid;
+            model.Firstday = date;
+            var biweek = _invoice.GetBiweektime(physiciainid, date);
+            var timesheet = _invoice.timeSheetViewModels(biweek.Biweekid);
+
+            var requeststatuslogs = _requestStatusLog.GetForPhysician(physiciainid);
+            var nighthousecall = requeststatuslogs.Where(x =>
+                x.Notes == "Provider choose for housecall" &&
+                (x.Createddate.TimeOfDay >= new TimeSpan(16, 0, 0) || x.Createddate.TimeOfDay < new TimeSpan(20, 0, 0))).ToList();
+            //(x.Createddate.TimeOfDay >= new TimeSpan(20, 0, 0) || x.Createddate.TimeOfDay < new TimeSpan(6, 0, 0))).ToList();
+            var nightphonecall = requeststatuslogs.Where(x =>
+                x.Notes == "Provider choose for consult" &&
+                (x.Createddate.TimeOfDay >= new TimeSpan(16, 0, 0) || x.Createddate.TimeOfDay < new TimeSpan(20, 0, 0))).ToList();
+            //(x.Createddate.TimeOfDay >= new TimeSpan(20, 0, 0) || x.Createddate.TimeOfDay < new TimeSpan(6, 0, 0))).ToList();
+            for (DateTime i = biweek.Firstday.Value; i <= biweek.Lastday; i = i.AddDays(1))
+            {
+
+
+                TimeSheetOnlyView timeSheetmodel = new TimeSheetOnlyView();
+                var shifts = _scheduling.ShifsOfDateOfProvider(i, 0, 0, physiciainid, 0);
+                timeSheetmodel.NightShift = shifts.Where(x =>
+                    (x.StartTime.TimeOfDay >= new TimeSpan(20, 0, 0) && x.StartTime.TimeOfDay < new TimeSpan(23, 59, 59)) ||
+                    (x.EndTime.TimeOfDay >= new TimeSpan(0, 0, 0) && x.EndTime.TimeOfDay < new TimeSpan(6, 0, 0)) ||
+                     (x.StartTime.TimeOfDay >= new TimeSpan(0, 0, 0) && x.StartTime.TimeOfDay < new TimeSpan(6, 0, 0)) ||
+                    (x.EndTime.TimeOfDay >= new TimeSpan(20, 0, 0) && x.EndTime.TimeOfDay < new TimeSpan(23, 59, 59))).Count();
+
+                timeSheetmodel.Shift = shifts.Count() - timeSheetmodel.NightShift;
+                timeSheetmodel.ShiftDate = i;
+                timeSheetmodel.BatchTesting = 0;
+                var housecall = timesheet.FirstOrDefault(x => x.ThisDate == i).HouseCalls;
+                var Phonecall = timesheet.FirstOrDefault(x => x.ThisDate == i).PhoneCalls;
+                if (housecall >= nighthousecall.Count())
+                {
+                    housecall = housecall - nighthousecall.Count();
+                    timeSheetmodel.HouseCall = housecall;
+                    timeSheetmodel.HouseCallNight = nighthousecall.Count();
+                }
+                else
+                {
+                    timeSheetmodel.HouseCall = housecall;
+                    timeSheetmodel.HouseCallNight = 0;
+                }
+                if (Phonecall >= nightphonecall.Count())
+                {
+                    Phonecall = Phonecall - nightphonecall.Count();
+                    timeSheetmodel.PhoneCall = Phonecall;
+                    timeSheetmodel.PhoneCallNight = nightphonecall.Count();
+                }
+                else
+                {
+                    timeSheetmodel.PhoneCall = Phonecall;
+                    timeSheetmodel.PhoneCallNight = 0;
+                }
+                timeSheetOnlyViews.Add(timeSheetmodel);
+
+
+            }
+            model.TimeSheets = timeSheetOnlyViews;
+            return View(model);
+        }
+
+        [Area("AdminArea")]
+        [HttpPost]
+        public IActionResult ReimbursementDataView(int physiciainid, string selecteddate)
+        {
+            var date = DateTime.Parse(selecteddate);
+            var timesheetexist = _db.Biweektimes.FirstOrDefault(x => x.Physicianid == physiciainid && x.Firstday == date);
+            if (timesheetexist == null)
+            {
+                return Ok("No Record(s) Found");
+            }
+            BiWeekOnlyView model = new BiWeekOnlyView();
+            List<ReimbursementOnlyView> reimbursementOnlyViews = new List<ReimbursementOnlyView>();
+            var biweek = _invoice.GetBiweektime(physiciainid, date);
+            var reimbursement = _invoice.reimbursementViewModels(biweek.Biweekid);
+
+            var reimb = reimbursement.Where(x => x.Item != null).ToList();
+            if (reimb == null)
+            {
+                return Ok("No Record(s) Found");
+            }
+            foreach (var item in reimb)
+            {
+                ReimbursementOnlyView reimbursementOnly = new ReimbursementOnlyView();
+                reimbursementOnly.ItemDate = item.ThisDate;
+                reimbursementOnly.ItemName = item.Item;
+                reimbursementOnly.ItemAmount = item.Amount;
+                reimbursementOnly.BillName = item.Billname;
+                reimbursementOnly.BillPath = item.Billname;
+                reimbursementOnlyViews.Add(reimbursementOnly);
+            }
+            model.Reimbursements = reimbursementOnlyViews;
+            return View(model);
+        }
+
+
+
+
+        [Area("AdminArea")]
+        [HttpPost]
+        public IActionResult GetTimeSheet(int physiciainid, string selecteddate)
+        {
+            var date = DateTime.Parse(selecteddate);
+            BiWeekViewModel model = _invoice.BiWeekData(physiciainid, date);
+            return PartialView("TimeSheetsView", model);
+        }
+
+
+        [Area("AdminArea")]
+        [HttpPost]
+        public IActionResult ReimbursementData(int physicianid, string date)
+        {
+            var selecteddate = DateTime.Parse(date);
+            var biweekid = _invoice.GetBiweektime(physicianid, selecteddate).Biweekid;
+            List<ReimbursementViewModel> model = _invoice.reimbursementViewModels(biweekid);
+            return PartialView("ReimbursementView", model);
+        }
+
+
+        [Area("AdminArea")]
+        [HttpPost]
+        public void EditTimesheet(int physicianid, DateTime firstday, List<TimeSheetViewModel> timesheets)
+        {
+            var biweek = _invoice.GetBiweektime(physicianid, firstday);
+            foreach (var item in timesheets)
+            {
+                var timesheet = _invoice.GetTimesheet(physicianid, item.ThisDate);
+                timesheet.Oncallhours = item.OnCallHours.Hour + item.OnCallHours.Minute / 60.0m;
+                timesheet.Isweekend = item.IsWeekend;
+                timesheet.Housecall = item.HouseCalls;
+                timesheet.Consult = item.PhoneCalls;
+                timesheet.Modifieddate = DateTime.Now;
+                if (_admin.GetSessionAdminId() != -1)
+                {
+                    timesheet.Modifiedby = _admin.GetFirstOrDefault(x => x.Adminid == _admin.GetSessionAdminId()).Aspnetuserid;
+                }
+                if (_physician.GetSessionPhysicianId() != -1)
+                {
+                    timesheet.Modifiedby = _physician.GetFirstOrDefault(x => x.Physicianid == physicianid).Aspnetuserid;
+                }
+                _invoice.UpdateTimesheet(timesheet);
+            }
+        }
     }
 }
+
+    
+

@@ -436,3 +436,16 @@ $('#requestadmin').on('click', function () {
         }
     })
 })
+
+
+$('#payrate').on('click', function () {
+    var physicianid = $('#inputhiddenid').val();
+    $.ajax({
+        url: '/AdminArea/AdminProviderTab/EnterPayrate',
+        data: { physicianid },
+        type: 'POST',
+        success: function (result) {
+            $('#nav-tabContent').html(result);
+        }
+    })
+})

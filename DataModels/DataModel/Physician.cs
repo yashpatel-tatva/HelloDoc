@@ -135,6 +135,9 @@ public partial class Physician
     [InverseProperty("PhysicianAspnetusers")]
     public virtual Aspnetuser? Aspnetuser { get; set; }
 
+    [InverseProperty("Physician")]
+    public virtual ICollection<Biweektime> Biweektimes { get; set; } = new List<Biweektime>();
+
     [ForeignKey("Createdby")]
     [InverseProperty("PhysicianCreatedbyNavigations")]
     public virtual Aspnetuser CreatedbyNavigation { get; set; } = null!;
@@ -145,6 +148,9 @@ public partial class Physician
     [ForeignKey("Modifiedby")]
     [InverseProperty("PhysicianModifiedbyNavigations")]
     public virtual Aspnetuser? ModifiedbyNavigation { get; set; }
+
+    [InverseProperty("Physicina")]
+    public virtual ICollection<Payrate> Payrates { get; set; } = new List<Payrate>();
 
     [InverseProperty("Physician")]
     public virtual ICollection<Physicianlocation> Physicianlocations { get; set; } = new List<Physicianlocation>();
@@ -160,6 +166,9 @@ public partial class Physician
     public virtual Region? Region { get; set; }
 
     [InverseProperty("Physician")]
+    public virtual ICollection<Reimbursement> Reimbursements { get; set; } = new List<Reimbursement>();
+
+    [InverseProperty("Physician")]
     public virtual ICollection<Request> Requests { get; set; } = new List<Request>();
 
     [InverseProperty("Physician")]
@@ -173,4 +182,7 @@ public partial class Physician
 
     [InverseProperty("Physician")]
     public virtual ICollection<Shift> Shifts { get; set; } = new List<Shift>();
+
+    [InverseProperty("Physician")]
+    public virtual ICollection<Timesheet> Timesheets { get; set; } = new List<Timesheet>();
 }

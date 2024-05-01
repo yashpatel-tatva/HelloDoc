@@ -20,7 +20,11 @@ namespace DataAccess.Repository
             var reqstatus = _db.Requeststatuslogs.ToList().Where(x => x.Requestid == RequestId);
             return reqstatus.ToList();
         }
-
+    public List<Requeststatuslog> GetForPhysician(int RequestId)
+        {
+            var requeststatuslog = _db.Requeststatuslogs.Where(x=>x.Physicianid==RequestId).ToList();
+            return requeststatuslog;
+        }
         public void Update(Requeststatuslog requeststatuslog)
         {
             _db.Requeststatuslogs.Update(requeststatuslog);
