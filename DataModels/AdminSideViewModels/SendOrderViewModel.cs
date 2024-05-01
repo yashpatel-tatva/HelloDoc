@@ -1,10 +1,15 @@
-﻿namespace DataModels.AdminSideViewModels
+﻿using Microsoft.AspNetCore.Mvc;
+
+namespace DataModels.AdminSideViewModels
 {
     public class SendOrderViewModel
     {
         public int RequestId { get; set; }
 
+        [Remote(action: "VerifyProfession", controller: "AdminProfile", ErrorMessage = "Please Select State.")]
         public int ProfessionId { get; set; }
+
+        [Remote(action: "VerifyVendor", controller: "AdminProfile", ErrorMessage = "Please Select State.")]
         public int VendorId { get; set; }
         public string Contact { get; set; }
         public string Email { get; set; }

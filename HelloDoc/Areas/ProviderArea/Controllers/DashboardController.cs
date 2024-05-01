@@ -95,9 +95,18 @@ namespace HelloDoc.Areas.ProviderArea.Controllers
         public IActionResult AcceptCase(int id)
         {
             var request = _request.GetFirstOrDefault(x => x.Requestid == id);
+            request.Status = 2;
             request.Accepteddate = DateTime.Now;
             _request.Update(request);
             _request.Save();
+            Requeststatuslog requeststatuslog = new Requeststatuslog();
+            requeststatuslog.Status = 2;
+            requeststatuslog.Requestid = id;
+            requeststatuslog.Physicianid = request.Physicianid;
+            requeststatuslog.Notes = "physician accepted";
+            requeststatuslog.Createddate = DateTime.Now;
+            _requeststatuslog.Add(requeststatuslog);
+            _requeststatuslog.Save();
             return RedirectToAction("Dashboard");
         }
 

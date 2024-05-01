@@ -34,8 +34,8 @@
                     </div>
                     <div class="py-2 col-xl-4 col-md-4 col-sm-12">
                         <div class="form-group d-flex align-items-center rounded">
-                            <select class="form-select shadow-none" asp-for="Roleid">
-                                <option>Select Role</option>
+                            <select class="form-select shadow-none" id="role" asp-for="Roleid">
+                                <option value="InValid">Select Role</option>
                                 @foreach (var role in Model.roles)
                                 {
                                     <option value="@role.Roleid">@role.Name</option>
@@ -43,6 +43,7 @@
                             </select>
                             <span class="selectedselectspan">Role</span>
                         </div>
+                        <span asp-validation-for="Roleid" class="text-danger spanofvalid"></span>
                     </div>
                 </div>
                 <div class="h5 mt-5 fw-bold">Physicians Information</div>
@@ -118,7 +119,7 @@
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                         <div class="form-group d-flex align-items-center rounded">
                             <select class="form-select addressedit" id="state" asp-for="RegionID">
-                                <option>Select State</option>
+                                <option value="InValid">Select State</option>
                                 @foreach (var item in Model.regions)
                                 {
                                     <option value="@item.Regionid">@item.Name</option>
@@ -126,6 +127,7 @@
                             </select>
                             <span class="selectedselectspan">State</span>
                         </div>
+                        <span class="text-danger spanofvalid" asp-validation-for="RegionID"></span>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                         <div class="form-group d-flex align-items-center rounded">

@@ -72,7 +72,9 @@ $('#CreateAccountBtn').on('click', function () {
     var id = 0;
     var email = $('#editemail').val();
     if (email == "") {
-        Swal.fire("Enter Email");
+        $(this).closest('form').valid()
+        $(this).closest('form').validate().focusInvalid();
+        //Swal.fire("Enter Email");
     } else {
         var submit = checkemail(id, email);
         console.log("click", submit)

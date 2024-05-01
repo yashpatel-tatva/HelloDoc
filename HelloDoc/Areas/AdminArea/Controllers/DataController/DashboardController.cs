@@ -376,6 +376,9 @@ namespace HelloDoc.Areas.AdminArea.DataController
             return View(result);
         }
 
+        [Area("AdminArea")]
+        [AuthorizationRepository("Admin,Physician")]
+        [HttpPost]
 
         public IActionResult SaveAdminNotes([FromBody] RequestNotesViewModel model)
         {
@@ -584,12 +587,13 @@ namespace HelloDoc.Areas.AdminArea.DataController
         }
 
         [Area("AdminArea")]
-        [AuthorizationRepository("Admin")]
+        [AuthorizationRepository("Admin,Physician")]
         [HttpPost]
         public void SendEmailFromSendLinkPopUp(string firstname, string lastname, string email, string mobile)
         {
             var url = Url.Action("EmaillinkToOpenPatientRequest", "RequestForms", new { Area = "PatientArea", firstname = firstname, lastname = lastname, email = email, mobile = mobile }, Request.Scheme, Request.Host.Value);
             _sendemail.Sendemail(email, "Submit Your Request", url);
+            _sendemail.Sendsms(mobile, "Submit Your Request", url , 0);
         }
         //Pop-up ends
 

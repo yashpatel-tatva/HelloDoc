@@ -1,5 +1,5 @@
-﻿.error  .form-group  ,
-.error .telephone{
+﻿.error .form-group,
+.error .telephone {
     border: 1px solid red;
     background: #ffefef;
 }
@@ -8,4 +8,10 @@
 .error textarea:focus + span,
 .error textarea:not(:placeholder-shown) + span{
     color : red;
+}
+
+.error .form-error {
+    padding : 10px;
+    border: 1px solid red;
+    background: #ffefef;
 }

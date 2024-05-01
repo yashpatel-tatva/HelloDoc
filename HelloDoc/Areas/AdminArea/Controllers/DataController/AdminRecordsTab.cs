@@ -3,11 +3,15 @@ using DataAccess.ServiceRepository;
 using DataModels.AdminSideViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Localization;
+using NPOI.SS.Formula;
 using NPOI.SS.Formula.Functions;
 using Org.BouncyCastle.Utilities.Encoders;
+using System;
 using System.Buffers.Text;
 using System.Configuration.Provider;
 using System.Reflection;
+using System.Security.Policy;
+using System.Web;
 
 namespace HelloDoc.Areas.AdminArea.Controllers.DataController
 {
@@ -298,7 +302,6 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             {
                 smslogs = smslogs.Where(x => x.Sentdate.HasValue && x.Sentdate.Value.ToString("yyyy-MM-dd") == senddate).ToList();
             }
-            smslogs = smslogs.Skip((currentpage - 1) * pagesize).Take(pagesize).ToList();
             foreach (var log in smslogs)
             {
                 EmailSMSLogsViewModel em = new EmailSMSLogsViewModel();
@@ -312,6 +315,22 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
                 //    em.Recipient = log.Emailid.Split('@')[0];
                 //}
                 //em.Recipient = log.Emailid.Split('@')[0];
+                string username = "";
+                string url = log.Smstemplate;
+                if (log.Action == null)
+                {
+                    if (url.Contains("email="))
+                    {
+                        string email = url.Split(new string[] { "email=" }, StringSplitOptions.None)[1].Split('&')[0];
+                        username = email.Split('@')[0];
+                    }
+                }
+                else
+                {
+                    var phy = _db.Physicians.FirstOrDefault(x=>x.Physicianid==log.Action);
+                    username = phy.Firstname + " " + phy.Lastname;
+                }
+                em.Recipient = username;
                 em.Action = log.Smstemplate;
                 em.RoleName = _db.Aspnetroles.FirstOrDefault(x => x.Id == log.Roleid.ToString()).Name;
                 em.Mobile = log.Mobilenumber;
@@ -323,16 +342,46 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
                 {
                     em.ConfirmationNo = log.Confirmationnumber;
                 }
+                else
+                {
+                    em.ConfirmationNo = "-";
+                }
                 model.Add(em);
             }
-
-            return PartialView("_EmailLogs", model);
+            if (rname != null)
+                model = model.Where(x=>x.Recipient.ToLower().Replace(" ","").Contains(rname)).ToList();
+            model = model.Skip((currentpage - 1) * pagesize).Take(pagesize).ToList();
+            return PartialView("_SmsLogs", model);
         }
 
         [Area("AdminArea")]
         [HttpPost]
         public int SMSContbyFilter(int role, string rname, string mobile, string createddate, string senddate)
         {
+            //if (rname != null) { rname = rname.Replace(" ", ""); rname = rname.ToLower(); }
+            //if (mobile != null) { mobile = mobile.Replace(" ", ""); mobile = mobile.ToLower(); }
+            //if (createddate != null) createddate = createddate.Replace("ya", "");
+            //if (senddate != null) senddate = senddate.Replace("ya", "");
+
+            //List<EmailSMSLogsViewModel> model = new List<EmailSMSLogsViewModel>();
+            //var smslogs = _db.Smslogs.ToList();
+            //if (role != 0)
+            //{
+            //    smslogs = smslogs.Where(x => x.Roleid == role).ToList();
+            //}
+            //if (mobile != null)
+            //{
+            //    smslogs = smslogs.Where(x => x.Mobilenumber.Contains(mobile)).ToList();
+            //}
+            //if (createddate != null)
+            //{
+            //    smslogs = smslogs.Where(x => x.Createdate.ToString("yyyy-MM-dd") == createddate).ToList();
+            //}
+            //if (senddate != null)
+            //{
+            //    smslogs = smslogs.Where(x => x.Sentdate.HasValue && x.Sentdate.Value.ToString("yyyy-MM-dd") == senddate).ToList();
+            //}
+            //return smslogs.Count();
             if (rname != null) { rname = rname.Replace(" ", ""); rname = rname.ToLower(); }
             if (mobile != null) { mobile = mobile.Replace(" ", ""); mobile = mobile.ToLower(); }
             if (createddate != null) createddate = createddate.Replace("ya", "");
@@ -356,8 +405,45 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             {
                 smslogs = smslogs.Where(x => x.Sentdate.HasValue && x.Sentdate.Value.ToString("yyyy-MM-dd") == senddate).ToList();
             }
-
-            return smslogs.Count();
+            foreach (var log in smslogs)
+            {
+                EmailSMSLogsViewModel em = new EmailSMSLogsViewModel();
+               string username = "";
+                string url = log.Smstemplate;
+                if (log.Action == null)
+                {
+                    if (url.Contains("email="))
+                    {
+                        string email = url.Split(new string[] { "email=" }, StringSplitOptions.None)[1].Split('&')[0];
+                        username = email.Split('@')[0];
+                    }
+                }
+                else
+                {
+                    var phy = _db.Physicians.FirstOrDefault(x => x.Physicianid == log.Action);
+                    username = phy.Firstname + " " + phy.Lastname;
+                }
+                em.Recipient = username;
+                em.Action = log.Smstemplate;
+                em.RoleName = _db.Aspnetroles.FirstOrDefault(x => x.Id == log.Roleid.ToString()).Name;
+                em.Mobile = log.Mobilenumber;
+                em.CreatedDate = log.Createdate;
+                em.SentDate = (DateTime)log.Sentdate;
+                em.Sent = log.Issmssent[0];
+                em.Senttries = (int)log.Senttries;
+                if (log.Confirmationnumber != null)
+                {
+                    em.ConfirmationNo = log.Confirmationnumber;
+                }
+                else
+                {
+                    em.ConfirmationNo = "-";
+                }
+                model.Add(em);
+            }
+            if (rname != null)
+                model = model.Where(x => x.Recipient.ToLower().Replace(" ", "").Contains(rname)).ToList();
+            return model.Count();
         }
 
         /// <summary>

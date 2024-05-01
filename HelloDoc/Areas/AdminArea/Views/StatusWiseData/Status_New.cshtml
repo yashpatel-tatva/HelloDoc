@@ -91,7 +91,7 @@
                 <td>@item.Address</td>
                 <td>@item.TransferNotes</td>
                 <td>
-                    @item.ProviderEmail
+                    @*@item.ProviderEmail*@
                     <div class="border border-1 border-white rounded d-flex justify-content-around align-items-center p-1">
                         <i class="fa-solid fa-user-doctor"></i>
                         Provider
@@ -104,7 +104,14 @@
                         </button>
                         <form data-id="@item.RequestId" value="@item.PatientName">
                             <ul class="dropdown-menu">
-                                <li><button type="button" class="dropdown-item gotopopup text-secondary" action="AssignCase"><i class="fa-regular fa-rectangle-list me-2"></i>Assign case</button></li>
+                                @if (item.PhysicainName == null)
+                                {
+                                    <li><button type="button" class="dropdown-item gotopopup text-secondary" action="AssignCase"><i class="fa-regular fa-rectangle-list me-2"></i>Assign case</button></li>
+                                }
+                                else
+                                {
+                                    <li><button type="button" class="dropdown-item gotopopup text-secondary" action="TransferCase"><i class="fa-solid fa-shuffle me-2"></i>Transfer</button></li>
+                                }
                                 <li><button type="button" class="dropdown-item gotopopup text-secondary" action="CancelCase"><i class="fa-regular fa-circle-xmark me-2"></i>Cancel case</button></li>
                                 <li><button type="button" class="dropdown-item gotoaction text-secondary" action="ViewCase"><i class="bi bi-view-list me-2"></i>View case</button></li>
                                 <li><button type="button" class="dropdown-item gotoaction text-secondary" action="ViewNotes"><i class="fa-solid fa-book-journal-whills me-2"></i>View Notes</button></li>
@@ -205,8 +212,15 @@
                                         <div class="ps-1">@item.RequestorName</div>
                                     </div>
                                     <div class="row  mt-4 d-flex flex-wrap">
-                                        <div class="col-6 pt-2"><button type="button" class="w-100 border-0 rounded-pill px-3 py-1 small text-white gotoaction" action="AssignCase" style="background-color : purple">Assign Case</button></div>
-                                        <div class="col-6 pt-2"><button type="button" class="w-100 border-0 rounded-pill px-3 py-1 small text-white gotoaction" action="CancelCase" style="background-color : red">Cancel Case</button></div>
+                                            @if (item.PhysicainName == null)
+                                            {
+                                                <div class="col-6 pt-2"><button type="button" class="w-100 border-0 rounded-pill px-3 py-1 small text-white gotoaction" action="AssignCase" style="background-color : purple">Assign Case</button></div>
+                                            }
+                                            else
+                                            {
+                                            <div class="col-6 pt-2"><button type="button" class="w-100 small border-0 rounded-pill px-3 py-1 text-white gotopopup" action="TransferCase" style="background-color : #0dcaf0">Transfer</button></div>
+                                            }
+                                            <div class="col-6 pt-2"><button type="button" class="w-100 border-0 rounded-pill px-3 py-1 small text-white gotoaction" action="CancelCase" style="background-color : red">Cancel Case</button></div>
                                         <div class="col-6 pt-2"><button type="button" class="w-100 border-0 rounded-pill px-3 py-1 small text-white gotoaction" action="ViewNotes" style="background-color : green">View Notes</button></div>
                                         <div class="col-6 pt-2"><button type="button" class="w-100 border-0 rounded-pill px-3 py-1 small text-white gotoaction" action="BlockCase" style="background-color : red">Block Patient</button></div>
                                         <div class="col-6 pt-2"><button type="button" class="w-100 border-0 rounded-pill px-3 py-1 small text-white gotoaction" action="" style="background-color : green">Email</button></div>

@@ -121,5 +121,74 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             var check = _admin.CheckEmailExist(adminid, email);
             return check;
         }
+
+        [Area("AdminArea")]
+        [AcceptVerbs("GET", "POST")]
+        public IActionResult VerifyRole(string role)
+        {
+            if (role == "InValid") // Check if the role is invalid
+            {
+                return Json(false); // If invalid, return false
+            }
+
+            // If valid, return true
+            return Json(true);
+        }[Area("AdminArea")]
+        [AcceptVerbs("GET", "POST")]
+        public IActionResult VerifyRegion(string region)
+        {
+            if (region == "InValid") // Check if the role is invalid
+            {
+                return Json(false); // If invalid, return false
+            }
+
+            // If valid, return true
+            return Json(true);
+        }[Area("AdminArea")]
+        [AcceptVerbs("GET", "POST")]
+        public IActionResult VerifyRegionid(string regionid)
+        {
+            if (regionid == "InValid") // Check if the role is invalid
+            {
+                return Json(false); // If invalid, return false
+            }
+
+            // If valid, return true
+            return Json(true);
+        }
+        [Area("AdminArea")]
+        [AcceptVerbs("GET", "POST")]
+        public IActionResult VerifyRoleid(string roleid)
+        {
+            if (roleid == "InValid") // Check if the role is invalid
+            {
+                return Json(false); // If invalid, return false
+            }
+
+            // If valid, return true
+            return Json(true);
+        } [Area("AdminArea")]
+        [AcceptVerbs("GET", "POST")]
+        public IActionResult VerifyVendor(string vendorid)
+        {
+            if (vendorid == "InValid") // Check if the role is invalid
+            {
+                return Json(false); // If invalid, return false
+            }
+
+            // If valid, return true
+            return Json(true);
+        } [Area("AdminArea")]
+        [AcceptVerbs("GET", "POST")]
+        public IActionResult VerifyProfession(string professionid)
+        {
+            if (professionid == "InValid") // Check if the role is invalid
+            {
+                return Json(false); // If invalid, return false
+            }
+
+            // If valid, return true
+            return Json(true);
+        }
     }
 }

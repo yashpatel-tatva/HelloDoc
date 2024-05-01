@@ -95,7 +95,7 @@
                         <div class="form-group d-flex align-items-center rounded">
                             <input type="email" class="form-control" placeholder="" onblur="checkEmailExists()" asp-for="Email" id="patientEmail"><span>Email</span>
                         </div>
-                        <span asp-validation-for="Email" class="text-danger"></span>
+                        <span asp-validation-for="Email" class="text-danger" id="emailerror"></span>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                         <div class="telephone rounded">
@@ -194,9 +194,11 @@
                 success: function (data) {
                     if (data) {
                         document.getElementById("submitbtn").type = "submit";
+                        $('#emailerror').html("");
                     }
                     else {
-                        alert("Create Patient Account Via Link that hase been sent to this email. After that try to submit.");
+                        $('#emailerror').html("Create Patient Account Via Link that hase been sent to this email. After that try to submit.")
+                        Swal.fire("Create Patient Account Via Link that hase been sent to this email. After that try to submit.");
                         $(document).ready(function () {
                             $.ajax({
                                 url: '/PatientArea/Credential/SendEmailforcreateaccount',
@@ -215,8 +217,21 @@
             });
         }
         else{
-            alert("Enter Email First");
+            Swal.fire("Enter Patient Email First");
+            $('#emailerror').html("Enter Patient Email First")
         }
     }
+
+
+    $('#submitbtn').on('click' , function(){
+        var form = $(this).closest('form');
+
+        if (form.valid()) { 
+           form.submit();
+        } else {
+            
+            form.validate().focusInvalid();
+        }
+    })
 </script>
 

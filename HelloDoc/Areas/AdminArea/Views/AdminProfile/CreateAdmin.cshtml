@@ -27,7 +27,7 @@
                         <div class="form-group d-flex align-items-center rounded">
                             <input type="text" class="form-control" placeholder="" asp-for="Username" id="usernamefield" readonly><span>Username</span>
                         </div>
-                        <span asp-validation-for="Username"></span>
+                        @*<span asp-validation-for="Username"></span>*@
                     </div>
                     <div class="py-2 col-xl-4 col-md-4 col-sm-12">
                         <div class="form-group d-flex align-items-center rounded">
@@ -46,6 +46,7 @@
                             </select>
                             <span class="selectedselectspan">Role</span>
                         </div>
+                        <span asp-validation-for="Role" class="text-danger spanofvalid"></span>
                     </div>
                 </div>
                 <div class="h5 mt-5 fw-bold">Administrator Information</div>
@@ -83,13 +84,16 @@
                         <span class="text-danger spanofvalid" asp-validation-for="Mobile"></span>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12 d-flex justify-content-between align-items-center flex-wrap">
-                        @foreach (var item in Model.State)
-                        {
-                            <div class="form-check form-check-inline ">
-                                <input type="checkbox" name="selectedregion" class="form-check-input" id="region_@item.Regionid" value="@item.Regionid" />
-                                <label for="region_@item.Regionid">@item.Name</label>
-                            </div>
-                        }
+                        <div class="form-error rounded  w-100">
+                            @foreach (var item in Model.State)
+                            {
+                                <div class="form-check form-check-inline ">
+                                    <input type="checkbox" name="selectedregion" class="form-check-input" id="region_@item.Regionid" value="@item.Regionid" required />
+                                    <label for="region_@item.Regionid">@item.Name</label>
+                                </div>
+                            }
+                        </div>
+                        <span asp-validation-for="selectedregion" class="text-danger selectregionerror spanofvalid"></span>
                     </div>
                 </div>
                 <div class="h5 mt-5 fw-bold">Mailing&Billing Information</div>
@@ -123,6 +127,7 @@
                             </select>
                             <span class="selectedselectspan">State</span>
                         </div>
+                        <span asp-validation-for="Region" class="text-danger spanofvalid"></span>
                     </div>
                     <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                         <div class="form-group d-flex align-items-center rounded">
@@ -176,7 +181,7 @@
                 fullNumber = fullNumber.replace("+" + countryCode + "+", "+");
             }
             console.log(fullNumber);
-            $(this).val(fullNumber.replace(" ",""));
+            $(this).val(fullNumber.replace(" ", ""));
         });
     });
     $('.spanofvalid').bind("DOMSubtreeModified", function () {
@@ -189,21 +194,24 @@
 
     $('#CreateAccountBtn').on('click', function () {
         var error = "";
-        if ($('#roles').val() == "InValid") {
-            error = error + "Select Roles || " ;
-        }
-         if ($('input[name="selectedregion"]:checked').length === 0) {
-            error = error + "Select Region || ";
-        }
-         if ($('#state').val() == "InValid") {
-            error = error + "Select State";
-        }
-        
-        
+        //if ($('#roles').val() == "InValid") {
+        //    error = error + "Select Roles || " ;
+        //}
+        // if ($('input[name="selectedregion"]:checked').length === 0) {
+        //    error = error + "Select Region || ";
+        //    $('.selectregionerror').html('At least one region must be selected.');
+        //}
+        // if ($('#state').val() == "InValid") {
+        //    error = error + "Select State";
+        //}
+
+
         if (error != "") {
-            Swal.fire(error);
+            //Swal.fire(error);
+
         }
         else {
+            $('.selectregionerror').html('At least one region must be selected.');
             $(this).closest('form').submit();
         }
 

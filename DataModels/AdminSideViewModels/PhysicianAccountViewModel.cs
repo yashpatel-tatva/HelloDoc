@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace DataModels.AdminSideViewModels
 {
     using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc;
     using System.ComponentModel.DataAnnotations;
 
     public class PhysicianAccountViewModel
@@ -21,6 +22,8 @@ namespace DataModels.AdminSideViewModels
         public string Password { get; set; }
 
         public int Status { get; set; }
+
+        [Remote(action: "VerifyRoleid", controller: "AdminProfile", ErrorMessage = "Please Select Role.")]
         public int Roleid { get; set; }
 
         [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Name can only contain letters.")]
@@ -58,13 +61,14 @@ namespace DataModels.AdminSideViewModels
         [Required]
         public string City { get; set; }
 
+        [Remote(action: "VerifyRegionid", controller: "AdminProfile", ErrorMessage = "Please Select State.")]
         public int RegionID { get; set; }
 
         [Required]
         [RegularExpression(@"^\d{6}$", ErrorMessage = "Zip code must be exactly 6 digits.")]
         public string Zip { get; set; }
 
-        [Phone]
+        [RegularExpression(@"^\+?(\d[\d-. ]+)?(\([\d-. ]+\))?[\d-. ]+\d$", ErrorMessage = "Please enter valid phone number")]
         public string BusinessPhone { get; set; }
 
         [Required]

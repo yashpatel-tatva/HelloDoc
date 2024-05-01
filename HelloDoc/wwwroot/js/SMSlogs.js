@@ -4,7 +4,7 @@ var mobile = $('#mobile').val();
 var createddate = $('#createddate').val();
 var sentdate = $('#sentdate').val();
 
-var pagesize = 10;
+var pagesize = 5;
 var currentpage = 1;
 var buttoncount;
 

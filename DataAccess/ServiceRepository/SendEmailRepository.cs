@@ -105,5 +105,34 @@ namespace DataAccess.ServiceRepository
                 Console.WriteLine($"Error sending email: {ex.Message}");
             }
         }
+
+        public void Sendsms(string phone, string subject, string message, int p)
+        {
+            Smslog smslog = new Smslog();
+            if (p != 0) {
+                smslog.Action = p;
+            }
+            smslog.Mobilenumber = phone;
+            smslog.Sentdate = DateTime.Now;
+            smslog.Createdate = DateTime.Now;
+            smslog.Smstemplate = message;
+            if (_admin.GetSessionAdminId() != -1)
+            {
+            smslog.Roleid = 1;
+                smslog.Adminid = _admin.GetSessionAdminId();
+            }
+            if (_physician.GetSessionPhysicianId() != -1)
+            {
+                smslog.Roleid = 2;
+
+                smslog.Physicianid = _physician.GetSessionPhysicianId();
+            }
+                BitArray fortrue = new BitArray(1);
+            fortrue[0] = true;
+            smslog.Issmssent = fortrue;
+            smslog.Senttries = 1;
+            _context.Smslogs.Add(smslog);
+            _context.SaveChanges();
+        }
     }
 }

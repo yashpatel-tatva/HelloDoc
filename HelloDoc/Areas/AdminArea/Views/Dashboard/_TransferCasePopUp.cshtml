@@ -15,8 +15,8 @@
                     <input type="number" id="inputhiddenrequestid" asp-for="RequestId" value="@Model.RequestId" hidden />
                     <label class="my-2 text-secondary  fw-normal mb-3" style="font-size:12.8px">To Assign This Request, search and selectanother Physician</label>
                     <div class="did-floating-label-content mb-3 form-group d-flex align-items-center rounded">
-                        <select class="form-select form-select-lg fs-6 form-control regiondropdown did-floating-select" onclick="this.setAttribute('value', this.value);" onchange="this.setAttribute('value', this.value);" value="" aria-label=".form-select-lg example">
-                            <option value=""></option>
+                        <select class="form-select form-select-lg fs-6 form-control regiondropdown did-floating-select" onclick="this.setAttribute('value', this.value);" onchange="this.setAttribute('value', this.value);" value="invalid" aria-label=".form-select-lg example">
+                            <option value="invalid" hidden>Select Region</option>
                             @foreach (var item in Model.regions)
                             {
                                 <option value="@item.Regionid">@item.Name</option>
@@ -25,11 +25,12 @@
                         <span class="did-floating-label">Narrow Search By Region</span>
                     </div>
                     <select class="form-select form-select-lg mb-3 fs-6 form-control" id="physiciandropdown" aria-label=".form-select-lg example" required>
-                        <option value="invalid">Select Physician</option>
-                        @foreach (var item in Model.physicians)
+                        <option value="invalid" hidden>Select Physician</option>
+                        <option value="invalid" class="text-danger">Select Region First</option>
+                        @*@foreach (var item in Model.physicians)
                         {
-                            <option value="@item.Physicianid">@item.Firstname @item.Lastname</option>
-                        }
+                        <option value="@item.Physicianid">@item.Firstname @item.Lastname</option>
+                        }*@
                     </select>
 
                     <div class="form-group rounded d-flex align-items-center">
@@ -82,37 +83,39 @@
         var requestid = $('#inputhiddenrequestid').val();
         console.log(requestid);
         var regionid = $(this).val();
-        $.ajax({
-            url: '/AdminArea/Dashboard/GetPhysician',
-            type: 'POST',
-            data: { regionid: regionid, requestid: requestid },
-            success: function (data) {
-                console.log(data);
-                var physiciandropdown = $('#physiciandropdown');
-                physiciandropdown.empty();
-                physiciandropdown.append($('<option>', {
-                    hidden: "hidden",
-                    value: "invalid",
-                    text: "Select Physician"
-                }))
-                if (data.length == 0) {
+        if (regionid != "invalid") {
+            $.ajax({
+                url: '/AdminArea/Dashboard/GetPhysician',
+                type: 'POST',
+                data: { regionid: regionid, requestid: requestid },
+                success: function (data) {
+                    console.log(data);
+                    var physiciandropdown = $('#physiciandropdown');
+                    physiciandropdown.empty();
                     physiciandropdown.append($('<option>', {
+                        hidden: "hidden",
                         value: "invalid",
-                        disabled: "disabled",
-                        text: "No Physician in this area",
-                        style: "color : red"
+                        text: "Select Physician"
                     }))
-                }
-                else {
-                    $.each(data, function (index, phy) {
+                    if (data.length == 0) {
                         physiciandropdown.append($('<option>', {
-                            value: phy.physicianid,
-                            text: phy.firstname + " " + phy.lastname
+                            value: "invalid",
+                            disabled: "disabled",
+                            text: "No Physician in this area",
+                            style: "color : red"
                         }))
-                    });
+                    }
+                    else {
+                        $.each(data, function (index, phy) {
+                            physiciandropdown.append($('<option>', {
+                                value: phy.physicianid,
+                                text: phy.firstname + " " + phy.lastname
+                            }))
+                        });
+                    }
                 }
-            }
-        });
+            });
+        }
     });
 
 </script>

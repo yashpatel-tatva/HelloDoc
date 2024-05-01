@@ -78,6 +78,10 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             {
                 _sendEmail.Sendemail(_physician.GetFirstOrDefault(x => x.Physicianid == physicianid).Email, "Message From" + _admin.GetFirstOrDefault(x => x.Adminid == _admin.GetSessionAdminId()).Firstname + "(Admin)", msg);
             }
+            if(msgtype == "typesms" || msgtype == "typeboth")
+            {
+                _sendEmail.Sendsms(_physician.GetFirstOrDefault(x => x.Physicianid == physicianid).Mobile, "Message From" + _admin.GetFirstOrDefault(x => x.Adminid == _admin.GetSessionAdminId()).Firstname + "(Admin)", msg , physicianid);
+            }
         }
 
 
@@ -811,15 +815,15 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             SchedulingDataViewModel model = new SchedulingDataViewModel();
             if (showby == "DayWiseData")
             {
-                model.Shifts = _scheduling.ShifsOfDate(datetoshow, region, 1, currentpage);
+                model.Shifts = _scheduling.ShifsOfDate(datetoshow, region, 1, currentpage, "Now");
             }
             else if (showby == "WeekWiseData")
             {
-                model.Shifts = _scheduling.ShifsOfWeek(datetoshow, region, 1, currentpage);
+                model.Shifts = _scheduling.ShifsOfWeek(datetoshow, region, 1, currentpage, "Now");
             }
             else
             {
-                model.Shifts = _scheduling.ShifsOfMonth(datetoshow, region, 1, currentpage);
+                model.Shifts = _scheduling.ShifsOfMonth(datetoshow, region, 1, currentpage , "Now");
             }
             List<PhysicianData> physicianDatas = new List<PhysicianData>();
             foreach (var s in model.Shifts)
@@ -864,15 +868,54 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             {
                 if (showby == "DayWiseData")
                 {
-                    model.Shifts = _scheduling.ShifsOfDate(datetoshow, region, status, 0);
+                    model.Shifts = _scheduling.ShifsOfDate(datetoshow, region, status, 0).ToList();
                 }
                 else if (showby == "WeekWiseData")
                 {
-                    model.Shifts = _scheduling.ShifsOfWeek(datetoshow, region, status, 0);
+                    model.Shifts = _scheduling.ShifsOfWeek(datetoshow, region, status, 0).ToList();
                 }
                 else
                 {
-                    model.Shifts = _scheduling.ShifsOfMonth(datetoshow, region, status, 0);
+                    model.Shifts = _scheduling.ShifsOfMonth(datetoshow, region, status, 0).ToList();
+                }
+            }
+            return model.Shifts.Count();
+        }
+        
+        [Area("AdminArea")]
+        [HttpPost]
+        public int ShiftCountbyFilterforagenda(DateTime datetoshow, int region, string showby, int status)
+        {
+            SchedulingDataViewModel model = new SchedulingDataViewModel();
+            var jwtservice = HttpContext.RequestServices.GetService<IJwtRepository>();
+            var request = HttpContext.Request;
+            var token = request.Cookies["jwt"];
+            jwtservice.ValidateToken(token, out JwtSecurityToken jwttoken);
+            var roleClaim = jwttoken.Claims.FirstOrDefault(x => x.Type == "Role");
+            var role = "";
+            if (roleClaim != null)
+            {
+                role = roleClaim.Value;
+            }
+            if (role == "Physician")
+            {
+                var physicianid = _physician.GetSessionPhysicianId();
+                var list = _scheduling.ShifsOfDateOfProvider(datetoshow, status, 0, physicianid, 0);
+                return list.Count;
+            }
+            if (role == "Admin")
+            {
+                if (showby == "DayWiseData")
+                {
+                    model.Shifts = _scheduling.ShifsOfDate(datetoshow, region, status, 0).Where(x => x.EndTime >= DateTime.Now).ToList();
+                }
+                else if (showby == "WeekWiseData")
+                {
+                    model.Shifts = _scheduling.ShifsOfWeek(datetoshow, region, status, 0).Where(x => x.EndTime >= DateTime.Now).ToList();
+                }
+                else
+                {
+                    model.Shifts = _scheduling.ShifsOfMonth(datetoshow, region, status, 0).Where(x => x.EndTime >= DateTime.Now).ToList();
                 }
             }
             return model.Shifts.Count();

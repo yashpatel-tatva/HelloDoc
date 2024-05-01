@@ -50,7 +50,7 @@ namespace DataAccess.Repository
 
         public int CountbyStatus(int status)
         {
-            return _db.Requests.Where(r => r.Status == status).Count();
+            return _db.Requests.Where(r => r.Status == status).AsEnumerable().Where(x => x.Isdeleted == null || x.Isdeleted[0]==false).Count();
         }
 
 
@@ -245,7 +245,7 @@ namespace DataAccess.Repository
                 }
                 var PhysicianNote = item.Requestnotes.LastOrDefault();
                 search.PhysicianNote = PhysicianNote != null ? PhysicianNote.Physiciannotes : "-";
-                var notelog = item.Requeststatuslogs.Where(x => x.Physicianid != null).LastOrDefault();
+                var notelog = item.Requeststatuslogs.Where(x => x.Physicianid != null && x.Status == 1).LastOrDefault();
                 search.CancelledByPhyNote = notelog != null ? notelog.Notes : "-";
                 var AdminNote = item.Requestnotes.LastOrDefault();
                 search.AdminNote = AdminNote != null ? AdminNote.Adminnotes : "-";
@@ -376,7 +376,7 @@ namespace DataAccess.Repository
             var count = 0;
             if (state == "New")
             {
-                count = GetRequestsbyState("Pending").Where(x => (x.Physicianid == providerid && x.Accepteddate == null)).Count();
+                count = GetRequestsbyState("New").Where(x => (x.Physicianid == providerid && x.Accepteddate == null)).Count();
             }
             if (state == "Pending")
             {

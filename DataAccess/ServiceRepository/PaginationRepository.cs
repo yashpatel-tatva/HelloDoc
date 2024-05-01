@@ -79,7 +79,7 @@ namespace DataAccess.ServiceRepository
             var request = new List<Request>(); 
             if (state == "New")
             {
-                request = _request.GetRequestsbyState("Pending").Where(x => (x.Physicianid == providerid && x.Accepteddate == null)).ToList();
+                request = _request.GetRequestsbyState("New").Where(x => (x.Physicianid == providerid && x.Accepteddate == null)).ToList();
             }
             if (state == "Pending")
             {

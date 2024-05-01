@@ -77,16 +77,15 @@ namespace DataAccess.ServiceRepository
                 {
                     model.IsAcceptedbyprovider = false;
                 }
-                if (item.Status != 1)
-                {
+               
                     if (item.Physician != null)
                     {
                         model.ProviderEmail = item.Physician.Email;
                         model.PhysicainName = item.Physician.Firstname + " " + item.Physician.Lastname;
                     }
-                }
+                
                 var id = item.Requestid;
-                var reqstatuslog = item.Requeststatuslogs.ToList().OrderByDescending(x => x.Createddate);
+                var reqstatuslog = item.Requeststatuslogs.ToList().OrderByDescending(x => x.Createddate).Where(x=>x.Transtophysicianid != null);
                 if (reqstatuslog.Count() == 0)
                 {
                     model.TransferNotes = "-";

@@ -30,13 +30,14 @@ namespace DataAccess.ServiceRepository
         public void AssignCase(int requestId, int physicianId, int assignby, string description)
         {
             var request = _request.GetFirstOrDefault(x => x.Requestid == requestId);
-            request.Status = 2;
+            request.Status = 1;
+            request.Accepteddate = null;
             request.Physicianid = physicianId;
             _request.Update(request);
 
             Requeststatuslog requeststatuslog = new Requeststatuslog();
             requeststatuslog.Requestid = requestId;
-            requeststatuslog.Status = 2;
+            requeststatuslog.Status = 1;
             requeststatuslog.Transtophysicianid = physicianId;
             requeststatuslog.Createddate = DateTime.Now;
             requeststatuslog.Notes = description;

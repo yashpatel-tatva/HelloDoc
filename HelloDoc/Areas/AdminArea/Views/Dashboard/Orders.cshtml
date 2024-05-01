@@ -16,21 +16,23 @@
         </div>
     </div>
     <form asp-action="SendOrderDetails" asp-controller="Dashboard" method="post">
-        <input type="hidden"  asp-for="RequestId" value="@Model.RequestId" />
+        <input type="hidden" asp-for="RequestId" value="@Model.RequestId" />
         <div class="bg-white rounded-3 p-3 mt-2 shadow">
             <div class="row d-flex">
                 <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                     <div class="form-group d-flex align-items-center rounded">
-                        <select type="text" class="professiondropdown" placeholder="" asp-for="ProfessionId">
+                        <select type="text" class="professiondropdown" placeholder="" asp-for="ProfessionId" required>
                         </select>
                     </div>
+                    <span asp-validation-for="ProfessionId" class="text-danger spanofvalid"></span>
                 </div>
                 <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                     <div class="form-group d-flex align-items-center rounded">
-                        <select type="text" class="businessdropdown" placeholder="" asp-for="VendorId">
-                            <option hidden>Business</option>
+                        <select type="text" class="businessdropdown" placeholder="" asp-for="VendorId" required>
+                            <option hidden value="InValid">Business</option>
                         </select>
                     </div>
+                    <span asp-validation-for="VendorId" class="text-danger spanofvalid"></span>
                 </div>
                 <div class="py-2 col-xl-6 col-md-6 col-sm-12">
                     <div class="form-group d-flex align-items-center rounded">
@@ -87,14 +89,16 @@
 <script>
     $(document).ready(function () {
 
-        $('.submit').on('click' , function(){
-            if ($('.professiondropdown').val() == "invalid"){
-                Swal.fire("Please Select Profession!");
+        $('.submit').on('click', function () {
+            $(this).closest('form').valid()
+            $(this).closest('form').validate().focusInvalid();
+            if ($('.professiondropdown').val() == "InValid") {
+                //Swal.fire("Please Select Profession!");
             }
-            else if ($('.businessdropdown').val() == "invalid"){
-                Swal.fire("Please Select Vendor!");
+            else if ($('.businessdropdown').val() == "InValid") {
+                //Swal.fire("Please Select Vendor!");
             }
-            else{
+            else {
                 $(this).closest('form').submit();
             }
         })
@@ -108,7 +112,7 @@
                 proffession.empty();
                 proffession.append($('<option>', {
                     hidden: "hidden",
-                    value: "invalid",
+                    value: "InValid",
                     text: "Select Profession"
                 }))
                 $.each(data, function (index, item) {
@@ -132,7 +136,7 @@
                 business.empty();
                 business.append($('<option>', {
                     hidden: "hidden",
-                    value: "invalid",
+                    value: "InValid",
                     text: "Business"
                 }))
                 $.each(data, function (index, item) {
