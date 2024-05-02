@@ -15,12 +15,14 @@ namespace DataAccess.ServiceRepository
         private readonly HelloDocDbContext _db;
         private readonly IAdminRepository _admin;
         private readonly IPhysicianRepository _physician;
-        public InvoiceRepository(HelloDocDbContext helloDocDbContext, ISchedulingRepository schedulingRepository, IAdminRepository adminRepository, IPhysicianRepository physicianRepository)
+        private readonly IRequestStatusLogRepository _requestStatusLog;
+        public InvoiceRepository(HelloDocDbContext helloDocDbContext, ISchedulingRepository schedulingRepository, IAdminRepository adminRepository, IPhysicianRepository physicianRepository, IRequestStatusLogRepository requestStatusLog)
         {
             _db = helloDocDbContext;
             _scheduling = schedulingRepository;
             _admin = adminRepository;
             _physician = physicianRepository;
+            _requestStatusLog = requestStatusLog;
         }
         public void Editnightshiftpayrate(int physicianid, int rate)
         {
@@ -95,6 +97,7 @@ namespace DataAccess.ServiceRepository
                 biweek = new Biweektime();
                 biweek.Physicianid = physicianid;
                 biweek.Isfinalized = false;
+                biweek.Isapproved = false;
                 biweek.Firstday = date;
                 if (biweek.Firstday.Value.Day <= 14)
                 {
@@ -133,9 +136,12 @@ namespace DataAccess.ServiceRepository
                     {
                         thistimesheet.Createdby = _physician.GetFirstOrDefault(x => x.Physicianid == physicianid).Aspnetuserid;
                     }
+                    var requeststatuslogs = _requestStatusLog.GetForPhysician((int)physicianid).Where(x => x.Createddate.Date == i.Date);
+                    var housecall = requeststatuslogs.Where(x => x.Notes == "Provider choose for housecall").Count();
+                    var consult = requeststatuslogs.Where(x => x.Notes == "Provider choose for consult").Count();
                     thistimesheet.Createddate = DateTime.Now;
-                    thistimesheet.Housecall = 0;
-                    thistimesheet.Consult = 0;
+                    thistimesheet.Housecall = housecall;
+                    thistimesheet.Consult = consult;
                     thistimesheet.Date = i;
                     thistimesheet.Biweektimeid = biweek.Biweekid;
                     _db.Timesheets.Add(thistimesheet);
@@ -160,7 +166,7 @@ namespace DataAccess.ServiceRepository
             List<ReimbursementViewModel> reimbursements = new List<ReimbursementViewModel>();
             for (DateTime i = biweek.Firstday.Value; i <= biweek.Lastday; i = i.AddDays(1))
             {
-                var thisreimbursement = _db.Reimbursements.FirstOrDefault(x => x.Physicianid == physicianid && x.Date == i);
+                var thisreimbursement = _db.Reimbursements.Where(x=>x.Isdeleted==false).FirstOrDefault(x => x.Physicianid == physicianid && x.Date == i);
                 if (thisreimbursement == null)
                 {
                     thisreimbursement = new Reimbursement();
@@ -186,7 +192,8 @@ namespace DataAccess.ServiceRepository
                 reimbursementViewModel.Item = thisreimbursement.Item;
                 reimbursementViewModel.ThisDate = (DateTime)thisreimbursement.Date;
                 reimbursementViewModel.Amount = (decimal)thisreimbursement.Amount;
-                reimbursementViewModel.Billname = thisreimbursement.Bill;
+                reimbursementViewModel.Billname = thisreimbursement.Billname;
+                reimbursementViewModel.Bill = thisreimbursement.Bill;
                 reimbursements.Add(reimbursementViewModel);
             }
             return reimbursements;
@@ -199,7 +206,7 @@ namespace DataAccess.ServiceRepository
 
         public Reimbursement GetReimbursement(int physicianid, DateTime date)
         {
-            return _db.Reimbursements.FirstOrDefault(x => x.Physicianid == physicianid && x.Date == date);
+            return _db.Reimbursements.Where(x => x.Isdeleted == false).FirstOrDefault(x => x.Physicianid == physicianid && x.Date == date);
         }
 
         public void UpdateTimesheet(Timesheet timesheet)
@@ -211,6 +218,33 @@ namespace DataAccess.ServiceRepository
         public void UpdateReimbursement(Reimbursement reimbursement)
         {
             _db.Reimbursements.Update(reimbursement);
+            _db.SaveChanges();
+        }
+
+        public string DownloadReimbursementBill(int id)
+        {
+            var bill = _db.Reimbursements.Where(x => x.Isdeleted == false).FirstOrDefault(x=>x.Id == id).Bill;
+            return bill;
+        }
+
+        public string billname(int id)
+        {
+            var billname = _db.Reimbursements.Where(x => x.Isdeleted == false).FirstOrDefault(x => x.Id == id).Billname;
+            return billname;
+        }
+
+        public void DeleteReimbursement(int id)
+        {
+            var re = _db.Reimbursements.Where(x => x.Isdeleted == false).FirstOrDefault(x=>x.Id==id);
+            re.Isdeleted = true;
+            _db.Reimbursements.Update(re); _db.SaveChanges();
+        }
+
+        public void Finalizetimesheet(int physicianid, DateTime selecteddate)
+        {
+            var biweek = _db.Biweektimes.FirstOrDefault(x => x.Physicianid == physicianid && x.Firstday == selecteddate);
+            biweek.Isfinalized = true;
+            _db.Biweektimes.Update(biweek);
             _db.SaveChanges();
         }
     }

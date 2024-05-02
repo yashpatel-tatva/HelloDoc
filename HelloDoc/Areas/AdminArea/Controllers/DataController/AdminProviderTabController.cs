@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections;
 using System.Drawing;
 using System.IdentityModel.Tokens.Jwt;
+using System.Text.RegularExpressions;
 
 namespace HelloDoc.Areas.AdminArea.Controllers.DataController
 {
@@ -83,9 +84,9 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             {
                 _sendEmail.Sendemail(_physician.GetFirstOrDefault(x => x.Physicianid == physicianid).Email, "Message From" + _admin.GetFirstOrDefault(x => x.Adminid == _admin.GetSessionAdminId()).Firstname + "(Admin)", msg);
             }
-            if(msgtype == "typesms" || msgtype == "typeboth")
+            if (msgtype == "typesms" || msgtype == "typeboth")
             {
-                _sendEmail.Sendsms(_physician.GetFirstOrDefault(x => x.Physicianid == physicianid).Mobile, "Message From" + _admin.GetFirstOrDefault(x => x.Adminid == _admin.GetSessionAdminId()).Firstname + "(Admin)", msg , physicianid);
+                _sendEmail.Sendsms(_physician.GetFirstOrDefault(x => x.Physicianid == physicianid).Mobile, "Message From" + _admin.GetFirstOrDefault(x => x.Adminid == _admin.GetSessionAdminId()).Firstname + "(Admin)", msg, physicianid);
             }
         }
 
@@ -331,7 +332,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             if (shift.Weekdays == null)
             {
                 bool IsValid = false;
-                var shiftdetailexistdata = _db.Shiftdetails.Include(x => x.Shift).Where(x => x.Shift.Physicianid == model.physician).Where(x=>x.Shiftdate == currentDate).AsEnumerable().Where(x => x.Isdeleted[0] == false).ToList();
+                var shiftdetailexistdata = _db.Shiftdetails.Include(x => x.Shift).Where(x => x.Shift.Physicianid == model.physician).Where(x => x.Shiftdate == currentDate).AsEnumerable().Where(x => x.Isdeleted[0] == false).ToList();
                 if (shiftdetailexistdata.Count() != 0)
                 {
                     foreach (var item in shiftdetailexistdata)
@@ -381,7 +382,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
                 var IsValid = false;
                 StartTimewithdate = new DateTime(currentDate.Year, currentDate.Month, currentDate.Day, startTime.Hours, startTime.Minutes, 0);
                 EndTimewithdate = new DateTime(currentDate.Year, currentDate.Month, currentDate.Day, endTime.Hours, endTime.Minutes, 0);
-                var shiftdetailexistdata = _db.Shiftdetails.Include(x => x.Shift).Where(x => x.Shift.Physicianid == model.physician).Where(x => x.Shiftdate == currentDate).AsEnumerable().Where(x => x.Isdeleted[0]==false).ToList();
+                var shiftdetailexistdata = _db.Shiftdetails.Include(x => x.Shift).Where(x => x.Shift.Physicianid == model.physician).Where(x => x.Shiftdate == currentDate).AsEnumerable().Where(x => x.Isdeleted[0] == false).ToList();
                 if (shiftdetailexistdata.Count() != 0)
                 {
                     foreach (var s in shiftdetailexistdata)
@@ -719,7 +720,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
 
             DateTime dateTime = DateTime.Now;
 
-            var shifts = _scheduling.ShifsOfDate(dateTime, region, 0, 0).Where(x => (x.StartTime <= dateTime && x.EndTime >= dateTime)).Where(x=>x.Status == 2).Select(x => x.ShiftId).ToList();
+            var shifts = _scheduling.ShifsOfDate(dateTime, region, 0, 0).Where(x => (x.StartTime <= dateTime && x.EndTime >= dateTime)).Where(x => x.Status == 2).Select(x => x.ShiftId).ToList();
             foreach (var shift in shifts)
             {
                 var shiftid = _shiftDetail.GetFirstOrDefault(x => x.Shiftdetailid == shift).Shiftid;
@@ -828,7 +829,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             }
             else
             {
-                model.Shifts = _scheduling.ShifsOfMonth(datetoshow, region, 1, currentpage , "Now");
+                model.Shifts = _scheduling.ShifsOfMonth(datetoshow, region, 1, currentpage, "Now");
             }
             List<PhysicianData> physicianDatas = new List<PhysicianData>();
             foreach (var s in model.Shifts)
@@ -886,7 +887,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             }
             return model.Shifts.Count();
         }
-        
+
         [Area("AdminArea")]
         [HttpPost]
         public int ShiftCountbyFilterforagenda(DateTime datetoshow, int region, string showby, int status)
@@ -1098,6 +1099,47 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
 
         [Area("AdminArea")]
         [HttpPost]
+        public bool IsBiweekFinalized(int physiciainid, string selecteddate)
+        {
+            var date = DateTime.Parse(selecteddate);
+            var timesheetexist = _db.Biweektimes.FirstOrDefault(x => x.Physicianid == physiciainid && x.Firstday == date);
+            if (timesheetexist == null)
+            {
+                return false;
+            }
+            else if ((bool)timesheetexist.Isfinalized)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        
+        [Area("AdminArea")]
+        [HttpPost]
+        public IActionResult IsBiweekApproved(int physiciainid, string selecteddate)
+        {
+            var date = DateTime.Parse(selecteddate);
+            var name = _physician.GetFirstOrDefault(x => x.Physicianid == physiciainid).Firstname + " " + _physician.GetFirstOrDefault(x => x.Physicianid == physiciainid).Lastname; 
+            var timesheetexist = _db.Biweektimes.FirstOrDefault(x => x.Physicianid == physiciainid && x.Firstday == date);
+            if (timesheetexist == null)
+            {
+                return Ok(name + " has not finalized the timesheet in specific time period");
+            }
+            else if ((bool)timesheetexist.Isapproved)
+            {
+                return Ok("true");
+            }
+            else
+            {
+                return Ok(name + " has not finalized the timesheet in specific time period");
+            }
+        }
+
+        [Area("AdminArea")]
+        [HttpPost]
         public IActionResult ReimbursementDataView(int physiciainid, string selecteddate)
         {
             var date = DateTime.Parse(selecteddate);
@@ -1119,6 +1161,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             foreach (var item in reimb)
             {
                 ReimbursementOnlyView reimbursementOnly = new ReimbursementOnlyView();
+                reimbursementOnly.Id = item.Id;
                 reimbursementOnly.ItemDate = item.ThisDate;
                 reimbursementOnly.ItemName = item.Item;
                 reimbursementOnly.ItemAmount = item.Amount;
@@ -1129,9 +1172,9 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             model.Reimbursements = reimbursementOnlyViews;
             return View(model);
         }
-          
 
-          
+
+
 
         [Area("AdminArea")]
         [HttpPost]
@@ -1144,13 +1187,37 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
 
 
         [Area("AdminArea")]
-        [HttpPost]
+        //[HttpGet]
         public IActionResult ReimbursementData(int physicianid, string date)
         {
             var selecteddate = DateTime.Parse(date);
+            if (selecteddate.Day <= 14)
+            {
+                selecteddate = new DateTime(selecteddate.Year, selecteddate.Month, 1);
+            }
+            else
+            {
+                selecteddate = new DateTime(selecteddate.Year, selecteddate.Month, 15);
+            }
             var biweekid = _invoice.GetBiweektime(physicianid, selecteddate).Biweekid;
             List<ReimbursementViewModel> model = _invoice.reimbursementViewModels(biweekid);
             return PartialView("ReimbursementView", model);
+        }
+
+        [Area("AdminArea")]
+        //[HttpGet]
+        public void FinalizeThisTimeSheet(int physicianid, string date)
+        {
+            var selecteddate = DateTime.Parse(date);
+            if (selecteddate.Day <= 14)
+            {
+                selecteddate = new DateTime(selecteddate.Year, selecteddate.Month, 1);
+            }
+            else
+            {
+                selecteddate = new DateTime(selecteddate.Year, selecteddate.Month, 15);
+            }
+            _invoice.Finalizetimesheet(physicianid, selecteddate);
         }
 
 
@@ -1178,8 +1245,55 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
                 _invoice.UpdateTimesheet(timesheet);
             }
         }
+
+        [Area("AdminArea")]
+        //[HttpPost]
+        public IActionResult EditReimbursement(int id, string item, decimal amount, string file, string filesname, string date)
+        {
+            Reimbursement reimbursement = _db.Reimbursements.Where(x => x.Isdeleted == false).FirstOrDefault(x => x.Id == id);
+            var physicianid = reimbursement.Physicianid;
+            reimbursement.Item = item;
+            reimbursement.Amount = amount;
+            reimbursement.Bill = file;
+            reimbursement.Billname = filesname;
+            reimbursement.Modifieddate = DateTime.Now;
+            if (_physician.GetSessionPhysicianId() != -1)
+            {
+                reimbursement.Modifirdby = _physician.GetFirstOrDefault(x => x.Physicianid == _physician.GetSessionPhysicianId()).Aspnetuserid;
+            }
+            if (_admin.GetSessionAdminId() != -1)
+            {
+                reimbursement.Modifirdby = _admin.GetFirstOrDefault(x => x.Adminid == _admin.GetSessionAdminId()).Aspnetuserid;
+            }
+            _invoice.UpdateReimbursement(reimbursement);
+
+            return RedirectToAction("ReimbursementData", new { physicianid = physicianid, date = date });
+        }
+
+        [Area("AdminArea")]
+        [HttpPost]
+        public IActionResult DeleteReimbursement(int id)
+        {
+            Reimbursement reimbursement = _db.Reimbursements.Where(x => x.Isdeleted == false).FirstOrDefault(x => x.Id == id);
+            var physicianid = reimbursement.Physicianid;
+            _invoice.DeleteReimbursement(id);
+            string date = reimbursement.Date.Value.ToString("dd-MM-yyyy");
+            return RedirectToAction("ReimbursementData", new { physicianid = physicianid, date = date });
+        }
+
+
+        [Area("AdminArea")]
+        public IActionResult DownloadReimbursementBill(int id)
+        {
+            var bill = _invoice.DownloadReimbursementBill(id);
+            var base64Data = Regex.Match(bill, @"data:(?<type>.+?);base64,(?<data>.+)").Groups["data"].Value;
+            var fileType = Regex.Match(bill, @"data:(?<type>.+?);base64,(?<data>.+)").Groups["type"].Value;
+            var billname = _invoice.billname(id);
+            var fileBytes = Convert.FromBase64String(base64Data);
+            return File(fileBytes, fileType, DateTime.Now.ToString("dd-mm-yyyy HH:mm") + "_" + billname);
+        }
     }
 }
 
-    
+
 

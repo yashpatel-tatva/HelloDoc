@@ -118,7 +118,7 @@
         $.ajax({
             url: '/AdminArea/AdminProviderTab/ReimbursementData',
             data: { physicianid, date },
-            type: 'POST',
+            //type: 'POST',
             success: function (result) {
                 $('#receipts').html(result);
             }
@@ -154,4 +154,17 @@
         })
     });
 
+    $('#finalizethistimesheet').on('click' , function(){
+        var physicianid = $('#timesheetphysicianid').val();
+        var date = $('#timesheetdate').val();
+        console.log(physicianid, date);
+        $.ajax({
+            url: '/AdminArea/AdminProviderTab/FinalizeThisTimeSheet',
+            data: { physicianid, date },
+            //type: 'POST',
+            success: function (result) {
+                location.reload();
+            }
+        })
+    })
 </script>

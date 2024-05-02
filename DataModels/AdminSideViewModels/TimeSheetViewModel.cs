@@ -23,7 +23,7 @@ namespace DataModels.AdminSideViewModels
         public string Item { get; set; }
         public DateTime ThisDate { get; set; }
         public decimal Amount { get; set; }
-        public IFormFile Bill { get; set; }
+        public string Bill { get; set; }
         public string Billname { get; set; }
     }
 
@@ -33,6 +33,9 @@ namespace DataModels.AdminSideViewModels
         public int Physicianid { get; set; }
         public DateTime Firstday { get; set; }
         public DateTime Lastday { get; set; }
+        public bool isfinalized { get; set; }
+        public bool isapproved { get; set; }
+
         public List<TimeSheetViewModel> TimeSheets { get; set; }
         public List<ReimbursementViewModel> Reimbursements { get; set; }
     }
@@ -52,6 +55,7 @@ namespace DataModels.AdminSideViewModels
 
     public class ReimbursementOnlyView
     {
+        public int Id { get; set; }
         public DateTime ItemDate { get; set; }
         public string ItemName { get; set; }
         public decimal ItemAmount { get; set; }

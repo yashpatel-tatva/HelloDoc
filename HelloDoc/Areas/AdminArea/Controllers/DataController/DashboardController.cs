@@ -1067,7 +1067,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
                 Requeststatuslog requeststatuslog = new Requeststatuslog();
                 requeststatuslog.Status = requestdetail.Status;
                 requeststatuslog.Requestid = requestdetail.Requestid;
-                requeststatuslog.Notes = "Provider chose for consultunt";
+                requeststatuslog.Notes = "Provider choose for consult";
                 requeststatuslog.Createddate = DateTime.Now;
                 requeststatuslog.Physicianid = _physician.GetSessionPhysicianId();
                 _db.Requeststatuslogs.Add(requeststatuslog);

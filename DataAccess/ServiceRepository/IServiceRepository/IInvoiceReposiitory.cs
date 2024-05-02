@@ -28,6 +28,9 @@ namespace DataAccess.ServiceRepository.IServiceRepository
 
         void UpdateTimesheet(Timesheet timesheet);
         void UpdateReimbursement(Reimbursement reimbursement);
-
+        string DownloadReimbursementBill(int id);
+        string billname(int id);
+        void DeleteReimbursement(int id);
+        void Finalizetimesheet(int physicianid, DateTime selecteddate);
     }
 }

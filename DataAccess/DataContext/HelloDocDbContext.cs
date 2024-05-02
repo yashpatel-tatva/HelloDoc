@@ -158,7 +158,7 @@ public partial class HelloDocDbContext : DbContext
         {
             entity.HasKey(e => e.Biweekid).HasName("biweektime_pkey");
 
-            entity.HasOne(d => d.Physician).WithMany(p => p.Biweektimes).HasConstraintName("physician");
+            entity.HasOne(d => d.Physician).WithMany(p => p.Biweektimes).HasConstraintName("physicain");
         });
 
         modelBuilder.Entity<Blockrequest>(entity =>

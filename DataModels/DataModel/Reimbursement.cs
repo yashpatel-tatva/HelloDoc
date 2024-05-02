@@ -17,14 +17,12 @@ public partial class Reimbursement
     public int? Physicianid { get; set; }
 
     [Column("item")]
-    [StringLength(500)]
     public string? Item { get; set; }
 
     [Column("amount")]
     public decimal? Amount { get; set; }
 
     [Column("bill")]
-    [StringLength(500)]
     public string? Bill { get; set; }
 
     [Column("isdeleted")]
@@ -49,6 +47,9 @@ public partial class Reimbursement
 
     [Column("modifieddate", TypeName = "timestamp without time zone")]
     public DateTime? Modifieddate { get; set; }
+
+    [Column("billname")]
+    public string? Billname { get; set; }
 
     [ForeignKey("Biweektimeid")]
     [InverseProperty("Reimbursements")]

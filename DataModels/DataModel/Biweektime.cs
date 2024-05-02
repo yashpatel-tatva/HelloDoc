@@ -25,6 +25,9 @@ public partial class Biweektime
     [Column("lastday", TypeName = "timestamp without time zone")]
     public DateTime? Lastday { get; set; }
 
+    [Column("isapproved")]
+    public bool? Isapproved { get; set; }
+
     [ForeignKey("Physicianid")]
     [InverseProperty("Biweektimes")]
     public virtual Physician? Physician { get; set; }

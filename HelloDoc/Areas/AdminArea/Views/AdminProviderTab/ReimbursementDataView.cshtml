@@ -1,0 +1,48 @@
+﻿@using DataModels.AdminSideViewModels
+@model BiWeekOnlyView
+@{
+    Layout = null;
+}
+<div class="table-responsive">
+    <table class="w-100 table">
+        <thead class="thead-dark bg-body-secondary">
+            <tr style="--bs-table-bg: #ebebeb; color : black">
+                <th>Date</th>
+                <th>Item</th>
+                <th>Amount</th>
+                <th>Bill</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Reimbursements)
+            {
+                <tr>
+                    <td>@item.ItemDate.ToString("MMM dd , yyyy")</td>
+                    <td>@item.ItemName</td>
+                    <td>@item.ItemAmount</td>
+                    <td>@item.BillName</td>
+                    <td>
+                        <button type="button" class="btn border-info text-info shadow-none viewbill" data-id="@item.Id">View</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $('.viewbill').on('click', function () {
+        var id = $(this).data('id');
+        var link = document.createElement('a');
+        link.href = '/AdminArea/AdminProviderTab/DownloadReimbursementBill?id=' + id;
+        link.click();
+        Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: "File Downloaded",
+            showConfirmButton: false,
+            timer: 1500
+        });
+    })
+</script>

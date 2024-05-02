@@ -25,7 +25,7 @@ namespace DataAccess.ServiceRepository
             var physicianservice = context.HttpContext.RequestServices.GetService<IPhysicianRepository>();
             if (jwtservice == null)
             {
-                context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Home", action = "AdminLogin" }));
+                context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Home", action = "AdminLogin", area = "AdminArea" }));
                 return;
             }
 
@@ -34,7 +34,7 @@ namespace DataAccess.ServiceRepository
 
             if (token == null || !jwtservice.ValidateToken(token, out JwtSecurityToken jwttoken))
             {
-                context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Home", action = "ExpirePopUp" }));
+                context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Home", action = "ExpirePopUp", area = "AdminArea" }));
                 return;
             }
 
@@ -43,13 +43,13 @@ namespace DataAccess.ServiceRepository
 
             if (roleClaim == null)
             {
-                context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Home", action = "AdminLogin" }));
+                context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Home", action = "AdminLogin", area = "AdminArea" }));
                 return;
             }
 
             if (string.IsNullOrEmpty(_role) || !_role.Contains(roleClaim.Value))
             {
-                context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Home", action = "AdminLogin" }));
+                context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Home", action = "AdminLogin" , area = "AdminArea" }));
                 return;
             }
 

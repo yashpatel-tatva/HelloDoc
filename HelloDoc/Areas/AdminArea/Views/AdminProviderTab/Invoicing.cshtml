@@ -5,6 +5,58 @@
     ViewData["Title"] = "Invoicing";
 }
 
+
+<div class="container">
+    <div class="d-flex justify-content-between mx-3">
+        <div class="h3 subinfotext fw-bold">
+            Timesheets
+        </div>
+        <div>
+            <a asp-action="Dashboard" asp-controller="Dashboard">
+                <button type="button" class="d-flex babtn rounded align-item-center p-1 px-2">
+                    <div><img src="~/res/back.png" width="15px" height="10px"></div>
+                    <div><span>Back</span></div>
+                </button>
+            </a>
+        </div>
+    </div>
+    <div class="bg-light rounded m-3 shadow" id="content">
+        <div class="p-3">
+            <div class="d-flex gap-3">
+                <div class="form-group d-flex align-items-center rounded">
+                    <select class="form-select shadow-none" id="biweekDropdown">
+                    </select>
+                    <span class="selectedselectspan">Search By TimeSheet Period</span>
+                </div>
+                <div class="form-group d-flex align-items-center rounded">
+                    <select class="form-select shadow-none" id="physicianid">
+                    </select>
+                    <span class="selectedselectspan">Search By Physician</span>
+                </div>
+            </div>
+        </div>
+        <div class="p-3">
+            <div class="h4 subinfotext fw-bold">
+                Pending Biweekly Timesheet
+            </div>
+        </div>
+        <div id="datatoprintintimesheet">
+        </div>
+    </div>
+    <div class="bg-light rounded m-3 shadow " id="content1">
+        <div class="p-3">
+            <div class="h4 subinfotext fw-bold">
+                Timesheets Reimbursement
+            </div>
+        </div>
+        <div id="datatoprintinreimbursement">
+        </div>
+    </div>
+</div>
+
+<script src="~/js/Invoice.js" asp-append-version="true"></script>
+
+
 <script>
     localStorage.setItem('target', "#invoicing");
     var target = localStorage.getItem('target');
