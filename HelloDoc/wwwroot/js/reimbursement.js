@@ -111,3 +111,64 @@ $('.deletebill').on('click', function () {
     })
 })
 
+
+
+$('#bonus').on('blur', function () {
+    var id = $(this).data('id');
+    var bonus = $(this).val();
+    $.ajax({
+        url: '/AdminArea/AdminProviderTab/EditBonus',
+        data: { id , bonus },
+        type: 'POST',
+        success: function (result) {
+            Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: "Bonus Saved",
+                showConfirmButton: false,
+                timer: 1500
+            });
+            $('#receipts').html(result);
+        }
+    })
+})
+
+$('#description').on('blur', function () {
+    var id = $(this).data('id');
+    var description = $(this).val();
+    $.ajax({
+        url: '/AdminArea/AdminProviderTab/Editdescription',
+        data: { id, description },
+        type: 'POST',
+        success: function (result) {
+            Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: "description Saved",
+                showConfirmButton: false,
+                timer: 1500
+            });
+            $('#receipts').html(result);
+        }
+    })
+})
+
+
+$('#approvethis').on('click', function () {
+    var id = $(this).data('id');
+    $.ajax({
+        url: '/AdminArea/AdminProviderTab/ApproveThisBiweek',
+        data: { id },
+        type: 'POST',
+        success: function (result) {
+            Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: "description Saved",
+                showConfirmButton: false,
+                timer: 1500
+            });
+            location.reload();
+        }
+    })
+})

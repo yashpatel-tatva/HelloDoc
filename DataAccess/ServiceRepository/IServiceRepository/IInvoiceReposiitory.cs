@@ -32,5 +32,8 @@ namespace DataAccess.ServiceRepository.IServiceRepository
         string billname(int id);
         void DeleteReimbursement(int id);
         void Finalizetimesheet(int physicianid, DateTime selecteddate);
+        void Editbonus(int id, decimal bonus);
+        void Editdescription(int id, string Description);
+        void ApproveThisBiweek(int id);
     }
 }

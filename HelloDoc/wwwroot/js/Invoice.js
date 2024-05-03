@@ -75,6 +75,7 @@ $('#physicianid').on('change', function () {
                 $('#content1').removeClass('d-none')
                 getdata(selecteddate);
             } else {
+                $('#content1').addClass('d-none')
                 $('#datatoprintintimesheet').html('<div class="text-muted text-center py-4">' + response + '</div>')
             }
         },
@@ -118,8 +119,28 @@ getdata(selecteddate);
 
 $('#biweekDropdown').on('change', function () {
     selecteddate = $(this).val();
-    getdata(selecteddate);
+    if ($('#isadmin').val() == 1) {
+        $.ajax({
+            url: '/AdminArea/AdminProviderTab/IsBiweekApproved',
+            data: { physiciainid, selecteddate },
+            type: 'POST',
+            success: function (response) {
+                if (response == "true") {
+                    $('#content1').removeClass('d-none')
+                    getdata(selecteddate);
+                }
+                else {
+                    $('#datatoprintintimesheet').html('<div class="text-muted text-center py-4">' + response + '</div>')
+                    $('#content1').addClass('d-none')
+                }
+            },
+        })
+    } else {
+        getdata(selecteddate);
+    }
+
 })
+
 
 $('#finalizetimesheet').on('click', function () {
     $.ajax({

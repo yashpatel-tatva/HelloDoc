@@ -98,6 +98,7 @@ namespace DataAccess.ServiceRepository
                 biweek.Physicianid = physicianid;
                 biweek.Isfinalized = false;
                 biweek.Isapproved = false;
+                biweek.Bonus = 0;
                 biweek.Firstday = date;
                 if (biweek.Firstday.Value.Day <= 14)
                 {
@@ -246,6 +247,27 @@ namespace DataAccess.ServiceRepository
             biweek.Isfinalized = true;
             _db.Biweektimes.Update(biweek);
             _db.SaveChanges();
+        }
+
+        public void Editbonus(int id, decimal bonus)
+        {
+           var d = _db.Biweektimes.FirstOrDefault(x=>x.Biweekid == id);
+            d.Bonus = bonus;
+            _db.Biweektimes.Update(d); _db.SaveChanges();
+        }
+
+        public void Editdescription(int id, string Description)
+        {
+            var d = _db.Biweektimes.FirstOrDefault(x => x.Biweekid == id);
+            d.Description = Description;
+            _db.Biweektimes.Update(d); _db.SaveChanges();
+        }
+
+        public void ApproveThisBiweek(int id)
+        {
+            var d = _db.Biweektimes.FirstOrDefault(x => x.Biweekid == id);
+            d.Isapproved = true;
+            _db.Biweektimes.Update(d); _db.SaveChanges();
         }
     }
 }

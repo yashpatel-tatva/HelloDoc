@@ -66,12 +66,12 @@
                             </td>
                             <td>
                                 <div class="form-group d-flex align-items-center rounded">
-                                    <input type="time" class="form-control oncall" placeholder="" id="oncall_@item.Id" asp-for="@item.OnCallHours" value="@item.OnCallHours">
+                                    <input type="time" class="form-control oncall inputchange" placeholder="" id="oncall_@item.Id" asp-for="@item.OnCallHours" value="@item.OnCallHours">
                                 </div>
                             </td>
                             <td style="text-align : center">
                                 <div class="form-check form-check-inline ">
-                                    <input type="checkbox" name="weekend" id="weekend_@item.Id" class="form-check-input"
+                                    <input type="checkbox" name="weekend" id="weekend_@item.Id" class="form-check-input inputchange"
                                         @if (item.IsWeekend)
                                         {
                                             @: checked
@@ -80,17 +80,75 @@
                             </td>
                             <td>
                                 <div class="form-group d-flex align-items-center rounded">
-                                    <input type="number" class="form-control housecall" placeholder="" id="housecall_@item.Id" asp-for="@item.HouseCalls" value="@item.HouseCalls">
+                                    <input type="number" class="form-control housecall inputchange" placeholder="" min="0" id="housecall_@item.Id" asp-for="@item.HouseCalls" value="@item.HouseCalls">
                                 </div>
                             </td>
                             <td>
                                 <div class="form-group d-flex align-items-center rounded">
-                                    <input type="number" class="form-control consult" placeholder="" id="phonecall_@item.Id" asp-for="@item.PhoneCalls" value="@item.PhoneCalls">
+                                    <input type="number" class="form-control consult inputchange" placeholder="" min="0" id="phonecall_@item.Id" asp-for="@item.PhoneCalls" value="@item.PhoneCalls">
                                 </div>
                             </td>
                             <td></td>
                         </tr>
                         </form>
+                    }
+                    @if (Model.IsAdmin)
+                    {
+                        <tr>
+                            <td>Payrate</td>
+                            <td></td>
+                            <td>
+                                <div class="form-group d-flex align-items-center rounded">
+                                    <input type="number" class="form-control" value="@Model.Payrate.Shift" disabled>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group d-flex align-items-center rounded">
+                                    <input type="number" class="form-control" value="@Model.Payrate.Nightshift" disabled>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group d-flex align-items-center rounded">
+                                    <input type="number" class="form-control" value="@Model.Payrate.Housecall" disabled>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group d-flex align-items-center rounded">
+                                    <input type="number" class="form-control" value="@Model.Payrate.Consult" disabled>
+                                </div>
+                            </td>
+                            <td></td>
+                        </tr>
+
+                        <tr>
+                            <td>Invoice Total</td>
+                            <td></td>
+                            <td>
+                                <div class="form-group d-flex align-items-center rounded">
+                                    <input type="number" class="form-control" id="shiftpay" value="@Model.shiftpay" disabled>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group d-flex align-items-center rounded">
+                                    <input type="number" class="form-control" id="nightshiftpay" value="@Model.nightshiftpay" disabled>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group d-flex align-items-center rounded">
+                                    <input type="number" class="form-control" id="housecallpay" value="@Model.housecallpay" disabled>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group d-flex align-items-center rounded">
+                                    <input type="number" class="form-control" id="consultpay" value="@Model.consultpay" disabled>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group d-flex align-items-center rounded">
+                                    <input type="number" class="form-control" id="totalpay" value="@Model.totalpay" disabled>
+                                </div>
+                            </td>
+                        </tr>
                     }
                     <tr>
                         <td colspan="7" style="text-align : right">
@@ -105,9 +163,12 @@
         <button type="button" class=" p-2 px-3 text-white bg-info rounded border-info   px-3 shadow-none" id="addreceipt">Add Receipt</button>
     </div>
     <div id="receipts"></div>
-    <div class="d-flex justify-content-end m-3">
-        <button type="button" class=" p-2 px-3 text-white bg-info rounded border-info   px-3 shadow-none" id="finalizethistimesheet">Finalize</button>
-    </div>
+    @if (!Model.IsAdmin)
+    {
+        <div class="d-flex justify-content-end m-3">
+            <button type="button" class=" p-2 px-3 text-white bg-info rounded border-info   px-3 shadow-none" id="finalizethistimesheet">Finalize</button>
+        </div>
+    }
 </div>
 
 <script>
@@ -154,7 +215,38 @@
         })
     });
 
-    $('#finalizethistimesheet').on('click' , function(){
+
+    $('.inputchange').on('change', function () {
+        var physicianid = $('#timesheetphysicianid').val();
+        var firstday = $('#timesheetdate').val();
+        var timesheets = $('.form').map(function () {
+            return {
+                Id: $(this).data('id'),
+                ThisDate: $(this).data('name'),
+                IsWeekend: $('#weekend_' + $(this).data('id')).prop('checked'),
+                OnCallHours: $('#oncall_' + $(this).data('id')).val(),
+                HouseCalls: $('#housecall_' + $(this).data('id')).val(),
+                PhoneCalls: $('#phonecall_' + $(this).data('id')).val()
+            };
+        }).get()
+        console.log(physicianid, firstday, timesheets);
+        $.ajax({
+            url: '/AdminArea/AdminProviderTab/CalculatePayrates',
+            type: 'POST',
+            data: { physicianid, firstday, timesheets },
+            success: function (result) {
+                console.log(result);
+                $('#shiftpay').val(result.shiftpay);
+                $('#nightshiftpay').val(result.nightshiftpay);
+                $('#housecallpay').val(result.housecallpay);
+                $('#consultpay').val(result.consultpay);
+                $('#totalpay').val(result.totalpay);
+            }
+        })
+    });
+
+
+    $('#finalizethistimesheet').on('click', function () {
         var physicianid = $('#timesheetphysicianid').val();
         var date = $('#timesheetdate').val();
         console.log(physicianid, date);

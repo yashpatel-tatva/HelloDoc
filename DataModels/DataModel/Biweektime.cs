@@ -28,6 +28,12 @@ public partial class Biweektime
     [Column("isapproved")]
     public bool? Isapproved { get; set; }
 
+    [Column("description")]
+    public string? Description { get; set; }
+
+    [Column("bonus")]
+    public decimal? Bonus { get; set; }
+
     [ForeignKey("Physicianid")]
     [InverseProperty("Biweektimes")]
     public virtual Physician? Physician { get; set; }

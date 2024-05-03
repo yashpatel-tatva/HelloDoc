@@ -11,6 +11,7 @@ using System.Collections;
 using System.Drawing;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text.RegularExpressions;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace HelloDoc.Areas.AdminArea.Controllers.DataController
 {
@@ -1035,7 +1036,6 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             }
             BiWeekOnlyView model = new BiWeekOnlyView();
             List<TimeSheetOnlyView> timeSheetOnlyViews = new List<TimeSheetOnlyView>();
-
             model.PhysicianId = physiciainid;
             model.Firstday = date;
             var biweek = _invoice.GetBiweektime(physiciainid, date);
@@ -1090,10 +1090,10 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
                     timeSheetmodel.PhoneCallNight = 0;
                 }
                 timeSheetOnlyViews.Add(timeSheetmodel);
-
-
             }
+            model.Id = biweek.Biweekid;
             model.TimeSheets = timeSheetOnlyViews;
+
             return View(model);
         }
 
@@ -1116,13 +1116,13 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
                 return false;
             }
         }
-        
+
         [Area("AdminArea")]
         [HttpPost]
         public IActionResult IsBiweekApproved(int physiciainid, string selecteddate)
         {
             var date = DateTime.Parse(selecteddate);
-            var name = _physician.GetFirstOrDefault(x => x.Physicianid == physiciainid).Firstname + " " + _physician.GetFirstOrDefault(x => x.Physicianid == physiciainid).Lastname; 
+            var name = _physician.GetFirstOrDefault(x => x.Physicianid == physiciainid).Firstname + " " + _physician.GetFirstOrDefault(x => x.Physicianid == physiciainid).Lastname;
             var timesheetexist = _db.Biweektimes.FirstOrDefault(x => x.Physicianid == physiciainid && x.Firstday == date);
             if (timesheetexist == null)
             {
@@ -1134,7 +1134,15 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             }
             else
             {
-                return Ok(name + " has not finalized the timesheet in specific time period");
+                if ((bool)timesheetexist.Isfinalized)
+                {
+                    Biweektime model = _invoice.GetBiweektime(physiciainid, date);
+                    return PartialView("PendingBiweekTable", model);
+                }
+                else
+                {
+                    return Ok(name + " has not finalized the timesheet in specific time period");
+                }
             }
         }
 
@@ -1182,6 +1190,22 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         {
             var date = DateTime.Parse(selecteddate);
             BiWeekViewModel model = _invoice.BiWeekData(physiciainid, date);
+            var timesheet = model.TimeSheets;
+
+            if (_admin.GetSessionAdminId() != -1)
+            {
+                model.IsAdmin = true;
+                model.Payrate = _db.Payrates.FirstOrDefault(x => x.Physicinaid == physiciainid);
+                model.shiftpay = (decimal)((timesheet.Where(x => x.OnCallHours != TimeOnly.MinValue).Count()) * model.Payrate.Shift);
+                model.nightshiftpay = (decimal)((timesheet.Where(x => x.IsWeekend == true).Count()) * model.Payrate.Nightshift);
+                model.housecallpay = (decimal)(timesheet.Sum(x => x.HouseCalls) * model.Payrate.Housecall);
+                model.consultpay = (decimal)(timesheet.Sum(x => x.PhoneCalls) * model.Payrate.Consult);
+                model.totalpay = model.shiftpay + model.nightshiftpay + model.housecallpay + model.consultpay;
+            }
+            else
+            {
+                model.IsAdmin = false;
+            }
             return PartialView("TimeSheetsView", model);
         }
 
@@ -1199,9 +1223,23 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             {
                 selecteddate = new DateTime(selecteddate.Year, selecteddate.Month, 15);
             }
-            var biweekid = _invoice.GetBiweektime(physicianid, selecteddate).Biweekid;
+            var biweek = _invoice.GetBiweektime(physicianid, selecteddate);
+            var biweekid = biweek.Biweekid;
+            AdminReimbursementView result = new AdminReimbursementView();
             List<ReimbursementViewModel> model = _invoice.reimbursementViewModels(biweekid);
-            return PartialView("ReimbursementView", model);
+            result.BiWeekId = biweekid;
+            result.Reimbursements = model;
+            if (_admin.GetSessionAdminId() != -1)
+            {
+                result.IsAdmin = true;
+                result.bonus = (decimal)biweek.Bonus.Value;
+                result.Description = biweek.Description;
+            }
+            else
+            {
+                result.IsAdmin = false;
+            }
+            return PartialView("ReimbursementView", result);
         }
 
         [Area("AdminArea")]
@@ -1218,6 +1256,31 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
                 selecteddate = new DateTime(selecteddate.Year, selecteddate.Month, 15);
             }
             _invoice.Finalizetimesheet(physicianid, selecteddate);
+        }
+
+
+        [Area("AdminArea")]
+        [HttpPost]
+        public payrates CalculatePayrates(int physicianid, DateTime firstday, List<TimeSheetViewModel> timesheets)
+        {
+            var date = firstday;
+            payrates result = new payrates();
+            var timesheet = timesheets;
+            var Payrate = _db.Payrates.FirstOrDefault(x => x.Physicinaid == physicianid);
+            var shiftpay = (decimal)((timesheet.Where(x => x.OnCallHours != TimeOnly.MinValue).Count()) * Payrate.Shift);
+            var nightshiftpay = (decimal)((timesheet.Where(x => x.IsWeekend == true).Count()) * Payrate.Nightshift);
+            var housecallpay = (decimal)(timesheet.Sum(x => x.HouseCalls) * Payrate.Housecall);
+            var consultpay = (decimal)(timesheet.Sum(x => x.PhoneCalls) * Payrate.Consult);
+            var totalpay = shiftpay + nightshiftpay + housecallpay + consultpay;
+
+            result.shiftpay = shiftpay;
+            result.nightshiftpay = nightshiftpay;
+            result.housecallpay = housecallpay;
+            result.consultpay = consultpay;
+            result.totalpay = totalpay;
+
+            return result;
+
         }
 
 
@@ -1292,6 +1355,35 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             var fileBytes = Convert.FromBase64String(base64Data);
             return File(fileBytes, fileType, DateTime.Now.ToString("dd-mm-yyyy HH:mm") + "_" + billname);
         }
+
+        [Area("AdminArea")]
+        [HttpPost]
+        public IActionResult EditBonus(int id, decimal bonus)
+        {
+            _invoice.Editbonus(id, bonus);
+            var biweek = _db.Biweektimes.FirstOrDefault(x => x.Biweekid == id);
+            var physicianid = biweek.Physicianid;
+            var date = biweek.Firstday.Value.ToString("dd-MM-yyyy");
+            return RedirectToAction("ReimbursementData", new { physicianid = physicianid, date = date });
+        }
+
+        [Area("AdminArea")]
+        [HttpPost]
+        public IActionResult Editdescription(int id, string description)
+        {
+            _invoice.Editdescription(id, description);
+            var biweek = _db.Biweektimes.FirstOrDefault(x => x.Biweekid == id);
+            var physicianid = biweek.Physicianid;
+            var date = biweek.Firstday.Value.ToString("dd-MM-yyyy");
+            return RedirectToAction("ReimbursementData", new { physicianid = physicianid, date = date });
+        }
+        [Area("AdminArea")]
+        [HttpPost]
+        public void ApproveThisBiweek(int id)
+        {
+            _invoice.ApproveThisBiweek(id);
+        }
+
     }
 }
 

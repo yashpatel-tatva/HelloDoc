@@ -1,0 +1,47 @@
+﻿@model Biweektime
+
+<div class="p-3" style="text-align: left !important">
+    <div class="h4 subinfotext fw-bold">
+        Pending Biweekly Timesheet
+    </div>
+</div>
+
+
+<div class="table-responsive " style=" text-align: left !important">
+    <table class="w-100 table">
+        <thead class="thead-dark bg-body-secondary">
+            <tr style="--bs-table-bg: #ebebeb; color : black">
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>@Model.Firstday.Value.ToString("MMM dd , yyyy")</td>
+                <td>@Model.Lastday.Value.ToString("MMM dd , yyyy")</td>
+                <td>Pendig</td>
+                <td>
+                    <button type="button" class="btn border-info text-info shadow-none approve" data-id="@Model.Biweekid">Approve</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $('.approve').on('click', function () {
+        console.log(physiciainid , selecteddate);
+        $.ajax({
+            url: '/AdminArea/AdminProviderTab/GetTimeSheet',
+            data: { physiciainid, selecteddate },
+            type: 'POST',
+            success: function (result) {
+                $('#nav-tabContent').html(result);
+            }
+        })
+    })
+
+   
+</script>

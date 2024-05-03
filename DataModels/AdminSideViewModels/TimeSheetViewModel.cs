@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using HelloDoc;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +28,15 @@ namespace DataModels.AdminSideViewModels
         public string Billname { get; set; }
     }
 
+    public class AdminReimbursementView
+    {
+        public int BiWeekId { get; set; }
+        public bool IsAdmin { get; set; }
+        public List<ReimbursementViewModel> Reimbursements { get; set; }
+        public decimal bonus { get; set; }
+        public string Description { get;set; }
+    }
+
     public class BiWeekViewModel
     {
         public int Id { get; set; }
@@ -38,6 +48,23 @@ namespace DataModels.AdminSideViewModels
 
         public List<TimeSheetViewModel> TimeSheets { get; set; }
         public List<ReimbursementViewModel> Reimbursements { get; set; }
+
+        public bool IsAdmin { get; set; }
+        public Payrate Payrate { get; set; }
+        public decimal shiftpay { get; set; }
+        public decimal nightshiftpay { get; set; }
+        public decimal housecallpay { get; set; }
+        public decimal consultpay { get; set; }
+        public decimal totalpay { get; set; }
+    }
+
+    public class payrates
+    {
+        public decimal shiftpay { get; set; }
+        public decimal nightshiftpay { get; set; }
+        public decimal housecallpay { get; set; }
+        public decimal consultpay { get; set; }
+        public decimal totalpay { get; set; }
     }
 
     public class TimeSheetOnlyView
@@ -65,10 +92,13 @@ namespace DataModels.AdminSideViewModels
 
     public class BiWeekOnlyView
     {
+        public int Id { get; set; }
         public int PhysicianId { get; set; }
         public DateTime Firstday { get; set; }
         public List<TimeSheetOnlyView> TimeSheets { get; set; }
         public List<ReimbursementOnlyView> Reimbursements { get; set; }
+   
+
 
     }
 }
