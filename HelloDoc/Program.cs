@@ -3,6 +3,8 @@ using DataAccess.Repository.IRepository;
 using DataAccess.ServiceRepository;
 using DataAccess.ServiceRepository.IServiceRepository;
 using HelloDoc;
+using HelloDoc.Areas.Hubs;
+using Microsoft.AspNetCore.SignalR;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSession(options =>
@@ -15,7 +17,8 @@ builder.Services.AddSession(options =>
 builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddDbContext<HelloDocDbContext>();
-
+builder.Services.AddSingleton<IUserIdProvider, CustomConnectionIdProvider>();
+builder.Services.AddSignalR();
 
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -74,6 +77,12 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseSession();
 app.UseAuthorization();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHub<ChatHub>("/chathub");
+});
+
 
 
 app.MapControllerRoute(

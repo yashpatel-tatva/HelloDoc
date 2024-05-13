@@ -10,6 +10,9 @@
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'http' " />
   <ItemGroup>
     <None Remove="Areas\PatientArea\Views\Home\RequestForms\" />
+    <None Remove="Areas\Hubs\" />
+    <None Remove="Areas\Hubs\Views\" />
+    <None Remove="Areas\Hubs\Views\Home\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="6.12.0" />
@@ -41,6 +44,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\" />
+    <Folder Include="Areas\Hubs\" />
+    <Folder Include="Areas\Hubs\Views\" />
+    <Folder Include="Areas\Hubs\Views\Home\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
