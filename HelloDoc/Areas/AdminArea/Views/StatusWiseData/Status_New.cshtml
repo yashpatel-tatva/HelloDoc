@@ -91,11 +91,13 @@
                 <td>@item.Address</td>
                 <td>@item.TransferNotes</td>
                 <td>
-                    @*@item.ProviderEmail*@
-                    <div class="border border-1 border-white rounded d-flex justify-content-around align-items-center p-1">
-                        <i class="fa-solid fa-user-doctor"></i>
-                        Provider
-                    </div>
+                    @if (item.PhysicainName != null)
+                    {
+                        <div class="border border-1 border-white rounded d-flex justify-content-around align-items-center p-1">
+                            <i class="fa-solid fa-user-doctor"></i>
+                            Provider
+                        </div>
+                    }
                 </td>
                 <td>
                     <div class="dropstart ms-2">
