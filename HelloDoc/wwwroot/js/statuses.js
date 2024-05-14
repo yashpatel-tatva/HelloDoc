@@ -211,3 +211,18 @@ $('.gotoactionproviderside').click(function (e) {
         },
     });
 });
+
+$('.openchat').on('click', function () {
+    var sendtoaspid = $(this).data('id');
+    $.ajax({
+        url: '/Hubs/Home/OpenChatBox',
+        data: { sendtoaspid },
+        type: 'POST',
+        success: function (result) {
+            $('#PopUps').html(result);
+            var my = new bootstrap.Modal(document.getElementById('ModalToOpen'));
+            my.show();
+        }
+    })
+});
+

@@ -37,6 +37,8 @@ builder.Services.AddScoped<IShiftDetailRepository, ShiftDetailRepository>();
 builder.Services.AddScoped<IShiftRepository, ShiftRepository>();
 builder.Services.AddScoped<ISchedulingRepository, SchedulingRepository>();
 builder.Services.AddScoped<IHealthProfessionalsRepository, HealthProfessionalsRepository>();
+builder.Services.AddScoped<IAspNetUserRolesRepository, AspNetUserRolesRepository>();
+builder.Services.AddScoped<IChatHistoryRepository, ChatHistoryRepository>();
 
 
 builder.Services.AddScoped<IAllRequestDataRepository, AllRequestDataRepository>();

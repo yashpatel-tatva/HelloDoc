@@ -1,0 +1,103 @@
+﻿@using DataModels.AdminSideViewModels
+@model ChatBoxViewModel
+<div class="modal fade" id="ModalToOpen" tabindex="-1" role="dialog" aria-labelledby="chatModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-right">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <div class="d-flex gap-3">
+                    <img src="@Model.photo" width="10%" />
+                    <h5 class="modal-title" id="chatModalLabel">@Model.sendtoname</h5>
+                    <input type="hidden" id="sendtoaspid" value="@Model.sendtoaspid" />
+                </div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex flex-column justify-content-end h-100">
+                    <div class="printmsg overflow-scroll">
+                        
+                    </div>
+                </div>
+                
+            </div>
+            <div class="modal-footer">
+                <input type="text" class="form-control" id="sendmsg" placeholder="Type a message" />
+                <button type="button" class="btn btn-primary" id="SendBtn">Send</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/chatbox.js"></script>
+<script src="~/js/signalr/dist/browser/signalr.js"></script>
+
+<style>
+    .modal-body{
+      /*  display: flex;
+        flex-direction: column;
+        justify-content: end;
+        overflow : scroll;*/
+    }
+    
+
+    ::-webkit-scrollbar {
+        width: 0px;
+        background: transparent; /* Make scrollbar transparent */
+    }
+
+
+    .modal-dialog-right {
+        position: absolute;
+        right: 0;
+        max-width: 400px;
+        min-width: 400px;
+        margin: 0px;
+        height: 100vh;
+    }
+
+    .modal.fade .modal-dialog.modal-dialog-right {
+        transition: transform 0.3s ease-out;
+        transform: translateX(100%);
+    }
+
+    .modal.show .modal-dialog.modal-dialog-right {
+        transform: translateX(0);
+    }
+
+    .bg-light-blue {
+        background-color: #add8e6;
+    }
+
+    .modal-content {
+        height: 100vh;
+    }
+
+    .spanoftime{
+        font-size: .875em;
+        display : flex;
+        align-items : end;
+        justify-content:end;
+    }
+
+    .spanofmsg{
+        max-width: 175px !important;
+        padding : 0.5rem ;
+        border-radius : 0.5rem ;
+        margin : 8px 0px;
+    }
+
+    .spanofsent{
+        display :flex;
+        justify-content:end;
+    }
+    .spanofsent .spanofmsg{
+        background-color: #add8e6;
+    }
+    .spanofrec{
+        display : flex;
+    }
+    .spanofrec .spanofmsg{
+        background-color : #F8F9FA;
+    }
+</style>

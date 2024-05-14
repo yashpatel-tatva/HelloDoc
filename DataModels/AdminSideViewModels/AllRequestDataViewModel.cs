@@ -2,6 +2,7 @@
 {
     public class AllRequestDataViewModel
     {
+        public string patientaspid { get; set; }
         public int RequestId { get; set; }
         public short? calltype { get; set; }
         public short? statusnotstate { get; set; }
@@ -15,6 +16,7 @@
         public string RequestorEmail { get; set; }
         public string Address { get; set; }
         public string Notes { get; set; }
+        public string provideraspid { get; set; }
         public string ProviderEmail { get; set; }
         public string PatientEmail { get; set; }
         public int RequestType { get; set; }

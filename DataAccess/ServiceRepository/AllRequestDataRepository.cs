@@ -47,6 +47,7 @@ namespace DataAccess.ServiceRepository
                 {
                     model.PatientDOB = new DateOnly(Convert.ToInt32(item.User.Intyear), DateTime.ParseExact(item.User.Strmonth, "MMMM", CultureInfo.InvariantCulture).Month, Convert.ToInt32(item.User.Intdate));
                 }
+                model.patientaspid = item.User.Aspnetuserid;
                 model.RequestorName = item.Firstname + " " + item.Lastname;
                 model.RequestedDate = item.Createddate;
                 model.PatientPhone = item.Requestclients.FirstOrDefault(x => x.Requestid == item.Requestid).Phonenumber;
@@ -77,15 +78,16 @@ namespace DataAccess.ServiceRepository
                 {
                     model.IsAcceptedbyprovider = false;
                 }
-               
-                    if (item.Physician != null)
-                    {
-                        model.ProviderEmail = item.Physician.Email;
-                        model.PhysicainName = item.Physician.Firstname + " " + item.Physician.Lastname;
-                    }
-                
+
+                if (item.Physician != null)
+                {
+                    model.ProviderEmail = item.Physician.Email;
+                    model.PhysicainName = item.Physician.Firstname + " " + item.Physician.Lastname;
+                    model.provideraspid = item.Physician.Aspnetuserid;
+                }
+
                 var id = item.Requestid;
-                var reqstatuslog = item.Requeststatuslogs.ToList().OrderByDescending(x => x.Createddate).Where(x=>x.Transtophysicianid != null);
+                var reqstatuslog = item.Requeststatuslogs.ToList().OrderByDescending(x => x.Createddate).Where(x => x.Transtophysicianid != null);
                 if (reqstatuslog.Count() == 0)
                 {
                     model.TransferNotes = "-";

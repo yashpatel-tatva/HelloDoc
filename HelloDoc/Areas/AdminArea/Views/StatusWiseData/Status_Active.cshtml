@@ -94,18 +94,18 @@
                 <td>@item.TransferNotes</td>
                 <td>
                     <div class="d-flex gap-2">
-                        <a asp-route-id="@item.ProviderEmail" style="color : white ; " class="m-1">
+                        <div data-id="@item.provideraspid"  style="color : white ; " class="m-1 openchat">
                             <div class="border border-1 border-white rounded d-flex justify-content-around align-items-center p-1">
                                 <i class="fa-solid fa-user-doctor"></i>
                                 Provider
                             </div>
-                        </a>
-                        <a asp-route-id="@item.PatientEmail" style="color : white ; " class="m-1">
+                        </div>
+                        <div data-id="@item.patientaspid" style="color : white ; " class="m-1 openchat">
                             <div class="border border-1 border-white rounded d-flex justify-content-around align-items-center p-1">
                                 <i class="fa-solid fa-user-doctor"></i>
                                 Patient
                             </div>
-                        </a>
+                        </div>
                     </div>
 
                 </td>
@@ -244,18 +244,18 @@
                                     <div class="d-flex justify-content-end align-items-center mt-4">
                                         <div class="">Chat With: </div>
                                         <div class="d-flex justify-content-between">
-                                            <a asp-route-id="@item.ProviderEmail" style="color : white ; " class="m-1">
+                                            <div data-id="@item.provideraspid" style="color : white ; " class="m-1 openchat ">
                                                 <div class="border border-1 border-info rounded d-flex text-info justify-content-around align-items-center p-1">
                                                     <i class="fa-solid fa-user-doctor pe-2"></i>
                                                     Provider
                                                 </div>
-                                            </a>
-                                            <a asp-route-id="@item.PatientEmail" style="color : white ; " class="m-1">
+                                            </div>
+                                            <div data-id="@item.patientaspid" style="color : white ; " class="m-1 openchat ">
                                                 <div class="border border-1 border-info rounded d-flex text-info justify-content-around align-items-center p-1">
                                                     <i class="fa-solid fa-user-doctor pe-2"></i>
                                                     Patient
                                                 </div>
-                                            </a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

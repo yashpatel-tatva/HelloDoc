@@ -33,6 +33,8 @@ public partial class HelloDocDbContext : DbContext
 
     public virtual DbSet<Casetag> Casetags { get; set; }
 
+    public virtual DbSet<Chathistory> Chathistories { get; set; }
+
     public virtual DbSet<Concierge> Concierges { get; set; }
 
     public virtual DbSet<Emaillog> Emaillogs { get; set; }
@@ -192,6 +194,11 @@ public partial class HelloDocDbContext : DbContext
             entity.HasKey(e => e.Casetagid).HasName("pk_casetag");
 
             entity.Property(e => e.Casetagid).UseIdentityAlwaysColumn();
+        });
+
+        modelBuilder.Entity<Chathistory>(entity =>
+        {
+            entity.HasKey(e => e.Msgid).HasName("chathistory_pkey");
         });
 
         modelBuilder.Entity<Concierge>(entity =>

@@ -44,9 +44,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\" />
-    <Folder Include="Areas\Hubs\" />
-    <Folder Include="Areas\Hubs\Views\" />
-    <Folder Include="Areas\Hubs\Views\Home\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
