@@ -1,0 +1,59 @@
+﻿@using HelloDoc;
+@model List<Admin>
+
+<div class="modal fade" id="ModalToOpen" tabindex="-1" role="dialog" aria-labelledby="CancelcaseTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h5 class="modal-title text-white">Which Admin?</h5>
+                <button type="button" class="btn" data-dismiss="modal" aria-label="Close">
+                    <i class="fa-solid fa-xmark text-white"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">Select Admin </div>
+                    <div class="">
+                        <select class="form-select form-select-lg mb-3 fs-6 shadow-none cancleselect" id="admindrop" aria-label=".form-select-lg example">
+                            <option value="1234" hidden>Select Admin</option>
+                            @foreach (var item in Model)
+                            {
+                                <option value="@item.Aspnetuserid">@item.Firstname @item.Lastname</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="d-flex float-end mt-4">
+                        <button type="button" id="confitmadmin" class=" p-2 px-3 text-white bg-info rounded border-info  mx-2 shadow-none ">Confirm</button>
+                        <button type="button" class="btn border-info text-info shadow-none" id="cancelmodel" data-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#confitmadmin').on('click', function () {
+        var sendtoaspid = $('#admindrop').val();
+        if(sendtoaspid == "1234"){
+            Swal.fire("Select Admin!");
+        }
+        else{
+            $('#cancelmodel').trigger('click')
+            $('.modal-backdrop').remove();
+
+            $.ajax({
+                url: '/Hubs/Home/OpenChatBox',
+                data: { sendtoaspid },
+                type: 'POST',
+                success: function (result) {
+                    $('#PopUps').html(result);
+                    var my = new bootstrap.Modal(document.getElementById('ModalToOpen'));
+                    my.show();
+                }
+            })
+        }
+    })
+
+</script>

@@ -44,11 +44,8 @@ namespace HelloDoc.Areas.Hubs
         {
             if (sendtoaspid == "AdminChatGroup")
             {
-                ChatBoxViewModel model1 = new ChatBoxViewModel();
-                model1.sendtoaspid = "AdminChatGroup";
-                model1.sendtoname = "ADMIN";
-                model1.photo = "";
-                return PartialView("_ChatBox", model1);
+                var admin = _admin.GetAll().ToList();
+                return PartialView("_selectAdminToTalk", admin);
             }
             var asp = _aspnetuser.GetFirstOrDefault(x => x.Id == sendtoaspid);
             var role = _aspnetuserroles.GetRoleFromId(asp.Id);
