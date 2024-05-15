@@ -43,6 +43,10 @@ function showmsges() {
         data: { opp: sendid },
         type: 'POST',
         success: function (data) {
+            var current = new Date(data[0].senttime);
+            var currentdate = current.getDate() + '-' + current.getMonth() + '-' + current.getFullYear();
+
+            $('.printmsg').append('<div class="d-flex justify-content-center"><span class="p-1 rounded-3 bg-info">' + currentdate  + '</span></div>');
             $.each(data, function (index, result) {
 
                 var rtime = new Date(result.senttime);
@@ -53,6 +57,12 @@ function showmsges() {
                 }
                 if (result.isread) {
                     read = '<i class="fa-solid fa-check-double tickmark text-info ms-1"></i>'
+                }
+                var resultcurrent = new Date(result.senttime);
+                var resultcurrentdate = resultcurrent.getDate() + '-' + resultcurrent.getMonth() + '-' + resultcurrent.getFullYear()
+                if (currentdate != resultcurrentdate) {
+                    currentdate = resultcurrentdate;
+                    $('.printmsg').append('<div class="d-flex justify-content-center"><span class="p-1 rounded-3 bg-info">' + currentdate + '</span></div>');
                 }
 
                 if (result.reciever == sendid) {
