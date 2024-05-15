@@ -71,6 +71,14 @@ namespace HelloDoc.Areas.Hubs
             model.sendtoaspid = sendtoaspid;
             model.sendtoname = name;
             model.photo = photo;
+
+            var jwtservice = HttpContext.RequestServices.GetService<IJwtRepository>();
+            var request = HttpContext.Request;
+            var token = request.Cookies["jwt"];
+            jwtservice.ValidateToken(token, out JwtSecurityToken jwttoken);
+            var roleClaim = jwttoken.Claims.FirstOrDefault(x => x.Type == "AspNetId");
+            var aspid = roleClaim.Value;
+            model.thisaspid = aspid;
             return PartialView("_ChatBox", model);
         }
 

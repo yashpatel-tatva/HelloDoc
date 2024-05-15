@@ -31,6 +31,7 @@ namespace DataAccess.Repository
                 _db.Chathistories.Update(item);
                 _db.SaveChanges();
             }
+            MsgSent(a);
         }
 
         public void MsgSent(string aspid)

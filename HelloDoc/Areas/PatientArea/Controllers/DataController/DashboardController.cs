@@ -39,9 +39,7 @@ namespace HelloDoc.Areas.PatientArea.DataController
                 DateTime date = new DateTime(Convert.ToInt32(user.Intyear), DateTime.ParseExact(user.Strmonth, "MMMM", CultureInfo.InvariantCulture).Month, Convert.ToInt32(user.Intdate));
                 patientDashboard.birthdate = date;
 
-                var request = from m in _context.Requests
-                              where m.Userid == id
-                              select m;
+                var request = _context.Requests.Include(x=>x.User).Include(x=>x.Physician).Where(x=>x.Userid == id).ToList();
                 patientDashboard.Requests = request.ToList();
 
                 List<Requestwisefile> files;

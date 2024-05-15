@@ -1,5 +1,8 @@
 ﻿
+using DataAccess.Repository.IRepository;
+using DataAccess.ServiceRepository;
 using DataAccess.ServiceRepository.IServiceRepository;
+using DataModels.CommonViewModel;
 using HelloDoc.Areas.PatientArea.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,12 +14,16 @@ namespace HelloDoc.Areas.PatientArea.DataController
         private readonly HelloDocDbContext _context;
         private readonly ISendEmailRepository _sendemail;
         private readonly IPatientFormsRepository _patientFormsRepository;
+        private readonly IAspNetUserRepository _aspnetuser;
+        private readonly IJwtRepository _jwtRepository;
 
-        public CredentialController(HelloDocDbContext context, ISendEmailRepository sendEmailRepository, IPatientFormsRepository patientFormsRepository)
+        public CredentialController(HelloDocDbContext context, ISendEmailRepository sendEmailRepository, IPatientFormsRepository patientFormsRepository , IAspNetUserRepository asp, IJwtRepository jwtRepository)
         {
             _context = context;
             _sendemail = sendEmailRepository;
             _patientFormsRepository = patientFormsRepository;
+            _aspnetuser = asp;
+            _jwtRepository = jwtRepository;
         }
 
         [Area("PatientArea")]
@@ -97,6 +104,18 @@ namespace HelloDoc.Areas.PatientArea.DataController
                     int id = userdata.Userid;
                     HttpContext.Session.SetInt32("UserId", id);
                     HttpContext.Session.SetString("UserName", userdata.Firstname + " " + userdata.Lastname);
+
+                    LoggedInPersonViewModel loggedInPersonViewModel = new LoggedInPersonViewModel();
+                    loggedInPersonViewModel.AspnetId = userdata.Aspnetuserid;
+                    loggedInPersonViewModel.UserName = _aspnetuser.GetFirstOrDefault(x => x.Id == userdata.Aspnetuserid).Username;
+                    var Roleid = _context.Aspnetuserroles.FirstOrDefault(x => x.Userid == userdata.Aspnetuserid).Roleid;
+                    loggedInPersonViewModel.Role = _context.Aspnetroles.FirstOrDefault(x => x.Id == Roleid).Name;
+                    var option = new CookieOptions
+                    {
+                        Expires = DateTime.Now.AddHours(2)
+                    };
+                    Response.Cookies.Append("jwt", _jwtRepository.GenerateJwtToken(loggedInPersonViewModel), option);
+
                     return RedirectToAction("Dashboard", "Dashboard");
                 }
                 TempData["WrongPass"] = "Enter Correct Password";

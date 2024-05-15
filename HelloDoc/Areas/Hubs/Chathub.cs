@@ -75,18 +75,25 @@ namespace HelloDoc.Areas.Hubs
             jwtservice.ValidateToken(token, out JwtSecurityToken jwttoken);
             var roleClaim = jwttoken.Claims.FirstOrDefault(x => x.Type == "AspNetId");
             var aspid = roleClaim.Value;
-            _chatHistory.MsgSeen(aspid , fromthis);
+            _chatHistory.MsgSeen(aspid, fromthis);
+            await Clients.Group(fromthis).SendAsync("MsgSeen" , fromthis , aspid);
         }
-        
+
         public async Task MsgSent()
         {
             var jwtservice = _contextAccessor.HttpContext.RequestServices.GetService<IJwtRepository>();
             var request = _contextAccessor.HttpContext.Request;
             var token = request.Cookies["jwt"];
-            jwtservice.ValidateToken(token, out JwtSecurityToken jwttoken);
-            var roleClaim = jwttoken.Claims.FirstOrDefault(x => x.Type == "AspNetId");
-            var aspid = roleClaim.Value;
-            _chatHistory.MsgSent(aspid);
+            var aspid = "";
+            
+            if (token != null)
+            {
+                jwtservice.ValidateToken(token, out JwtSecurityToken jwttoken);
+                var roleClaim = jwttoken.Claims.FirstOrDefault(x => x.Type == "AspNetId");
+                 aspid = roleClaim.Value;
+                _chatHistory.MsgSent(aspid);
+            }
+            await Clients.All.SendAsync("MsgSent" , aspid);
         }
 
 
@@ -101,19 +108,22 @@ namespace HelloDoc.Areas.Hubs
             var jwtservice = _contextAccessor.HttpContext.RequestServices.GetService<IJwtRepository>();
             var request = _contextAccessor.HttpContext.Request;
             var token = request.Cookies["jwt"];
-            jwtservice.ValidateToken(token, out JwtSecurityToken jwttoken);
-            var roleClaim = jwttoken.Claims.FirstOrDefault(x => x.Type == "AspNetId");
-            if (groupName == null)
+            if (token != null)
             {
-                groupName = roleClaim.Value;
+                jwtservice.ValidateToken(token, out JwtSecurityToken jwttoken);
+                var roleClaim = jwttoken.Claims.FirstOrDefault(x => x.Type == "AspNetId");
+                if (groupName == null)
+                {
+                    groupName = roleClaim.Value;
+                }
+                var role = _aspnetRoles.GetRoleFromId(roleClaim.Value);
+                if (role == 1)
+                {
+                    await Groups.AddToGroupAsync(Context.ConnectionId, "AdminChatGroup");
+                }
+                await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
+                await Clients.Group(groupName).SendAsync("Send", $"{Context.ConnectionId} has joined the group {groupName}.");
             }
-            var role = _aspnetRoles.GetRoleFromId(roleClaim.Value);
-            if (role == 1)
-            {
-                await Groups.AddToGroupAsync(Context.ConnectionId, "AdminChatGroup");
-            }
-            await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
-            await Clients.Group(groupName).SendAsync("Send", $"{Context.ConnectionId} has joined the group {groupName}.");
         }
 
         public async Task RemoveFromGroup(string groupName)

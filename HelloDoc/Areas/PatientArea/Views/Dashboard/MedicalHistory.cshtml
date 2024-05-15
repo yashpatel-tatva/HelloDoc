@@ -51,6 +51,9 @@
                                 Status
                             </th>
                             <th>
+                                Chat With
+                            </th>
+                            <th>
                                 Document
                             </th>
                         </tr>
@@ -61,6 +64,25 @@
                             <tr>
                                 <td>@m.Createddate.ToString("MMM dd , yyyy")</td>
                                 <td>@Model.Statusname(m.Status)</td>
+                                <td>
+                                    <div class="d-flex gap-2">
+                                        <div data-id="AdminChatGroup" style="color : #0DCAF0 !important; " class="m-1 openchat">
+                                            <div class="border border-1 border-info rounded d-flex justify-content-around align-items-center p-1">
+                                                <i class="fa-solid fa-user-doctor" style="color : #0DCAF0 !important; "></i>
+                                                Admin
+                                            </div>
+                                        </div>
+                                        @if (m.Physician != null)
+                                        {
+                                            <div data-id="@m.Physician.Aspnetuserid" style="color : #0DCAF0 !important; " class="m-1 openchat">
+                                                <div class="border border-1 border-info rounded d-flex justify-content-around align-items-center p-1">
+                                                    <i class="fa-solid fa-user-doctor" style="color : #0DCAF0 !important; "></i>
+                                                    Provider
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                </td>
                                 <td>
                                     @if (m.Requestwisefiles.Count() != 0)
                                     {
@@ -95,6 +117,19 @@
             searching: false,
 
         });
+    });
+    $('.openchat').on('click', function () {
+        var sendtoaspid = $(this).data('id');
+        $.ajax({
+            url: '/Hubs/Home/OpenChatBox',
+            data: { sendtoaspid },
+            type: 'POST',
+            success: function (result) {
+                $('#PopUps').html(result);
+                var my = new bootstrap.Modal(document.getElementById('ModalToOpen'));
+                my.show();
+            }
+        })
     });
 
 

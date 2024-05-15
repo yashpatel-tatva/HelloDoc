@@ -11,6 +11,7 @@ namespace DataModels.AdminSideViewModels
         public string sendtoaspid { get; set; }
         public string sendtoname { get; set;}
 
+        public string thisaspid { get; set; }
         public string photo  { get; set;}
 
     }
