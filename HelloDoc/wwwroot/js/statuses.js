@@ -225,4 +225,20 @@ $('.openchat').on('click', function () {
         }
     })
 });
+$('.opengroupchat').on('click', function () {
+    var groupid = $(this).data('id');
+    $.ajax({
+        url: '/Hubs/Home/OpenGroupChatBox',
+        data: { groupid },
+        type: 'POST',
+        success: function (result) {
+            $('#PopUps').html(result);
+            var my = new bootstrap.Modal(document.getElementById('ModalToOpen'));
+            my.show();
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            Swal.fire(jqXHR.responseText);
+        }
+    })
+});
 

@@ -80,6 +80,12 @@
                                                     Provider
                                                 </div>
                                             </div>
+                                            <div data-id="@m.Requestid" data-name="group" style="color : #0DCAF0 ; " class="m-1 opengroupchat">
+                                                <div class="border border-1 border-info rounded d-flex justify-content-around align-items-center p-1">
+                                                    <i class="fa-solid fa-people-group"></i>
+                                                    Group
+                                                </div>
+                                            </div>
                                         }
                                     </div>
                                 </td>
@@ -123,6 +129,19 @@
         $.ajax({
             url: '/Hubs/Home/OpenChatBox',
             data: { sendtoaspid },
+            type: 'POST',
+            success: function (result) {
+                $('#PopUps').html(result);
+                var my = new bootstrap.Modal(document.getElementById('ModalToOpen'));
+                my.show();
+            }
+        })
+    });
+    $('.opengroupchat').on('click', function () {
+        var groupid = $(this).data('id');
+        $.ajax({
+            url: '/Hubs/Home/OpenGroupChatBox',
+            data: { groupid },
             type: 'POST',
             success: function (result) {
                 $('#PopUps').html(result);

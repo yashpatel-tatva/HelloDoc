@@ -3,7 +3,7 @@ using HelloDoc;
 
 namespace DataAccess.Repository
 {
-    public class RequestStatusLogRepository : Repository<RequestStatusLogRepository>, IRequestStatusLogRepository
+    public class RequestStatusLogRepository : Repository<Requeststatuslog>, IRequestStatusLogRepository
     {
         public RequestStatusLogRepository(HelloDocDbContext db) : base(db)
         {

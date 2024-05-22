@@ -39,7 +39,7 @@ builder.Services.AddScoped<ISchedulingRepository, SchedulingRepository>();
 builder.Services.AddScoped<IHealthProfessionalsRepository, HealthProfessionalsRepository>();
 builder.Services.AddScoped<IAspNetUserRolesRepository, AspNetUserRolesRepository>();
 builder.Services.AddScoped<IChatHistoryRepository, ChatHistoryRepository>();
-
+builder.Services.AddScoped<IGroupchatRepository, GroupchatRepository>();
 
 builder.Services.AddScoped<IAllRequestDataRepository, AllRequestDataRepository>();
 builder.Services.AddScoped<ISendEmailRepository, SendEmailRepository>();

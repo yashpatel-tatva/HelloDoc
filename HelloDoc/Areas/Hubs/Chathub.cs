@@ -15,13 +15,25 @@ namespace HelloDoc.Areas.Hubs
         private readonly IAspNetUserRolesRepository _aspnetRoles;
         private readonly IChatHistoryRepository _chatHistory;
         private readonly IAdminRepository _admin;
-        public ChatHub(IHttpContextAccessor httpContextAccessor, IAspNetUserRepository aspNetUserRepository, IAspNetUserRolesRepository aspNetUserRolesRepository, IChatHistoryRepository chatHistory, IAdminRepository adminRepository)
+        private readonly IRequestRepository _requestRepository;
+        private readonly IRequestStatusLogRepository _requestStatusLogRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IPhysicianRepository _hysicianRepository;
+        private readonly IGroupchatRepository _groupchatRepository;
+        private readonly HelloDocDbContext _db;
+        public ChatHub(IHttpContextAccessor httpContextAccessor, IAspNetUserRepository aspNetUserRepository, IAspNetUserRolesRepository aspNetUserRolesRepository, IChatHistoryRepository chatHistory, IAdminRepository adminRepository, IRequestRepository requestRepository, IRequestStatusLogRepository requestStatusLogRepository, IUserRepository userRepository, IPhysicianRepository hysicianRepository, IGroupchatRepository groupchatRepository, HelloDocDbContext db)
         {
             _contextAccessor = httpContextAccessor;
             _aspnetRoles = aspNetUserRolesRepository;
             _aspnet = aspNetUserRepository;
             _chatHistory = chatHistory;
             _admin = adminRepository;
+            _requestRepository = requestRepository;
+            _requestStatusLogRepository = requestStatusLogRepository;
+            _userRepository = userRepository;
+            _hysicianRepository = hysicianRepository;
+            _groupchatRepository = groupchatRepository;
+            _db = db;
         }
         public async Task SendMessage(string sendid, string msg)
         {
@@ -67,6 +79,51 @@ namespace HelloDoc.Areas.Hubs
             await Clients.Group(sendid).SendAsync("ReceiveMessage", fromname, fromid, msg, time, msgid);
         }
 
+        public async Task SendMessageAsGroup(string sendid, string msg)
+        {
+            var jwtservice = _contextAccessor.HttpContext.RequestServices.GetService<IJwtRepository>();
+            var request = _contextAccessor.HttpContext.Request;
+            var token = request.Cookies["jwt"];
+            jwtservice.ValidateToken(token, out JwtSecurityToken jwttoken);
+            var roleClaim = jwttoken.Claims.FirstOrDefault(x => x.Type == "AspNetId");
+            var aspid = roleClaim.Value;
+            var fromname = _aspnet.GetFirstOrDefault(x => x.Id == aspid).Username;
+            var fromid = aspid;
+            var client = Context.ConnectionId;
+            var time = DateTime.Now;
+            var statuslog = _requestStatusLogRepository.GetAll()
+                .Where(x => x.Requestid == int.Parse(sendid))
+               .Where(x => x.Transtophysicianid != null)
+               .GroupBy(x => x.Requestid)
+               .Select(g => g.OrderByDescending(x => x.Createddate).First())
+               .ToList();
+            var requests = _requestRepository.GetAll().ToList();
+            var adminid = statuslog.FirstOrDefault(x => x.Requestid == int.Parse(sendid)).Adminid;
+            var providerid = statuslog.FirstOrDefault(x => x.Requestid == int.Parse(sendid)).Transtophysicianid;
+            var userid = requests.FirstOrDefault(x => x.Requestid == int.Parse(sendid)).Userid;
+
+            var adminasp = _admin.GetFirstOrDefault(x => x.Adminid == adminid).Aspnetuserid;
+            var phyasp = _hysicianRepository.GetFirstOrDefault(x => x.Physicianid == providerid).Aspnetuserid;
+            var userasp = _userRepository.GetFirstOrDefault(x => x.Userid == userid).Aspnetuserid;
+
+            Groupchat ch = new Groupchat();
+            ch.Groupid = int.Parse(sendid);
+            ch.Adminasp = adminasp;
+            ch.Physicainasp = phyasp;
+            ch.Userasp = userasp;
+            ch.Senttime = DateTime.Now;
+            ch.Msg = msg;
+            ch.Sender = int.Parse(_aspnetRoles.GetFirstOrDefault(x => x.Userid == fromid).Roleid);
+            
+            _db.Groupchats.Add(ch);
+            _db.SaveChanges();
+
+            var msgid = -1;
+
+
+            await Clients.Group(sendid).SendAsync("ReceiveMessageInGroup", fromname, fromid, msg, time, msgid , sendid);
+        }
+
         public async Task MsgSeen(string fromthis)
         {
             var jwtservice = _contextAccessor.HttpContext.RequestServices.GetService<IJwtRepository>();
@@ -76,8 +133,9 @@ namespace HelloDoc.Areas.Hubs
             var roleClaim = jwttoken.Claims.FirstOrDefault(x => x.Type == "AspNetId");
             var aspid = roleClaim.Value;
             _chatHistory.MsgSeen(aspid, fromthis);
-            await Clients.Group(fromthis).SendAsync("MsgSeen" , fromthis , aspid);
+            await Clients.Group(fromthis).SendAsync("MsgSeen", fromthis, aspid);
         }
+
 
         public async Task MsgSent()
         {
@@ -85,15 +143,15 @@ namespace HelloDoc.Areas.Hubs
             var request = _contextAccessor.HttpContext.Request;
             var token = request.Cookies["jwt"];
             var aspid = "";
-            
+
             if (token != null)
             {
                 jwtservice.ValidateToken(token, out JwtSecurityToken jwttoken);
                 var roleClaim = jwttoken.Claims.FirstOrDefault(x => x.Type == "AspNetId");
-                 aspid = roleClaim.Value;
+                aspid = roleClaim.Value;
                 _chatHistory.MsgSent(aspid);
             }
-            await Clients.All.SendAsync("MsgSent" , aspid);
+            await Clients.All.SendAsync("MsgSent", aspid);
         }
 
 
@@ -105,6 +163,12 @@ namespace HelloDoc.Areas.Hubs
 
         public async Task AddToGroup(string groupName)
         {
+            var statuslog = _requestStatusLogRepository.GetAll()
+                .Where(x => x.Transtophysicianid != null)
+                .GroupBy(x => x.Requestid)
+                .Select(g => g.OrderByDescending(x => x.Createddate).First())
+                .ToList();
+            var requests = _requestRepository.GetAll().ToList();
             var jwtservice = _contextAccessor.HttpContext.RequestServices.GetService<IJwtRepository>();
             var request = _contextAccessor.HttpContext.Request;
             var token = request.Cookies["jwt"];
@@ -120,6 +184,25 @@ namespace HelloDoc.Areas.Hubs
                 if (role == 1)
                 {
                     await Groups.AddToGroupAsync(Context.ConnectionId, "AdminChatGroup");
+                    foreach (var status in statuslog.Where(x => x.Adminid == _admin.GetFirstOrDefault(x => x.Aspnetuserid == groupName).Adminid))
+                    {
+                        await Groups.AddToGroupAsync(Context.ConnectionId, status.Requestid.ToString());
+                    }
+                }
+                if (role == 2)
+                {
+                    foreach (var status in statuslog.Where(x => x.Transtophysicianid == _hysicianRepository.GetFirstOrDefault(x => x.Aspnetuserid == groupName).Physicianid))
+                    {
+                        await Groups.AddToGroupAsync(Context.ConnectionId, status.Requestid.ToString());
+                    }
+                }
+                if (role == 3)
+                {
+                    var userid = _userRepository.GetFirstOrDefault(x => x.Aspnetuserid == groupName);
+                    foreach (var req in requests)
+                    {
+                        await Groups.AddToGroupAsync(Context.ConnectionId, req.Requestid.ToString());
+                    }
                 }
                 await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
                 await Clients.Group(groupName).SendAsync("Send", $"{Context.ConnectionId} has joined the group {groupName}.");

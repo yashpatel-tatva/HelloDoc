@@ -16,6 +16,7 @@ connection.start().then(function () {
 
 var sendtoaspid = "";
 connection.on("ReceiveMessage", function (fromname, fromid, msg, time, msgid) {
+    console.log(fromid)
     sendtoaspid = fromid;
     var printtime = new Date(time);
     var time = printtime.getHours() + ":" + printtime.getMinutes();
@@ -41,6 +42,21 @@ connection.on("ReceiveMessage", function (fromname, fromid, msg, time, msgid) {
     else {
         showNotification(msg + " from " + fromname);
     }
+
+});
+
+connection.on("ReceiveMessageInGroup", function (fromname, fromid, msg, time, msgid, sendid) {
+var thisaspid = $('#thisaspid').val();
+    sendtoaspid = sendid;
+    console.log(fromid , thisaspid , fromname)
+    var printtime = new Date(time);
+    var time = printtime.getHours() + ":" + printtime.getMinutes();
+    var thisid = $('#sendtoaspid').val();
+    if (thisid == sendid && fromid != thisaspid) {
+        $('.printmsg').append('<div class="spanofrec"><div class="spanofmsg"><p class="mb-0 text-success">'+ fromname + '</p><span>' + msg + '</span><span class="spanoftime">' + time + '</span></div></div>')
+        $('.printmsg').scrollTop($('.printmsg')[0].scrollHeight);
+    }
+        
 
 });
 

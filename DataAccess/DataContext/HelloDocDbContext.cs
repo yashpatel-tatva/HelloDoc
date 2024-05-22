@@ -41,6 +41,8 @@ public partial class HelloDocDbContext : DbContext
 
     public virtual DbSet<Encounter> Encounters { get; set; }
 
+    public virtual DbSet<Groupchat> Groupchats { get; set; }
+
     public virtual DbSet<Healthprofessional> Healthprofessionals { get; set; }
 
     public virtual DbSet<Healthprofessionaltype> Healthprofessionaltypes { get; set; }
@@ -235,6 +237,11 @@ public partial class HelloDocDbContext : DbContext
             entity.HasOne(d => d.Request).WithMany(p => p.Encounters)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_encounter_request");
+        });
+
+        modelBuilder.Entity<Groupchat>(entity =>
+        {
+            entity.HasKey(e => e.Msgid).HasName("groupchat_pkey");
         });
 
         modelBuilder.Entity<Healthprofessional>(entity =>

@@ -2,7 +2,7 @@
 
 namespace DataAccess.Repository.IRepository
 {
-    public interface IRequestStatusLogRepository : IRepository<RequestStatusLogRepository>
+    public interface IRequestStatusLogRepository : IRepository<Requeststatuslog>
     {
         void Add(Requeststatuslog requeststatuslog);
 
