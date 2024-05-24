@@ -1,5 +1,7 @@
 ﻿using DataAccess.Repository.IRepository;
 using HelloDoc;
+using Microsoft.EntityFrameworkCore;
+using NuGet.Protocol.Plugins;
 
 namespace DataAccess.Repository
 {
@@ -19,27 +21,36 @@ namespace DataAccess.Repository
 
         public void MsgSeen(string a, string fromthis)
         {
-            var unread = _db.Chathistories.Where(x => x.Reciever == a && x.Isread == false && x.Sender == fromthis).ToList();
-            foreach (var item in unread)
-            {
-                item.Isread = true;
-                item.Readtime = DateTime.Now;
-                _db.Chathistories.Update(item);
-                _db.SaveChanges();
-            }
-            MsgSent(a);
+            _db.Database.ExecuteSqlRawAsync("CALL public.msgseen(@p0, @p1)", fromthis, a);
+
+
+
+            //var unread = _db.Chathistories.Where(x => x.Reciever == a && x.Isread == false && x.Sender == fromthis).ToList();
+            //foreach (var item in unread)
+            //{
+            //    item.Isread = true;
+            //    item.Readtime = DateTime.Now;
+            //    _db.Chathistories.Update(item);
+            //    _db.SaveChanges();
+            //}
+            //MsgSent(a);
         }
 
 
         public void MsgSent(string aspid)
         {
+            //_db.Database.ExecuteSqlRawAsync("CALL public.msgsent(@p0)", aspid);
+
             var unread = _db.Chathistories.Where(x => x.Reciever == aspid && x.Isread == false).ToList();
             foreach (var item in unread)
             {
-                item.Issent = true;
-                item.Recievetime = DateTime.Now;
-                _db.Chathistories.Update(item);
-                _db.SaveChanges();
+                if (item.Issent == false)
+                {
+                    item.Issent = true;
+                    item.Recievetime = DateTime.Now;
+                    _db.Chathistories.Update(item);
+                    _db.SaveChanges();
+                }
             }
         }
     }
