@@ -4,12 +4,10 @@ using DataModels.AdminSideViewModels;
 using HelloDoc;
 using HelloDoc.Areas.PatientArea.ViewModels;
 using Microsoft.AspNetCore.Http;
-using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using System.Globalization;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace DataAccess.ServiceRepository
 {

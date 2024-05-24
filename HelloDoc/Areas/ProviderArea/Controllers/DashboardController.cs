@@ -4,7 +4,6 @@ using DataAccess.ServiceRepository.IServiceRepository;
 using DataModels.AdminSideViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
-using Microsoft.EntityFrameworkCore;
 using System.Collections;
 
 namespace HelloDoc.Areas.ProviderArea.Controllers

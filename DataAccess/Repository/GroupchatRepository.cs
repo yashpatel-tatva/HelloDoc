@@ -1,10 +1,5 @@
 ﻿using DataAccess.Repository.IRepository;
 using HelloDoc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.Repository
 {
@@ -24,7 +19,7 @@ namespace DataAccess.Repository
 
         public List<Groupchat> HistoryOfthisgroup(string opp)
         {
-            var gro = _db.Groupchats.Where(x=>x.Groupid.ToString() == opp).ToList();
+            var gro = _db.Groupchats.Where(x => x.Groupid.ToString() == opp).ToList();
             return gro;
         }
     }

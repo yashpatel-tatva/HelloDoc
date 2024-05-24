@@ -162,7 +162,7 @@ namespace DataAccess.Repository
             admin.Roleid = int.Parse(model.Role);
             _db.Admins.Add(admin);
             _db.SaveChanges();
-            foreach(var r in model.selectedregion)
+            foreach (var r in model.selectedregion)
             {
                 Adminregion adminregion = new Adminregion();
                 adminregion.Adminid = admin.Adminid;

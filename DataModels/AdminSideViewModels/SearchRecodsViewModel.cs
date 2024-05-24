@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DataModels.AdminSideViewModels
+﻿namespace DataModels.AdminSideViewModels
 {
     public class SearchRecodsViewModel
     {
@@ -18,9 +12,9 @@ namespace DataModels.AdminSideViewModels
         public string Address { get; set; }
         public string Zip { get; set; }
         public string Status { get; set; }
-        public string Phyicianname { get; set; }    
+        public string Phyicianname { get; set; }
         public string PhysicianNote { get; set; }
-        public string CancelledByPhyNote { get; set; }  
+        public string CancelledByPhyNote { get; set; }
         public string AdminNote { get; set; }
         public string PatientNote { get; set; }
     }

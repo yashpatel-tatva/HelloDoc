@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using System.Collections;
-using System.Drawing;
 using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO.Compression;
@@ -593,7 +592,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
         {
             var url = Url.Action("EmaillinkToOpenPatientRequest", "RequestForms", new { Area = "PatientArea", firstname = firstname, lastname = lastname, email = email, mobile = mobile }, Request.Scheme, Request.Host.Value);
             _sendemail.Sendemail(email, "Submit Your Request", url);
-            _sendemail.Sendsms(mobile, "Submit Your Request", url , 0);
+            _sendemail.Sendsms(mobile, "Submit Your Request", url, 0);
         }
         //Pop-up ends
 
@@ -839,7 +838,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
             {
                 return PartialView("_SelectCallType", request);
             }
-            if (request.Status == 6 && encounter == null && role== "Physician")
+            if (request.Status == 6 && encounter == null && role == "Physician")
             {
                 EncounterFormViewModel model = new EncounterFormViewModel();
                 model.Firstname = request.Requestclients.First().Firstname;
@@ -892,7 +891,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
             }
             else if ((request.Status == 6 || request.Status == 7 || request.Status == 8 || request.Status == 3))
             {
-                return PartialView("_DownLoadEncounter", new { requestid = request.Requestid, isencounter = (encounter != null)  , role = role });
+                return PartialView("_DownLoadEncounter", new { requestid = request.Requestid, isencounter = (encounter != null), role = role });
             }
             else
             {
@@ -1092,33 +1091,33 @@ namespace HelloDoc.Areas.AdminArea.DataController
             model.Mobile = request.Requestclients.FirstOrDefault().Phonenumber;
             model.Email = request.Requestclients.FirstOrDefault().Email;
             model.Location = request.Requestclients.FirstOrDefault().Address;
-            if(encounter != null)
+            if (encounter != null)
             {
-            model.HistoryOfIllness = encounter.HistoryIllness;
-            model.MedicalHistory = encounter.MedicalHistory;
-            model.Medication = encounter.Medications;
-            model.Allergies = encounter.Allergies;
-            model.Temp = encounter.Temp;
-            model.HR = encounter.Hr;
-            model.RR = encounter.Rr;
-            model.BPs = encounter.BpS;
-            model.BPd = encounter.BpD;
-            model.O2 = encounter.O2;
-            model.Pain = encounter.Pain;
-            model.Heent = encounter.Heent;
-            model.CV = encounter.Cv;
-            model.Chest = encounter.Chest;
-            model.ABD = encounter.Abd;
-            model.Extr = encounter.Extr;
-            model.Skin = encounter.Skin;
-            model.Neuro = encounter.Neuro;
-            model.Other = encounter.Other;
-            model.Diagnosis = encounter.Diagnosis;
-            model.TreatmentPlan = encounter.TreatmentPlan;
-            model.MedicationsDispended = encounter.MedicationDispensed;
-            model.Procedure = encounter.Procedures;
-            model.Followup = encounter.FollowUp;
-            model.isFinaled = encounter.IsFinalized[0];
+                model.HistoryOfIllness = encounter.HistoryIllness;
+                model.MedicalHistory = encounter.MedicalHistory;
+                model.Medication = encounter.Medications;
+                model.Allergies = encounter.Allergies;
+                model.Temp = encounter.Temp;
+                model.HR = encounter.Hr;
+                model.RR = encounter.Rr;
+                model.BPs = encounter.BpS;
+                model.BPd = encounter.BpD;
+                model.O2 = encounter.O2;
+                model.Pain = encounter.Pain;
+                model.Heent = encounter.Heent;
+                model.CV = encounter.Cv;
+                model.Chest = encounter.Chest;
+                model.ABD = encounter.Abd;
+                model.Extr = encounter.Extr;
+                model.Skin = encounter.Skin;
+                model.Neuro = encounter.Neuro;
+                model.Other = encounter.Other;
+                model.Diagnosis = encounter.Diagnosis;
+                model.TreatmentPlan = encounter.TreatmentPlan;
+                model.MedicationsDispended = encounter.MedicationDispensed;
+                model.Procedure = encounter.Procedures;
+                model.Followup = encounter.FollowUp;
+                model.isFinaled = encounter.IsFinalized[0];
             }
             model.role = "Admin";
             return PartialView("Encounter", model);

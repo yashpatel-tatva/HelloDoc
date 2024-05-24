@@ -1,9 +1,8 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using DataAccess.Repository.IRepository;
+﻿using DataAccess.Repository.IRepository;
 using DataAccess.ServiceRepository.IServiceRepository;
 using DataModels.AdminSideViewModels;
 using Microsoft.AspNetCore.Mvc;
-using NuGet.Protocol.Plugins;
+using System.IdentityModel.Tokens.Jwt;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 

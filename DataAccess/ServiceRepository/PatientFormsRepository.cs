@@ -16,7 +16,7 @@ namespace DataAccess.ServiceRepository
 
         public bool AddNewUserAndAspUser(PatientRequestViewModel model)
         {
-            var user = _context.Users.FirstOrDefault(x=>x.Email == model.Email);
+            var user = _context.Users.FirstOrDefault(x => x.Email == model.Email);
             if (user != null)
             {
                 return false;

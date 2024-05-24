@@ -1,10 +1,4 @@
 ﻿using HelloDoc;
-using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataModels.AdminSideViewModels
 {
@@ -34,7 +28,7 @@ namespace DataModels.AdminSideViewModels
         public bool IsAdmin { get; set; }
         public List<ReimbursementViewModel> Reimbursements { get; set; }
         public decimal bonus { get; set; }
-        public string Description { get;set; }
+        public string Description { get; set; }
     }
 
     public class BiWeekViewModel
@@ -97,7 +91,7 @@ namespace DataModels.AdminSideViewModels
         public DateTime Firstday { get; set; }
         public List<TimeSheetOnlyView> TimeSheets { get; set; }
         public List<ReimbursementOnlyView> Reimbursements { get; set; }
-   
+
 
 
     }

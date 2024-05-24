@@ -1,10 +1,7 @@
-﻿using System;
+﻿using DataAccess.Repository.IRepository;
 using DataAccess.ServiceRepository.IServiceRepository;
-using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.SignalR;
-using DataAccess.Repository.IRepository;
-using NuGet.Protocol.Plugins;
-using NPOI.SS.Formula.Functions;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace HelloDoc.Areas.Hubs
 {
@@ -114,14 +111,14 @@ namespace HelloDoc.Areas.Hubs
             ch.Senttime = DateTime.Now;
             ch.Msg = msg;
             ch.Sender = int.Parse(_aspnetRoles.GetFirstOrDefault(x => x.Userid == fromid).Roleid);
-            
+
             _db.Groupchats.Add(ch);
             _db.SaveChanges();
 
             var msgid = -1;
 
             //await Groups.RemoveFromGroupAsync(Context.ConnectionId, sendid);    
-            await Clients.Group(sendid).SendAsync("ReceiveMessageInGroup", fromname, fromid, msg, time, msgid , sendid);
+            await Clients.Group(sendid).SendAsync("ReceiveMessageInGroup", fromname, fromid, msg, time, msgid, sendid);
             //await Groups.AddToGroupAsync(Context.ConnectionId, sendid);
         }
 

@@ -39,7 +39,7 @@ namespace DataAccess.ServiceRepository
             }
 
             var roleClaim = jwttoken.Claims.FirstOrDefault(x => x.Type == "Role");
-            var aspnetid  = jwttoken.Claims.FirstOrDefault(x => x.Type == "AspNetId").Value;
+            var aspnetid = jwttoken.Claims.FirstOrDefault(x => x.Type == "AspNetId").Value;
 
             if (roleClaim == null)
             {
@@ -49,18 +49,18 @@ namespace DataAccess.ServiceRepository
 
             if (string.IsNullOrEmpty(_role) || !_role.Contains(roleClaim.Value))
             {
-                context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Home", action = "AdminLogin" , area = "AdminArea" }));
+                context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Home", action = "AdminLogin", area = "AdminArea" }));
                 return;
             }
 
-            if(roleClaim.Value == "Physician")
+            if (roleClaim.Value == "Physician")
             {
                 var physician = physicianservice.GetFirstOrDefault(x => x.Aspnetuserid == aspnetid);
                 physicianservice.SetSession(physician);
             }
-            if(roleClaim.Value== "Admin")
+            if (roleClaim.Value == "Admin")
             {
-                var admin = adminservice.GetFirstOrDefault(x=>x.Aspnetuserid== aspnetid); 
+                var admin = adminservice.GetFirstOrDefault(x => x.Aspnetuserid == aspnetid);
                 adminservice.SetSession(admin);
             }
 

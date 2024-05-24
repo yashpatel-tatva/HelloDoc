@@ -2,10 +2,6 @@
 using DataAccess.ServiceRepository.IServiceRepository;
 using DataModels.AdminSideViewModels;
 using HelloDoc;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.VisualBasic;
-using static iTextSharp.text.pdf.AcroFields;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace DataAccess.ServiceRepository
 {
@@ -167,7 +163,7 @@ namespace DataAccess.ServiceRepository
             List<ReimbursementViewModel> reimbursements = new List<ReimbursementViewModel>();
             for (DateTime i = biweek.Firstday.Value; i <= biweek.Lastday; i = i.AddDays(1))
             {
-                var thisreimbursement = _db.Reimbursements.Where(x=>x.Isdeleted==false).FirstOrDefault(x => x.Physicianid == physicianid && x.Date == i);
+                var thisreimbursement = _db.Reimbursements.Where(x => x.Isdeleted == false).FirstOrDefault(x => x.Physicianid == physicianid && x.Date == i);
                 if (thisreimbursement == null)
                 {
                     thisreimbursement = new Reimbursement();
@@ -224,7 +220,7 @@ namespace DataAccess.ServiceRepository
 
         public string DownloadReimbursementBill(int id)
         {
-            var bill = _db.Reimbursements.Where(x => x.Isdeleted == false).FirstOrDefault(x=>x.Id == id).Bill;
+            var bill = _db.Reimbursements.Where(x => x.Isdeleted == false).FirstOrDefault(x => x.Id == id).Bill;
             return bill;
         }
 
@@ -236,7 +232,7 @@ namespace DataAccess.ServiceRepository
 
         public void DeleteReimbursement(int id)
         {
-            var re = _db.Reimbursements.Where(x => x.Isdeleted == false).FirstOrDefault(x=>x.Id==id);
+            var re = _db.Reimbursements.Where(x => x.Isdeleted == false).FirstOrDefault(x => x.Id == id);
             re.Isdeleted = true;
             _db.Reimbursements.Update(re); _db.SaveChanges();
         }
@@ -251,7 +247,7 @@ namespace DataAccess.ServiceRepository
 
         public void Editbonus(int id, decimal bonus)
         {
-           var d = _db.Biweektimes.FirstOrDefault(x=>x.Biweekid == id);
+            var d = _db.Biweektimes.FirstOrDefault(x => x.Biweekid == id);
             d.Bonus = bonus;
             _db.Biweektimes.Update(d); _db.SaveChanges();
         }

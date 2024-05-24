@@ -31,14 +31,15 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
         {
             List<Physician> physician = _physician.GetAll().AsEnumerable().Where(x => x.Isdeleted == null || x.Isdeleted[0] == false).ToList();
             List<LocationData> result = new List<LocationData>();
-            
-            var lastLocations = _db.Physicianlocations.Include(x => x.Physician).AsEnumerable().Where(x => x.Physician.Isdeleted == null || x.Physician.Isdeleted[0]==false)
+
+            var lastLocations = _db.Physicianlocations.Include(x => x.Physician).AsEnumerable().Where(x => x.Physician.Isdeleted == null || x.Physician.Isdeleted[0] == false)
                                  .GroupBy(l => l.Physicianid)
                                  .Select(g => g.OrderByDescending(l => l.Createddate).First())
                                  .ToList();
             foreach (var phy in lastLocations)
             {
-                result.Add(new LocationData() {
+                result.Add(new LocationData()
+                {
                     Physicianid = phy.Physicianid,
                     Name = phy.Physician.Firstname + " " + phy.Physician.Lastname,
                     Photo = phy.Physician.Photo,

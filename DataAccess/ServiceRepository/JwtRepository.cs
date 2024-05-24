@@ -1,5 +1,4 @@
 ﻿using DataAccess.ServiceRepository.IServiceRepository;
-using DataAccess.ServiceRepository.IServiceRepository;
 using DataModels.CommonViewModel;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;

@@ -1,9 +1,8 @@
-﻿using System;
-using System.IdentityModel.Tokens.Jwt;
-using DataAccess.ServiceRepository.IServiceRepository;
+﻿using DataAccess.ServiceRepository.IServiceRepository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace DataAccess.ServiceRepository
 {
@@ -22,7 +21,7 @@ namespace DataAccess.ServiceRepository
                 var jwtservice = httpContext.HttpContext.RequestServices.GetService<IJwtRepository>();
                 var request = httpContext.HttpContext.Request;
                 var token = request.Cookies["jwt"];
-                if(token == null)
+                if (token == null)
                 {
                     return null;
                 }
@@ -31,7 +30,8 @@ namespace DataAccess.ServiceRepository
                 var id = roleClaim.Value;
                 return id;
             }
-            catch {
+            catch
+            {
                 return null;
             }
 

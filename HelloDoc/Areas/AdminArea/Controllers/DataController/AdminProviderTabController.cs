@@ -1,17 +1,13 @@
 ﻿using DataAccess.Repository.IRepository;
-using DataAccess.Repository.IRepository;
 using DataAccess.ServiceRepository;
 using DataAccess.ServiceRepository.IServiceRepository;
 using DataModels.AdminSideViewModels;
-using iTextSharp.text;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using System.Collections;
-using System.Drawing;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text.RegularExpressions;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace HelloDoc.Areas.AdminArea.Controllers.DataController
 {

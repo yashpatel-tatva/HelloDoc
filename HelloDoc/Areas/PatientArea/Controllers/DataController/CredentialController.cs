@@ -1,6 +1,5 @@
 ﻿
 using DataAccess.Repository.IRepository;
-using DataAccess.ServiceRepository;
 using DataAccess.ServiceRepository.IServiceRepository;
 using DataModels.CommonViewModel;
 using HelloDoc.Areas.PatientArea.ViewModels;
@@ -17,7 +16,7 @@ namespace HelloDoc.Areas.PatientArea.DataController
         private readonly IAspNetUserRepository _aspnetuser;
         private readonly IJwtRepository _jwtRepository;
 
-        public CredentialController(HelloDocDbContext context, ISendEmailRepository sendEmailRepository, IPatientFormsRepository patientFormsRepository , IAspNetUserRepository asp, IJwtRepository jwtRepository)
+        public CredentialController(HelloDocDbContext context, ISendEmailRepository sendEmailRepository, IPatientFormsRepository patientFormsRepository, IAspNetUserRepository asp, IJwtRepository jwtRepository)
         {
             _context = context;
             _sendemail = sendEmailRepository;

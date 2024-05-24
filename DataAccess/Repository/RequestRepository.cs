@@ -50,7 +50,7 @@ namespace DataAccess.Repository
 
         public int CountbyStatus(int status)
         {
-            return _db.Requests.Where(r => r.Status == status).AsEnumerable().Where(x => x.Isdeleted == null || x.Isdeleted[0]==false).Count();
+            return _db.Requests.Where(r => r.Status == status).AsEnumerable().Where(x => x.Isdeleted == null || x.Isdeleted[0] == false).Count();
         }
 
 

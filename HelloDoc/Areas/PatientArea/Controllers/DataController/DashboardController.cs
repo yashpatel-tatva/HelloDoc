@@ -15,7 +15,7 @@ namespace HelloDoc.Areas.PatientArea.DataController
         public readonly HelloDocDbContext _context;
         private readonly IAdminRepository _admin;
         private readonly IAddRequestRepository _addrequest;
-        public DashboardController(HelloDocDbContext context, IAdminRepository adminRepository , IAddRequestRepository addRequestRepository)
+        public DashboardController(HelloDocDbContext context, IAdminRepository adminRepository, IAddRequestRepository addRequestRepository)
         {
             _context = context;
             _admin = adminRepository;
@@ -39,7 +39,7 @@ namespace HelloDoc.Areas.PatientArea.DataController
                 DateTime date = new DateTime(Convert.ToInt32(user.Intyear), DateTime.ParseExact(user.Strmonth, "MMMM", CultureInfo.InvariantCulture).Month, Convert.ToInt32(user.Intdate));
                 patientDashboard.birthdate = date;
 
-                var request = _context.Requests.Include(x=>x.User).Include(x=>x.Physician).Where(x=>x.Userid == id).ToList();
+                var request = _context.Requests.Include(x => x.User).Include(x => x.Physician).Where(x => x.Userid == id).ToList();
                 patientDashboard.Requests = request.ToList();
 
                 List<Requestwisefile> files;

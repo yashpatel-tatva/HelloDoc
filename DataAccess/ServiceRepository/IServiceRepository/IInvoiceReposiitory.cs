@@ -1,10 +1,5 @@
 ﻿using DataModels.AdminSideViewModels;
 using HelloDoc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.ServiceRepository.IServiceRepository
 {
@@ -14,7 +9,7 @@ namespace DataAccess.ServiceRepository.IServiceRepository
         List<TimeSheetViewModel> timeSheetViewModels(int biweekid);
         List<ReimbursementViewModel> reimbursementViewModels(int biweekid);
 
-        Timesheet GetTimesheet(int physicianid , DateTime date);
+        Timesheet GetTimesheet(int physicianid, DateTime date);
         Reimbursement GetReimbursement(int physicianid, DateTime date);
 
         BiWeekViewModel BiWeekData(int physicianid, DateTime date);

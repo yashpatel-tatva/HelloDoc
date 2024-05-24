@@ -133,7 +133,8 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
 
             // If valid, return true
             return Json(true);
-        }[Area("AdminArea")]
+        }
+        [Area("AdminArea")]
         [AcceptVerbs("GET", "POST")]
         public IActionResult VerifyRegion(string region)
         {
@@ -144,7 +145,8 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
 
             // If valid, return true
             return Json(true);
-        }[Area("AdminArea")]
+        }
+        [Area("AdminArea")]
         [AcceptVerbs("GET", "POST")]
         public IActionResult VerifyRegionid(string regionid)
         {
@@ -167,7 +169,8 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
 
             // If valid, return true
             return Json(true);
-        } [Area("AdminArea")]
+        }
+        [Area("AdminArea")]
         [AcceptVerbs("GET", "POST")]
         public IActionResult VerifyVendor(string vendorid)
         {
@@ -178,7 +181,8 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
 
             // If valid, return true
             return Json(true);
-        } [Area("AdminArea")]
+        }
+        [Area("AdminArea")]
         [AcceptVerbs("GET", "POST")]
         public IActionResult VerifyProfession(string professionid)
         {

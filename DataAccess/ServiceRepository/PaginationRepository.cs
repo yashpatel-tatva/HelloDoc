@@ -1,7 +1,6 @@
 ﻿using DataAccess.Repository.IRepository;
 using DataAccess.ServiceRepository.IServiceRepository;
 using HelloDoc;
-using NPOI.SS.Formula.Functions;
 using System.Globalization;
 
 namespace DataAccess.ServiceRepository
@@ -76,7 +75,7 @@ namespace DataAccess.ServiceRepository
 
         public List<Request> requestsofProvider(string state, int currentpage, int pagesize, int requesttype, string search, int region, int providerid)
         {
-            var request = new List<Request>(); 
+            var request = new List<Request>();
             if (state == "New")
             {
                 request = _request.GetRequestsbyState("New").Where(x => (x.Physicianid == providerid && x.Accepteddate == null)).ToList();

@@ -1,7 +1,4 @@
-﻿using System.Security.Cryptography;
-using System.Text;
-
-namespace DataAccess.ServiceRepository
+﻿namespace DataAccess.ServiceRepository
 {
     public static class EncryptionRepository
     {

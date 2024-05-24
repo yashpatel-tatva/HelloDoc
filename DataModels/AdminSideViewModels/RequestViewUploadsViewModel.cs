@@ -22,9 +22,9 @@ namespace DataModels.AdminSideViewModels
         public string ProviderNote { get; set; }
         public DateTime PatientDOB { get; set; }
 
-        [EmailAddress(ErrorMessage = "Invalid Email Address")] 
+        [EmailAddress(ErrorMessage = "Invalid Email Address")]
         public string PatientEmail { get; set; }
-        [RegularExpression(@"^(\+\d{1,3}[- ]?)?\d{10}$", ErrorMessage = "Mobile number format is not valid")] 
+        [RegularExpression(@"^(\+\d{1,3}[- ]?)?\d{10}$", ErrorMessage = "Mobile number format is not valid")]
         public string PatientMobile { get; set; }
         public string role { get; set; }
     }

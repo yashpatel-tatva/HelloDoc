@@ -1,5 +1,4 @@
-﻿using DataAccess.Repository;
-using DataAccess.Repository.IRepository;
+﻿using DataAccess.Repository.IRepository;
 using DataAccess.ServiceRepository.IServiceRepository;
 using DataModels.CommonViewModel;
 using Microsoft.AspNetCore.Mvc;
@@ -38,7 +37,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
             var alluser = _aspnetuser.GetAll().Where(x => x.Email == user.Email && x.Passwordhash == user.Passwordhash).Select(x => x.Id);
             Admin admin = null;
             Physician physician = null;
-            User patient =null;
+            User patient = null;
             Aspnetuser correct = null;
             foreach (var u in alluser)
             {
@@ -63,7 +62,7 @@ namespace HelloDoc.Areas.AdminArea.DataController
             {
                 if (admin != null && physician != null)
                 {
-                    return RedirectToAction("SelectRole", "Home" , new { email =  user.Email , password =  user.Passwordhash });
+                    return RedirectToAction("SelectRole", "Home", new { email = user.Email, password = user.Passwordhash });
                 }
                 else if (admin != null && physician == null)
                 {

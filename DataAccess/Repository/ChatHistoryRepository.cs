@@ -1,11 +1,5 @@
 ﻿using DataAccess.Repository.IRepository;
 using HelloDoc;
-using NuGet.Protocol.Plugins;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.Repository
 {
@@ -16,7 +10,7 @@ namespace DataAccess.Repository
             _db = db;
         }
 
-       
+
         public List<Chathistory> HistoryOfthisTwo(string sender, string receiver)
         {
             var hist = _db.Chathistories.Where(x => (x.Sender == sender && x.Reciever == receiver) || (x.Sender == receiver && x.Reciever == sender)).ToList();
@@ -36,7 +30,7 @@ namespace DataAccess.Repository
             MsgSent(a);
         }
 
-      
+
         public void MsgSent(string aspid)
         {
             var unread = _db.Chathistories.Where(x => x.Reciever == aspid && x.Isread == false).ToList();

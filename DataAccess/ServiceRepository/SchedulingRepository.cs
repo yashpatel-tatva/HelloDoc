@@ -3,7 +3,6 @@ using DataAccess.ServiceRepository.IServiceRepository;
 using DataModels.AdminSideViewModels;
 using HelloDoc;
 using Microsoft.CodeAnalysis;
-using System.Drawing;
 
 namespace DataAccess.ServiceRepository
 {

@@ -168,7 +168,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
                     var region = _db.Adminregions.Where(x => x.Adminid == thisuser.Adminid).Select(x => x.Regionid).ToList();
                     //try
                     //{
-                        model.Openrequest = _db.Requests.Include(x => x.User).Where(x => x.Status >= 1 && x.Status <= 9).AsEnumerable().Where(x => x.Isdeleted == null || x.Isdeleted[0] == false).Where(x => region.Contains((int)x.User.Regionid)).Count();
+                    model.Openrequest = _db.Requests.Include(x => x.User).Where(x => x.Status >= 1 && x.Status <= 9).AsEnumerable().Where(x => x.Isdeleted == null || x.Isdeleted[0] == false).Where(x => region.Contains((int)x.User.Regionid)).Count();
                     //}
                     //catch
                     //{

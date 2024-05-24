@@ -9,7 +9,7 @@ namespace DataAccess.Repository.IRepository
         void Save();
 
         Request GetById(int id);
-        
+
         int Countbystate(string state);
         int CountbyStatus(int status);
         List<Request> GetRequestsbyState(string state);

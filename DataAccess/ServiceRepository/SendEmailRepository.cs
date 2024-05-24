@@ -109,7 +109,8 @@ namespace DataAccess.ServiceRepository
         public void Sendsms(string phone, string subject, string message, int p)
         {
             Smslog smslog = new Smslog();
-            if (p != 0) {
+            if (p != 0)
+            {
                 smslog.Action = p;
             }
             smslog.Mobilenumber = phone;
@@ -118,7 +119,7 @@ namespace DataAccess.ServiceRepository
             smslog.Smstemplate = message;
             if (_admin.GetSessionAdminId() != -1)
             {
-            smslog.Roleid = 1;
+                smslog.Roleid = 1;
                 smslog.Adminid = _admin.GetSessionAdminId();
             }
             if (_physician.GetSessionPhysicianId() != -1)
@@ -127,7 +128,7 @@ namespace DataAccess.ServiceRepository
 
                 smslog.Physicianid = _physician.GetSessionPhysicianId();
             }
-                BitArray fortrue = new BitArray(1);
+            BitArray fortrue = new BitArray(1);
             fortrue[0] = true;
             smslog.Issmssent = fortrue;
             smslog.Senttries = 1;

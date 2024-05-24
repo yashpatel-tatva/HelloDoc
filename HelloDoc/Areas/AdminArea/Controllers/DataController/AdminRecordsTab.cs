@@ -2,16 +2,6 @@
 using DataAccess.ServiceRepository;
 using DataModels.AdminSideViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Localization;
-using NPOI.SS.Formula;
-using NPOI.SS.Formula.Functions;
-using Org.BouncyCastle.Utilities.Encoders;
-using System;
-using System.Buffers.Text;
-using System.Configuration.Provider;
-using System.Reflection;
-using System.Security.Policy;
-using System.Web;
 
 namespace HelloDoc.Areas.AdminArea.Controllers.DataController
 {
@@ -327,7 +317,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
                 }
                 else
                 {
-                    var phy = _db.Physicians.FirstOrDefault(x=>x.Physicianid==log.Action);
+                    var phy = _db.Physicians.FirstOrDefault(x => x.Physicianid == log.Action);
                     username = phy.Firstname + " " + phy.Lastname;
                 }
                 em.Recipient = username;
@@ -349,7 +339,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
                 model.Add(em);
             }
             if (rname != null)
-                model = model.Where(x=>x.Recipient.ToLower().Replace(" ","").Contains(rname)).ToList();
+                model = model.Where(x => x.Recipient.ToLower().Replace(" ", "").Contains(rname)).ToList();
             model = model.Skip((currentpage - 1) * pagesize).Take(pagesize).ToList();
             return PartialView("_SmsLogs", model);
         }
@@ -408,7 +398,7 @@ namespace HelloDoc.Areas.AdminArea.Controllers.DataController
             foreach (var log in smslogs)
             {
                 EmailSMSLogsViewModel em = new EmailSMSLogsViewModel();
-               string username = "";
+                string username = "";
                 string url = log.Smstemplate;
                 if (log.Action == null)
                 {

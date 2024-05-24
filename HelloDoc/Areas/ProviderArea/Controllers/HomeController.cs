@@ -1,7 +1,6 @@
 ﻿using DataAccess.Repository.IRepository;
 using DataAccess.ServiceRepository;
 using Microsoft.AspNetCore.Mvc;
-using NPOI.SS.Formula.Functions;
 
 namespace HelloDoc.Areas.ProviderArea.Controllers
 {
@@ -10,7 +9,7 @@ namespace HelloDoc.Areas.ProviderArea.Controllers
         private readonly IPhysicianRepository _physician;
         public HomeController(IPhysicianRepository physicianRepository)
         {
-               _physician = physicianRepository;
+            _physician = physicianRepository;
         }
         [AuthorizationRepository("Physician")]
         [Area("ProviderArea")]

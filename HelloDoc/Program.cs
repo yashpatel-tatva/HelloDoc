@@ -52,7 +52,7 @@ builder.Services.AddScoped<IPatientFormsRepository, PatientFormsRepository>();
 builder.Services.AddScoped<IPaginationRepository, PaginationRepository>();
 builder.Services.AddScoped<IProviderMenuRepository, ProviderMenuRepository>();
 builder.Services.AddScoped<IAddRequestRepository, AddRequestRepository>();
-builder.Services.AddScoped<IInvoiceReposiitory , InvoiceRepository>();
+builder.Services.AddScoped<IInvoiceReposiitory, InvoiceRepository>();
 
 var app = builder.Build();
 
