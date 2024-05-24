@@ -21,19 +21,19 @@ namespace DataAccess.Repository
 
         public void MsgSeen(string a, string fromthis)
         {
-            _db.Database.ExecuteSqlRawAsync("CALL public.msgseen(@p0, @p1)", fromthis, a);
+            //_db.Database.ExecuteSqlRawAsync("CALL public.msgseen(@p0, @p1)", fromthis, a);
 
 
 
-            //var unread = _db.Chathistories.Where(x => x.Reciever == a && x.Isread == false && x.Sender == fromthis).ToList();
-            //foreach (var item in unread)
-            //{
-            //    item.Isread = true;
-            //    item.Readtime = DateTime.Now;
-            //    _db.Chathistories.Update(item);
-            //    _db.SaveChanges();
-            //}
-            //MsgSent(a);
+            var unread = _db.Chathistories.Where(x => x.Reciever == a && x.Isread == false && x.Sender == fromthis).ToList();
+            foreach (var item in unread)
+            {
+                item.Isread = true;
+                item.Readtime = DateTime.Now;
+                _db.Chathistories.Update(item);
+                _db.SaveChanges();
+            }
+            MsgSent(a);
         }
 
 
