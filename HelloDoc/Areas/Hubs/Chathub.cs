@@ -120,8 +120,9 @@ namespace HelloDoc.Areas.Hubs
 
             var msgid = -1;
 
-
+            //await Groups.RemoveFromGroupAsync(Context.ConnectionId, sendid);    
             await Clients.Group(sendid).SendAsync("ReceiveMessageInGroup", fromname, fromid, msg, time, msgid , sendid);
+            //await Groups.AddToGroupAsync(Context.ConnectionId, sendid);
         }
 
         public async Task MsgSeen(string fromthis)
@@ -216,4 +217,5 @@ namespace HelloDoc.Areas.Hubs
         }
     }
 }
+
 

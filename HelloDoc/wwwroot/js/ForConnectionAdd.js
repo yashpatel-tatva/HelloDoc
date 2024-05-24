@@ -42,22 +42,64 @@ connection.on("ReceiveMessage", function (fromname, fromid, msg, time, msgid) {
     else {
         showNotification(msg + " from " + fromname);
     }
+    var title = fromname + " HelloDoc";
+    var icon = "/res/Logo.png"
+    var body = msg;
+    var notification = new Notification(title, { body, icon });
 
+    notification.onclick = () => {
+        notification.close();
+        window.parent.focus();
+        $('.modal-backdrop').remove();
+        $.ajax({
+            url: '/Hubs/Home/OpenChatBox',
+            data: { sendtoaspid },
+            type: 'POST',
+            success: function (result) {
+                $('#PopUps').html(result);
+                var my = new bootstrap.Modal(document.getElementById('ModalToOpen'));
+                my.show();
+            }
+        });
+    }
 });
 
 connection.on("ReceiveMessageInGroup", function (fromname, fromid, msg, time, msgid, sendid) {
-var thisaspid = $('#thisaspid').val();
+    var thisaspid = $('#thisaspid').val();
     sendtoaspid = sendid;
-    console.log(fromid , thisaspid , fromname)
+    console.log(fromid, thisaspid, fromname)
     var printtime = new Date(time);
     var time = printtime.getHours() + ":" + printtime.getMinutes();
     var thisid = $('#sendtoaspid').val();
     if (thisid == sendid && fromid != thisaspid) {
-        $('.printmsg').append('<div class="spanofrec"><div class="spanofmsg"><p class="mb-0 text-success">'+ fromname + '</p><span>' + msg + '</span><span class="spanoftime">' + time + '</span></div></div>')
+        $('.printmsg').append('<div class="spanofrec"><div class="spanofmsg"><p class="mb-0 text-success">' + fromname + '</p><span>' + msg + '</span><span class="spanoftime">' + time + '</span></div></div>')
         $('.printmsg').scrollTop($('.printmsg')[0].scrollHeight);
     }
-        
+ 
+    var title = fromname + " HelloDoc";
+    var icon = "/res/Logo.png"
+    var body = msg;
+    var notification = new Notification(title, { body, icon });
 
+    notification.onclick = () => {
+        notification.close();
+        window.parent.focus();
+        $('.modal-backdrop').remove();
+        var groupid = sendid;
+        $.ajax({
+            url: '/Hubs/Home/OpenGroupChatBox',
+            data: { groupid },
+            type: 'POST',
+            success: function (result) {
+                $('#PopUps').html(result);
+                var my = new bootstrap.Modal(document.getElementById('ModalToOpen'));
+                my.show();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                Swal.fire(jqXHR.responseText);
+            }
+        })
+    }
 });
 
 
@@ -101,3 +143,24 @@ function showNotification(message) {
 
 
 
+let permission = Notification.permission;
+if (permission === "granted") {
+    showNotify();
+} else if (permission === "default") {
+    requestAndShowPermission();
+}
+
+function requestAndShowPermission() {
+    Notification.requestPermission(function (permission) {
+        if (permission === "granted") {
+            showNotify();
+        }
+    });
+}
+
+function showNotify() {
+    if (document.visibilityState === "visible") {
+        return;
+    }
+  
+}

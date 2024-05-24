@@ -64,6 +64,7 @@ namespace HelloDoc.Areas.Hubs
             model.sendtoaspid = groupid.ToString();
             model.sendtoname = name;
             model.isgroup = true;
+            model.photo = "/res/groupphoto.png";
             var jwtservice = HttpContext.RequestServices.GetService<IJwtRepository>();
             var request = HttpContext.Request;
             var token = request.Cookies["jwt"];
